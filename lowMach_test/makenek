@@ -9,16 +9,16 @@
 IFMPI="true"
 
 # Fortran compiler
-F77="mpif77"
+F77="mpixlf77_r"
 
 # C compiler
-CC="mpicc"
+CC="mpixlc_r"
 
 # compiler Flags
-G=""  # "-Knoieee -Ktrap=fp"
+G="-qarch=450d -qtune=450" # "-Knoieee -Ktrap=fp"
 
 # Absolute path of the NEK5 source 
-SOURCE_ROOT="/home/$USER/nek5_svn/trunk/core"
+SOURCE_ROOT="../../nek5_svn/trunk/core"
 
 # linking libraries
 USR_LIB=""
