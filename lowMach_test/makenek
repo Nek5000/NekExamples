@@ -6,22 +6,22 @@
 ###############################################################################
 
 # use MPI (true or false)
-IFMPI=true
+IFMPI="true"
 
 # Fortran compiler
-F77=mpif77
+F77="mpif77"
 
 # C compiler
-CC=mpicc
+CC="mpicc"
 
 # compiler Flags
-G=  # '-Knoieee -Ktrap=fp'
+G=""  # "-Knoieee -Ktrap=fp"
 
 # Absolute path of the NEK5 source 
-SOURCE_ROOT=/home/$USER/nek5_svn/trunk/core
+SOURCE_ROOT="/home/$USER/nek5_svn/trunk/core"
 
 # linking libraries
-USR_LIB=
+USR_LIB=""
 
 
 ###############################################################################
