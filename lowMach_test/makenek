@@ -18,7 +18,7 @@ CC="mpicc"
 G=""  # "-Knoieee -Ktrap=fp"
 
 # Absolute path of the NEK5 source 
-SOURCE_ROOT="/home/$USER/nek5_svn/trunk/core"
+SOURCE_ROOT="/home/$USER/nek5_svn/trunk/nek"
 
 # linking libraries
 USR_LIB=""
