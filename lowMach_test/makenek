@@ -14,23 +14,23 @@ F77="mpif77"
 # C compiler
 CC="mpicc"
 
-# compiler Flags
-G=""  # "-Knoieee -Ktrap=fp"
+# Optional compiler Flags
+# NOTE: Flags like r8, DUNDERSCORE are detected automatically
+G="-Knoieee -Ktrap=fp"
 
 # Absolute path of the NEK5 source 
 SOURCE_ROOT="/home/$USER/nek5_svn/trunk/nek"
 
-# linking libraries
+# Optional linking libraries
 USR_LIB=""
 
 
 ###############################################################################
+
+# do some checks and set up some needed enviroment variables
 source $SOURCE_ROOT/makenek.inc
 
 make -f $SOURCE_ROOT/makefile 2>&1 | tee compiler.out
-
-rm -f $SOURCE_ROOT/SIZE
-rm -f $SOURCE_ROOT/subuser.f
 
 mkdir obj 2>/dev/null
 \mv *.o ./obj 2>/dev/null
