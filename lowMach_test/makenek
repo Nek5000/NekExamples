@@ -22,9 +22,9 @@ G="-Knoieee -Ktrap=fp"
 SOURCE_ROOT="/home/$USER/nek5_svn/trunk/nek"
 
 # Optional files to compile
-NOTE: files have to located in the same directory as makenek
-      and a makefile_usr.inc has to be provided containing the
-      instructions how to compile these files. 
+#NOTE: files have to located in the same directory as makenek
+#      and a makefile_usr.inc has to be provided containing the
+#      instructions how to compile these files. 
 USR=""
 
 # Optional linking libraries
