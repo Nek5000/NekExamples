@@ -21,6 +21,12 @@ G="-Knoieee -Ktrap=fp"
 # Absolute path of the NEK5 source 
 SOURCE_ROOT="/home/$USER/nek5_svn/trunk/nek"
 
+# Optional files to compile
+NOTE: files have to located in the same directory as makenek
+      and a makefile_usr.inc has to be provided containing the
+      instructions how to compile these files. 
+USR=""
+
 # Optional linking libraries
 USR_LIB=""
 
@@ -30,7 +36,7 @@ USR_LIB=""
 # do some checks and set up some needed enviroment variables
 source $SOURCE_ROOT/makenek.inc
 
-make -f $SOURCE_ROOT/makefile 2>&1 | tee compiler.out
+make -f makefile 2>&1 | tee compiler.out
 
 mkdir obj 2>/dev/null
 \mv *.o ./obj 2>/dev/null
