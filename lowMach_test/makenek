@@ -21,6 +21,9 @@ G="-Knoieee -Ktrap=fp"
 # Absolute path of the NEK5 source 
 SOURCE_ROOT="/home/$USER/nek5_svn/trunk/nek"
 
+# coarse grid solver (default XXT)
+IFAMG="false"
+
 # Optional files to compile
 #NOTE: files have to located in the same directory as makenek
 #      and a makefile_usr.inc has to be provided containing the
