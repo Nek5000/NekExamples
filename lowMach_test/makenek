@@ -5,8 +5,11 @@
 # User Settings
 ###############################################################################
 
-# use MPI (true or false)
+# use MPI (default true)
 IFMPI="true"
+
+# coarse grid solver (default XXT)
+IFAMG="false"
 
 # Fortran compiler
 F77="mpif77"
@@ -18,16 +21,13 @@ CC="mpicc"
 # NOTE: Flags like r8, DUNDERSCORE are detected automatically
 G="-Knoieee -Ktrap=fp"
 
-# Absolute path of the NEK5 source 
+# Path of the NEK5 source 
 SOURCE_ROOT="/home/$USER/nek5_svn/trunk/nek"
-
-# coarse grid solver (default XXT)
-IFAMG="false"
 
 # Optional files to compile
 #NOTE: files have to located in the same directory as makenek
 #      and a makefile_usr.inc has to be provided containing the
-#      instructions how to compile these files. 
+#      compiling instructions. 
 USR=""
 
 # Optional linking libraries
@@ -36,7 +36,7 @@ USR_LIB=""
 
 ###############################################################################
 
-# do some checks and set up some needed enviroment variables
+# do some checks and create makefile using the settings defined above
 source $SOURCE_ROOT/makenek.inc
 
 make -f makefile 2>&1 | tee compiler.out
