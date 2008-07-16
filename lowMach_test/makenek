@@ -39,7 +39,7 @@ USR_LIB=""
 # do some checks and create makefile using the settings defined above
 source $SOURCE_ROOT/makenek.inc
 
-make -f makefile 2>&1 | tee compiler.out
+make -j -f makefile 2>&1 | tee compiler.out
 
 mkdir obj 2>/dev/null
 \mv *.o ./obj 2>/dev/null
