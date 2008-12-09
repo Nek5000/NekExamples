@@ -102,22 +102,23 @@ C=======================================================================
      &                            0.5/delta*(1. - (tanh(XD)*tanh(XD))))
  100  continue 
   
-      call col3(w1,VX_err,VX_err,ntot)
-      call col2(w1,BM1,ntot)
-      l2_err  = GLSUM(w1,ntot)/VOLVM1
-      max_err = GLMAX(VX_err,ntot)
-      write(*,*) 'ERROR VX: MAX/L2', max_err, SQRT(l2_err)   
+      max_err = glmax(VX_err,ntot)
+      l2_err  = glsc3(VX_err,bm1,VX_err,ntot)/VOLVM1
+      if (l2_err.gt.0) l2_err = sqrt(l2_err)
+      write(6,1) istep,time,max_err,l2_err
+    1 format(i8,1p3e12.4,' ERROR VX: MAX/L2')
 
-      call col3(w1,T_err,T_err,ntot)
-      call col2(w1,BM1,ntot)
-      l2_err = GLSUM(w1,ntot)/VOLVM1
-      max_err = GLMAX(T_err,ntot)
-      write(*,*) 'ERROR T: MAX/L2', max_err, SQRT(l2_err)   
+      max_err = glmax(T_err,ntot)
+      l2_err  = glsc3(T_err,bm1,T_err,ntot)/VOLVM1
+      if (l2_err.gt.0) l2_err = sqrt(l2_err)
+      write(6,2) istep,time,max_err,l2_err
+    2 format(i8,1p3e12.4,' ERROR T: MAX/L2')
 
-      call col3(w1,QTL_err,QTL_err,ntot)
-      l2_err = GLSUM(w1,ntot)/VOLVM1
-      max_err = GLMAX(QTL_err,ntot)
-      write(*,*) 'ERROR QTL: MAX/L2', max_err, SQRT(l2_err)   
+      max_err = glmax(QTL_err,ntot)
+      l2_err  = glsc3(QTL_err,bm1,QTL_err,ntot)/VOLVM1
+      if (l2_err.gt.0) l2_err = sqrt(l2_err)
+      write(6,3) istep,time,max_err,l2_err
+    3 format(i8,1p3e12.4,' ERROR QTL: MAX/L2')
 
 
       RETURN
