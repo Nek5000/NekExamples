@@ -105,19 +105,22 @@ C=======================================================================
       max_err = glmax(VX_err,ntot)
       l2_err  = glsc3(VX_err,bm1,VX_err,ntot)/VOLVM1
       if (l2_err.gt.0) l2_err = sqrt(l2_err)
-      write(6,1) istep,time,max_err,l2_err
+      if(nid.eq.0)
+     & write(6,1) istep,time,max_err,l2_err
     1 format(i8,1p3e12.4,' ERROR VX: MAX/L2')
 
       max_err = glmax(T_err,ntot)
       l2_err  = glsc3(T_err,bm1,T_err,ntot)/VOLVM1
       if (l2_err.gt.0) l2_err = sqrt(l2_err)
-      write(6,2) istep,time,max_err,l2_err
+      if(nid.eq.0)
+     & write(6,2) istep,time,max_err,l2_err
     2 format(i8,1p3e12.4,' ERROR T: MAX/L2')
 
       max_err = glmax(QTL_err,ntot)
       l2_err  = glsc3(QTL_err,bm1,QTL_err,ntot)/VOLVM1
       if (l2_err.gt.0) l2_err = sqrt(l2_err)
-      write(6,3) istep,time,max_err,l2_err
+      if(nid.eq.0)
+     & write(6,3) istep,time,max_err,l2_err
     3 format(i8,1p3e12.4,' ERROR QTL: MAX/L2')
 
 
