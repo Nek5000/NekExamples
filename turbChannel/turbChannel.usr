@@ -120,7 +120,7 @@ c
      $             , dgtq(3,4)
 
       integer e
-
+      logical ifverbose
       common /gaaa/    wo1(lx1,ly1,lz1,lelv)
      &              ,  wo2(lx1,ly1,lz1,lelv)
      &              ,  wo3(lx1,ly1,lz1,lelv)
@@ -287,9 +287,6 @@ c      if(istep.lt.500) return               ! delay averaging
      &                     , uavg_pl(i)/u_tau
     3           format(1p15e17.9)
             enddo
-
-            call flush(56)
-            call flush(57)
 
         endif
 
