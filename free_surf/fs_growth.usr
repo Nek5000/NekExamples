@@ -306,7 +306,7 @@ c-----------------------------------------------------------------------
          ax = alpha*x + gamma_i*time
          c  = cos(ax)
          s  = sin(ax)
-         eg = lglel(e,node)
+         eg = lglel(e)
 
          call get_exyz(ex,ey,ez,eg,nelx,nely,nelz)
 
