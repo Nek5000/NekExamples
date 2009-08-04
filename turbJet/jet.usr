@@ -350,69 +350,28 @@ c
       include 'SIZE'
       include 'TOTAL'
 c
+      integer e,f
+
       integer icalld
       save    icalld
       data    icalld  /0/
 c
       common /cvflow_d/ dist(lx2,ly2,lz2,lelt),dmax
 c
-      ntot2 = nx2*ny2*nz2*nelv
-      call rzero(usrdiv,ntot2)
-c
-      if (icalld.eq.0) then
-         icalld = 1
-         call set_outflow_dist
-      endif
-      dmax2 = dmax*dmax
+      if(icalld.ne.0) return
 
-c     Get constant multiplier for divergence
-c     (acceleration factor)
-      call get_div_const(cdiv)
-
-c     Fill usrdiv only for the outflow layer elements
-c     and ramp it up quadratically to the target value 
-      nd    = 0
-      do i=1,ntot2
-         dd = dist(i,1,1,1)*dist(i,1,1,1)
-         dd = min(dmax2,dd)
-         if (dist(i,1,1,1).ge.0) usrdiv(i,1,1,1) = cdiv*(1.-dd/dmax2)
-         if (dist(i,1,1,1).ge.0) nd = nd+1
-      enddo
-      dsmin = glmin(dist,ntot2)
-      dsmax = glmax(dist,ntot2)
-      dvmin = glmin(usrdiv,ntot2)
-      dvmax = glmax(usrdiv,ntot2)
-      xd    = nd
-      xd    = glsum(xd,1)
-      nd    = xd
-      if(nid.eq.0)write(6,1) istep,nd,dvmin,dvmax,dsmin,dsmax,cdiv,dmax2
-    1 format(2i9,1p6e11.3,'divmnmx')
-c
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine set_outflow_dist
-c
-c     Compute projected normal distance from outflow
-c
-      include 'SIZE'
-      include 'TOTAL'
-c
-      common /cvflow_d/ dist(lx2,ly2,lz2,lelt),dmax
-c
-      integer e,f
-c
-c
       nxyz2 = nx2*ny2*nz2
       ntot2 = nx2*ny2*nz2*nelv
       ntot1 = nx1*ny1*nz1*nelv
-c
+
+      call rzero(usrdiv,ntot2)
+
+c     Compute projected normal distance from outflow
       call rzero(dist,ntot2)
       davg = 0.
       wavg = 0.
-c
       zmax = glmax(zm1,ntot1)
-c
+      if(ifsplit) call copy(zm2,zm1,ntot1)
       do e=1,nelv
          if (cbc(6,e,1).eq.'O  ') then  ! Outflow
             do k=1,nxyz2
@@ -429,26 +388,41 @@ c
       if (nid.eq.0) write(6,1) dmax,davg,wavg
     1 format('div: davg:',1p3e12.4)
       dmax = 0.5*(dmax+davg)
-c
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine get_div_const(cdiv)
-c
-c     Get constant multiplier for divergence
-c
-      include 'SIZE'
-      include 'TOTAL'
-c
-      common /cvflow_d/ dist(lx2,ly2,lz2,lelt),dmax
-c
-      vnmo_desired  = 0.2  ! level of acceleration
 
-      cdivt         = 1.5*vnmo_desired/dmax
-      cdiv          = max(0.,cdivt)       ! No contraction!
+c     Get constant multiplier for divergence (acceleration factor)
+      vnmo_desired  = 0.2
+      cdiv          = 1.5*vnmo_desired/dmax
+      cdiv          = max(0.,cdiv) ! No contraction
 
-c      if (nid.eq.0) write(6,1) istep,time,vnmo,dmax,cdiv,cdivt
-c    1 format(i9,1p5e13.5,'  cdiv')
+c     Fill user defined divergence into usrdiv
+      dmax2 = dmax*dmax
+      nd    = 0
+      if (ifsplit) then
+         do i=1,ntot2
+            dd = dist(i,1,1,1)*dist(i,1,1,1)
+            dd = min(dmax2,dd)
+            if (dist(i,1,1,1).ge.0) usrdiv(i,1,1,1) = cdiv*(1.-dd/dmax2)
+            if (dist(i,1,1,1).ge.0) nd = nd+1
+         enddo
+      else
+         do i=1,ntot2
+            dd = dist(i,1,1,1)*dist(i,1,1,1)
+            dd = min(dmax2,dd)
+            if (dist(i,1,1,1).ne.0) usrdiv(i,1,1,1) = cdiv*(1.-dd/dmax2)
+            if (dist(i,1,1,1).ne.0) nd = nd+1
+         enddo
+      endif
+      dsmin = glmin(dist,ntot2)
+      dsmax = glmax(dist,ntot2)
+      dvmin = glmin(usrdiv,ntot2)
+      dvmax = glmax(usrdiv,ntot2)
+      xd    = nd
+      xd    = glsum(xd,1)
+      nd    = xd
+      if(nid.eq.0)write(6,2) istep,nd,dvmin,dvmax,dsmin,dsmax,cdiv,dmax2
+    2 format(2i9,1p6e11.3,'divmnmx')
 
+      icalld = 1
+c
       return
       end

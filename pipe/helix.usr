@@ -213,8 +213,6 @@ c     call cmult( ym1, dpd, n )
       enddo
 
       param(59) = 1.   !  All elements deformed
-      param(66) = 4.   !  Std nek binary output
-      param(67) = 4.   !  Std nek binary input (for restart)
       ifxyo     = .true.
       
       return

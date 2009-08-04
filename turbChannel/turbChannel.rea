@@ -27,7 +27,7 @@
   1.000000E+00     NPSCAL
   0.100000E-01     TOLREL
   0.100000E-01     TOLABS
-   0.50000         COURANT
+   2.00000         COURANT
    3.00000         TORDER
   0.000000E+00
    0.0000        
@@ -106,10 +106,11 @@
    1.00000           Dump out divergence at each time step
 -1   0.010            103 filter weight
             0  SCALAR DATA FOLLOW (CONDUCT; RHOCP)
-            3  LOGICAL SWITCHES FOLLOW
+            4  LOGICAL SWITCHES FOLLOW
   T     IFFLOW
   T     IFTRAN
   T     IFADVC (one entry per field)
+  F     IFCHAR
    8.00000       8.00000     -0.500000      -4.00000     XFAC,YFAC,XZERO,YZERO
  ** MESH DATA ** 
        -1 3        1 NEL,NDIM,NELV
