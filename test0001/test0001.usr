@@ -210,11 +210,12 @@ c        emax = max(emax,err1)
          emax = emax + err1*dt
       endif
 
-      eref = 1.004566E-05  ! 10/7/09 pff
+      eref = 5.742723E-07  ! 10/8/09 pff:  For 1000 steps, dt=2.e-5, lx1=8
 
       if (nid.eq.0.and.istep.eq.nsteps) 
      $  write(6,1) emax,eref,dt,time,nx1,nelt,nsteps
     1 format(1p4e14.6,' ANS1',3i7)
+
 
       return
       end
