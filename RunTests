@@ -1,0 +1,8 @@
+#! /bin/sh
+
+cd ./test0001
+cp ../../trunk/tools/srcipts/neklmpi .
+./makenek clean
+./makenek test0001
+./neklmpi test0001 1
+./neklmpi test0001 4
