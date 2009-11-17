@@ -1,7 +1,7 @@
 #! /bin/sh
 
 cd ./test0001
-cp ../../trunk/tools/srcipts/neklmpi .
+cp ../../trunk/tools/scripts/neklmpi .
 ./makenek clean
 ./makenek test0001
 ./neklmpi test0001 1
