@@ -1,0 +1,153 @@
+ ****** PARAMETERS *****
+   2.610000      NEKTON VERSION
+   2  DIMENSIONAL RUN
+ 103  PARAMETERS FOLLOW
+   1.00000         DENSITY
+   1.0000          VISCOS   (<0 -> Reynolds number else 1/Re)
+  0.000000E+00     BETAG    (>0 use Boussinesq approx)
+  0.000000E+00     GTHETA
+  0.000000E+00
+  0.000000E+00
+   1.00000         RHOCP
+   1.              CONDUCT
+  0.000000E+00     QVOL
+  0.000000E+00     FINTIME
+      5.0e3        NSTEPS
+      1.0e-3       DT (negative value -> forcing)
+  0.000000E+00     IOCOMM
+  0.000000E+00     IOTIME
+      5.0e2        IOSTEP
+  0.000000E+00     PSSOLVER (1: Helmholz, 2: CVODE)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+   5.00000         NORDER   (only used by prenek)
+       1.0E-08     DIVERGENCE
+       1.0E-12     HELMHOLTZ
+       0.0         NPSCAL
+       1.0E-06     TOLREL
+       1.0E-10     TOLABS
+   0.35000         COURANT
+   3.00000         TORDER
+  0.000000E+00     NABMSH       (0: extrapolation >0: AB)
+  0.000000E+00     MHD_VISCOS   (>0 enable MHD)
+  1.000000E+00     USERVP       (0: constand prop 1: user prop)
+  0.000000E+00     NPERT        (number of pert modes)
+  0.000000E+00     NBCRE2       (number of BCs in re2 file, 0: all)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00     Linear equation solver (0: GMRES, 1:CG)
+  1.000000E+00     (0: additive mulilevel, 1:2 level scheme)
+  0.000000E+00     p44
+  0.000000E+00     p45
+  0.000000E+00     (>0: do not set IC)
+  0.000000E+00     p47
+  0.000000E+00
+  0.000000         mixing length factor
+  0.000000E+00
+  0.000000E+00     1: get_local_crs, else get_local_crs_galerkin
+  0.000000E+00     HISTEP (>1_ history point dump freq)
+  0.000000E+00
+  0.000000E+00     direction of fixed massflow (1: X, 2: Y, 3: Z)
+  0.000000E+00     bulk velocity for fixed massflow (!=0 adust flow)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00     !=0 deformed elements (only relevant for FDM)
+  0.000000E+00     !=0 init velocity to 1e-10 (for steady Stokes)
+  0.000000E+00
+  0.000000E+00     >0 swap bytes for output
+  0.000000E+00     WDSIZO (8: 8-bytes reals else 4 byte reals)
+  0.000000E+00
+  0.000000E+00     p65 number of i/o nodes (< 0 multi subdirectories)
+  0.000000E+00     write format (<0: ASCII else BINARY)
+  0.000000E+00     read form
+  0.000000E+00     averaging frequency in avg_all (0: every timestep)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00     >0: print Helmholz solver iterations
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00     ntaupf
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+   2.00000         dimension of coarse grid (2 -> linear, etc.)
+  0.000000E+00
+  0.000000E+00     >0: use this value as inital time step
+  0.000000E+00     set dt in setdt
+  0.000000E+00     0: convective from else skey-symmetric form
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00      coarse grid weighting (default=10.0)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  20.0000          number of previous sol'ns to save
+  5.00000          start saving velocity+scalar soln's after this
+  5.00000          start saving pressure soln's after this
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+    3.00000        <0: turn off dealiasing
+  0.000000E+00     pres CG precond (0: 2-level Schwarz else Jacobi)
+  0.000000E+00     number of additional modes to filter
+   1.00000         dump out divergence at each time st
+-1   .05             filter weight (< 0 no filtering)
+      4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+     13   LOGICAL SWITCHES FOLLOW
+  T      IFFLOW    solve for fluid
+  T      IFHEAT    solve for heat (temperature + scalars)
+  T      IFTRAN
+  T,19*T IFNAV & IFADVC (convection in P.S. fields)
+  20*F   IFTMSH (IF mesh for this field is T mesh)
+  F      IFAXIS
+  F      IFSTRS    use stress formulation
+  T      IFLOMACH  use Low Mach number formulation (variabe denisty)
+  F      IFMGRID
+  F      IFMODEL
+  F      IFKEPS
+  F      IFMVBD
+  F      IFCHAR
+   62.0000       62.0000      -62.0000      -62.0000     XFAC,YFAC,XZERO,YZERO
+ **MESH DATA** 1st line is X of corner 1,2,3,4. 2nd line is Y.
+      -64  2         64     NELT,NDIM,NELV
+ 0  PRESOLVE/RESTART OPTIONS  *****
+ 1          INITIAL CONDITIONS *****
+C Default
+  ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
+            1                  Lines of Drive force data follow
+C
+  ***** Variable Property Data ***** Overrrides Parameter data.
+  1 Lines follow.
+  0 PACKETS OF DATA FOLLOW
+  ***** HISTORY AND INTEGRAL DATA *****
+            0    POINTS.  Hcode, I,J,H,IEL
+  ***** OUTPUT FIELD SPECIFICATION *****
+  6   SPECIFICATIONS FOLLOW
+  T       COORDINATES
+  T       VELOCITY
+  T       PRESSURE
+  T       TEMPERATURE
+  F       TEMPERATURE GRADIENT
+  0       PASSIVE SCALARS
+  ***** OBJECT SPECIFICATION *****
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects
