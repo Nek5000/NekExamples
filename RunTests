@@ -1,8 +1,134 @@
 #! /bin/sh
 
-cd ./test0001
+mkdir tools
+cd tools
+HERE_T=`pwd`
+
+cd ../../trunk/nek
+HERE_S=`pwd`
+
+cd ../tools/
+maketools all              $HERE_T
+
+
+cd ../../tests/test0001
 cp ../../trunk/tools/scripts/neklmpi .
+cp ../../trunk/nek/makenek .
 ./makenek clean
-./makenek test0001
+./makenek test0001         $HERE_S
 ./neklmpi test0001 1
 ./neklmpi test0001 4
+
+
+cd ..
+cd ./test0002
+cp ../../trunk/tools/scripts/neklmpi .
+cp ../../trunk/nek/makenek .
+./makenek clean
+./makenek test0002         $HERE_S
+./neklmpi test0002 1
+./neklmpi test0002 4
+
+
+
+#Test all examples...
+cd ../../examples/2D/EDDY
+cp ../../../trunk/tools/scripts/nek10steps .
+cp ../../../trunk/nek/makenek .
+./makenek    clean
+./makenek    eddy_uv       $HERE_S
+./nek10steps eddy_uv 1
+./nek10steps eddy_uv 4
+
+
+
+cd ..; cd ..
+cd ./axi
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/tools/scripts/mvv .
+cp ../../trunk/nek/makenek .
+../../tests/tools/genbox < gb.in
+../../tests/tools/genmap < gm.in
+mvv box axi
+./makenek    clean
+./makenek    axi           $HERE_S
+./nek10steps axi 1
+./nek10steps axi 4
+
+
+
+cd ..
+cd ./free_surf
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    fs_growth     $HERE_S
+./nek10steps fs_growth 1
+./nek10steps fs_growth 4
+
+
+
+cd ..
+cd ./fs_2
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    st1           $HERE_S
+./nek10steps st1 1
+./nek10steps st1 4
+
+./nek10steps st2 1
+./nek10steps st2 4
+
+./nek10steps std_wv 1
+./nek10steps std_wv 4
+
+
+
+cd ..
+cd kovasznay
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    kov           $HERE_S
+./nek10steps kov 1
+./nek10steps kov 4
+
+
+
+cd ..
+cd lowMach_test
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    lowMach_test  $HERE_S
+./nek10steps lowMach_test 1
+./nek10steps lowMach_test 4
+
+
+
+cd ..
+cd pipe
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    helix         $HERE_S
+./nek10steps helix 1
+./nek10steps helix 4
+
+../../tests/tools/n2to3  < n2to3.in
+../../tests/tools/genmap < g.in
+./nek10steps stenosis 1
+./nek10steps stenosis 4
+
+
+
+cd ..
+cd turbChannel
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    turbChannel   $HERE_S
+./nek10steps turbChannel 1
+./nek10steps turbChannel 4
+

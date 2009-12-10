@@ -82,14 +82,139 @@ print("    . : successful test, F : failed test\n\n")
 
 #Test0001 serial
 log = "./test0001/test0001.log.1"
-value = [['total elapsed time',0,105,2],['ANS1',5.742723E-07,1e-06,8]]
+value = [['total elapsed time',0,170,2],['ANS1',5.742723E-07,1e-06,8]]
 Run("Test0001 Serial",log,value)
-    
    
 #Test0001 parallel
 log = "./test0001/test0001.log.4"
-value = [['total elapsed time',0,40,2],['ANS1',5.742723E-07,1e-06,8]]
+value = [['total elapsed time',0,50,2],['ANS1',5.742723E-07,1e-06,8]]
 Run("Test0001 Parallel",log,value)
+
+
+
+#Test0002 serial
+log = "./test0002/test0002.log.1"
+value = [['total elapsed time',0,930,2],['FINAL',2.6557E-06,1e-06,7]]
+Run("Test0002 Serial",log,value)
+   
+#Test0002 parallel
+log = "./test0002/test0002.log.4"
+value = [['total elapsed time',0,400,2],['FINAL',2.6557E-06,1e-06,7]]
+Run("Test0002 Parallel",log,value)
+
+
+
+#Example Cases tested for time elapsed
+#Example turbJet is too big(?) and doesn't work at all
+#2D/EDDY serial
+log = "../examples/2D/EDDY/eddy_uv.log.1"
+value = [['total elapsed time',0,1.8,2]]
+Run("Example 2D/EDDY- Serial",log,value)
+   
+#2D/EDDY parallel
+log = "../examples/2D/EDDY/eddy_uv.log.4"
+value = [['total elapsed time',0,0.7,2]]
+Run("Example 2D/EDDY- Parallel",log,value)
+
+
+#axi
+log = "../examples/axi/axi.log.1"
+value = [['total elapsed time',0,0.4,2]]
+Run("Example axi- Serial",log,value)
+
+log = "../examples/axi/axi.log.4"
+value = [['total elapsed time',0,0.9,2]]
+Run("Example axi- Parallel",log,value)
+
+
+
+#free_surf
+log = "../examples/free_surf/fs_growth.log.1"
+value = [['total elapsed time',0,4.6,2]]
+Run("Example fs_growth- Serial",log,value)
+
+log = "../examples/free_surf/fs_growth.log.4"
+value = [['total elapsed time',0,1.8,2]]
+Run("Example fs_growth- Parallel",log,value)
+
+
+
+#fs_2
+log = "../examples/fs_2/st1.log.1"
+value = [['total elapsed time',0,1.0,2]]
+Run("Example st1- Serial",log,value)
+
+log = "../examples/fs_2/st1.log.4"
+value = [['total elapsed time',0,1.0,2]]
+Run("Example st1- Parallel",log,value)
+
+log = "../examples/fs_2/st2.log.1"
+value = [['total elapsed time',0,1.25,2]]
+Run("Example st2- Serial",log,value)
+
+log = "../examples/fs_2/st2.log.4"
+value = [['total elapsed time',0,1.4,2]]
+Run("Example st2- Parallel",log,value)
+
+log = "../examples/fs_2/std_wv.log.1"
+value = [['total elapsed time',0,1.2,2]]
+Run("Example std_wv- Serial",log,value)
+
+log = "../examples/fs_2/std_wv.log.4"
+value = [['total elapsed time',0,1.1,2]]
+Run("Example std_wv- Parallel",log,value)
+
+
+
+#kovasznay
+log = "../examples/kovasznay/kov.log.1"
+value = [['total elapsed time',0,0.5,2]]
+Run("Example kov- Serial",log,value)
+
+log = "../examples/kovasznay/kov.log.4"
+value = [['total elapsed time',0,0.5,2]]
+Run("Example kov- Parallel",log,value)
+
+
+
+#lowMach_test
+log = "../examples/lowMach_test/lowMach_test.log.1"
+value = [['total elapsed time',0,2.7,2]]
+Run("Example lowMach_test- Serial",log,value)
+
+log = "../examples/lowMach_test/lowMach_test.log.4"
+value = [['total elapsed time',0,1.2,2]]
+Run("Example lowMach_test- Parallel",log,value)
+
+
+
+#pipe
+log = "../examples/pipe/helix.log.1"
+value = [['total elapsed time',0,22,2]]
+Run("Example helix- Serial",log,value)
+
+log = "../examples/pipe/helix.log.4"
+value = [['total elapsed time',0,3.3,2]]
+Run("Example helix- Parallel",log,value)
+
+log = "../examples/pipe/stenosis.log.1"
+value = [['total elapsed time',0,30,2]]
+Run("Example stenosis- Serial",log,value)
+
+log = "../examples/pipe/stenosis.log.4"
+value = [['total elapsed time',0,7.4,2]]
+Run("Example stenosis- Parallel",log,value)
+
+
+
+#turbChannel
+log = "../examples/turbChannel/turbChannel.log.1"
+value = [['total elapsed time',0,134,2]]
+Run("Example turbChannel- Serial",log,value)
+
+log = "../examples/turbChannel/turbChannel.log.4"
+value = [['total elapsed time',0,39,2]]
+Run("Example turbChannel- Parallel",log,value)
 
 
 ###############################################################################################
