@@ -71,10 +71,13 @@ c-----------------------------------------------------------------------
       if (vy2.gt.0) vy2 = sqrt(vy2)
       ymx = glmax(ym1,n)
 
+      ifusermv = .true.
+      call my_meshv_2d  ! user-defined mesh velocity
    
-c
+      call usr_dt       ! set initial timestep size to be small
+
+
 c     Target error values for ge are asympotically ~ 1.e-4
-c
 
       if (istep.eq.0) then
          vol0 = vol
@@ -89,7 +92,7 @@ c
          gl = log(vy2l)/dt
          ge = (gr - gamma_r)/gamma_r
          if (nid.eq.0) write(6,1) istep,time,ymx,vy2,ymxr,vy2r,gr,gl,ge
-    1    format(i5,1p8e15.7,' amp')
+    1    format(i5,1p8e15.7,' error')
       endif
       vy2l = vy2
 
@@ -98,12 +101,11 @@ c
          call opcopy(vx,vy,vz,ub,vb,vb)
       endif
 
-      if (istep.eq.0) dtmax = abs(param(12))
-      if (istep.eq.0) dt = dtmax/100.
-      dt = dt*1.01
-      dt = min(dtmax,dt)
-      param(12) = -dt
-      
+      if (istep.eq.nsteps.and.nid.eq.0) then
+         write(6,2) istep,time,ymx,vy2,ymxr,vy2r,gr,gl,ge
+    2    format(i5,1p8e15.7,' efinal')
+      endif
+
       return
       end
 c-----------------------------------------------------------------------
@@ -182,6 +184,11 @@ c-----------------------------------------------------------------------
       nelx = 6  ! must match .rea file
       nely = 10
       nelz = 1
+
+      if (nelx*nely*nelz.ne.nelgv) then
+         neltmp = nelx*nely*nelz
+         call exitti('ABORT usrdat2: nelx,nely,nelz.ne.nelgv:$',neltmp)
+      endif
 
 c     Free Surface Amplitude
 
@@ -301,6 +308,110 @@ c-----------------------------------------------------------------------
       enddo
       enddo
 
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine my_meshv_2d  ! user-defined mesh velocity
+      include 'SIZE'
+      include 'TOTAL'
+      include 'ZPER'
+c
+      integer e,ex,ey,ez,eg
+      common /surfa/ zsurf (lx1,lz1,lelx,lely)
+     $             , wsurf (lx1,lz1,lelx,lely)
+      real nxs,nys,nzs
+
+      icount = 0
+      do ex=1,nelx
+      do ix=1,nx1
+         zsurf (ix,1,ex,1) = -1.e20
+         wsurf (ix,1,ex,1) = -1.e20
+         ey=nely
+         eg  = ex + nelx*(ey-1) 
+         mid = gllnid(eg)
+         e   = gllel (eg)
+         if (mid.eq.nid) then
+            zsurf(ix,1,ex,1) = ym1(ix,ny1,1,e)
+            vxs              = vx (ix,ny1,1,e)
+            vys              = vy (ix,ny1,1,e)
+            nxs              = unx(ix,1,3,e)          ! Face 3 is on top in 2D
+            nys              = uny(ix,1,3,e)
+            gamma_s          = (vxs*nxs + vys*nys)/(nys) 
+            wsurf(ix,1,ex,1) = gamma_s
+         endif
+         zsurf(ix,1,ex,1) = glmax(zsurf(ix,1,ex,1),1)
+         wsurf(ix,1,ex,1) = glmax(wsurf(ix,1,ex,1),1)
+         icount = icount+1
+
+      enddo
+      enddo
+      zmin = glmin(ym1,nx1*ny1*nz1*nelv)
+
+      do ex=1,nelx
+      do ix=1,nx1
+         do ey=1,nely
+            eg  = ex + nelx*(ey-1) 
+            mid = gllnid(eg)
+            e   = gllel (eg)
+            if (mid.eq.nid) then
+               do iy=1,ny1
+                 scale = (ym1(ix,iy,1,e)-zmin)/(zsurf(ix,1,ex,1)-zmin)
+                 wy (ix,iy,1,e) = wsurf(ix,1,ex,1)*scale
+               enddo
+            endif
+         enddo
+      enddo
+      enddo
+
+      n = nx1*ny1*nz1*nelv
+      call rzero(wx,n)
+      call dsavg(wy)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usr_dt
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      real dtmx1,dtmax,p93,p94,p95,p103
+      save dtmx1,dtmax,p93,p94,p95,p103
+
+      rescale = 5.
+      rescale = 10.
+      if (istep.eq.0) then
+         dtmax = abs(param(12))
+         dtmx1 = dtmax/rescale
+         dt    = dtmx1/rescale
+         p93   = param(93)
+         p94   = param(94)
+         p95   = param(95)
+         p103  = param(103)
+      endif
+      dt = dt*1.05
+      dt = min(dtmx1,dt)
+      param(12) = -dt
+
+      param(93) = p93   ! turn off projection till dt is fixed
+      param(94) = p94
+      param(95) = p95
+      if (dt.lt.dtmx1) then
+         param(93) = 0
+         param(94) = 0
+         param(95) = 0
+c        p95       = istep
+      endif
+      if (istep.gt.200) dtmx1 = dtmax
+
+      if (nid.eq.0.and.istep.le.20) write(6,*) istep,dt,dtmax,' dtmax'
+
+c     fexp       = 0.85   ! filter strength doubled for first few steps
+c     param(103) = p103*(dt/dtmax)**fexp   ! adjust filter weight
+c     if (nid.eq.0.and.istep.le.110) 
+c    $   write(6,*) istep,param(103),p103,' p103'
+c     param(103) = p103   ! std filter weight
+      
       return
       end
 c-----------------------------------------------------------------------

@@ -12,7 +12,7 @@
   0.100000E-01     CONDUCT
   0.000000E+00     QVOL
   0.000000E+00     FINTIME
- 200000.00         NSTEPS
+  10000            NSTEPS
  -0.0025000         DT
   0.000000E+00     IOCOMM
   0.000000E+00     IOTIME
@@ -94,9 +94,9 @@
   0.000000E+00
   0.000000E+00
   0.000000E+00
-  00.00000E+00      Number of pressure sol'ns saved
-  0.000000E+00      start saving pressure soln's after this
-  0.000000E+00      start saving pressure soln's after this
+0 20.00000E+00      Number of pressure sol'ns saved
+0 5.000000E+00      start saving pressure soln's after this
+0 5.000000E+00      start saving pressure soln's after this
   0.000000E+00       which saving algorithm 1 = discard, 2=
   0.000000E+00       0 == > no iterative refinement
   0.000000E+00       0 = Bnorm, 1=1norm, 2=B^2 norm,
@@ -117,9 +117,9 @@
   0.000000E+00       113
   0.000000E+00       114
   0.000000E+00       115
-  6.000000E+00       116
- 10.000000E+00       117
-  1.000000E+00       118
+0  6.000000E+00       116
+0 10.000000E+00       117
+0  1.000000E+00       118
   0.000000E+00       119
   0.000000E+00       120 Axial magnetic field bz0     ~ 700
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
