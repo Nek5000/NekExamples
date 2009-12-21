@@ -13,7 +13,7 @@
    0.00000         QVOL
    0.00000         FINTIME
    2000            NSTEPS
-  -8.e-3           DT
+  -1.e-3           DT
    0.00000         IOCOMM
    0.00000         IOTIME
    0000.00         IOSTEP
@@ -114,7 +114,7 @@
  T      IFFLOW
  T      IFTRAN
  T      IFADVC
- T      IFCHAR
+ F      IFCHAR
    3.33333       3.33333     -0.833333      -1.16667     XFAC,YFAC,XZERO,YZERO
  **MESH DATA** 1st line is X of corner 1,2,3,4. 2nd line is Y.
        -8  2          8     NELT,NDIM,NELV
