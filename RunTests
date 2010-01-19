@@ -8,7 +8,13 @@ cd ../../trunk/nek
 HERE_S=`pwd`
 
 cd ../tools/
-maketools all              $HERE_T
+
+# set Fortran&C compiler
+sed -e "s:^F77*=\"\":F77=\"pgf77\":"  \
+-e "s:^CC*=\"\":CC=\"pgcc\":"  maketools >maketools.buildbot
+
+chmod +x maketools.buildbot
+maketools.buildbot all              $HERE_T
 
 
 cd ../../tests/test0001
@@ -29,7 +35,7 @@ cp ../../trunk/nek/makenek .
 ./neklmpi test0002 1
 ./neklmpi test0002 4
 
-
+##############################################################
 
 #Test all examples...
 cd ../../examples/2D/EDDY
@@ -45,11 +51,11 @@ cp ../../../trunk/nek/makenek .
 cd ..; cd ..
 cd ./axi
 cp ../../trunk/tools/scripts/nek10steps .
-cp ../../trunk/tools/scripts/mvv .
+cp ../../trunk/tools/scripts/mvn .
 cp ../../trunk/nek/makenek .
 ../../tests/tools/genbox < gb.in
 ../../tests/tools/genmap < gm.in
-mvv box axi
+mvn box axi
 ./makenek    clean
 ./makenek    axi           $HERE_S
 ./nek10steps axi 1
@@ -67,7 +73,7 @@ cp ../../trunk/nek/makenek .
 ./nek10steps fs_growth 4
 
 
-
+ 
 cd ..
 cd ./fs_2
 cp ../../trunk/tools/scripts/nek10steps .
@@ -82,9 +88,9 @@ cp ../../trunk/nek/makenek .
 
 ./nek10steps std_wv 1
 ./nek10steps std_wv 4
-
-
-
+ 
+ 
+ 
 cd ..
 cd kovasznay
 cp ../../trunk/tools/scripts/nek10steps .
@@ -93,9 +99,9 @@ cp ../../trunk/nek/makenek .
 ./makenek    kov           $HERE_S
 ./nek10steps kov 1
 ./nek10steps kov 4
-
-
-
+ 
+ 
+ 
 cd ..
 cd lowMach_test
 cp ../../trunk/tools/scripts/nek10steps .
@@ -104,9 +110,9 @@ cp ../../trunk/nek/makenek .
 ./makenek    lowMach_test  $HERE_S
 ./nek10steps lowMach_test 1
 ./nek10steps lowMach_test 4
-
-
-
+ 
+ 
+ 
 cd ..
 cd pipe
 cp ../../trunk/tools/scripts/nek10steps .
@@ -115,14 +121,14 @@ cp ../../trunk/nek/makenek .
 ./makenek    helix         $HERE_S
 ./nek10steps helix 1
 ./nek10steps helix 4
-
+ 
 ../../tests/tools/n2to3  < n2to3.in
 ../../tests/tools/genmap < g.in
 ./nek10steps stenosis 1
 ./nek10steps stenosis 4
-
-
-
+ 
+ 
+ 
 cd ..
 cd turbChannel
 cp ../../trunk/tools/scripts/nek10steps .
@@ -131,4 +137,5 @@ cp ../../trunk/nek/makenek .
 ./makenek    turbChannel   $HERE_S
 ./nek10steps turbChannel 1
 ./nek10steps turbChannel 4
-
+ 
+##############################################################
