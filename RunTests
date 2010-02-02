@@ -39,18 +39,18 @@ cp ../../trunk/nek/makenek .
 
 #Test all examples...
 cd ../../examples/2D/EDDY
-cp ../../../trunk/tools/scripts/nek10steps .
+cp ../../../trunk/tools/scripts/neklmpi .
 cp ../../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    eddy_uv       $HERE_S
-./nek10steps eddy_uv 1
-./nek10steps eddy_uv 4
+./neklmpi eddy_uv 1
+./neklmpi eddy_uv 4
 
 
 
 cd ..; cd ..
 cd ./axi
-cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/tools/scripts/mvn .
 cp ../../trunk/nek/makenek .
 ../../tests/tools/genbox < gb.in
@@ -58,58 +58,58 @@ cp ../../trunk/nek/makenek .
 mvn box axi
 ./makenek    clean
 ./makenek    axi           $HERE_S
-./nek10steps axi 1
-./nek10steps axi 4
+./neklmpi axi 1
+./neklmpi axi 4
 
 
 
 cd ..
 cd ./free_surf
-cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    fs_growth     $HERE_S
-./nek10steps fs_growth 1
-./nek10steps fs_growth 4
+./nek200steps fs_growth 1
+./nek200steps fs_growth 4
 
 
  
 cd ..
 cd ./fs_2
-cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    st1           $HERE_S
-./nek10steps st1 1
-./nek10steps st1 4
+./nek200steps st1 1
+./nek200steps st1 4
 
-./nek10steps st2 1
-./nek10steps st2 4
+./nek200steps st2 1
+./nek200steps st2 4
 
-./nek10steps std_wv 1
-./nek10steps std_wv 4
+./nek200steps std_wv 1
+./nek200steps std_wv 4
  
  
  
 cd ..
 cd kovasznay
-cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    kov           $HERE_S
-./nek10steps kov 1
-./nek10steps kov 4
+./neklmpi kov 1
+./neklmpi kov 4
  
  
  
 cd ..
 cd lowMach_test
-cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    lowMach_test  $HERE_S
-./nek10steps lowMach_test 1
-./nek10steps lowMach_test 4
+./nek200steps lowMach_test 1
+./nek200steps lowMach_test 4
  
  
  
