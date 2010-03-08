@@ -1,0 +1,43 @@
+c-----------------------------------------------------------------------
+c
+c     A short example of Rayleigh-Benard convection:
+c
+c     Parameters are set in routine rayleigh_const for convenience.
+c
+c     With this nondimensionalization, set rho==1 (parameter p1 in .rea
+c     file) and visocity (p2) to be the desired Prandtl number.
+c
+c     Rayleigh number is set as Ra = Rc*(1+eps),  Rc=p76, eps=p75.
+c
+c     The buoyancy is ffy = Ra Pr T, where T is determined by 
+c     boundary and initial conditions.
+c
+c     Critical Rayleigh number is around 1707.762 
+c     (Somehow I was recalling 1734, but that appears to be for a 
+c     particular geometric configuration considered by Laurette Tuckerman 
+c     & Dwight Barkley)
+c
+c     GEOMETRY:
+c
+c     There are two primary cases, ray1.box and ray2.box.
+c     The former specifies 10 elements in x, the latter only 9,
+c     both for a 9x1 domain.
+c
+c     NOTES:
+c
+c     A time trace of (u,v)_max vs t is output to the logfile. See userchk.
+c
+c     Be careful about selecting an even number of elements in x
+c     as it appears that the RB system likes to lock onto the grid spacing
+c     and give a number of rolls that matches the number of elements, if the
+c     elements have order-unity aspect ratio, as in the present case.
+c     Thus, in the case, the 9 element mesh is likely to be more faithful
+c     to the linear stability theory, at least for modest polynomial orders
+c     of lx1=12.
+c     
+c     It appears that one cannot realize Courant conditions of CFL ~ 0.5
+c     with these cases because of the explicit convection treatment.
+c     The given value dt=.02 is stable with lx1=12.
+c
+c
+c-----------------------------------------------------------------------
