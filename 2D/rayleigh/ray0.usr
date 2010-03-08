@@ -36,7 +36,7 @@ c     to the linear stability theory, at least for modest polynomial orders
 c     of lx1=12.
 c     
 c     It appears that one cannot realize Courant conditions of CFL ~ 0.5
-c     with these cases because of the explicit convection treatment.
+c     with these cases because of the explicit Boussinesq treatment.
 c     The given value dt=.02 is stable with lx1=12.
 c
 c
