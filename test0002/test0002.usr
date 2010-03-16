@@ -125,7 +125,7 @@ C=======================================================================
 
       if (nid.eq.0.and.istep.eq.nsteps)
      $  write(6,4) max_err,l2_err,time,nx1,nelt,nsteps
-    4 format(1p3e14.6,' FINAL',3i7)
+    4 format(1p3e14.6,' ANS1',3i7)
 
 
       RETURN
