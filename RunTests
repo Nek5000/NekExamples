@@ -54,7 +54,7 @@ cd ./rayleigh
 cp ../../../trunk/tools/scripts/nek200steps .
 cp ../../../trunk/nek/makenek .
 ./makenek    clean
-./makenek    ray0
+./makenek    ray0          $HERE_S
 ./nek200steps ray1 1
 grep "umax" ray1.log.1 | tail -1 > ray1.err.1
 ./nek200steps ray1 4
