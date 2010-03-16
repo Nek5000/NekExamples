@@ -83,139 +83,193 @@ print("    . : successful test, F : failed test\n\n")
 #Test0001 serial
 log = "./test0001/test0001.log.1"
 value = [['total elapsed time',0,170,2],['ANS1',5.742723E-07,1e-06,8]]
-Run("Test0001 Serial",log,value)
-   
+Run("Test0001: Serial",log,value)
+
 #Test0001 parallel
 log = "./test0001/test0001.log.4"
-value = [['total elapsed time',0,50,2],['ANS1',5.742723E-07,1e-06,8]]
-Run("Test0001 Parallel",log,value)
+value = [['ANS1',5.742723E-07,1e-06,8]]
+Run("Test0001: Parallel-error",log,value)
 
 
 
 #Test0002 serial
 log = "./test0002/test0002.log.1"
-value = [['total elapsed time',0,930,2],['FINAL',2.6557E-06,1e-06,7]]
-Run("Test0002 Serial",log,value)
-   
+value = [['total elapsed time',0,930,2],['ANS1',2.6557E-06,1e-06,7]]
+Run("Test0002: Serial",log,value)
+
 #Test0002 parallel
 log = "./test0002/test0002.log.4"
-value = [['total elapsed time',0,400,2],['FINAL',2.6557E-06,1e-06,7]]
-Run("Test0002 Parallel",log,value)
+value = [['ANS1',2.6557E-06,1e-06,7]]
+Run("Test0002: Parallel-error",log,value)
 
 
 
-#Example Cases tested for time elapsed
-#Example turbJet is too big(?) and doesn't work at all
-#2D/EDDY serial
+#Example Cases tested for time elapsed and error values
+#2D/EDDY
 log = "../examples/2D/EDDY/eddy_uv.log.1"
 value = [['total elapsed time',0,108,2]]
-Run("Example 2D/EDDY- Serial",log,value)
-   
-#2D/EDDY parallel
-log = "../examples/2D/EDDY/eddy_uv.log.4"
-value = [['total elapsed time',0,37.3,2]]
-Run("Example 2D/EDDY- Parallel",log,value)
+Run("Example 2D/EDDY: Serial-time",log,value)
+
+log = "../examples/2D/EDDY/eddy_uv.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example 2D/EDDY: Serial-error",log,value)
+
+log = "../examples/2D/EDDY/eddy_uv.err.4"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example 2D/EDDY: Parallel-error",log,value)
+
+
+
+#2D/rayleigh 
+log = "../examples/2D/rayleigh/ray1.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example 2D/ray1: Serial-time",log,value)
+
+log = "../examples/2D/rayleigh/ray1.err.1"
+value = [['umax',3.798345E-03,1e-06,3]]
+Run("Example 2D/ray1: Serial-error",log,value)
+
+log = "../examples/2D/rayleigh/ray1.err.4"
+value = [['umax',3.413486E-03,1e-06,3]]
+Run("Example 2D/ray1: Parallel-error",log,value)
+
+log = "../examples/2D/rayleigh/ray2.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example 2D/ray2: Serial-time",log,value)
+
+log = "../examples/2D/rayleigh/ray2.err.1"
+value = [['umax',3.239578E-03,1e-06,3]]
+Run("Example 2D/ray2: Serial-error",log,value)
+
+log = "../examples/2D/rayleigh/ray2.err.4"
+value = [['umax',2.958139E-03,1e-06,3]]
+Run("Example 2D/ray2: Parallel-error",log,value)
+
 
 
 #axi
 log = "../examples/axi/axi.log.1"
 value = [['total elapsed time',0,6,2]]
-Run("Example axi- Serial",log,value)
-
-log = "../examples/axi/axi.log.4"
-value = [['total elapsed time',0,16.6,2]]
-Run("Example axi- Parallel",log,value)
+Run("Example axi: Serial-time",log,value)
 
 
 
 #free_surf
 log = "../examples/free_surf/fs_growth.log.1"
 value = [['total elapsed time',0,53.3,2]]
-Run("Example fs_growth- Serial",log,value)
+Run("Example fs_growth: Serial-time",log,value)
 
-log = "../examples/free_surf/fs_growth.log.4"
-value = [['total elapsed time',0,21,2]]
-Run("Example fs_growth- Parallel",log,value)
+log = "../examples/free_surf/fs_growth.err.1"
+value = [['error',5.6688752E-06,1e-06,2]]
+Run("Example fs_growth: Serial-error",log,value)
+
+log = "../examples/free_surf/fs_growth.err.4"
+value = [['error',2.1132385E-04,1e-06,2]]
+Run("Example fs_growth: Parallel-error",log,value)
 
 
 
 #fs_2
 log = "../examples/fs_2/st1.log.1"
 value = [['total elapsed time',0,27.3,2]]
-Run("Example st1- Serial",log,value)
+Run("Example st1: Serial-time",log,value)
 
-log = "../examples/fs_2/st1.log.4"
-value = [['total elapsed time',0,21.3,2]]
-Run("Example st1- Parallel",log,value)
+log = "../examples/fs_2/st1.err.1"
+value = [['amp',6.382536E-01,1e-06,2]]
+Run("Example st1: Serial-error",log,value)
+
+log = "../examples/fs_2/st1.err.4"
+value = [['amp',6.382536E-01,1e-06,2]]
+Run("Example st1: Parallel-error",log,value)
 
 log = "../examples/fs_2/st2.log.1"
 value = [['total elapsed time',0,31.2,2]]
-Run("Example st2- Serial",log,value)
+Run("Example st2: Serial-time",log,value)
 
-log = "../examples/fs_2/st2.log.4"
-value = [['total elapsed time',0,26.1,2]]
-Run("Example st2- Parallel",log,value)
+log = "../examples/fs_2/st2.err.1"
+value = [['amp',6.376303E-01,1e-06,2]]
+Run("Example st2: Serial-error",log,value)
+
+log = "../examples/fs_2/st2.err.4"
+value = [['amp',6.376303E-01,1e-06,2]]
+Run("Example st2: Parallel-error",log,value)
 
 log = "../examples/fs_2/std_wv.log.1"
 value = [['total elapsed time',0,29,2]]
-Run("Example std_wv- Serial",log,value)
+Run("Example std_wv: Serial-time",log,value)
 
-log = "../examples/fs_2/std_wv.log.4"
-value = [['total elapsed time',0,23.8,2]]
-Run("Example std_wv- Parallel",log,value)
+log = "../examples/fs_2/std_wv.err.1"
+value = [['amp',9.011472E-01,1e-06,2]]
+Run("Example std_wv: Serial-error",log,value)
+
+log = "../examples/fs_2/std_wv.err.4"
+value = [['amp',9.011472E-01,1e-06,2]]
+Run("Example std_wv: Parallel-error",log,value)
+
+#fs_hydro
+log = "../examples/fs_hydro/fs_hydro.log.1"
+value = [['total elapsed time',0,52,2]]
+Run("Example fs_hydro: Serial-time",log,value)
+
+log = "../examples/fs_hydro/fs_hydro.err.1"
+value = [['AMP',1.5581969E-03,1e-06,2]]
+Run("Example fs_hydro: Serial-error",log,value)
+
+log = "../examples/fs_hydro/fs_hydro.err.4"
+value = [['AMP',3.1468195E-04,1e-06,2]]
+Run("Example fs_hydro: Parallel-error",log,value)
 
 
 
 #kovasznay
 log = "../examples/kovasznay/kov.log.1"
 value = [['total elapsed time',0,20,2]]
-Run("Example kov- Serial",log,value)
+Run("Example kov: Serial-time",log,value)
 
-log = "../examples/kovasznay/kov.log.4"
-value = [['total elapsed time',0,16,2]]
-Run("Example kov- Parallel",log,value)
+log = "../examples/kovasznay/kov.err.1"
+value = [['err',5.14316E-13,1e-06,3]]
+Run("Example kov: Serial-error",log,value)
 
+log = "../examples/kovasznay/kov.err.4"
+value = [['err',5.14316E-13,1e-06,3]]
+Run("Example kov: Parallel-error",log,value)
 
 
 #lowMach_test
 log = "../examples/lowMach_test/lowMach_test.log.1"
 value = [['total elapsed time',0,53.8,2]]
-Run("Example lowMach_test- Serial",log,value)
+Run("Example lowMach_test: Serial-time",log,value)
 
-log = "../examples/lowMach_test/lowMach_test.log.4"
-value = [['total elapsed time',0,19,2]]
-Run("Example lowMach_test- Parallel",log,value)
+log = "../examples/lowMach_test/lowMach_test.err.1"
+value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
+Run("Example lowMach_test: Serial-error",log,value)
 
-
+log = "../examples/lowMach_test/lowMach_test.err.4"
+value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
+Run("Example lowMach_test: Parallel-error",log,value)
 
 #pipe
 log = "../examples/pipe/helix.log.1"
 value = [['total elapsed time',0,24.7,2]]
-Run("Example helix- Serial",log,value)
+Run("Example helix: Serial-time",log,value)
 
-log = "../examples/pipe/helix.log.4"
-value = [['total elapsed time',0,40,2]]
-Run("Example helix- Parallel",log,value)
+log = "../examples/pipe/helix.err.1"
+value = [['e2',1.9072258E+00,1e-05,2]]
+Run("Example helix: Serial-error",log,value)
+
+log = "../examples/pipe/helix.err.4"
+value = [['e2',1.9080559E+00,1e-05,2]]
+Run("Example helix: Parallel-error",log,value)
 
 log = "../examples/pipe/stenosis.log.1"
 value = [['total elapsed time',0,33.2,2]]
-Run("Example stenosis- Serial",log,value)
-
-log = "../examples/pipe/stenosis.log.4"
-value = [['total elapsed time',0,10.2,2]]
-Run("Example stenosis- Parallel",log,value)
-
+Run("Example stenosis: Serial-time",log,value)
 
 
 #turbChannel
 log = "../examples/turbChannel/turbChannel.log.1"
 value = [['total elapsed time',0,156,2]]
-Run("Example turbChannel- Serial",log,value)
-
-log = "../examples/turbChannel/turbChannel.log.4"
-value = [['total elapsed time',0,50,2]]
-Run("Example turbChannel- Parallel",log,value)
-
+Run("Example turbChannel: Serial-time",log,value)
 
 ###############################################################################################
     
