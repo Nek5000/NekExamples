@@ -38,9 +38,9 @@ cp ../../trunk/nek/makenek .
 ##############################################################
 
 #Test all examples...
-cd ../../examples/2D/EDDY
-cp ../../../trunk/tools/scripts/neklmpi .
-cp ../../../trunk/nek/makenek .
+cd ../../examples/eddy
+cp ../../trunk/tools/scripts/neklmpi .
+cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    eddy_uv       $HERE_S
 ./neklmpi eddy_uv 1
@@ -51,8 +51,8 @@ grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
 
 cd ..
 cd ./rayleigh
-cp ../../../trunk/tools/scripts/nek200steps .
-cp ../../../trunk/nek/makenek .
+cp ../../trunk/tools/scripts/nek200steps .
+cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    ray0          $HERE_S
 ./nek200steps ray1 1
@@ -77,18 +77,6 @@ mvn box axi
 ./makenek    axi           $HERE_S
 ./neklmpi axi 1
 ./neklmpi axi 4
-
-
-cd ..
-cd ./free_surf
-cp ../../trunk/tools/scripts/nek200steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    fs_growth     $HERE_S
-./nek200steps fs_growth 1
-grep "error" fs_growth.log.1 | tail -1 > fs_growth.err.1
-./nek200steps fs_growth 4
-grep "error" fs_growth.log.4 | tail -1 > fs_growth.err.4
 
 
 cd ..

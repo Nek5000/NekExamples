@@ -105,48 +105,6 @@ Run("Test0002: Parallel-error",log,value)
 
 
 #Example Cases tested for time elapsed and error values
-#2D/EDDY
-log = "../examples/2D/EDDY/eddy_uv.log.1"
-value = [['total elapsed time',0,108,2]]
-Run("Example 2D/EDDY: Serial-time",log,value)
-
-log = "../examples/2D/EDDY/eddy_uv.err.1"
-value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
-Run("Example 2D/EDDY: Serial-error",log,value)
-
-log = "../examples/2D/EDDY/eddy_uv.err.4"
-value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
-Run("Example 2D/EDDY: Parallel-error",log,value)
-
-
-
-#2D/rayleigh 
-log = "../examples/2D/rayleigh/ray1.log.1"
-value = [['total elapsed time',0,4,2]]
-Run("Example 2D/ray1: Serial-time",log,value)
-
-log = "../examples/2D/rayleigh/ray1.err.1"
-value = [['umax',3.798345E-03,1e-06,3]]
-Run("Example 2D/ray1: Serial-error",log,value)
-
-log = "../examples/2D/rayleigh/ray1.err.4"
-value = [['umax',3.413486E-03,1e-06,3]]
-Run("Example 2D/ray1: Parallel-error",log,value)
-
-log = "../examples/2D/rayleigh/ray2.log.1"
-value = [['total elapsed time',0,4,2]]
-Run("Example 2D/ray2: Serial-time",log,value)
-
-log = "../examples/2D/rayleigh/ray2.err.1"
-value = [['umax',3.239578E-03,1e-06,3]]
-Run("Example 2D/ray2: Serial-error",log,value)
-
-log = "../examples/2D/rayleigh/ray2.err.4"
-value = [['umax',2.958139E-03,1e-06,3]]
-Run("Example 2D/ray2: Parallel-error",log,value)
-
-
-
 #axi
 log = "../examples/axi/axi.log.1"
 value = [['total elapsed time',0,6,2]]
@@ -154,18 +112,18 @@ Run("Example axi: Serial-time",log,value)
 
 
 
-#free_surf
-log = "../examples/free_surf/fs_growth.log.1"
-value = [['total elapsed time',0,53.3,2]]
-Run("Example fs_growth: Serial-time",log,value)
+#eddy
+log = "../examples/eddy/eddy_uv.log.1"
+value = [['total elapsed time',0,108,2]]
+Run("Example eddy: Serial-time",log,value)
 
-log = "../examples/free_surf/fs_growth.err.1"
-value = [['error',5.6688752E-06,1e-06,2]]
-Run("Example fs_growth: Serial-error",log,value)
+log = "../examples/eddy/eddy_uv.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example eddy: Serial-error",log,value)
 
-log = "../examples/free_surf/fs_growth.err.4"
-value = [['error',2.1132385E-04,1e-06,2]]
-Run("Example fs_growth: Parallel-error",log,value)
+log = "../examples/eddy/eddy_uv.err.4"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example eddy: Parallel-error",log,value)
 
 
 
@@ -206,6 +164,8 @@ log = "../examples/fs_2/std_wv.err.4"
 value = [['amp',9.011472E-01,1e-06,2]]
 Run("Example std_wv: Parallel-error",log,value)
 
+
+
 #fs_hydro
 log = "../examples/fs_hydro/fs_hydro.log.1"
 value = [['total elapsed time',0,52,2]]
@@ -235,6 +195,7 @@ value = [['err',5.14316E-13,1e-06,3]]
 Run("Example kov: Parallel-error",log,value)
 
 
+
 #lowMach_test
 log = "../examples/lowMach_test/lowMach_test.log.1"
 value = [['total elapsed time',0,53.8,2]]
@@ -247,6 +208,8 @@ Run("Example lowMach_test: Serial-error",log,value)
 log = "../examples/lowMach_test/lowMach_test.err.4"
 value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
 Run("Example lowMach_test: Parallel-error",log,value)
+
+
 
 #pipe
 log = "../examples/pipe/helix.log.1"
@@ -264,6 +227,34 @@ Run("Example helix: Parallel-error",log,value)
 log = "../examples/pipe/stenosis.log.1"
 value = [['total elapsed time',0,33.2,2]]
 Run("Example stenosis: Serial-time",log,value)
+
+
+
+#rayleigh 
+log = "../examples/rayleigh/ray1.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray1: Serial-time",log,value)
+
+log = "../examples/rayleigh/ray1.err.1"
+value = [['umax',3.798345E-03,1e-06,3]]
+Run("Example ray1: Serial-error",log,value)
+
+log = "../examples/rayleigh/ray1.err.4"
+value = [['umax',3.413486E-03,1e-06,3]]
+Run("Example ray1: Parallel-error",log,value)
+
+log = "../examples/rayleigh/ray2.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray2: Serial-time",log,value)
+
+log = "../examples/rayleigh/ray2.err.1"
+value = [['umax',3.239578E-03,1e-06,3]]
+Run("Example ray2: Serial-error",log,value)
+
+log = "../examples/rayleigh/ray2.err.4"
+value = [['umax',2.958139E-03,1e-06,3]]
+Run("Example ray2: Parallel-error",log,value)
+
 
 
 #turbChannel
