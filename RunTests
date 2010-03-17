@@ -65,7 +65,7 @@ grep "umax" ray2.log.1 | tail -1 > ray2.err.1
 grep "umax" ray2.log.4 | tail -1 > ray2.err.4
 
 
-cd ..; cd ..
+cd .. 
 cd ./axi
 cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/tools/scripts/mvn .
