@@ -1,5 +1,6 @@
 #! /bin/sh
 
+#Create variables to store source paths
 mkdir tools
 cd tools
 HERE_T=`pwd`
@@ -7,65 +8,33 @@ HERE_T=`pwd`
 cd ../../trunk/nek
 HERE_S=`pwd`
 
-cd ../tools/
 
-# set Fortran&C compiler
+#Set Fortran&C compiler
+cd ../tools/
 sed -e "s:^F77*=\"\":F77=\"pgf77\":"  \
 -e "s:^CC*=\"\":CC=\"pgcc\":"  maketools >maketools.buildbot
-
 chmod +x maketools.buildbot
+
 maketools.buildbot all              $HERE_T
 
 
+##############################################################
+#Begin testing...
 cd ../../tests/test0001
 cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek .
 ./makenek clean
 ./makenek test0001         $HERE_S
+./tools/genmap << EOF
+test0001
+.05
+EOF
 ./neklmpi test0001 1
 ./neklmpi test0001 4
 
 
-cd ..
-cd ./test0002
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek clean
-./makenek test0002         $HERE_S
-./neklmpi test0002 1
-./neklmpi test0002 4
-
-##############################################################
-
 #Test all examples...
-cd ../../examples/eddy
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    eddy_uv       $HERE_S
-./neklmpi eddy_uv 1
-grep "err" eddy_uv.log.1 | tail -2 > eddy_uv.err.1
-./neklmpi eddy_uv 4
-grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
-
-
-cd ..
-cd ./rayleigh
-cp ../../trunk/tools/scripts/nek200steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    ray0          $HERE_S
-./nek200steps ray1 1
-grep "umax" ray1.log.1 | tail -1 > ray1.err.1
-./nek200steps ray1 4
-grep "umax" ray1.log.4 | tail -1 > ray1.err.4
-./nek200steps ray2 1
-grep "umax" ray2.log.1 | tail -1 > ray2.err.1
-./nek200steps ray2 4
-grep "umax" ray2.log.4 | tail -1 > ray2.err.4
-
-
-cd .. 
+cd ../../examples 
 cd ./axi
 cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/tools/scripts/mvn .
@@ -80,21 +49,65 @@ mvn box axi
 
 
 cd ..
+cd ./conj_ht
+cp ../../trunk/tools/scripts/neklmpi .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    conj_ht       $HERE_S
+../../tests/tools/genmap << EOF
+conj_ht
+.05
+EOF
+./neklmpi conj_ht 1
+grep "tmax" conj_ht.log.1 | tail -1 > conj_ht.err.1
+./neklmpi conj_ht 4
+grep "tmax" conj_ht.log.4 | tail -1 > conj_ht.err.4
+
+
+cd ..
+cd ./eddy
+cp ../../trunk/tools/scripts/neklmpi .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    eddy_uv       $HERE_S
+../../tests/tools/genmap << EOF
+conj_ht
+.05
+EOF
+./neklmpi eddy_uv 1
+grep "err" eddy_uv.log.1 | tail -2 > eddy_uv.err.1
+./neklmpi eddy_uv 4
+grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
+
+
+cd ..
 cd ./fs_2
 cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    st1           $HERE_S
+../../tests/tools/genmap << EOF
+st1
+.05
+EOF
 ./nek200steps st1 1
 grep "amp" st1.log.1 | tail -1 > st1.err.1
 ./nek200steps st1 4
 grep "amp" st1.log.4 | tail -1 > st1.err.4
 
+../../tests/tools/genmap << EOF
+st2
+.05
+EOF
 ./nek200steps st2 1
 grep "amp" st2.log.1 | tail -1 > st2.err.1
 ./nek200steps st2 4
 grep "amp" st2.log.4 | tail -1 > st2.err.4
 
+../../tests/tools/genmap << EOF
+std_wv
+.05
+EOF
 ./nek200steps std_wv 1
 grep "amp" std_wv.log.1 | tail -1 > std_wv.err.1
 ./nek200steps std_wv 4
@@ -107,6 +120,10 @@ cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek fs_hydro        $HERE_S 
+../../tests/tools/genmap << EOF
+fs_hydro
+.05
+EOF
 ./nek200steps fs_hydro 1
 grep "AMP" fs_hydro.log.1 | tail -1 > fs_hydro.err.1
 ./nek200steps fs_hydro 4
@@ -119,6 +136,10 @@ cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    kov           $HERE_S
+../../tests/tools/genmap << EOF
+kov
+.05
+EOF
 ./neklmpi kov 1
 grep "err" kov.log.1 | tail -1 > kov.err.1
 ./neklmpi kov 4
@@ -131,18 +152,40 @@ cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    lowMach_test  $HERE_S
+../../tests/tools/genmap << EOF
+lowMach_test
+.05
+EOF
 ./nek200steps lowMach_test 1
 grep "ERROR" lowMach_test.log.1 | tail -3 > lowMach_test.err.1
 ./nek200steps lowMach_test 4
 grep "ERROR" lowMach_test.log.4 | tail -3 > lowMach_test.err.4
+
+
+cd ..
+cd peris 
+cp ../../trunk/tools/scripts/nek10steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    peris         $HERE_S
+../../tests/tools/genmap << EOF
+peris
+.05
+EOF
+./nek10steps peris 1
+./nek10steps peris 4
  
- 
+
 cd ..
 cd pipe
 cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    helix         $HERE_S
+../../tests/tools/genmap << EOF
+helix
+.05
+EOF
 ./nek10steps helix 1
 grep "e2" helix.log.1 | tail -1 > helix.err.1
 ./nek10steps helix 4
@@ -153,6 +196,31 @@ grep "e2" helix.log.4 | tail -1 > helix.err.4
 ./nek10steps stenosis 1
 ./nek10steps stenosis 4
  
+
+cd ..
+cd ./rayleigh
+cp ../../trunk/tools/scripts/nek200steps .
+cp ../../trunk/nek/makenek .
+./makenek    clean
+./makenek    ray0          $HERE_S
+../../tests/tools/genmap << EOF
+ray1
+.05
+EOF
+./nek200steps ray1 1
+grep "umax" ray1.log.1 | tail -1 > ray1.err.1
+./nek200steps ray1 4
+grep "umax" ray1.log.4 | tail -1 > ray1.err.4
+./nek200steps ray2 1
+
+../../tests/tools/genmap << EOF
+ray2
+.05
+EOF
+grep "umax" ray2.log.1 | tail -1 > ray2.err.1
+./nek200steps ray2 4
+grep "umax" ray2.log.4 | tail -1 > ray2.err.4
+
  
 cd ..
 cd turbChannel
@@ -160,6 +228,10 @@ cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek .
 ./makenek    clean
 ./makenek    turbChannel   $HERE_S
+../../tests/tools/genmap << EOF
+turbChannel
+.05
+EOF
 ./nek10steps turbChannel 1
 grep "e2" turbChannel.log.1 | tail -1 > turbChannel.err.1
 ./nek10steps turbChannel 4

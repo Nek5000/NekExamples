@@ -92,23 +92,26 @@ Run("Test0001: Parallel-error",log,value)
 
 
 
-#Test0002 serial
-log = "./test0002/test0002.log.1"
-value = [['total elapsed time',0,930,2],['ANS1',2.6557E-06,1e-06,7]]
-Run("Test0002: Serial",log,value)
-
-#Test0002 parallel
-log = "./test0002/test0002.log.4"
-value = [['ANS1',2.6557E-06,1e-06,7]]
-Run("Test0002: Parallel-error",log,value)
-
-
-
 #Example Cases tested for time elapsed and error values
 #axi
 log = "../examples/axi/axi.log.1"
 value = [['total elapsed time',0,6,2]]
 Run("Example axi: Serial-time",log,value)
+
+
+
+#conj_ht
+log = "../examples/conj_ht/conj_ht.log.1"
+value = [['total elapsed time',0,9,2]]
+Run("Example conj_ht: Serial-time",log,value)
+
+log = "../examples/conj_ht/conj_ht.err.1"
+value = [['tmax',1.31190E+01,1e-06,2]]
+Run("Example conj_ht: Serial-error",log,value)
+
+log = "../examples/conj_ht/conj_ht.err.4"
+value = [['tmax',1.31190E+01,1e-06,2]]
+Run("Example conj_ht: Parallel-error",log,value)
 
 
 
@@ -211,6 +214,13 @@ Run("Example lowMach_test: Parallel-error",log,value)
 
 
 
+#peris
+log = "../examples/peris/peris.log.1"
+value = [['total elapsed time',0,17,2]]
+Run("Example peris: Serial-time",log,value)
+
+
+
 #pipe
 log = "../examples/pipe/helix.log.1"
 value = [['total elapsed time',0,24.7,2]]
@@ -236,11 +246,11 @@ value = [['total elapsed time',0,4,2]]
 Run("Example ray1: Serial-time",log,value)
 
 log = "../examples/rayleigh/ray1.err.1"
-value = [['umax',3.798345E-03,1e-06,3]]
+value = [['umax',3.798345E-03,1e-05,3]]
 Run("Example ray1: Serial-error",log,value)
 
 log = "../examples/rayleigh/ray1.err.4"
-value = [['umax',3.413486E-03,1e-06,3]]
+value = [['umax',3.413486E-03,1e-05,3]]
 Run("Example ray1: Parallel-error",log,value)
 
 log = "../examples/rayleigh/ray2.log.1"
@@ -248,11 +258,11 @@ value = [['total elapsed time',0,4,2]]
 Run("Example ray2: Serial-time",log,value)
 
 log = "../examples/rayleigh/ray2.err.1"
-value = [['umax',3.239578E-03,1e-06,3]]
+value = [['umax',3.239578E-03,1e-05,3]]
 Run("Example ray2: Serial-error",log,value)
 
 log = "../examples/rayleigh/ray2.err.4"
-value = [['umax',2.958139E-03,1e-06,3]]
+value = [['umax',2.958139E-03,1e-05,3]]
 Run("Example ray2: Parallel-error",log,value)
 
 
