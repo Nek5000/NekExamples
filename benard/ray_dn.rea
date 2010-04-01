@@ -1,0 +1,201 @@
+ ****** PARAMETERS *****
+     2.60000 NEKTON VERSION
+   2 DIMENSIONAL RUN
+   103 PARAMETERS FOLLOW
+   1.00000         DENSITY
+   1.00000         VISCOS
+        0.
+        0.
+        0.
+        0.
+   1.00000         RHOCP
+   1.00000         CONDUCT
+        0.         QVOL
+   0.00000         FINTIME
+    100000         NSTEPS
+   -.02000         DT
+        0.         IOCOMM
+        0          IOTIME
+  10000.00         IOSTEP
+        0.
+        0.
+  0.250000E-01     GRID
+  -1.00000         INTYPE
+   4.0000
+  0.000000E-06     DIVERGENCE
+  0.000000E-08     HELMHOLTZ
+        0.         NPSCAL
+  1.000000E-05     TOLREL
+  1.000000E-05     TOLABS
+   2.01000         COURANT
+   3.00000         TORDER
+        0.         TMESH
+        0.         MAXCGHELM
+        0.         p30
+        0.
+        0.
+   000.000
+   000.000
+  0.000000E-03
+  0.000000E-03
+  0.000000E-01
+        0.
+        0.
+        0.         p40
+        0.         p41
+        0.         p42
+   0.00000         p43
+        0.         p44
+        0.         p45
+        0.
+        0.
+        0.
+  0.000000
+        0.
+        0.
+        0.
+        0.00
+        0.
+        0.         P55
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+   0.00000
+   4.00000         p66 = write form (0), unform(1), universal(2)
+   4.00000         p67 = read form (0), unform (1), universal(2)
+        0.         p68 = avg_all output freq
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+   2.682           p75 - k_c
+   1110.00	   p76 - Rayleigh number (p75=0) or crit
+        0.         p77 - Taylor number squared
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.
+        0.           coarse grid weighting (default=10.0)
+        0.
+        0.
+        0.
+   40.0000          Number of pressure sol'ns saved
+0   5.00000          start saving pressure soln's after this
+   5.00000          start saving pressure soln's after this
+        0.
+        0.
+        0.
+        3.           p99 = 3 ==> dealiasing
+        0.
+        0.           p101 - number of additional filter modes
+   1.00000           Dump out divergence at each time step
+    .00000           p103 - weight of filter
+      4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   13  LOGICAL SWITCHES FOLLOW
+   T     IFFLOW
+   T     IFHEAT
+   T     IFTRAN
+   T  T  F  F  F  F  F  F  F  F  F IFNAV & IFADVC (convection in P.S. fields)
+   F  F  T  T  T  T  T  T  T  T  T  T IFTMSH (IF mesh for this field is T mesh)
+   F     IFAXIS
+   F     IFSTRS
+   F     IFSPLIT
+   F     IFMGRID
+   F     IFMODEL
+   F     IFKEPS
+   F     IFMVBD
+   F     IFCHAR
+   8.00000       8.00000     -0.500000      -4.00000     XFAC,YFAC,XZERO,YZERO
+  *** MESH DATA ***
+         3         2         3           NEL,NDIM,NELV
+            ELEMENT       1 [    1a]  GROUP  0
+  0.000000E+00  0.333333      0.333333      0.000000E+00
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       2 [    1b]  GROUP  0
+  0.333333      0.666667      0.666667      0.333333    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       3 [    1c]  GROUP  0
+  0.666667       1.00000       1.00000      0.666667    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+  ***** CURVED SIDE DATA *****
+     0 Curved sides follow IEDGE,IEL,CURVE(I),I=1,5, CCURVE
+  ***** BOUNDARY CONDITIONS *****
+  ***** FLUID   BOUNDARY CONDITIONS *****
+ W    1  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    1  2  2.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ SYM  1  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P    1  4  3.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    2  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  2  3.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ SYM  2  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  4  1.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    3  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P    3  2  1.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ SYM  3  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    3  4  2.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+  ***** THERMAL BOUNDARY CONDITIONS *****
+ t    1  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    1  2  2.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    1  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P    1  4  3.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    2  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  2  3.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    2  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  4  1.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    3  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P    3  2  1.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    3  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    3  4  2.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+   0 PRESOLVE/RESTART OPTIONS  *****
+   7         INITIAL CONDITIONS *****
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+  ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
+   4                 Lines of Drive force data follow
+C
+C
+C
+C
+  ***** Variable Property Data ***** Overrrides Parameter data.
+   1 Lines follow.
+   0 PACKETS OF DATA FOLLOW
+  ***** HISTORY AND INTEGRAL DATA *****
+ 001   POINTS.  Hcode, I,J,H,IEL
+ UV PT    H      3    3    1    1
+  ***** OUTPUT FIELD SPECIFICATION *****
+   6 SPECIFICATIONS FOLLOW
+   F      COORDINATES
+   T      VELOCITY
+   T      PRESSURE
+   T      TEMPERATURE
+   F      TEMPERATURE GRADIENT
+   0      PASSIVE SCALARS
+  ***** OBJECT SPECIFICATION *****
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects
