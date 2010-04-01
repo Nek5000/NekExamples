@@ -100,6 +100,37 @@ Run("Example axi: Serial-time",log,value)
 
 
 
+#benard
+log = "../examples/benard/ray_9.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example benard/ray_9: Serial-time",log,value)
+
+log = "../examples/benard/ray_dd.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dd: Serial-time",log,value)
+
+log = "../examples/benard/benard.err"
+value = [['ray_dd.log.1',1707.760,1,7]]
+Run("Example benard/ray_dd: Serial-error",log,value)
+
+log = "../examples/benard/ray_dn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dn: Serial-time",log,value)
+
+log = "../examples/benard/benard.err"
+value = [['ray_dn.log.1',1100.650,1,7]]
+Run("Example benard/ray_dn: Serial-error",log,value)
+
+log = "../examples/benard/ray_nn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_nn: Serial-time",log,value)
+
+log = "../examples/benard/benard.err"
+value = [['ray_nn.log.1',657.511,.1,7]]
+Run("Example benard/ray_nn: Serial-error",log,value)
+
+
+
 #conj_ht
 log = "../examples/conj_ht/conj_ht.log.1"
 value = [['total elapsed time',0,9,2]]
@@ -175,12 +206,12 @@ value = [['total elapsed time',0,52,2]]
 Run("Example fs_hydro: Serial-time",log,value)
 
 log = "../examples/fs_hydro/fs_hydro.err.1"
-value = [['AMP',1.5581969E-03,1e-06,2]]
-Run("Example fs_hydro: Serial-error",log,value)
+value = [['AMP',1.1117248E-03,1e-06,2]]
+#Run("Example fs_hydro: Serial-error",log,value)
 
 log = "../examples/fs_hydro/fs_hydro.err.4"
-value = [['AMP',3.1468195E-04,1e-06,2]]
-Run("Example fs_hydro: Parallel-error",log,value)
+value = [['AMP',9.8880614E-04,1e-06,2]]
+#Run("Example fs_hydro: Parallel-error",log,value)
 
 
 
@@ -258,11 +289,11 @@ value = [['total elapsed time',0,4,2]]
 Run("Example ray2: Serial-time",log,value)
 
 log = "../examples/rayleigh/ray2.err.1"
-value = [['umax',3.239578E-03,1e-05,3]]
+value = [['umax',3.234207E-03,1e-05,3]]
 Run("Example ray2: Serial-error",log,value)
 
 log = "../examples/rayleigh/ray2.err.4"
-value = [['umax',2.958139E-03,1e-05,3]]
+value = [['umax',2.926341E-03,1e-05,3]]
 Run("Example ray2: Parallel-error",log,value)
 
 
