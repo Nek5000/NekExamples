@@ -218,9 +218,6 @@ c-----------------------------------------------------------------------
 
       common /rayleigh_r/ rapr,ta2pr
       common /rayleigh_c/ Ra,Ra1,Ra2,Ra3,Prnum,Ta2,Ek1,Ek2,Ek3,ck
-      real Ra_c(3)
-      save Ra_c
-      data Ra_c / 1707.76 , 1100.65 , 657.511 / ! Values from Chandrashekar
 
       real Ek0,Ek,t12,t23
       save Ek0,Ek,t12,t23
