@@ -2,16 +2,27 @@ C     Dimension file to be included
 C
 C     HCUBE array dimensions
 C
-      parameter (ldim=3)
-      parameter (lx1=8,ly1=lx1,lz1=lx1,lelt=520,lelv=lelt)
-      parameter (lxd=12,lyd=lxd,lzd=lxd)
-      parameter (lelx=8,lely=lelx,lelz=lelx)
+      parameter (ldim=2)
+      parameter (lx1=14,ly1=lx1,lz1=1,lelt=80,lelv=lelt)
+      parameter (lxd=20,lyd=lxd,lzd=1)
+      parameter (lelx=1,lely=1,lelz=1)
 c
+c     NOTE: for IBM BLUE GENE LX1,LXD has to be an even number (double hummer)
+
+      parameter (ldimt= 1)       ! upper limit for passive scalars + T
+
+      parameter (lp =      64)   ! upper limit for number of CPUs
+      parameter (lelg = 5000)    ! upper limit for total number of elements
+
+C
+C    ******************************************************************
+C
       parameter (lzl=3 + 2*(ldim-3))
-c
+
       parameter (lx2=lx1-0)
       parameter (ly2=ly1-0)
-      parameter (lz2=lz1-0)
+      parameter (lz2=lz1)
+
       parameter (lx3=lx2)
       parameter (ly3=ly2)
       parameter (lz3=lz2)
@@ -35,11 +46,8 @@ c
 c
 C LX1M=LX1 when there are moving meshes; =1 otherwise
       parameter (lx1m=1,ly1m=1,lz1m=1)
-      parameter (ldimt= 2)                       ! passive scalars + T
       parameter (ldimt1=ldimt+1)
       parameter (ldimt3=ldimt+3)
-      parameter (lp = 128)
-      parameter (lelg = 520)
 c
 c     Note:  In the new code, LELGEC should be about sqrt(LELG)
 c
@@ -85,3 +93,13 @@ C
       COMMON/DIMN/NELV,NELT,NX1,NY1,NZ1,NX2,NY2,NZ2
      $,NX3,NY3,NZ3,NDIM,NFIELD,NPERT,NID
      $,NXD,NYD,NZD
+
+c automatically added by makenek
+      parameter(lxo=lx1)
+
+c automatically added by makenek
+      parameter(lpart = 1  ) ! max number of particles
+
+c automatically added by makenek
+      integer ax1,ay1,az1,ax2,ay2,az2
+      parameter (ax1=lx1,ay1=ly1,az1=lz1,ax2=lx2,ay2=ly2,az2=lz2) ! running averages
