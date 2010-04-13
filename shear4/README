@@ -1,0 +1,264 @@
+
+
+Thin and thick shear layer cases.  (See below, from thin.usr.)
+
+Also, these cases illustrate transport of multiple passive scalars.
+
+
+
+c-----------------------------------------------------------------------
+c
+c    DOUBLE SHEAR-LAYER ROLL-UP with PASSIVE SCALAR TRANSPORT: thin case
+c
+c
+c    This is the .usr file for the double shear-layer roll-up problem
+c    that has been studied by many authors, including
+c
+c        Bell, Collela, & Glaz, JCP [85],  p257 (1989)
+c        Brown and Minion,      JCP [122], p165 (1995)
+c        Tadmor                 1997, Italy
+c        C.W. Shu               p.65, 1997 ICASE Rep.
+c        Fischer & Mullen       CRAS (2001)
+c
+c
+c    The challenge presented by this problem is that the shear
+c    layers thin out with time, eventually evolving to a state
+c    where they are thinner than the grid resolution.  Ideally,
+c    a code should be able to handle this situation with "graceful
+c    degradation" in which the macroscopic properties continue to
+c    evolve without blow-up of the solution.
+c
+c    Fischer & Mullen (CRAS 2001) illustrate that the filter-based
+c    stabilization is an effective approach to solving this problem.
+c    Further investigation pointed to aliasing of the nonlinear
+c    quadrature as a major stability issue in the original SEM
+c    formulations.   By over-integrating the convective transport
+c    term one can recover stability for this problem and run without
+c    filtering and even with arbitrarily small viscosity nu > 0.
+c    Thus, in the .rea file, p99=3 (dealiasing on) and p103=0
+c    (filtering off).
+c
+c    There are two different initial conditions - the "thin" shear
+c    layer (scaling parameter rho=100) and the thick one (rho=30),
+c    with the thin case considerably harder than the thick.  
+c    Reasonable results for the thin case (set here) can be realized 
+c    with 256^2 resolution (lx1=17 with the present 16x16 element mesh).
+c    For results with the thin-layer case, see F&M (2001).
+c
+c    Reynolds numbers of 10^4 and 10^5 have been reported in the
+c    literature.  In the present case, the .rea file has param 2
+c    set to -100000, corresponding to nu=.00001 and Re=10^5.
+c
+c    PASSIVE SCALAR TRANSPORT
+c
+c    The .rea and SIZEu files are also configured for the transport
+c    of 4 passive scalars, just to illustrate how this is accomplished.
+c    The scalar fields are initialized with some arbitrary values in
+c    useric.  The conductivities are set to 1, .1, .01, and .001,
+c    with the first one set as the thermal conductivity (param 8)
+c    and the others set on line 124 in the .rea file:
+c
+c      1.e-1         1.e-2         1.e-3         1.00000       1.00000    
+c
+c    Note that Nek5000 supports, in principle, an arbitrary number
+c    of passive scalars (up to 20 have been used to date).   Use 
+c    the .usr file to initialize the properties for a very high 
+c    number of passive scalars.  In addition, one must increase 
+c    the "ldimt" parameter in the SIZEu file and recompile the 
+c    entire code.
+c
+c
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,iel)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      udiff =0.
+      utrans=0.
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,iel)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,iel)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      qvol   = 0.0
+      source = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+       subroutine userchk
+       include 'SIZE'
+       include 'TOTAL'
+
+       ntot = nx1*ny1*nz1*nelv
+       umax = glamax(vx,ntot)
+       if (umax.gt.8.) then
+          write(6,*) nid,' umax:',umax,ntot
+          call emerxit
+       endif
+
+       return
+       end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,iel)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      ux=0.0
+      uy=0.0
+      uz=0.0
+      temp=0.0
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,iel)
+      include 'SIZE'
+      include 'TSTEP'
+      include 'NEKUSE'
+
+      integer icalld
+      save    icalld
+      data    icalld  /0/
+
+      real rho,delta
+      save rho,delta
+
+      ux=0.0
+      uy=0.0
+      uz=0.0
+      TEMP=0
+c
+c
+c     Shu's double shear layer (p.65, 1997 ICASE Rep.)
+c
+c     Also,
+c
+c         Bell, Collela, & Glaz, JCP [85],  p257 (1989)
+c         Brown and Minion,      JCP [122], p165 (1995)
+c         Tadmor                 1997, Italy
+c
+c
+      delta = 0.05
+c     rho   =  30.         ! thick shear layer case
+      rho   = 100.         ! thin shear layer case
+
+      if (icalld.eq.0) then
+         icalld = 1
+         if (nid.eq.0) write(6,*) 'Shear layer delta:',delta
+         if (nid.eq.0) write(6,*) 'Shear layer rho:  ',rho
+      endif
+
+      if (y.le.0.5) then
+         ux =  tanh(rho*(y-0.25))
+      else
+         ux =  tanh(rho*(0.75-y))
+      endif
+      uy =  delta*sin(2.*pi*x)
+
+      if (ifield.gt.1) then          ! set up passive scalar
+         rho  = 50.*ifield
+         if (y.le.0.5) then
+            tmp  =  tanh(rho*(y-0.25))
+         else
+            tmp  =  tanh(rho*(0.75-y))
+         endif
+
+         if (x.le.0.5) then
+            tmp  =  tmp  + tanh(rho*(x-0.25))
+         else
+            tmp  =  tmp  + tanh(rho*(0.75-x))
+         endif
+         temp = tmp*sin(2.*pi*ifield*x)
+         ps1  = tmp
+         ps2  = tmp
+         ps3  = tmp
+         ps4  = tmp
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+
+      param(66) = 4   ! std nek io
+      param(67) = 4
+
+!
+!     Checking for fast tensor product pressure solver:
+!
+!     As of 3/1/2010, the fast tensor product solver is broken for P > 1,
+!     apparently a element to processor map issue.  pff
+!
+!     The fast tensor product solver is set by setting 
+!
+!     p116=nelx   (in .rea file)       lelx=nelx  (in SIZEu)
+!     p117=nely                        lely=nely
+!     p118=nelz                        lelz=nelz
+!
+!     where nelx=nely=16 and nelz=1 for the present case.
+!
+!     In addition, ZPER in the /nek repo must be modified from
+!
+! >        parameter (lelg_sm=2)
+! >        parameter (ltfdm2 =2)
+! >  c     parameter (lelg_sm=lelg)
+! >  c     parameter (ltfdm2=2*lx2*ly2*lz2*lelt)
+!
+! to:
+!
+! >  c     parameter (lelg_sm=2)
+! >  c     parameter (ltfdm2 =2)
+! >        parameter (lelg_sm=lelg)
+! >        parameter (ltfdm2=2*lx2*ly2*lz2*lelt)
+!
+ 
+c     if (param(116).gt.0.and.np.gt.1.and.nid.eq.0) write(6,*)
+c    $'Set p115-118=0 and rerun, or rerun with only one processor.'
+c
+c     if (param(116).gt.0.and.np.gt.1) call exitti
+c    $('Fast tens. prod. solver (p116>0) currently broken for P>1$,np)
+c
+
+      if (param(116).gt.0.and.np.gt.1.and.nid.eq.0) then
+        write(6,*)
+     $  'TURNING OFF FAST TENSOR PRODUCT SOLVER FOR PARALLEL CASE.'
+        param(115) = 0
+        param(116) = 0
+        param(117) = 0
+        param(118) = 0
+      endif
+
+      if (lx1.lt.12.and.nid.eq.0) then
+          write(6,*)
+          write(6,*) 'NOTE: FOR THE THIN CASE, recommend lx1=16'
+          write(6,*)
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      return
+      end
+c-----------------------------------------------------------------------
