@@ -34,7 +34,7 @@ cd ./benard
 cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb clean
-./makenek.bb ray_9
+./makenek.bb ray_9            $HERE_S
 ../../tests/tools/genmap << EOF
 ray_9
 .05
@@ -42,7 +42,7 @@ EOF
 ./neklmpi ray_9 1
 
 ./makenek.bb clean
-./makenek.bb ray_cr
+./makenek.bb ray_cr           $HERE_S
 ../../tests/tools/genmap << EOF
 ray_dd
 .05
