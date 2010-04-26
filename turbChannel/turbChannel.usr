@@ -261,7 +261,7 @@ c      if(istep.lt.500) return               ! delay averaging
         diff   = (tw-ffx_avg)/tw
 
         write(6,1) istep,time,e2,ffx_new,diff
-    1   format(i6,1p4e17.9,' e2')
+    1   format(i6,1p4e17.9,' err2')
 
         ! write statistics to file
         idump = param(68)
