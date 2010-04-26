@@ -1,274 +1,149 @@
 #! /bin/sh
 
-#Create variables to store source paths
+#Create Directories 
 mkdir tools
+mkdir mpiLog
+mkdir gnuLog
+mkdir intLog
+mkdir pgiLog
+
+
+#Create variable to store source path for tools
 cd tools
 HERE_T=`pwd`
 
-cd ../../trunk/nek
-HERE_S=`pwd`
 
-
-#Set Fortran&C compiler
-cd ../tools/
+#Set Fortran&C compiler and build tools
+cd ../../trunk/tools/
 sed -e "s:^F77*=\"\":F77=\"pgf77\":"  \
 -e "s:^CC*=\"\":CC=\"pgcc\":"  maketools >maketools.buildbot
 chmod +x maketools.buildbot
 
+cd prenek
+sed -e "s:1 000 000:10 000:" basics.inc>t.t
+mv t.t basics.inc
+
+cd ../
 maketools.buildbot all              $HERE_T
 
 
-##############################################################
-#Begin testing...
+#Test MPI Compiler
+cp ../nek/makenek ../nek/makenek.bb
+chmod +x ../nek/makenek.bb
+
+../../tests/ExTest
+#Parallel Tests for MPI
 cd ../../tests/test0001
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek clean
-./makenek test0001         $HERE_S
-../tools/genmap << EOF
-test0001
-.05
-EOF
-./neklmpi test0001 1
 ./neklmpi test0001 4
 
-
-#Test all examples...
-cd ../../examples 
-cd ./axi
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/tools/scripts/mvn .
-cp ../../trunk/nek/makenek .
-../../tests/tools/genbox < gb.in
-../../tests/tools/genmap < gm.in
-mvn box axi
-./makenek    clean
-./makenek    axi           $HERE_S
-./neklmpi axi 1
+cd ../../examples/axi
 ./neklmpi axi 4
 
-
-cd ..
-cd ./benard
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek clean
-./makenek ray_9
-../../tests/tools/genmap << EOF
-ray_9
-.05
-EOF
-./neklmpi ray_9 1
-
-./makenek clean
-./makenek ray_cr
-../../tests/tools/genmap << EOF
-ray_dd
-.05
-EOF
-neklmpi ray_dd 1
-
-../../tests/tools/genmap << EOF
-ray_dn
-.05
-EOF
-neklmpi ray_dn 1
-
-../../tests/tools/genmap << EOF
-ray_nn
-.05
-EOF
-neklmpi ray_nn 1
-grep rayleigh *.log.1 > benard.err
-
-
-cd ..
-cd ./conj_ht
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    conj_ht       $HERE_S
-../../tests/tools/genmap << EOF
-conj_ht
-.05
-EOF
-./neklmpi conj_ht 1
-grep "tmax" conj_ht.log.1 | tail -1 > conj_ht.err.1
+cd ../conj_ht
 ./neklmpi conj_ht 4
 grep "tmax" conj_ht.log.4 | tail -1 > conj_ht.err.4
 
-
-cd ..
-cd ./eddy
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    eddy_uv       $HERE_S
-../../tests/tools/genmap << EOF
-eddy_uv
-.05
-EOF
-./neklmpi eddy_uv 1
-grep "err" eddy_uv.log.1 | tail -2 > eddy_uv.err.1
+cd ../eddy
 ./neklmpi eddy_uv 4
 grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
 
-
-cd ..
-cd ./fs_2
-cp ../../trunk/tools/scripts/nek200steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    st1           $HERE_S
-../../tests/tools/genmap << EOF
-st1
-.05
-EOF
-./nek200steps st1 1
-grep "amp" st1.log.1 | tail -1 > st1.err.1
+cd ../fs_2
 ./nek200steps st1 4
 grep "amp" st1.log.4 | tail -1 > st1.err.4
-
-../../tests/tools/genmap << EOF
-st2
-.05
-EOF
-./nek200steps st2 1
-grep "amp" st2.log.1 | tail -1 > st2.err.1
 ./nek200steps st2 4
 grep "amp" st2.log.4 | tail -1 > st2.err.4
-
-../../tests/tools/genmap << EOF
-std_wv
-.05
-EOF
-./nek200steps std_wv 1
-grep "amp" std_wv.log.1 | tail -1 > std_wv.err.1
 ./nek200steps std_wv 4
 grep "amp" std_wv.log.4 | tail -1 > std_wv.err.4
 
-
-cd ..
-cd ./fs_hydro
-cp ../../trunk/tools/scripts/nek200steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek fs_hydro        $HERE_S 
-../../tests/tools/genmap << EOF
-fs_hydro
-.05
-EOF
-./nek200steps fs_hydro 1
-grep "AMP" fs_hydro.log.1 | tail -1 > fs_hydro.err.1
+cd ../fs_hydro
 ./nek200steps fs_hydro 4
 grep "AMP" fs_hydro.log.4 | tail -1 > fs_hydro.err.4
- 
 
-cd ..
-cd kovasznay
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    kov           $HERE_S
-../../tests/tools/genmap << EOF
-kov
-.05
-EOF
-./neklmpi kov 1
-grep "err" kov.log.1 | tail -1 > kov.err.1
+cd ../kovasznay
 ./neklmpi kov 4
 grep "err" kov.log.4 | tail -1 > kov.err.4
- 
- 
-cd ..
-cd lowMach_test
-cp ../../trunk/tools/scripts/nek200steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    lowMach_test  $HERE_S
-../../tests/tools/genmap << EOF
-lowMach_test
-.05
-EOF
-./nek200steps lowMach_test 1
-grep "ERROR" lowMach_test.log.1 | tail -3 > lowMach_test.err.1
+
+cd ../lowMach_test
 ./nek200steps lowMach_test 4
 grep "ERROR" lowMach_test.log.4 | tail -3 > lowMach_test.err.4
 
-
-cd ..
-cd peris 
-cp ../../trunk/tools/scripts/nek10steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    peris         $HERE_S
-../../tests/tools/genmap << EOF
-peris
-.05
-EOF
-./nek10steps peris 1
+cd ../peris
 ./nek10steps peris 4
- 
 
-cd ..
-cd pipe
-cp ../../trunk/tools/scripts/nek10steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    helix         $HERE_S
-../../tests/tools/genmap << EOF
-helix
-.05
-EOF
-./nek10steps helix 1
-grep "e2" helix.log.1 | tail -1 > helix.err.1
+cd ../pipe
 ./nek10steps helix 4
-grep "e2" helix.log.4 | tail -1 > helix.err.4
- 
-../../tests/tools/n2to3  < n2to3.in
-../../tests/tools/genmap < g.in
-./nek10steps stenosis 1
+grep "err2" helix.log.4 | tail -1 > helix.err.4
 ./nek10steps stenosis 4
- 
 
-cd ..
-cd ./rayleigh
-cp ../../trunk/tools/scripts/nek200steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    ray0          $HERE_S
-../../tests/tools/genmap << EOF
-ray1
-.05
-EOF
-./nek200steps ray1 1
-grep "umax" ray1.log.1 | tail -1 > ray1.err.1
+cd ../rayleigh
 ./nek200steps ray1 4
 grep "umax" ray1.log.4 | tail -1 > ray1.err.4
-./nek200steps ray2 1
-
-../../tests/tools/genmap << EOF
-ray2
-.05
-EOF
-grep "umax" ray2.log.1 | tail -1 > ray2.err.1
 ./nek200steps ray2 4
 grep "umax" ray2.log.4 | tail -1 > ray2.err.4
 
- 
-cd ..
-cd turbChannel
-cp ../../trunk/tools/scripts/nek10steps .
-cp ../../trunk/nek/makenek .
-./makenek    clean
-./makenek    turbChannel   $HERE_S
-../../tests/tools/genmap << EOF
-turbChannel
-.05
-EOF
-./nek10steps turbChannel 1
-grep "e2" turbChannel.log.1 | tail -1 > turbChannel.err.1
+cd ../shear4
+./nek10steps shear4 4
+./nek10steps thin 4
+
+cd ../turbChannel
 ./nek10steps turbChannel 4
-grep "e2" turbChannel.log.4 | tail -1 > turbChannel.err.4
- 
+grep "err2" turbChannel.log.4 | tail -1 > turbChannel.err.4
+
+
+
+#Find all log files and error files and put into directory
+cd ..
+mv */*log.* ../tests/mpiLog
+mv */*.err* ../tests/mpiLog
+cd ../tests/test0001
+mv *log.*   ../mpiLog
 ##############################################################
+#Test PG Compiler
+cd ../../trunk/nek/
+sed -e "s:^F77*=\"mpif77\":F77=\"pgf77\":"  \
+-e "s:^CC*=\"mpicc\":CC=\"pgcc\":"  \
+-e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
+#chmod +x makenek.bb
+
+../../tests/ExTest
+
+#Find all log files and error files and put into directory
+cd ../../examples
+mv */*log.* ../tests/pgiLog
+mv */*.err* ../tests/pgiLog
+cd ../tests/test0001
+mv *log.*   ../pgiLog
+##############################################################
+#Test GNU Compiler
+cd ../../trunk/nek/
+sed -e "s:^F77*=\"mpif77\":F77=\"gfortran\":"  \
+-e "s:^CC*=\"mpicc\":CC=\"gcc\":"  \
+-e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
+#chmod +x makenek.bb
+
+../../tests/ExTest
+
+#Find all log files and error files and put into directory
+cd ../../examples
+mv */*log.* ../tests/gnuLog
+mv */*.err* ../tests/gnuLog
+cd ../tests/test0001
+mv *log.*   ../gnuLog
+##############################################################
+#Test INTEL Compiler
+cd ../../trunk/nek/
+sed -e "s:^F77*=\"mpif77\":F77=\"ifort\":"  \
+-e "s:^CC*=\"mpicc\":CC=\"icc\":"  \
+-e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
+#chmod +x makenek.bb
+
+../../tests/ExTest
+
+#Find all log files and error files and put into directory
+cd ../../examples
+mv */*log.* ../tests/intLog
+mv */*.err* ../tests/intLog
+cd ../tests/test0001
+mv *log.*   ../intLog
+##############################################################
+
