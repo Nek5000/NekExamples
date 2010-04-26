@@ -80,228 +80,712 @@ print("Beginning of top-down testing\n\n")
 print("    . : successful test, F : failed test\n\n")
 ###############################################################################################
 
-#Test0001 serial
-log = "./test0001/test0001.log.1"
+#Test0001 - MPI 
+log = "./mpiLog/test0001.log.1"
 value = [['total elapsed time',0,170,2],['ANS1',5.742723E-07,1e-06,8]]
-Run("Test0001: Serial",log,value)
+Run("Test0001/MPI: Serial",log,value)
 
-#Test0001 parallel
-log = "./test0001/test0001.log.4"
+log = "./mpiLog/test0001.log.4"
 value = [['ANS1',5.742723E-07,1e-06,8]]
-Run("Test0001: Parallel-error",log,value)
+Run("Test0001/MPI: Parallel-error",log,value)
+
+#Test0001 - PGI
+log = "./pgiLog/test0001.log.1"
+value = [['total elapsed time',0,170,2],['ANS1',5.742723E-07,1e-06,8]]
+Run("Test0001/PGI: Serial",log,value)
+
+#Test0001 - GNU
+log = "./gnuLog/test0001.log.1"
+value = [['total elapsed time',0,170,2],['ANS1',5.742723E-07,1e-06,8]]
+Run("Test0001/GNU: Serial",log,value)
+
+#Test0001 - INT
+log = "./intLog/test0001.log.1"
+value = [['total elapsed time',0,170,2],['ANS1',5.742723E-07,1e-06,8]]
+Run("Test0001/INT: Serial",log,value)
 
 
 
 #Example Cases tested for time elapsed and error values
-#axi
-log = "../examples/axi/axi.log.1"
+#axi - MPI
+log = "./mpiLog/axi.log.1"
 value = [['total elapsed time',0,6,2]]
-Run("Example axi: Serial-time",log,value)
+Run("Example axi/MPI: Serial-time",log,value)
 
+#axi - PGI
+log = "./pgiLog/axi.log.1"
+value = [['total elapsed time',0,6,2]]
+Run("Example axi/PGI: Serial-time",log,value)
 
-
-#benard
-log = "../examples/benard/ray_9.log.1"
-value = [['total elapsed time',0,11,2]]
-Run("Example benard/ray_9: Serial-time",log,value)
-
-log = "../examples/benard/ray_dd.log.1"
-value = [['total elapsed time',0,10,2]]
-Run("Example benard/ray_dd: Serial-time",log,value)
-
-log = "../examples/benard/benard.err"
-value = [['ray_dd.log.1',1707.760,1,7]]
-Run("Example benard/ray_dd: Serial-error",log,value)
-
-log = "../examples/benard/ray_dn.log.1"
-value = [['total elapsed time',0,10,2]]
-Run("Example benard/ray_dn: Serial-time",log,value)
-
-log = "../examples/benard/benard.err"
-value = [['ray_dn.log.1',1100.650,1,7]]
-Run("Example benard/ray_dn: Serial-error",log,value)
-
-log = "../examples/benard/ray_nn.log.1"
-value = [['total elapsed time',0,10,2]]
-Run("Example benard/ray_nn: Serial-time",log,value)
-
-log = "../examples/benard/benard.err"
-value = [['ray_nn.log.1',657.511,.1,7]]
-Run("Example benard/ray_nn: Serial-error",log,value)
-
-
-
-#conj_ht
-log = "../examples/conj_ht/conj_ht.log.1"
+#axi - GNU
+log = "./gnuLog/axi.log.1"
 value = [['total elapsed time',0,9,2]]
-Run("Example conj_ht: Serial-time",log,value)
+Run("Example axi/GNU: Serial-time",log,value)
 
-log = "../examples/conj_ht/conj_ht.err.1"
+#axi - INT
+log = "./intLog/axi.log.1"
+value = [['total elapsed time',0,6,2]]
+Run("Example axi/INT: Serial-time",log,value)
+
+
+
+#benard - MPI
+log = "./mpiLog/ray_9.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example benard/ray_9/MPI: Serial-time",log,value)
+
+log = "./mpiLog/ray_dd.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dd/MPI: Serial-time",log,value)
+
+log = "./mpiLog/benard.err"
+value = [['ray_dd.log.1',1707.760,1,7]]
+Run("Example benard/ray_dd/MPI: Serial-error",log,value)
+
+log = "./mpiLog/ray_dn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dn/MPI: Serial-time",log,value)
+
+log = "./mpiLog/benard.err"
+value = [['ray_dn.log.1',1100.650,1,7]]
+Run("Example benard/ray_dn/MPI: Serial-error",log,value)
+
+log = "./mpiLog/ray_nn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_nn/MPI: Serial-time",log,value)
+
+log = "./mpiLog/benard.err"
+value = [['ray_nn.log.1',657.511,.1,7]]
+Run("Example benard/ray_nn/MPI: Serial-error",log,value)
+
+#benard - PGI
+log = "./pgiLog/ray_9.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example benard/ray_9/PGI: Serial-time",log,value)
+
+log = "./pgiLog/ray_dd.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dd/PGI: Serial-time",log,value)
+
+log = "./pgiLog/benard.err"
+value = [['ray_dd.log.1',1707.760,1,7]]
+Run("Example benard/ray_dd/PGI: Serial-error",log,value)
+
+log = "./pgiLog/ray_dn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dn/PGI: Serial-time",log,value)
+
+log = "./pgiLog/benard.err"
+value = [['ray_dn.log.1',1100.650,1,7]]
+Run("Example benard/ray_dn/PGI: Serial-error",log,value)
+
+log = "./pgiLog/ray_nn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_nn/PGI: Serial-time",log,value)
+
+log = "./pgiLog/benard.err"
+value = [['ray_nn.log.1',657.511,.1,7]]
+Run("Example benard/ray_nn/PGI: Serial-error",log,value)
+
+#benard - GNU
+log = "./gnuLog/ray_9.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example benard/ray_9/GNU: Serial-time",log,value)
+
+log = "./gnuLog/ray_dd.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dd/GNU: Serial-time",log,value)
+
+log = "./gnuLog/benard.err"
+value = [['ray_dd.log.1',1707.760,1,7]]
+Run("Example benard/ray_dd/GNU: Serial-error",log,value)
+
+log = "./gnuLog/ray_dn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dn/GNU: Serial-time",log,value)
+
+log = "./gnuLog/benard.err"
+value = [['ray_dn.log.1',1100.650,1,7]]
+Run("Example benard/ray_dn/GNU: Serial-error",log,value)
+
+log = "./gnuLog/ray_nn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_nn/GNU: Serial-time",log,value)
+
+log = "./gnuLog/benard.err"
+value = [['ray_nn.log.1',657.511,.1,7]]
+Run("Example benard/ray_nn/GNU: Serial-error",log,value)
+
+#benard - INT
+log = "./intLog/ray_9.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example benard/ray_9/INT: Serial-time",log,value)
+
+log = "./intLog/ray_dd.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dd/INT: Serial-time",log,value)
+
+log = "./intLog/benard.err"
+value = [['ray_dd.log.1',1707.760,1,7]]
+Run("Example benard/ray_dd/INT: Serial-error",log,value)
+
+log = "./intLog/ray_dn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_dn/INT: Serial-time",log,value)
+
+log = "./intLog/benard.err"
+value = [['ray_dn.log.1',1100.650,1,7]]
+Run("Example benard/ray_dn/INT: Serial-error",log,value)
+
+log = "./intLog/ray_nn.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example benard/ray_nn/INT: Serial-time",log,value)
+
+log = "./intLog/benard.err"
+value = [['ray_nn.log.1',657.511,.1,7]]
+Run("Example benard/ray_nn/INT: Serial-error",log,value)
+
+
+
+#conj_ht - MPI
+log = "./mpiLog/conj_ht.log.1"
+value = [['total elapsed time',0,9,2]]
+Run("Example conj_ht/MPI: Serial-time",log,value)
+
+log = "./mpiLog/conj_ht.err.1"
 value = [['tmax',1.31190E+01,1e-06,2]]
-Run("Example conj_ht: Serial-error",log,value)
+Run("Example conj_ht/MPI: Serial-error",log,value)
 
-log = "../examples/conj_ht/conj_ht.err.4"
+log = "./mpiLog/conj_ht.err.4"
 value = [['tmax',1.31190E+01,1e-06,2]]
-Run("Example conj_ht: Parallel-error",log,value)
+Run("Example conj_ht/MPI: Parallel-error",log,value)
+
+#conj_ht - PGI
+log = "./pgiLog/conj_ht.log.1"
+value = [['total elapsed time',0,9,2]]
+Run("Example conj_ht/PGI: Serial-time",log,value)
+
+log = "./pgiLog/conj_ht.err.1"
+value = [['tmax',1.31190E+01,1e-06,2]]
+Run("Example conj_ht/PGI: Serial-error",log,value)
+
+#conj_ht - GNU
+log = "./gnuLog/conj_ht.log.1"
+value = [['total elapsed time',0,9,2]]
+Run("Example conj_ht/GNU: Serial-time",log,value)
+
+log = "./gnuLog/conj_ht.err.1"
+value = [['tmax',1.31190E+01,1e-06,2]]
+Run("Example conj_ht/GNU: Serial-error",log,value)
+
+#conj_ht - INT
+log = "./intLog/conj_ht.log.1"
+value = [['total elapsed time',0,9,2]]
+Run("Example conj_ht/INT: Serial-time",log,value)
+
+log = "./intLog/conj_ht.err.1"
+value = [['tmax',1.31190E+01,1e-06,2]]
+Run("Example conj_ht/INT: Serial-error",log,value)
 
 
 
-#eddy
-log = "../examples/eddy/eddy_uv.log.1"
+#eddy - MPI
+log = "./mpiLog/eddy_uv.log.1"
 value = [['total elapsed time',0,108,2]]
-Run("Example eddy: Serial-time",log,value)
+Run("Example eddy/MPI: Serial-time",log,value)
 
-log = "../examples/eddy/eddy_uv.err.1"
+log = "./mpiLog/eddy_uv.err.1"
 value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
-Run("Example eddy: Serial-error",log,value)
+Run("Example eddy/MPI: Serial-error",log,value)
 
-log = "../examples/eddy/eddy_uv.err.4"
+log = "./mpiLog/eddy_uv.err.4"
 value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
-Run("Example eddy: Parallel-error",log,value)
+Run("Example eddy/MPI: Parallel-error",log,value)
+
+#eddy - PGI
+log = "./pgiLog/eddy_uv.log.1"
+value = [['total elapsed time',0,108,2]]
+Run("Example eddy/PGI: Serial-time",log,value)
+
+log = "./pgiLog/eddy_uv.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example eddy/PGI: Serial-error",log,value)
+
+#eddy - GNU
+log = "./gnuLog/eddy_uv.log.1"
+value = [['total elapsed time',0,108,2]]
+Run("Example eddy/GNU: Serial-time",log,value)
+
+log = "./gnuLog/eddy_uv.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example eddy/GNU: Serial-error",log,value)
+
+#eddy - INT
+log = "./intLog/eddy_uv.log.1"
+value = [['total elapsed time',0,108,2]]
+Run("Example eddy/INT: Serial-time",log,value)
+
+log = "./intLog/eddy_uv.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example eddy/INT: Serial-error",log,value)
 
 
 
-#fs_2
-log = "../examples/fs_2/st1.log.1"
+#fs_2 - MPI
+log = "./mpiLog/st1.log.1"
 value = [['total elapsed time',0,27.3,2]]
-Run("Example st1: Serial-time",log,value)
+Run("Example st1/MPI: Serial-time",log,value)
 
-log = "../examples/fs_2/st1.err.1"
+log = "./mpiLog/st1.err.1"
 value = [['amp',6.382536E-01,1e-06,2]]
-Run("Example st1: Serial-error",log,value)
+Run("Example st1/MPI: Serial-error",log,value)
 
-log = "../examples/fs_2/st1.err.4"
+log = "./mpiLog/st1.err.4"
 value = [['amp',6.382536E-01,1e-06,2]]
-Run("Example st1: Parallel-error",log,value)
+Run("Example st1/MPI: Parallel-error",log,value)
 
-log = "../examples/fs_2/st2.log.1"
+log = "./mpiLog/st2.log.1"
 value = [['total elapsed time',0,31.2,2]]
-Run("Example st2: Serial-time",log,value)
+Run("Example st2/MPI: Serial-time",log,value)
 
-log = "../examples/fs_2/st2.err.1"
+log = "./mpiLog/st2.err.1"
 value = [['amp',6.376303E-01,1e-06,2]]
-Run("Example st2: Serial-error",log,value)
+Run("Example st2/MPI: Serial-error",log,value)
 
-log = "../examples/fs_2/st2.err.4"
+log = "./mpiLog/st2.err.4"
 value = [['amp',6.376303E-01,1e-06,2]]
-Run("Example st2: Parallel-error",log,value)
+Run("Example st2/MPI: Parallel-error",log,value)
 
-log = "../examples/fs_2/std_wv.log.1"
+log = "./mpiLog/std_wv.log.1"
 value = [['total elapsed time',0,29,2]]
-Run("Example std_wv: Serial-time",log,value)
+Run("Example std_wv/MPI: Serial-time",log,value)
 
-log = "../examples/fs_2/std_wv.err.1"
+log = "./mpiLog/std_wv.err.1"
 value = [['amp',9.011472E-01,1e-06,2]]
-Run("Example std_wv: Serial-error",log,value)
+Run("Example std_wv/MPI: Serial-error",log,value)
 
-log = "../examples/fs_2/std_wv.err.4"
+log = "./mpiLog/std_wv.err.4"
 value = [['amp',9.011472E-01,1e-06,2]]
-Run("Example std_wv: Parallel-error",log,value)
+Run("Example std_wv/MPI: Parallel-error",log,value)
+
+#fs_2 - PGI
+log = "./pgiLog/st1.log.1"
+value = [['total elapsed time',0,27.3,2]]
+Run("Example st1/PGI: Serial-time",log,value)
+
+log = "./pgiLog/st1.err.1"
+value = [['amp',6.382536E-01,1e-06,2]]
+Run("Example st1/PGI: Serial-error",log,value)
+
+log = "./pgiLog/st2.log.1"
+value = [['total elapsed time',0,31.2,2]]
+Run("Example st2/PGI: Serial-time",log,value)
+
+log = "./pgiLog/st2.err.1"
+value = [['amp',6.376303E-01,1e-06,2]]
+Run("Example st2/PGI: Serial-error",log,value)
+
+log = "./pgiLog/std_wv.log.1"
+value = [['total elapsed time',0,29,2]]
+Run("Example std_wv/PGI: Serial-time",log,value)
+
+log = "./pgiLog/std_wv.err.1"
+value = [['amp',9.011472E-01,1e-06,2]]
+Run("Example std_wv/PGI: Serial-error",log,value)
+
+#fs_2 - GNU
+log = "./gnuLog/st1.log.1"
+value = [['total elapsed time',0,27.3,2]]
+Run("Example st1/GNU: Serial-time",log,value)
+
+log = "./gnuLog/st1.err.1"
+value = [['amp',6.382536E-01,1e-06,2]]
+Run("Example st1/GNU: Serial-error",log,value)
+
+log = "./gnuLog/st2.log.1"
+value = [['total elapsed time',0,31.2,2]]
+Run("Example st2/GNU: Serial-time",log,value)
+
+log = "./gnuLog/st2.err.1"
+value = [['amp',6.376303E-01,1e-06,2]]
+Run("Example st2/GNU: Serial-error",log,value)
+
+log = "./gnuLog/std_wv.log.1"
+value = [['total elapsed time',0,29,2]]
+Run("Example std_wv/GNU: Serial-time",log,value)
+
+log = "./gnuLog/std_wv.err.1"
+value = [['amp',9.011472E-01,1e-06,2]]
+Run("Example std_wv/GNU: Serial-error",log,value)
+
+#fs_2 - INT
+log = "./intLog/st1.log.1"
+value = [['total elapsed time',0,27.3,2]]
+Run("Example st1/INT: Serial-time",log,value)
+
+log = "./intLog/st1.err.1"
+value = [['amp',6.382536E-01,1e-06,2]]
+Run("Example st1/INT: Serial-error",log,value)
+
+log = "./intLog/st2.log.1"
+value = [['total elapsed time',0,31.2,2]]
+Run("Example st2/INT: Serial-time",log,value)
+
+log = "./intLog/st2.err.1"
+value = [['amp',6.376303E-01,1e-06,2]]
+Run("Example st2/INT: Serial-error",log,value)
+
+log = "./intLog/std_wv.log.1"
+value = [['total elapsed time',0,29,2]]
+Run("Example std_wv/INT: Serial-time",log,value)
+
+log = "./intLog/std_wv.err.1"
+value = [['amp',9.011472E-01,1e-06,2]]
+Run("Example std_wv/INT: Serial-error",log,value)
 
 
 
-#fs_hydro
-log = "../examples/fs_hydro/fs_hydro.log.1"
+#fs_hydro - MPI
+log = "./mpiLog/fs_hydro.log.1"
 value = [['total elapsed time',0,52,2]]
-Run("Example fs_hydro: Serial-time",log,value)
+Run("Example fs_hydro/MPI: Serial-time",log,value)
 
-log = "../examples/fs_hydro/fs_hydro.err.1"
+log = "./mpiLog/fs_hydro.err.1"
 value = [['AMP',1.1117248E-03,1e-06,2]]
-#Run("Example fs_hydro: Serial-error",log,value)
+#Run("Example fs_hydro/MPI: Serial-error",log,value)
 
-log = "../examples/fs_hydro/fs_hydro.err.4"
+log = "./mpiLog/fs_hydro.err.4"
 value = [['AMP',9.8880614E-04,1e-06,2]]
-#Run("Example fs_hydro: Parallel-error",log,value)
+#Run("Example fs_hydro/MPI: Parallel-error",log,value)
+
+#fs_hydro - PGI
+log = "./pgiLog/fs_hydro.log.1"
+value = [['total elapsed time',0,52,2]]
+Run("Example fs_hydro/PGI: Serial-time",log,value)
+
+log = "./pgiLog/fs_hydro.err.1"
+value = [['AMP',1.1117248E-03,1e-06,2]]
+#Run("Example fs_hydro/PGI: Serial-error",log,value)
+
+#fs_hydro - GNU
+log = "./gnuLog/fs_hydro.log.1"
+value = [['total elapsed time',0,52,2]]
+Run("Example fs_hydro/GNU: Serial-time",log,value)
+
+log = "./gnuLog/fs_hydro.err.1"
+value = [['AMP',1.1117248E-03,1e-06,2]]
+#Run("Example fs_hydro/GNU: Serial-error",log,value)
+
+#fs_hydro - INT
+log = "./intLog/fs_hydro.log.1"
+value = [['total elapsed time',0,52,2]]
+Run("Example fs_hydro/INT: Serial-time",log,value)
+
+log = "./intLog/fs_hydro.err.1"
+value = [['AMP',1.1117248E-03,1e-06,2]]
+#Run("Example fs_hydro/INT: Serial-error",log,value)
 
 
 
-#kovasznay
-log = "../examples/kovasznay/kov.log.1"
+#kovasznay - MPI
+log = "./mpiLog/kov.log.1"
 value = [['total elapsed time',0,20,2]]
-Run("Example kov: Serial-time",log,value)
+Run("Example kov/MPI: Serial-time",log,value)
 
-log = "../examples/kovasznay/kov.err.1"
+log = "./mpiLog/kov.err.1"
 value = [['err',5.14316E-13,1e-06,3]]
-Run("Example kov: Serial-error",log,value)
+Run("Example kov/MPI: Serial-error",log,value)
 
-log = "../examples/kovasznay/kov.err.4"
+log = "./mpiLog/kov.err.4"
 value = [['err',5.14316E-13,1e-06,3]]
-Run("Example kov: Parallel-error",log,value)
+Run("Example kov/MPI: Parallel-error",log,value)
+
+#kovaszany - PGI
+log = "./pgiLog/kov.log.1"
+value = [['total elapsed time',0,20,2]]
+Run("Example kov/PGI: Serial-time",log,value)
+
+log = "./pgiLog/kov.err.1"
+value = [['err',5.14316E-13,1e-06,3]]
+Run("Example kov/PGI: Serial-error",log,value)
+
+#kovaszany - GNU
+log = "./gnuLog/kov.log.1"
+value = [['total elapsed time',0,20,2]]
+Run("Example kov/GNU: Serial-time",log,value)
+
+log = "./gnuLog/kov.err.1"
+value = [['err',5.14316E-13,1e-06,3]]
+Run("Example kov/GNU: Serial-error",log,value)
+
+#kovaszany - INT
+log = "./intLog/kov.log.1"
+value = [['total elapsed time',0,20,2]]
+Run("Example kov/INT: Serial-time",log,value)
+
+log = "./intLog/kov.err.1"
+value = [['err',5.14316E-13,1e-06,3]]
+Run("Example kov/INT: Serial-error",log,value)
 
 
 
-#lowMach_test
-log = "../examples/lowMach_test/lowMach_test.log.1"
+#lowMach_test - MPI
+log = "./mpiLog/lowMach_test.log.1"
 value = [['total elapsed time',0,53.8,2]]
-Run("Example lowMach_test: Serial-time",log,value)
+Run("Example lowMach_test/MPI: Serial-time",log,value)
 
-log = "../examples/lowMach_test/lowMach_test.err.1"
+log = "./mpiLog/lowMach_test.err.1"
 value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
-Run("Example lowMach_test: Serial-error",log,value)
+Run("Example lowMach_test/MPI: Serial-error",log,value)
 
-log = "../examples/lowMach_test/lowMach_test.err.4"
+log = "./mpiLog/lowMach_test.err.4"
 value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
-Run("Example lowMach_test: Parallel-error",log,value)
+Run("Example lowMach_test/MPI: Parallel-error",log,value)
+
+#lowMach_test - PGI
+log = "./pgiLog/lowMach_test.log.1"
+value = [['total elapsed time',0,53.8,2]]
+Run("Example lowMach_test/PGI: Serial-time",log,value)
+
+log = "./pgiLog/lowMach_test.err.1"
+value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
+Run("Example lowMach_test/PGI: Serial-error",log,value)
+
+#lowMach_test - GNU
+log = "./gnuLog/lowMach_test.log.1"
+value = [['total elapsed time',0,53.8,2]]
+Run("Example lowMach_test/GNU: Serial-time",log,value)
+
+log = "./gnuLog/lowMach_test.err.1"
+value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
+Run("Example lowMach_test/GNU: Serial-error",log,value)
+
+#lowMach_test - INT
+log = "./intLog/lowMach_test.log.1"
+value = [['total elapsed time',0,53.8,2]]
+Run("Example lowMach_test/INT: Serial-time",log,value)
+
+log = "./intLog/lowMach_test.err.1"
+value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e-06,5]]
+Run("Example lowMach_test/INT: Serial-error",log,value)
 
 
 
-#peris
-log = "../examples/peris/peris.log.1"
+#peris - MPI
+log = "./mpiLog/peris.log.1"
 value = [['total elapsed time',0,17,2]]
-Run("Example peris: Serial-time",log,value)
+Run("Example peris/MPI: Serial-time",log,value)
+
+#peris - PGI
+log = "./pgiLog/peris.log.1"
+value = [['total elapsed time',0,17,2]]
+Run("Example peris/PGI: Serial-time",log,value)
+
+#peris - GNU
+log = "./gnuLog/peris.log.1"
+value = [['total elapsed time',0,17,2]]
+Run("Example peris/GNU: Serial-time",log,value)
+
+#peris - INT
+log = "./intLog/peris.log.1"
+value = [['total elapsed time',0,17,2]]
+Run("Example peris/INT: Serial-time",log,value)
 
 
 
-#pipe
-log = "../examples/pipe/helix.log.1"
+#pipe - MPI
+log = "./mpiLog/helix.log.1"
 value = [['total elapsed time',0,24.7,2]]
-Run("Example helix: Serial-time",log,value)
+Run("Example helix/MPI: Serial-time",log,value)
 
-log = "../examples/pipe/helix.err.1"
-value = [['e2',1.9072258E+00,1e-05,2]]
-Run("Example helix: Serial-error",log,value)
+log = "./mpiLog/helix.err.1"
+value = [['err2',1.9072258E+00,1e-05,2]]
+Run("Example helix/MPI: Serial-error",log,value)
 
-log = "../examples/pipe/helix.err.4"
-value = [['e2',1.9080559E+00,1e-05,2]]
-Run("Example helix: Parallel-error",log,value)
+log = "./mpiLog/helix.err.4"
+value = [['err2',1.9080559E+00,1e-05,2]]
+Run("Example helix/MPI: Parallel-error",log,value)
 
-log = "../examples/pipe/stenosis.log.1"
+log = "./mpiLog/stenosis.log.1"
 value = [['total elapsed time',0,33.2,2]]
-Run("Example stenosis: Serial-time",log,value)
+Run("Example stenosis/MPI: Serial-time",log,value)
+
+#pipe - PGI
+log = "./pgiLog/helix.log.1"
+value = [['total elapsed time',0,24.7,2]]
+Run("Example helix/PGI: Serial-time",log,value)
+
+log = "./pgiLog/helix.err.1"
+value = [['err2',1.9072258E+00,1e-05,2]]
+Run("Example helix/PGI: Serial-error",log,value)
+
+log = "./pgiLog/stenosis.log.1"
+value = [['total elapsed time',0,33.2,2]]
+Run("Example stenosis/PGI: Serial-time",log,value)
+
+#pipe - GNU
+log = "./gnuLog/helix.log.1"
+value = [['total elapsed time',0,24.7,2]]
+Run("Example helix/GNU: Serial-time",log,value)
+
+log = "./gnuLog/helix.err.1"
+value = [['err2',1.9072258E+00,1e-05,2]]
+Run("Example helix/GNU: Serial-error",log,value)
+
+log = "./gnuLog/stenosis.log.1"
+value = [['total elapsed time',0,33.2,2]]
+Run("Example stenosis/GNU: Serial-time",log,value)
+
+#pipe - INT
+log = "./intLog/helix.log.1"
+value = [['total elapsed time',0,24.7,2]]
+Run("Example helix/INT: Serial-time",log,value)
+
+log = "./intLog/helix.err.1"
+value = [['err2',1.9072258E+00,1e-05,2]]
+Run("Example helix/INT: Serial-error",log,value)
+
+log = "./intLog/stenosis.log.1"
+value = [['total elapsed time',0,33.2,2]]
+Run("Example stenosis/INT: Serial-time",log,value)
 
 
 
-#rayleigh 
-log = "../examples/rayleigh/ray1.log.1"
+#rayleigh - MPI 
+log = "./mpiLog/ray1.log.1"
 value = [['total elapsed time',0,4,2]]
-Run("Example ray1: Serial-time",log,value)
+Run("Example ray1/MPI: Serial-time",log,value)
 
-log = "../examples/rayleigh/ray1.err.1"
+log = "./mpiLog/ray1.err.1"
 value = [['umax',3.798345E-03,1e-05,3]]
-Run("Example ray1: Serial-error",log,value)
+Run("Example ray1/MPI: Serial-error",log,value)
 
-log = "../examples/rayleigh/ray1.err.4"
-value = [['umax',3.413486E-03,1e-05,3]]
-Run("Example ray1: Parallel-error",log,value)
+log = "./mpiLog/ray1.err.4"
+value = [['umax',3.409899E-03,1e-05,3]]
+Run("Example ray1/MPI: Parallel-error",log,value)
 
-log = "../examples/rayleigh/ray2.log.1"
+log = "./mpiLog/ray2.log.1"
 value = [['total elapsed time',0,4,2]]
-Run("Example ray2: Serial-time",log,value)
+Run("Example ray2/MPI: Serial-time",log,value)
 
-log = "../examples/rayleigh/ray2.err.1"
+log = "./mpiLog/ray2.err.1"
 value = [['umax',3.234207E-03,1e-05,3]]
-Run("Example ray2: Serial-error",log,value)
+Run("Example ray2/MPI: Serial-error",log,value)
 
-log = "../examples/rayleigh/ray2.err.4"
+log = "./mpiLog/ray2.err.4"
 value = [['umax',2.926341E-03,1e-05,3]]
-Run("Example ray2: Parallel-error",log,value)
+Run("Example ray2/MPI: Parallel-error",log,value)
+
+#rayleigh - PGI
+log = "./pgiLog/ray1.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray1/PGI: Serial-time",log,value)
+
+log = "./pgiLog/ray1.err.1"
+value = [['umax',3.798345E-03,1e-05,3]]
+Run("Example ray1/PGI: Serial-error",log,value)
+
+log = "./pgiLog/ray2.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray2/PGI: Serial-time",log,value)
+
+log = "./pgiLog/ray2.err.1"
+value = [['umax',3.234207E-03,1e-05,3]]
+Run("Example ray2/PGI: Serial-error",log,value)
+
+#rayleigh - GNU
+log = "./gnuLog/ray1.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray1/GNU: Serial-time",log,value)
+
+log = "./gnuLog/ray1.err.1"
+value = [['umax',3.798345E-03,1e-05,3]]
+Run("Example ray1/GNU: Serial-error",log,value)
+
+log = "./gnuLog/ray2.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray2/GNU: Serial-time",log,value)
+
+log = "./gnuLog/ray2.err.1"
+value = [['umax',3.234207E-03,1e-05,3]]
+Run("Example ray2/GNU: Serial-error",log,value)
+
+#rayleigh - INT
+log = "./intLog/ray1.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray1/INT: Serial-time",log,value)
+
+log = "./intLog/ray1.err.1"
+value = [['umax',3.798345E-03,1e-05,3]]
+Run("Example ray1/INT: Serial-error",log,value)
+
+log = "./intLog/ray2.log.1"
+value = [['total elapsed time',0,4,2]]
+Run("Example ray2/INT: Serial-time",log,value)
+
+log = "./intLog/ray2.err.1"
+value = [['umax',3.234207E-03,1e-05,3]]
+Run("Example ray2/INT: Serial-error",log,value)
 
 
 
-#turbChannel
-log = "../examples/turbChannel/turbChannel.log.1"
+#shear4 - MPI
+log = "./mpiLog/shear4.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example shear4/thick/MPI: Serial-time",log,value)
+
+log = "./mpiLog/thin.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example shear4/thin/MPI: Serial-time",log,value)
+
+#shear4 - PGI
+log = "./pgiLog/shear4.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example shear4/thick/PGI: Serial-time",log,value)
+
+log = "./pgiLog/thin.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example shear4/thin/PGI: Serial-time",log,value)
+
+#shear4 - GNU
+log = "./gnuLog/shear4.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example shear4/thick/GNU: Serial-time",log,value)
+
+log = "./gnuLog/thin.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example shear4/thin/GNU: Serial-time",log,value)
+
+#shear4 - INT
+log = "./intLog/shear4.log.1"
+value = [['total elapsed time',0,10,2]]
+Run("Example shear4/thick/INT: Serial-time",log,value)
+
+log = "./intLog/thin.log.1"
+value = [['total elapsed time',0,11,2]]
+Run("Example shear4/thin/INT: Serial-time",log,value)
+
+
+
+#turbChannel - MPI
+log = "./mpiLog/turbChannel.log.1"
 value = [['total elapsed time',0,156,2]]
-Run("Example turbChannel: Serial-time",log,value)
+Run("Example turbChannel/MPI: Serial-time",log,value)
+
+#turbChannel - PGI
+log = "./pgiLog/turbChannel.log.1"
+value = [['total elapsed time',0,156,2]]
+Run("Example turbChannel/PGI: Serial-time",log,value)
+
+#turbChannel - GNU
+log = "./gnuLog/turbChannel.log.1"
+value = [['total elapsed time',0,156,2]]
+Run("Example turbChannel/GNU: Serial-time",log,value)
+
+#turbChannel - INT
+log = "./intLog/turbChannel.log.1"
+value = [['total elapsed time',0,156,2]]
+Run("Example turbChannel/INT: Serial-time",log,value)
 
 ###############################################################################################
     
