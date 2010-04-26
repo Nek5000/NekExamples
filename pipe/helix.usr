@@ -67,7 +67,7 @@ c
          vym = glamax(vy,n)
          vzm = glamax(vz,n)
          if (nid.eq.0) write(6,1) istep,time,vx2,vy2,vz2,vxm,vym,vzm
-    1    format(i7,1p7e14.7,' e2')
+    1    format(i7,1p7e14.7,' err2')
       endif
 
       if (istep.gt.iostep) ifxyo = .false.
