@@ -76,7 +76,7 @@ C=======================================================================
 
       common /scrns/ wt(lx1*ly1*lz1,lelt)
 
-      integer glo_num(lx1*ly1*lz1*lelt)
+      integer*8 glo_num(lx1*ly1*lz1*lelt)
       integer gs_bc_hndl
       save gs_bc_hndl
 
