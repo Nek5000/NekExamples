@@ -96,7 +96,11 @@ C=======================================================================
 
 c     Connect slab next to the last with inflow (recycling method)
       if(istep.eq.0) then 
-        call izero(glo_num,n)
+
+        do i=1,n
+           glo_num(i)=0  ! integer*8
+        enddo
+
         do e=1,nelv
            eg = lglel(e)
            if (eg.le.n_in_pipe) then
