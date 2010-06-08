@@ -109,7 +109,7 @@ r1854a
 EOF
 ./nek10steps r1854a 1
 grep "VMIN" r1854a.log.1 | tail -1 > escudier.err.1
-./neklmpi r1854a 4
+./nek10steps r1854a 4
 grep "VMIN" r1854a.log.4 | tail -1 > escudier.err.4
 
 
