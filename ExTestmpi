@@ -4,7 +4,7 @@ HERE_S=`pwd`
 ##############################################################
 #Begin testing...
 cd ../../tests/test0001
-cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb clean
 ./makenek.bb test0001         $HERE_S
@@ -12,13 +12,14 @@ cp ../../trunk/nek/makenek.bb .
 test0001
 .05
 EOF
-./nekbb test0001 1
+./neklmpi test0001 1
+./neklmpi test0001 4
 
 
 #Test all examples...
 cd ../../examples 
 cd ./axi
-cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/tools/scripts/mvn .
 cp ../../trunk/nek/makenek.bb .
 ../../tests/tools/genbox < gb.in
@@ -26,12 +27,13 @@ cp ../../trunk/nek/makenek.bb .
 mvn box axi
 ./makenek.bb    clean
 ./makenek.bb    axi           $HERE_S
-./nekbb axi 1
+./neklmpi axi 1
+./neklmpi axi 4
 
 
 cd ..
 cd ./benard
-cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb clean
 ./makenek.bb ray_9            $HERE_S
@@ -39,7 +41,7 @@ cp ../../trunk/nek/makenek.bb .
 ray_9
 .05
 EOF
-./nekbb ray_9 1
+./neklmpi ray_9 1
 
 ./makenek.bb clean
 ./makenek.bb ray_cr           $HERE_S
@@ -47,25 +49,25 @@ EOF
 ray_dd
 .05
 EOF
-./nekbb ray_dd 1
+./neklmpi ray_dd 1
 
 ../../tests/tools/genmap << EOF
 ray_dn
 .05
 EOF
-./nekbb ray_dn 1
+./neklmpi ray_dn 1
 
 ../../tests/tools/genmap << EOF
 ray_nn
 .05
 EOF
-./nekbb ray_nn 1
+./neklmpi ray_nn 1
 grep rayleigh *.log.1 > benard.err
 
 
 cd ..
 cd ./conj_ht
-cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    conj_ht       $HERE_S
@@ -73,13 +75,15 @@ cp ../../trunk/nek/makenek.bb .
 conj_ht
 .05
 EOF
-./nekbb conj_ht 1
+./neklmpi conj_ht 1
 grep "tmax" conj_ht.log.1 | tail -1 > conj_ht.err.1
+./neklmpi conj_ht 4
+grep "tmax" conj_ht.log.4 | tail -1 > conj_ht.err.4
 
 
 cd ..
 cd ./eddy
-cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    eddy_uv       $HERE_S
@@ -87,13 +91,15 @@ cp ../../trunk/nek/makenek.bb .
 eddy_uv
 .05
 EOF
-./nekbb eddy_uv 1
+./neklmpi eddy_uv 1
 grep "err" eddy_uv.log.1 | tail -2 > eddy_uv.err.1
+./neklmpi eddy_uv 4
+grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
 
 
 cd ..
 cd ./escudier
-cp ../../trunk/tools/scripts/nek10s .
+cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb clean
 ./makenek.bb r1854a           $HERE_S
@@ -101,13 +107,15 @@ cp ../../trunk/nek/makenek.bb .
 r1854a
 .05
 EOF
-./nek10s r1854a 1
+./nek10steps r1854a 1
 grep "VMIN" r1854a.log.1 | tail -1 > escudier.err.1
+./neklmpi r1854a 4
+grep "VMIN" r1854a.log.4 | tail -1 > escudier.err.4
 
 
 cd ..
 cd ./fs_2
-cp ../../trunk/tools/scripts/nek200s .
+cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    st1           $HERE_S
@@ -115,27 +123,33 @@ cp ../../trunk/nek/makenek.bb .
 st1
 .05
 EOF
-./nek200s st1 1
+./nek200steps st1 1
 grep "amp" st1.log.1 | tail -1 > st1.err.1
+./nek200steps st1 4
+grep "amp" st1.log.4 | tail -1 > st1.err.4
 
 ../../tests/tools/genmap << EOF
 st2
 .05
 EOF
-./nek200s st2 1
+./nek200steps st2 1
 grep "amp" st2.log.1 | tail -1 > st2.err.1
+./nek200steps st2 4
+grep "amp" st2.log.4 | tail -1 > st2.err.4
 
 ../../tests/tools/genmap << EOF
 std_wv
 .05
 EOF
-./nek200s std_wv 1
+./nek200steps std_wv 1
 grep "amp" std_wv.log.1 | tail -1 > std_wv.err.1
+./nek200steps std_wv 4
+grep "amp" std_wv.log.4 | tail -1 > std_wv.err.4
 
 
 cd ..
 cd ./fs_hydro
-cp ../../trunk/tools/scripts/nek1000s .
+cp ../../trunk/tools/scripts/nek1000steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    fs_hydro        $HERE_S 
@@ -143,13 +157,15 @@ cp ../../trunk/nek/makenek.bb .
 fs_hydro
 .05
 EOF
-./nek1000s fs_hydro 1
+./nek1000steps fs_hydro 1
 grep "AMP" fs_hydro.log.1 | tail -1 > fs_hydro.err.1
+./nek1000steps fs_hydro 4
+grep "AMP" fs_hydro.log.4 | tail -1 > fs_hydro.err.4
  
 
 cd ..
 cd kovasznay
-cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    kov           $HERE_S
@@ -157,13 +173,15 @@ cp ../../trunk/nek/makenek.bb .
 kov
 .05
 EOF
-./nekbb kov 1
+./neklmpi kov 1
 grep "err" kov.log.1 | tail -1 > kov.err.1
+./neklmpi kov 4
+grep "err" kov.log.4 | tail -1 > kov.err.4
  
  
 cd ..
 cd lowMach_test
-cp ../../trunk/tools/scripts/nek200s .
+cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    lowMach_test  $HERE_S
@@ -171,13 +189,15 @@ cp ../../trunk/nek/makenek.bb .
 lowMach_test
 .05
 EOF
-./nek200s lowMach_test 1
+./nek200steps lowMach_test 1
 grep "ERROR" lowMach_test.log.1 | tail -3 > lowMach_test.err.1
+./nek200steps lowMach_test 4
+grep "ERROR" lowMach_test.log.4 | tail -3 > lowMach_test.err.4
 
 
 cd ..
 cd peris 
-cp ../../trunk/tools/scripts/nek10s .
+cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    peris         $HERE_S
@@ -185,12 +205,13 @@ cp ../../trunk/nek/makenek.bb .
 peris
 .05
 EOF
-./nek10s peris 1
+./nek10steps peris 1
+./nek10steps peris 4
  
 
 cd ..
 cd pipe
-cp ../../trunk/tools/scripts/nek10s .
+cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    helix         $HERE_S
@@ -198,17 +219,20 @@ cp ../../trunk/nek/makenek.bb .
 helix
 .05
 EOF
-./nek10s helix 1
+./nek10steps helix 1
 grep "err2" helix.log.1 | tail -1 > helix.err.1
+./nek10steps helix 4
+grep "err2" helix.log.4 | tail -1 > helix.err.4
  
 ../../tests/tools/n2to3  < n2to3.in
 ../../tests/tools/genmap < g.in
-./nek10s stenosis 1
+./nek10steps stenosis 1
+./nek10steps stenosis 4
  
 
 cd ..
 cd ./rayleigh
-cp ../../trunk/tools/scripts/nek200s .
+cp ../../trunk/tools/scripts/nek200steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    ray0          $HERE_S
@@ -216,20 +240,24 @@ cp ../../trunk/nek/makenek.bb .
 ray1
 .05
 EOF
-./nek200s ray1 1
+./nek200steps ray1 1
 grep "umax" ray1.log.1 | tail -1 > ray1.err.1
+./nek200steps ray1 4
+grep "umax" ray1.log.4 | tail -1 > ray1.err.4
 
 ../../tests/tools/genmap << EOF
 ray2
 .05
 EOF
-./nek200s ray2 1
+./nek200steps ray2 1
 grep "umax" ray2.log.1 | tail -1 > ray2.err.1
+./nek200steps ray2 4
+grep "umax" ray2.log.4 | tail -1 > ray2.err.4
 
 
 cd ..
 cd shear4
-cp ../../trunk/tools/scripts/nek10s .
+cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    shear4        $HERE_S
@@ -237,8 +265,10 @@ cp ../../trunk/nek/makenek.bb .
 shear4
 .05
 EOF
-./nek10s shear4 1
+./nek10steps shear4 1
 grep "peak vorticity" shear4.log.1 | tail -1 > shear4.err.1
+./nek10steps shear4 4
+grep "peak vorticity" shear4.log.4 | tail -1 > shear4.err.4
 
 ./makenek.bb    clean
 ./makenek.bb    thin          $HERE_S
@@ -246,13 +276,15 @@ grep "peak vorticity" shear4.log.1 | tail -1 > shear4.err.1
 thin
 .05
 EOF
-./nek10s thin 1
+./nek10steps thin 1
 grep "peak vorticity" thin.log.1 | tail -1 > thin.err.1
+./nek10steps thin 4
+grep "peak vorticity" thin.log.4 | tail -1 > thin.err.4
 
  
 cd ..
 cd turbChannel
-cp ../../trunk/tools/scripts/nek10s .
+cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb    clean
 ./makenek.bb    turbChannel   $HERE_S
@@ -260,6 +292,8 @@ cp ../../trunk/nek/makenek.bb .
 turbChannel
 .05
 EOF
-./nek10s turbChannel 1
+./nek10steps turbChannel 1
 grep "err2" turbChannel.log.1 | tail -1 > turbChannel.err.1
+./nek10steps turbChannel 4
+grep "err2" turbChannel.log.4 | tail -1 > turbChannel.err.4
 ##############################################################
