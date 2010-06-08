@@ -31,68 +31,10 @@ maketools.buildbot all              $HERE_T
 cp ../nek/makenek ../nek/makenek.bb
 chmod +x ../nek/makenek.bb
 
-../../tests/ExTest
-#Parallel Tests for MPI
-cd ../../tests/test0001
-./neklmpi test0001 4
-
-cd ../../examples/axi
-./neklmpi axi 4
-
-cd ../conj_ht
-./neklmpi conj_ht 4
-grep "tmax" conj_ht.log.4 | tail -1 > conj_ht.err.4
-
-cd ../eddy
-./neklmpi eddy_uv 4
-grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
-
-cd ../fs_2
-./nek200steps st1 4
-grep "amp" st1.log.4 | tail -1 > st1.err.4
-./nek200steps st2 4
-grep "amp" st2.log.4 | tail -1 > st2.err.4
-./nek200steps std_wv 4
-grep "amp" std_wv.log.4 | tail -1 > std_wv.err.4
-
-cd ../fs_hydro
-./nek200steps fs_hydro 4
-grep "AMP" fs_hydro.log.4 | tail -1 > fs_hydro.err.4
-
-cd ../kovasznay
-./neklmpi kov 4
-grep "err" kov.log.4 | tail -1 > kov.err.4
-
-cd ../lowMach_test
-./nek200steps lowMach_test 4
-grep "ERROR" lowMach_test.log.4 | tail -3 > lowMach_test.err.4
-
-cd ../peris
-./nek10steps peris 4
-
-cd ../pipe
-./nek10steps helix 4
-grep "err2" helix.log.4 | tail -1 > helix.err.4
-./nek10steps stenosis 4
-
-cd ../rayleigh
-./nek200steps ray1 4
-grep "umax" ray1.log.4 | tail -1 > ray1.err.4
-./nek200steps ray2 4
-grep "umax" ray2.log.4 | tail -1 > ray2.err.4
-
-cd ../shear4
-./nek10steps shear4 4
-./nek10steps thin 4
-
-cd ../turbChannel
-./nek10steps turbChannel 4
-grep "err2" turbChannel.log.4 | tail -1 > turbChannel.err.4
-
-
+../../tests/ExTestmpi
 
 #Find all log files and error files and put into directory
-cd ..
+cd ../../examples
 mv */*log.* ../tests/mpiLog
 mv */*.err* ../tests/mpiLog
 cd ../tests/test0001
