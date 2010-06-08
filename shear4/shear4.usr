@@ -96,6 +96,10 @@ c-----------------------------------------------------------------------
        subroutine userchk
        include 'SIZE'
        include 'TOTAL'
+   
+       parameter(lt=lx1*ly1*lz1*lelv)
+       real vort(lt,3),work1(lt),work2(lt)
+
 
        ntot = nx1*ny1*nz1*nelv
        umax = glamax(vx,ntot)
@@ -103,6 +107,10 @@ c-----------------------------------------------------------------------
           write(6,*) nid,' umax:',umax,ntot
           call emerxit
        endif
+       call comp_vort3(vort,work1,work2,vx,vy,vz)
+       vmax = glamax(vort,ntot)
+       if (nid.eq.0) write(6,1) istep, time, vmax       
+    1  format(i9,1p2e14.6,' peak vorticity') 
 
        return
        end
@@ -201,3 +209,9 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
+c
+c automatically added by makenek
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
+      return
+      end

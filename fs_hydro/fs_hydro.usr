@@ -119,6 +119,10 @@ c     iostep = 1000000
       dt = min(dtmax,dt)
       param(12) = -dt
       
+c     NOTE:  ifusermv should be set in usrdat or usrdat2 to avoid
+c            a mesh move call in useric.  It is also set here simply
+c            as mnemonic.
+
       ifusermv = .true.   ! prescribe our own free surface motion
       call quickmv        ! move the mesh  (user affine motion)
 
@@ -182,6 +186,7 @@ c-----------------------------------------------------------------------
       character*3 cb
       integer e,eg,ex,ey,ez
 
+      ifusermv = .true.   ! prescribe our own free surface motion
 
       Re         = 3.e4
       visc       = 1/Re
@@ -336,3 +341,9 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
+c
+c automatically added by makenek
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
+      return
+      end

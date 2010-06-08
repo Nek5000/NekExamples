@@ -1,14 +1,13 @@
 c-----------------------------------------------------------------------
-C
-C  USER SPECIFIED ROUTINES:
-C
-C     - boundary conditions
-C     - initial conditions
-C     - variable properties
-C     - local acceleration for fluid (a)
-C     - forcing function for passive scalar (q)
-C     - general purpose routine for checking errors etc.
-C
+c
+c     This is the data set for the rotating lid problem of Escudier
+c
+c     Reynolds number determined by setting p2 in the .rea file to, e.g.,
+c     -1492 or -1854.
+c
+c
+c     See, e.g., Sotiropoulos & Ventikos, Int. J. Heat & Fluid Flow 19 (1998)
+c
 c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,eg)
       include 'SIZE'
@@ -60,6 +59,28 @@ c-----------------------------------------------------------------------
       subroutine userchk
       include 'SIZE'
       include 'TOTAL'
+
+      n = lx1*ly1*lz1*lelt
+      if (istep.eq.0) then
+         ifxyo = .true.
+         call outpost(vx,vy,vz,pr,t,'   ')
+         ifxyo = .false.
+      endif
+
+      dd   = 0.2**2
+      vmin = 1.e20
+
+      do i=1,n              ! Find min vz near centerline
+         x = xm1(i,1,1,1)
+         y = ym1(i,1,1,1)
+         rr = x*x + y*y
+         if (rr.lt.dd) vmin = min(vmin,vz(i,1,1,1))
+      enddo
+      vmin = glmin(vmin,1)
+
+      if (nid.eq.0) write(6,1) istep,time,vmin
+    1 format(i9,1p2e14.6,' VMIN')
+
       return
       end
 c-----------------------------------------------------------------------
@@ -67,10 +88,13 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
-
-      ux=1-4*y*y
-      uy=0.0
-      uz=0.0
+   
+      common /bcdata/ zstart   ! start of top layer of elements
+      az = 0
+      if (z.gt.zstart) az = ((z-zstart)/(2.-zstart))**5   ! polynomial ramp
+      ux = -y*az
+      uy =  x*az
+      uz = 0.0
       temp=0.0
 
       return
@@ -80,17 +104,38 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
-      ux=0.0
-      uy=0.0
-      uz=0.0
+
+      common /bcdata/ zstart   ! start of top layer of elements
+
+      az = 0
+      if (z.gt.zstart) az = ((z-zstart)/(2.-zstart))**5   ! polynomial ramp
+      ux = -y*az
+      uy =  x*az
+      uz = 0.0
       temp=0
+
       return
       end
 c-----------------------------------------------------------------------
       subroutine usrdat
       include 'SIZE'
       include 'TOTAL'
-c
+
+      n=nelv*8
+      do i=1,n
+         x=xc(i,1)
+         y=yc(i,1)
+         rr = x*x+y*y
+
+         if (rr.gt.0.99) then  ! project onto unit circle to machine prec.
+            r=sqrt(rr)
+            xc(i,1) = x/r
+            yc(i,1) = y/r
+         endif
+
+      enddo
+
+
       return
       end
 c-----------------------------------------------------------------------
@@ -98,8 +143,20 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      param(66) = 4.
-      param(67) = 4.
+      common /bcdata/ zstart   ! start of top layer of elements
+
+      param(66) = 4.   ! These give the std nek binary i/o and are 
+      param(67) = 4.   ! good default values
+
+
+      zstart = 0
+      ieg = lglel(nelv)
+
+      if (ieg.eq.nelgv) zstart = zm1(1,1,1,nelv) ! min z val in top layer
+
+      zstart = glmax(zstart,1)
+
+
 
       return
       end

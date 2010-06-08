@@ -139,11 +139,17 @@ c-----------------------------------------------------------------------
       save    idum
       data    idum /99/
 
-      ran = 2.e7*(ieg+x*sin(y)) + 1.e6*ix*iy + 1.e7*ix 
-      ran = 1.e9*sin(ran)
-      ran = 1.e9*sin(ran)
+c     ran = ran1(idum)
+
+c     The totally ad-hoc random number generator below is preferable
+c     to the above for the simple reason that it gives the same i.c.
+c     independent of the number of processors, which is important for
+c     code verification.
+
+      ran = 2.e4*(ieg+x*sin(y)) + 1.e3*ix*iy + 1.e5*ix 
+      ran = 1.e3*sin(ran)
+      ran = 1.e3*sin(ran)
       ran = cos(ran)
-      ran = ran1(idum)
       amp = .001
 
       temp = 1-y + ran*amp*(1-y)*y*x*(9-x)
@@ -203,3 +209,9 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
+c
+c automatically added by makenek
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
+      return
+      end
