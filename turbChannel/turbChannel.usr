@@ -1,10 +1,23 @@
 c-----------------------------------------------------------------------
-c   LES using a dynamic Smagorinsky model in a fully developed 
-c   turbulent channel flow.
-c
+c   LES of a turbulent channel flow with Re_tau=590.
 c   Reference: DNS of Turbulent Channel Flow up to Re_tau=590, 1999,
 c              Physics of Fluids, vol 11, 943-945.
-
+c
+c   Note: 1-D statistics are dumped to reystress.dat and means.dat 
+c
+c   Two SGS models are available:
+c   - simple filtering (set p30=0 in .rea file)
+c     Here, a simple low-pass filtering approrach (in the modal space)
+c     is used.
+c     To define a filter function, use the filer weight in p103 and
+c     specify the additional modes to filter with p101.
+c     Based on two parameters a filter function is automatically 
+c     contructed. The filter gets applied after each time step. 
+c     Typically it's a good idea to filter
+c     1/3 of the modes (2-3 modes for e.g. N=7) using a filter
+c     weight of 0.01-0.05 (depending on the time step).
+c
+c   - dynamic Smagorinsky (set p30=1 in .rea file) 
 c     This version computes C_s D^2 (mixing length) dynamically and thus 
 c     does not need an explicit definition of the filter width D. 
 c     It does, however, need a definition of the grid- to test-filter
@@ -23,10 +36,6 @@ c     temporal averaging of the numerator and denominator.
 c
 c     Here, the only clipping of the eddy viscosity is simply to
 c     ensure that C_s > 0.  That is, C_s = max(C_s,0).
-c
-c     NOTE: 
-c       * the used planar averaging relies on a tensor-product domain!
-c       * the first-order statistics are dumped to .reystress and .means 
 c
 c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,ieg)
@@ -80,9 +89,11 @@ c-----------------------------------------------------------------------
       data    icalld /0/
 
       character*1   snam1(80)
-      character*1   fnam1(80)
-      character*80  fname
-      equivalence  (fnam1,fname)
+      character*1   f1nam1(80),f2nam1(80)
+      character*80  f1name
+      equivalence  (f1nam1,f1name)
+      character*80  f2name
+      equivalence  (f2nam1,f2name)
 
       real atime,timel
       save atime,timel
@@ -169,12 +180,11 @@ c
 c
 c     Below is just for postprocessing ...
 c
-
-      if(mod(istep,iostep).eq.0) then
+      if(mod(istep,iostep).eq.0 .and. istep.gt.0) then
         ! compute lambda2 vortex
-        call lambda2(t(1,1,1,1,1))
+        call lambda2(t(1,1,1,1,2))
         ! compute vorticity
-        if(ldimt.gt.1) call comp_vort3(t(1,1,1,1,2),wo1,wo2,vx,vy,vz)
+        if(ldimt.gt.2) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
       endif
 
       if (istep.eq.0) then
@@ -192,21 +202,7 @@ c     Compute perturbation energy
       ifxyo = .true.                        ! Turn on xyz output
       if (istep.gt.iostep) ifxyo = .false.  ! Turn off xyz output after first dump
 
-c      if(istep.lt.500) return               ! delay averaging
-
       if(icalld.eq.0) then
-        if(nid.eq.0) then
-          len=ltrunc(session,132)
-          call chcopy(snam1,session,len)
-          call blank(fnam1,80)
-          call chcopy(fnam1,snam1,len)
-          call chcopy(fnam1(len+1),'.reystress',10)
-          open(unit=56,file=fname)
-          call blank(fnam1,80)
-          call chcopy(fnam1,snam1,len)
-          call chcopy(fnam1(len+1),'.means',6)
-          open(unit=57,file=fname)
-        endif
         call rzero(uavg,n)
         call rzero(urms,n)
         call rzero(vrms,n)
@@ -214,9 +210,7 @@ c      if(istep.lt.500) return               ! delay averaging
         call rzero(uvms,n)
         atime = 0.
         timel = time
-
         call planar_average_s(yy     ,ym1 ,w1,w2)
-
         icalld = 1
       endif
 
@@ -254,26 +248,28 @@ c      if(istep.lt.500) return               ! delay averaging
         enddo
       endif
 
-      if(nid.eq.0 .and. istep.gt.0) then
-        tw     = dragx_avg/A_w + 1.e-50
-        u_tau  = sqrt(tw/rho)
-        Re_tau = u_tau*delta/dnu
-        diff   = (tw-ffx_avg)/tw
+      tw     = dragx_avg/A_w + 1.e-50
+      u_tau  = sqrt(tw/rho)
+      Re_tau = u_tau*delta/dnu
+      diff   = (tw-ffx_avg)/tw
 
-        write(6,1) istep,time,e2,ffx_new,diff
-    1   format(i6,1p4e17.9,' err2')
+      if(nid.eq.0) write(6,1) istep,time,e2,ffx_new,diff
+    1              format(i6,1p4e17.9,' err2')
 
-        ! write statistics to file
-        idump = param(68)
-        if(idump.le.0) idump = iostep
-        if (mod(istep,idump).eq.0) then
-            write(6,*) 'Dumping statistics to file ...'
+      ! write statistics to file
+      iostep_avg = param(68)
+      if(nid.eq.0 .and. istep.gt.0 .and. 
+     &   mod(istep,iostep_avg).eq.0) then
+            write(6,*) 'Dumping statistics ...'
+            open(unit=56,file='reystresses.dat')
             write(56,'(A,1pe14.7)') '#time = ', time
             write(56,'(A)')
      &      '#  y     y+     R_uu     R_vv     R_ww     R_uv'
+            open(unit=57,file='means.dat')
             write(57,'(A,1pe14.7)') '#time = ', time
             write(57,'(A)')
      &      '#  y     y+    Umean'
+
             m = ny1*nely/2
             do i=1,m
                 write(56,3) yy(i)+1
@@ -288,15 +284,9 @@ c      if(istep.lt.500) return               ! delay averaging
     3           format(1p15e17.9)
             enddo
 
-        endif
-
-        if (istep.eq.nsteps) then
-           close(56)
-           close(57)
-        endif
-
+            close(56)
+            close(57)
       endif
-
 
       return
       end
@@ -324,9 +314,9 @@ c-----------------------------------------------------------------------
       save    idum 
       data    idum / 0 /
 
-      if (idum.eq.0) idum = 999 + nid
+      if (idum.eq.0) idum = 99 + nid
       
-c     blunt profile w/ perturbations
+c     blunt profile w/ random perturbations
       eps = .05
       ux  = 5*(1.-y**4)/4.  + eps*(ran1(idum)-.5)
       uy  =                   eps*(ran1(idum)-.5)
@@ -342,7 +332,6 @@ c-----------------------------------------------------------------------
       include 'TOTAL'     ! guarantees GLL mapping of mesh.
 
       common /cdsmag/ ediff(lx1,ly1,lz1,lelv)
-
 
       one  = 1.
       pi   = 4.*atan(one)
@@ -368,10 +357,10 @@ c-----------------------------------------------------------------------
          zc(i,1) = zscale*z
       enddo
 
-      param(59) = 0     ! All elements are _undeformed_
+      param(59) = 0     ! all elements are _undeformed_
 
-      n = nx1*ny1*nz1*nelt          ! Because of change to drive structure, must
-      call cfill(ediff,param(2),n)  ! initialize viscosity for first time step
+      n = nx1*ny1*nz1*nelt 
+      call cfill(ediff,param(2),n)  ! initialize viscosity
 
       ! enable stress formulation if we use PN-PN-2 
       if(lx1.ne.lx2 .and. param(30).gt.0) IFSTRS = .true.
@@ -964,5 +953,11 @@ c-----------------------------------------------------------------------
       f_max = 0.10000                 ! ad hoc limits
       f_new = min(f_new,f_max)
       
+      return
+      end
+c
+c automatically added by makenek
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
       return
       end

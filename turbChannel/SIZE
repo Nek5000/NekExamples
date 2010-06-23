@@ -35,10 +35,10 @@ c
 c
 C LX1M=LX1 when there are moving meshes; =1 otherwise
       parameter (lx1m=1,ly1m=1,lz1m=1)
-      parameter (ldimt= 2)                       ! passive scalars + T
+      parameter (ldimt= 3)                       ! passive scalars + T
       parameter (ldimt1=ldimt+1)
       parameter (ldimt3=ldimt+3)
-      parameter (lp = 128)
+      parameter (lp = 64)
       parameter (lelg = 520)
 c
 c     Note:  In the new code, LELGEC should be about sqrt(LELG)
