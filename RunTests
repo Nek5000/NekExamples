@@ -2,10 +2,10 @@
 
 #Create Directories 
 mkdir tools
-mkdir mpiLog
-mkdir gnuLog
-mkdir intLog
-mkdir pgiLog
+mkdir mpiLog;  mkdir mpi2Log
+mkdir gnuLog;  mkdir gnu2Log
+mkdir intLog;  mkdir int2Log
+mkdir pgiLog;  mkdir pgi2Log
 
 
 #Create variable to store source path for tools
@@ -26,66 +26,122 @@ mv t.t basics.inc
 cd ../
 maketools.buildbot all              $HERE_T
 
-
+##############################################################
+##############################################################
+#Test all Compilers for Pn-Pn Case
+##############################################################
+##############################################################
 #Test MPI Compiler
+
 cp ../nek/makenek ../nek/makenek.bb
 chmod +x ../nek/makenek.bb
+
+cd ../../
+sed -i "s:lx2=:lx2=lx1)      \!:"  */*/SIZE
+sed -i "s:ly2=:ly2=ly1)      \!:"  */*/SIZE
+sed -i "s:lz2=:lz2=lz1)      \!:"  */*/SIZE
+cd ./trunk/nek
+ 
+../../tests/ExTestmpi
+
+#Find all log files and error files and put into directory
+mv ../../examples/*/*log.*     ../../tests/mpiLog
+mv ../../examples/*/*.err*     ../../tests/mpiLog
+mv ../../tests/test0001/*log.* ../../tests/mpiLog
+##############################################################
+#Test PG Compiler
+
+sed -e "s:^F77*=\"mpif77\":F77=\"pgf77\":"  \
+-e "s:^CC*=\"mpicc\":CC=\"pgcc\":"  \
+-e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
+
+../../tests/ExTest
+
+#Find all log files and error files and put into directory
+mv ../../examples/*/*log.*     ../../tests/pgiLog
+mv ../../examples/*/*.err*     ../../tests/pgiLog
+##############################################################
+#Test GNU Compiler
+
+sed -e "s:^F77*=\"mpif77\":F77=\"gfortran\":"  \
+-e "s:^CC*=\"mpicc\":CC=\"gcc\":"  \
+-e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
+
+../../tests/ExTest
+
+#Find all log files and error files and put into directory
+mv ../../examples/*/*log.*     ../../tests/gnuLog
+mv ../../examples/*/*.err*     ../../tests/gnuLog
+##############################################################
+#Test INTEL Compiler
+
+sed -e "s:^F77*=\"mpif77\":F77=\"ifort\":"  \
+-e "s:^CC*=\"mpicc\":CC=\"icc\":"  \
+-e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
+
+../../tests/ExTest
+
+#Find all log files and error files and put into directory
+mv ../../examples/*/*log.*     ../../tests/intLog
+mv ../../examples/*/*.err*     ../../tests/intLog
+##############################################################
+##############################################################
+#Test all Compilers for Pn-Pn-2 Case
+##############################################################
+##############################################################
+#Test MPI Compiler
+
+cp makenek makenek.bb
+
+cd ../../
+sed -i "s:lx2=:lx2=lx1-2)      \!:"  */*/SIZE
+sed -i "s:ly2=:ly2=ly1-2)      \!:"  */*/SIZE
+sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/escudier/SIZE
+sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/peris/SIZE
+sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/pipe/SIZE
+sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/turbChannel/SIZE
+cd ./trunk/nek
 
 ../../tests/ExTestmpi
 
 #Find all log files and error files and put into directory
-cd ../../examples
-mv */*log.* ../tests/mpiLog
-mv */*.err* ../tests/mpiLog
-cd ../tests/test0001
-mv *log.*   ../mpiLog
+mv ../../examples/*/*log.*     ../../tests/mpi2Log
+mv ../../examples/*/*.err*     ../../tests/mpi2Log
+mv ../../tests/test0001/*log.* ../../tests/mpi2Log
 ##############################################################
 #Test PG Compiler
-cd ../../trunk/nek/
+
 sed -e "s:^F77*=\"mpif77\":F77=\"pgf77\":"  \
 -e "s:^CC*=\"mpicc\":CC=\"pgcc\":"  \
 -e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
-#chmod +x makenek.bb
 
 ../../tests/ExTest
 
 #Find all log files and error files and put into directory
-cd ../../examples
-mv */*log.* ../tests/pgiLog
-mv */*.err* ../tests/pgiLog
-cd ../tests/test0001
-mv *log.*   ../pgiLog
+mv ../../examples/*/*log.*     ../../tests/pgi2Log
+mv ../../examples/*/*.err*     ../../tests/pgi2Log
 ##############################################################
 #Test GNU Compiler
-cd ../../trunk/nek/
+
 sed -e "s:^F77*=\"mpif77\":F77=\"gfortran\":"  \
 -e "s:^CC*=\"mpicc\":CC=\"gcc\":"  \
 -e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
-#chmod +x makenek.bb
 
 ../../tests/ExTest
 
 #Find all log files and error files and put into directory
-cd ../../examples
-mv */*log.* ../tests/gnuLog
-mv */*.err* ../tests/gnuLog
-cd ../tests/test0001
-mv *log.*   ../gnuLog
+mv ../../examples/*/*log.*     ../../tests/gnu2Log
+mv ../../examples/*/*.err*     ../../tests/gnu2Log
 ##############################################################
 #Test INTEL Compiler
-cd ../../trunk/nek/
+
 sed -e "s:^F77*=\"mpif77\":F77=\"ifort\":"  \
 -e "s:^CC*=\"mpicc\":CC=\"icc\":"  \
 -e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
-#chmod +x makenek.bb
 
 ../../tests/ExTest
 
 #Find all log files and error files and put into directory
-cd ../../examples
-mv */*log.* ../tests/intLog
-mv */*.err* ../tests/intLog
-cd ../tests/test0001
-mv *log.*   ../intLog
+mv ../../examples/*/*log.*     ../../tests/int2Log
+mv ../../examples/*/*.err*     ../../tests/int2Log
 ##############################################################
-
