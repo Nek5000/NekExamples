@@ -43,26 +43,44 @@ ray_9
 EOF
 ./neklmpi ray_9 1
 
-./makenek.bb clean
-./makenek.bb ray_cr           $HERE_S
 ../../tests/tools/genmap << EOF
 ray_dd
 .05
 EOF
-./neklmpi ray_dd 1
 
 ../../tests/tools/genmap << EOF
 ray_dn
 .05
 EOF
-./neklmpi ray_dn 1
 
 ../../tests/tools/genmap << EOF
 ray_nn
 .05
 EOF
-./neklmpi ray_nn 1
-grep rayleigh *.log.1 > benard.err
+
+if  grep -q "lx2=lx1-2" SIZE   
+    then
+      ./makenek.bb clean
+      ./makenek.bb ray_cr           $HERE_S
+      ./neklmpi ray_dd 1
+      ./neklmpi ray_dn 1
+      ./neklmpi ray_nn 1
+      grep rayleigh *.log.1 > benard.err
+else
+      cd ./benard_split/
+      cp ../ray_dd.map .
+      cp ../ray_dn.map .
+      cp ../ray_nn.map .
+      ../makenek.bb clean
+      ../makenek.bb ray_cr            $HERE_S
+      ../neklmpi ray_dd 1
+      ../neklmpi ray_dn 1
+      ../neklmpi ray_nn 1
+      grep rayleigh *.log.1 > benard.err
+      mv benard.err ../
+      mv *.log.*    ../
+      cd ../
+fi
 
 
 cd ..
