@@ -71,7 +71,7 @@ def Run(name, logfile,listOfValue)  :
     if Result :
         print("%s : ."%name)
     else :
-        print("%s : F"%name)
+        print("%s : F "%name)
 ###############################################################################################
 def FindPhrase(name, logfile, keyword) :
     """A  Test to search the logfile for a specific word or phrase
@@ -112,7 +112,7 @@ def FindPhrase(name, logfile, keyword) :
             print("%s : ."%name)                 #prints the result
         else :
             print("[%s]...I couldn't find '%s' in the logfile..."%(name,keyword))
-            print("%s : F"%name)
+            print("%s : F "%name)
 
     return result
 ###############################################################################################
