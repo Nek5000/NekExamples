@@ -198,18 +198,18 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/MPI: Parallel-error",log,value)
 
 
-#escudier 
+#vortex 
 log = "./mpiLog/r1854a.log.1"
 value = [['total solver time',0,60,2]]
-Run("Example escudier/MPI: Serial-time",log,value)
+Run("Example vortex/MPI: Serial-time",log,value)
 
-log = "./mpiLog/escudier.err.1"
+log = "./mpiLog/vortex.err.1"
 value = [['VMIN',-1.910312E-03,1e-06,2]]
-Run("Example escudier/MPI: Serial-error",log,value)
+Run("Example vortex/MPI: Serial-error",log,value)
 
-log = "./mpiLog/escudier.err.1"
+log = "./mpiLog/vortex.err.1"
 value = [['VMIN',-1.910312E-03,1e-06,2]]
-Run("Example escudier/MPI: Parallel-error",log,value)
+Run("Example vortex/MPI: Parallel-error",log,value)
 
 
 #fs_2 
@@ -416,14 +416,14 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/PGI: Serial-error",log,value)
 
 
-#escudier
+#vortex
 log = "./pgiLog/r1854a.log.1"
 value = [['total solver time',0,60,2]]
-Run("Example escudier/PGI: Serial-time",log,value)
+Run("Example vortext/PGI: Serial-time",log,value)
 
-log = "./pgiLog/escudier.err.1"
+log = "./pgiLog/vortex.err.1"
 value = [['VMIN',-1.910312E-03,1e-06,2]]
-Run("Example escudier/PGI: Serial-error",log,value)
+Run("Example vortex/PGI: Serial-error",log,value)
 
 
 #fs_2 
@@ -581,14 +581,14 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/GNU: Serial-error",log,value)
 
 
-#escudier
+#vortex
 log = "./gnuLog/r1854a.log.1"
 value = [['total solver time',0,60,2]]
-Run("Example escudier/GNU: Serial-time",log,value)
+Run("Example vortex/GNU: Serial-time",log,value)
 
-log = "./gnuLog/escudier.err.1"
+log = "./gnuLog/vortex.err.1"
 value = [['VMIN',-1.910312E-03,1e-06,2]]
-Run("Example escudier/GNU: Serial-error",log,value)
+Run("Example vortex/GNU: Serial-error",log,value)
 
 
 #fs_2 
@@ -747,14 +747,14 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/INT: Serial-error",log,value)
 
 
-#escudier
+#vortex
 log = "./intLog/r1854a.log.1"
 value = [['total solver time',0,60,2]]
-Run("Example escudier/INT: Serial-time",log,value)
+Run("Example vortex/INT: Serial-time",log,value)
 
-log = "./intLog/escudier.err.1"
+log = "./intLog/vortex.err.1"
 value = [['VMIN',-1.910312E-03,1e-06,2]]
-Run("Example escudier/INT: Serial-error",log,value)
+Run("Example vortex/INT: Serial-error",log,value)
 
 
 #fs_2 
@@ -932,18 +932,18 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/MPI2: Parallel-error",log,value)
 
 
-#escudier 
+#vortex 
 log = "./mpi2Log/r1854a.log.1"
 value = [['total solver time',0,50,2]]
-Run("Example escudier/MPI2: Serial-time",log,value)
+Run("Example vortex/MPI2: Serial-time",log,value)
 
-log = "./mpi2Log/escudier.err.1"
+log = "./mpi2Log/vortex.err.1"
 value = [['VMIN',-1.839120E-03,1e-06,2]]
-Run("Example escudier/MPI2: Serial-error",log,value)
+Run("Example vortex/MPI2: Serial-error",log,value)
 
-log = "./mpi2Log/escudier.err.1"
+log = "./mpi2Log/vortex.err.1"
 value = [['VMIN',-1.839120E-03,1e-06,2]]
-Run("Example escudier/MPI2: Parallel-error",log,value)
+Run("Example vortex/MPI2: Parallel-error",log,value)
 
 
 #fs_2 
@@ -1162,14 +1162,14 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/PGI2: Serial-error",log,value)
 
 
-#escudier
+#vortex
 log = "./pgi2Log/r1854a.log.1"
 value = [['total solver time',0,50,2]]
-Run("Example escudier/PGI2: Serial-time",log,value)
+Run("Example vortex/PGI2: Serial-time",log,value)
 
-log = "./pgi2Log/escudier.err.1"
+log = "./pgi2Log/vortex.err.1"
 value = [['VMIN',-1.839120E-03,1e-06,2]]
-Run("Example escudier/PGI2: Serial-error",log,value)
+Run("Example vortex/PGI2: Serial-error",log,value)
 
 
 #fs_2 
@@ -1344,14 +1344,14 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/GNU2: Serial-error",log,value)
 
 
-#escudier
+#vortex
 log = "./gnu2Log/r1854a.log.1"
 value = [['total solver time',0,50,2]]
-Run("Example escudier/GNU2: Serial-time",log,value)
+Run("Example vortex/GNU2: Serial-time",log,value)
 
-log = "./gnu2Log/escudier.err.1"
+log = "./gnu2Log/vortex.err.1"
 value = [['VMIN',-1.839120E-03,1e-06,2]]
-Run("Example escudier/GNU2: Serial-error",log,value)
+Run("Example vortex/GNU2: Serial-error",log,value)
 
 
 #fs_2 
@@ -1526,14 +1526,14 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/INT2: Serial-error",log,value)
 
 
-#escudier
+#vortex
 log = "./int2Log/r1854a.log.1"
 value = [['total solver time',0,50,2]]
-Run("Example escudier/INT2: Serial-time",log,value)
+Run("Example vortex/INT2: Serial-time",log,value)
 
-log = "./int2Log/escudier.err.1"
+log = "./int2Log/vortex.err.1"
 value = [['VMIN',-1.839120E-03,1e-06,2]]
-Run("Example escudier/INT2: Serial-error",log,value)
+Run("Example vortex/INT2: Serial-error",log,value)
 
 
 #fs_2 
