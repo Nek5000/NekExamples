@@ -116,7 +116,7 @@ grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
 
 
 cd ..
-cd ./escudier
+cd ./vortex
 cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 ./makenek.bb clean
@@ -126,9 +126,9 @@ r1854a
 .05
 EOF
 ./nek10steps r1854a 1
-grep "VMIN" r1854a.log.1 | tail -1 > escudier.err.1
+grep "VMIN" r1854a.log.1 | tail -1 > vortex.err.1
 ./nek10steps r1854a 4
-grep "VMIN" r1854a.log.4 | tail -1 > escudier.err.4
+grep "VMIN" r1854a.log.4 | tail -1 > vortex.err.4
 
 
 cd ..
