@@ -96,7 +96,7 @@ cp makenek makenek.bb
 cd ../../
 sed -i "s:lx2=:lx2=lx1-2)      \!:"  */*/SIZE
 sed -i "s:ly2=:ly2=ly1-2)      \!:"  */*/SIZE
-sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/escudier/SIZE
+sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/vortex/SIZE
 sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/peris/SIZE
 sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/pipe/SIZE
 sed -i "s:lz2=:lz2=lz1-2)      \!:"  examples/turbChannel/SIZE
