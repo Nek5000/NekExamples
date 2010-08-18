@@ -112,7 +112,7 @@ EOF
 ./neklmpi eddy_uv 1
 grep "err" eddy_uv.log.1 | tail -2 > eddy_uv.err.1
 ./neklmpi eddy_uv 4
-grep "err" eddy_uv.log.4 | tail -4 > eddy_uv.err.4
+grep "err" eddy_uv.log.4 | tail -5 > eddy_uv.err.4
 
 
 cd ..
