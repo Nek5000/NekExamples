@@ -183,11 +183,10 @@ c     rho   = 100.         ! thin shear layer case
          else
             tmp  =  tmp  + tanh(rho*(0.75-x))
          endif
-         temp = tmp*sin(2.*pi*ifield*x)
-         ps1  = tmp
-         ps2  = tmp
-         ps3  = tmp
-         ps4  = tmp
+         if (ifield.eq.2) temp = tmp*sin(2.*pi*x)  ! temperature
+         if (ifield.eq.3) temp = tmp*sin(3.*pi*x)  ! ps1
+         if (ifield.eq.4) temp = tmp*sin(4.*pi*x)  ! ps2
+         if (ifield.eq.5) temp = tmp*sin(5.*pi*x)  ! ps3
       endif
 
       return
