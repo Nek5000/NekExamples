@@ -183,8 +183,8 @@ c
       if(mod(istep,iostep).eq.0 .and. istep.gt.0) then
         ! compute lambda2 vortex
         call lambda2(t(1,1,1,1,2))
-        ! compute vorticity
-        if(ldimt.gt.2) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
+        ! compute vorticity --- 3 components returned in t(...)
+        if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
       endif
 
       if (istep.eq.0) then
