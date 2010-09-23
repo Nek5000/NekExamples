@@ -13,7 +13,14 @@ cd tools
 HERE_T=`pwd`
 
 
-#Set Fortran&C compiler and build tools
+##############################################################
+##############################################################
+#Test all Compilers for Pn-Pn Case
+#Builds tools with all compilers
+##############################################################
+##############################################################
+#Build tools with pgi compiler
+
 cd ../../trunk/tools/
 sed -e "s:^F77*=\"\":F77=\"pgf77\":"  \
 -e "s:^CC*=\"\":CC=\"pgcc\":"  maketools >maketools.buildbot
@@ -24,12 +31,7 @@ sed -e "s:1 000 000:10 000:" basics.inc>t.t
 mv t.t basics.inc
 
 cd ../
-maketools.buildbot all              $HERE_T
-
-##############################################################
-##############################################################
-#Test all Compilers for Pn-Pn Case
-##############################################################
+maketools.buildbot all     $HERE_T  | tee ../../tests/pgitools.out
 ##############################################################
 #Test MPI Compiler
 
@@ -40,8 +42,12 @@ cd ../../
 sed -i "s:lx2=:lx2=lx1)      \!:"  */*/SIZE
 sed -i "s:ly2=:ly2=ly1)      \!:"  */*/SIZE
 sed -i "s:lz2=:lz2=lz1)      \!:"  */*/SIZE
-cd ./trunk/nek
+cd tests/test0001/
+sed "s/^.*DIVERGENCE$/  0.10000E-08/" test0001.rea > n.rea      
+mv n.rea test0001.rea
+cd ../../trunk/nek
  
+rm -rf ../../examples/*/*.map
 ../../tests/ExTestmpi
 
 #Find all log files and error files and put into directory
@@ -61,24 +67,71 @@ sed -e "s:^F77*=\"mpif77\":F77=\"pgf77\":"  \
 mv ../../examples/*/*log.*     ../../tests/pgiLog
 mv ../../examples/*/*.err*     ../../tests/pgiLog
 ##############################################################
+##############################################################
+#Build tools with gnu compiler
+
+cd ../tools/
+sed -e "s:^F77*=\"\":F77=\"gfortran\":"  \
+-e "s:^CC*=\"\":CC=\"gcc\":"  maketools >maketools.buildbot
+chmod +x maketools.buildbot
+
+maketools.buildbot clean            $HERE_T
+
+cd prenek
+sed -e "s:1 000 000:10 000:" basics.inc>t.t
+mv t.t basics.inc
+
+cd ../
+maketools.buildbot all     $HERE_T  | tee ../../tests/gnutools.out
+##############################################################
 #Test GNU Compiler
 
+cd ../nek
 sed -e "s:^F77*=\"mpif77\":F77=\"gfortran\":"  \
 -e "s:^CC*=\"mpicc\":CC=\"gcc\":"  \
 -e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
 
+rm -rf ../../examples/*/*.map
 ../../tests/ExTest
 
 #Find all log files and error files and put into directory
 mv ../../examples/*/*log.*     ../../tests/gnuLog
 mv ../../examples/*/*.err*     ../../tests/gnuLog
 ##############################################################
+##############################################################
+#Build tools with intel compiler
+
+cd ../tools/
+sed -e "s:^F77*=\"\":F77=\"ifort\":"  \
+-e "s:^CC*=\"\":CC=\"icc\":"  maketools >maketools.buildbot
+chmod +x maketools.buildbot
+
+maketools.buildbot clean           $HERE_T
+
+cd prenek
+sed -e "s:1 000 000:10 000:" basics.inc>t.t
+mv t.t basics.inc
+
+cd ../
+maketools.buildbot all     $HERE_T  | tee ../../tests/inttools.out
+##############################################################
 #Test INTEL Compiler
 
+cd ../nek
 sed -e "s:^F77*=\"mpif77\":F77=\"ifort\":"  \
 -e "s:^CC*=\"mpicc\":CC=\"icc\":"  \
 -e "s:\#IFMPI*=:IFMPI=:"  makenek >makenek.bb
 
+#Tweak Intel Compiler Specific 
+cd ../../examples/eddy/
+sed "s/^.*DIVERGENCE$/  0.10000E-08/" eddy_uv.rea > n.rea      
+mv n.rea eddy_uv.rea
+cd ../lowMach_test
+sed "s/^.*IFNAV.*$/  T T IFNAV & IFADVC/" lowMach_test.rea > n.rea
+mv n.rea lowMach_test.rea
+cd ../../trunk/nek
+
+rm -rf ../../examples/*/*.map
 ../../tests/ExTest
 
 #Find all log files and error files and put into directory

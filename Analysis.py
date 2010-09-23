@@ -116,17 +116,77 @@ def FindPhrase(name, logfile, keyword) :
 
     return result
 ###############################################################################################
+def DFdPhrase(name, logfile, keyword) :
+    """A  Test to search the logfile for a specific word or phrase, returns True, if not found
+        --Variable :
+            name (string): name of the test
+            logfile (string): path of the logfile
+            keyword (string): word or phrase searching for
+        --Function :
+            Tests to find that a phrase or word is not the logfile"""
+
+    global num_test
+    global num_success
+
+    num_test += 1
+    result    = False
+
+    #Test that the input file is here
+    try :
+        olog = open(logfile, 'r')
+        olog.close()
+        inputisgood = True
+    except IOError :
+        print("[%s]...Sorry, I must skip this test."%name)
+        print("[%s]...The logfile is missing or doesn't have the correct name..."%name)
+        inputisgood = False
+
+    #If we could find the log file, then we run the test
+    if inputisgood :
+        openlog  = open(logfile,'r')
+        for line in openlog :
+            if keyword in line :
+                num_success += 1
+                result       = True
+                print("[%s] : %s"%(name,keyword))
+        openlog.close()
+
+        if result :
+            print("%s : F"%name)                 #prints the result
+        else :
+            print("%s : . "%name)
+
+    return result
+###############################################################################################
 num_test = 0 
 num_success = 0
 print("Beginning of top-down testing\n\n")
 print("    . : successful test, F : failed test\n\n")
+###############################################################################################
+#---------------------Tools-------------------------------------------------------
+#---------------------Tests-----------------------------------------------------
+print("\nBEGIN TESTING TOOLS")  
+#PGI Compiler
+log = "./pgitools.out"
+value = "Error "
+DFdPhrase("Tools/PGI",log,value)
+
+#GNU Compiler
+log = "./gnutools.out"
+value = "Error "
+DFdPhrase("Tools/GNU",log,value)
+
+#INT Compiler
+log = "./inttools.out"
+value = "Error "
+DFdPhrase("Tools/INT",log,value)
 ###############################################################################################
 #---------------------MPI-------------------------------------------------------
 #---------------------Pn-Pn-----------------------------------------------------
 print("\nBEGIN Pn-Pn TESTING")  
 #Test0001 
 log = "./mpiLog/test0001.log.1"
-value = [['total solver time',0,2100,2],['ANS1',5.742723E-07,1e-06,8]]
+value = [['total solver time',0,400,2],['ANS1',5.742723E-07,1e-06,8]]
 Run("Test0001/MPI: Serial",log,value)
 
 log = "./mpiLog/test0001.log.4"
@@ -296,7 +356,7 @@ value = "ABORT: Fixed mass flux"
 FindPhrase("Example helix/MPI: Parallel",log,value)
 
 log = "./mpiLog/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0,60,2]]
 Run("Example stenosis/MPI: Serial-time",log,value)
 
 
@@ -478,7 +538,7 @@ value = "ABORT: Fixed mass flux"
 FindPhrase("Example helix/PGI: Serial",log,value)
 
 log = "./pgiLog/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0,60,2]]
 Run("Example stenosis/PGI: Serial-time",log,value)
 
 
@@ -643,7 +703,7 @@ value = "ABORT: Fixed mass flux"
 FindPhrase("Example helix/GNU: Serial",log,value)
 
 log = "./gnuLog/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0,60,2]]
 Run("Example stenosis/GNU: Serial-time",log,value)
 
 
@@ -809,7 +869,7 @@ value = "ABORT: Fixed mass flux"
 FindPhrase("Example helix/INT: Serial",log,value)
 
 log = "./intLog/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0,60,2]]
 Run("Example stenosis/INT: Serial-time",log,value)
 
 
