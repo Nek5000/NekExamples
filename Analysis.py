@@ -146,7 +146,6 @@ def DFdPhrase(name, logfile, keyword) :
         openlog  = open(logfile,'r')
         for line in openlog :
             if keyword in line :
-                num_success += 1
                 result       = True
                 print("[%s] : %s"%(name,keyword))
         openlog.close()
@@ -154,6 +153,7 @@ def DFdPhrase(name, logfile, keyword) :
         if result :
             print("%s : F"%name)                 #prints the result
         else :
+            num_success += 1
             print("%s : . "%name)
 
     return result
