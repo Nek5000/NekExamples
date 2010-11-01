@@ -206,7 +206,7 @@ value = [['total solver time',0,30,2]]
 Run("Example benard/ray_9/MPI: Serial-time",log,value)
 
 log = "./mpiLog/ray_dd.log.1"
-value = [['total solver time',0,24,2]]
+value = [['total solver time',0,34,2]]
 Run("Example benard/ray_dd/MPI: Serial-time",log,value)
 
 log = "./mpiLog/benard.err"
@@ -222,7 +222,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ray_nn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0,50,2]]
 Run("Example benard/ray_nn/MPI: Serial-time",log,value)
 
 log = "./mpiLog/benard.err"
@@ -348,12 +348,16 @@ FindPhrase("Example peris/MPI: Parallel",log,value)
 
 #pipe 
 log = "./mpiLog/helix.log.1"
-value = "ABORT: Fixed mass flux"
-FindPhrase("Example helix/MPI: Serial",log,value)
+value = [['total solver time',0,22,2]]
+Run("Example helix/MPI: Serial-time",log,value)
 
-log = "./mpiLog/helix.log.4"
-value = "ABORT: Fixed mass flux"
-FindPhrase("Example helix/MPI: Parallel",log,value)
+log = "./mpiLog/helix.err.1"
+value = [['err2',1.9077617E+00,1e-06,2]]
+Run("Example helix/MPI: Serial-error",log,value)
+
+log = "./mpiLog/helix.err.4"
+value = [['err2',1.9077617E+00,1e-06,2]]
+Run("Example helix/MPI: Serial-error",log,value)
 
 log = "./mpiLog/stenosis.log.1"
 value = [['total solver time',0,60,2]]
@@ -534,12 +538,12 @@ FindPhrase("Example peris/PGI: Serial",log,value)
 
 #pipe
 log = "./pgiLog/helix.log.1"
-value = "ABORT: Fixed mass flux"
-FindPhrase("Example helix/PGI: Serial",log,value)
+value = [['total solver time',0,22,2]]
+Run("Example helix/PGI: Serial-time",log,value)
 
-log = "./pgiLog/stenosis.log.1"
-value = [['total solver time',0,60,2]]
-Run("Example stenosis/PGI: Serial-time",log,value)
+log = "./pgiLog/helix.err.1"
+value = [['err2',1.9077617E+00,1e-06,2]]
+Run("Example helix/PGI: Serial-error",log,value)
 
 
 #rayleigh
@@ -699,8 +703,12 @@ FindPhrase("Example peris/GNU: Serial",log,value)
 
 #pipe 
 log = "./gnuLog/helix.log.1"
-value = "ABORT: Fixed mass flux"
-FindPhrase("Example helix/GNU: Serial",log,value)
+value = [['total solver time',0,22,2]]
+Run("Example helix/GNU: Serial-time",log,value)
+
+log = "./gnuLog/helix.err.1"
+value = [['err2',1.9077617E+00,1e-06,2]]
+Run("Example helix/GNU: Serial-error",log,value)
 
 log = "./gnuLog/stenosis.log.1"
 value = [['total solver time',0,60,2]]
@@ -865,8 +873,12 @@ FindPhrase("Example peris/INT: Serial",log,value)
 
 #pipe 
 log = "./intLog/helix.log.1"
-value = "ABORT: Fixed mass flux"
-FindPhrase("Example helix/INT: Serial",log,value)
+value = [['total solver time',0,22,2]]
+Run("Example helix/INT: Serial-time",log,value)
+
+log = "./intLog/helix.err.1"
+value = [['err2',1.9077617E+00,1e-06,2]]
+Run("Example helix/INT: Serial-error",log,value)
 
 log = "./intLog/stenosis.log.1"
 value = [['total solver time',0,60,2]]
@@ -1102,7 +1114,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/MPI2: Parallel-error",log,value)
 
 log = "./mpi2Log/stenosis.log.1"
-value = [['total solver time',0,28,2]]
+value = [['total solver time',0,40,2]]
 Run("Example stenosis/MPI2: Serial-time",log,value)
 
 
@@ -1300,7 +1312,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/stenosis.log.1"
-value = [['total solver time',0,28,2]]
+value = [['total solver time',0,40,2]]
 Run("Example stenosis/PGI2: Serial-time",log,value)
 
 
@@ -1482,7 +1494,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/stenosis.log.1"
-value = [['total solver time',0,28,2]]
+value = [['total solver time',0,40,2]]
 Run("Example stenosis/GNU2: Serial-time",log,value)
 
 
@@ -1664,7 +1676,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/INT2: Serial-error",log,value)
 
 log = "./int2Log/stenosis.log.1"
-value = [['total solver time',0,28,2]]
+value = [['total solver time',0,40,2]]
 Run("Example stenosis/INT2: Serial-time",log,value)
 
 
