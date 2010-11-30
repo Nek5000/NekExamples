@@ -12,11 +12,11 @@
    0.00000         CONDUCT
   0.000000E+00     QVOL
   0.000000E+00     FINTIME
-  10000.           NSTEPS
+0  10000.           NSTEPS
  -.020             DT
   0.000000E+00     IOCOMM
   0.000000E+00     IOTIME
-   1000            IOSTEP
+1   1000            IOSTEP
   0.000000E+00     EQTYPE
    1.00000         AXIS
   0.500000E-01     GRID

@@ -1,0 +1,176 @@
+C-----------------------------------------------------------------------
+C
+C  USER SPECIFIED ROUTINES:
+C
+C     - boundary conditions
+C     - initial conditions
+C     - variable properties
+C     - forcing function for fluid (f)
+C     - forcing function for passive scalar (q)
+C     - general purpose routine for checking errors etc.
+C
+C-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,ieg)
+
+C Set user variable properties
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      return
+      end
+
+C=======================================================================
+
+      subroutine userf  (ix,iy,iz,ieg)
+
+C Set user forcing function for the momentum
+
+      include 'SIZE'
+      include 'TSTEP'
+      include 'NEKUSE'
+
+      FFY = 0.0
+      FFX = 0.0
+      FFZ = 0.0
+
+      return
+      end
+
+C=======================================================================
+
+      subroutine userq  (ix,iy,iz,ieg)
+
+C Set user forcing function for scalars
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      qvol = 0.0
+
+      return
+      end
+
+C=======================================================================
+
+      subroutine userchk
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      real tag(lx1,ly1,lz1,lelt)
+      character*3 cbv
+
+      n = nx1*ny1*nz1
+
+      return
+
+c tag boundary conditions
+      do iel  = 1,nelt
+      do ifc=1,2*ndim
+         cbv = cbc(ifc,iel,1)
+         if (cbv.eq.'W  ') then 
+            call rone(tag(1,1,1,iel),n)
+         else if (cbv.eq.'v  ') then 
+            call rone(tag(1,1,1,iel),n)
+            call cmult(tag(1,1,1,iel),2.0,n)
+         else if (cbv.eq.'O  ') then 
+            call rone(tag(1,1,1,iel),n)
+            call cmult(tag(1,1,1,iel),3.0,n)
+         endif
+      enddo
+      enddo
+
+      call outpost(tag,tag,tag,tag,tag,'tst')
+      call exitt
+ 
+      return
+      end
+
+C=======================================================================
+
+      subroutine userbc (ix,iy,iz,iside,ieg)
+
+C  Set user boundary conditions
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      xp  = x/0.5
+      yp  = y/0.5
+      rr  = xp*xp + yp*yp
+
+      ux = 0.0
+      uy = 0.0
+      uz = 1 - rr
+      temp = 0.0 
+
+      return
+      end
+
+C=======================================================================
+
+      subroutine useric (ix,iy,iz,ieg)
+
+C   Set initial conditions
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      xp  = x/0.5
+      yp  = y/0.5
+      rr  = xp*xp + yp*yp
+
+      ux = 0.0
+      uy = 0.0
+      uz = 1 - rr
+      temp = 0.0 
+
+      return
+      end
+
+C=======================================================================
+      subroutine usrdat
+
+      return
+      end
+
+C=======================================================================
+
+      subroutine usrdat2
+
+      return
+      end
+
+C=======================================================================
+      subroutine usrdat3
+
+      return
+      end
+C=======================================================================
+      subroutine usr_moab2nek(id_nek, id_moab)
+
+      character*3 id_nek(1)
+      integer id_moab
+
+      id_nek(1) = 'E  '
+      if     (id_moab.eq.100) then
+         id_nek(1) = 'v  '
+      else if(id_moab.eq.200) then
+         id_nek(1) = 'O  '
+      else if(id_moab.eq.300) then
+         id_nek(1) = 'W  '
+      endif
+
+      end
+c-----------------------------------------------------------------------
+c automatically added by nekautomake
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
+      return
+      end
+c

@@ -2,9 +2,9 @@ C     Dimension file to be included
 C
 C     HCUBE array dimensions
 C
-      parameter (ldim=2)
-      parameter (lx1=14,ly1=lx1,lz1=1,lelt=80,lelv=lelt)
-      parameter (lxd=20,lyd=lxd,lzd=1)
+      parameter (ldim=3)
+      parameter (lx1=4,ly1=lx1,lz1=lx1,lelt=1500,lelv=lelt)
+      parameter (lxd=6,lyd=lxd,lzd=lxd)
       parameter (lelx=1,lely=1,lelz=1)
 c
       parameter (lzl=3 + 2*(ldim-3))
@@ -39,7 +39,7 @@ C LX1M=LX1 when there are moving meshes; =1 otherwise
       parameter (ldimt1=ldimt+1)
       parameter (ldimt3=ldimt+3)
       parameter (lp   = 128)
-      parameter (lelg = 10000)
+      parameter (lelg = 40000)
 c
 c     Note:  In the new code, LELGEC should be about sqrt(LELG)
 c

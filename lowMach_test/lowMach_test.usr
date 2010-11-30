@@ -64,6 +64,8 @@ C Set user forcing function for the energy and species
      
       qvol = sech*sech/delta * (0.5 + tanh(XD)/delta)
 
+      write(22,*) qvol 
+
       RETURN
       END
 
@@ -79,6 +81,11 @@ C=======================================================================
      $              ,VX_err (LX1,LY1,LZ1,LELT)
      $              ,QTL_err (LX1,LY1,LZ1,LELT)
 
+c      COMMON /MY001/ RES1  (LX1,LY1,LZ1,LELV)
+c     $ ,             RES2  (LX1,LY1,LZ1,LELV)
+c     $ ,             RES3  (LX1,LY1,LZ1,LELV)
+c     $ ,             H1    (LX1,LY1,LZ1,LELV)
+c     $ ,             H2    (LX1,LY1,LZ1,LELV)
 
       real sumqw
 
@@ -87,7 +94,17 @@ C=======================================================================
 
       ntot = nx1*ny1*nz1*nelv
 
-      if(istep.lt.1) return
+csk
+c      call invers2  (h1,vtrans,ntot)
+c      call rzero    (h2,ntot)
+c      call cresvsp  (res1,res2,res3,h1,h2)
+c      do i = 1,ntot
+c         write(6,*) res1(i,1,1,1),res2(i,1,1,1),res3(i,1,1,1)
+c      enddo
+c      call exitt
+csk
+
+c      if(istep.lt.1) return
 
       do 100 iel=1,nelv
       do 100 k=1,nz1
@@ -144,12 +161,12 @@ C  Set user boundary conditions
  
       IF (IFIELD .eq. 1) THEN          ! velocity
      
-            UX = 0.5*( 3.0 + tanh(XD) )
+            UX = 0.5*( 3.0 + dtanh(XD) )
             UY = 0.0
 
       ELSEIF (IFIELD .eq. 2) THEN      ! Temperature
 
-          TEMP = 0.5*( 3.0 + tanh(XD) )
+          TEMP = 0.5*( 3.0 + dtanh(XD) )
 
       ENDIF
 
@@ -172,12 +189,12 @@ C   Set initial conditions
       XD = X/delta
 
       IF (IFIELD.EQ.1) THEN          ! ---------- Velocity
-          UX = 0.5*(3.0 + tanh(XD))
+          UX = 0.5*(3.0 + dtanh(XD))
           UY = 0.0
       ENDIF
 
       IF (IFIELD.EQ.2)               ! ---------- Temperature
-     &    TEMP = 0.5*(3.0 + tanh(XD))
+     &    TEMP = 0.5*(3.0 + dtanh(XD))
 
       RETURN
       END
@@ -193,6 +210,22 @@ C=======================================================================
 
       subroutine usrdat2
 
+      INCLUDE 'SIZE'
+      INCLUDE 'TOTAL'
+
+      write(6,*) ifadvc(2)
+      call exitt
+
+      return
+
+      n = nx1*ny1*nz1*nelv
+      do i = 1,n
+         write(90,*) bm1(i,1,1,1)
+      enddo
+      call exitt()
+
+
+
       return
       end
 
@@ -202,3 +235,10 @@ C=======================================================================
       return
       end
 C=======================================================================
+c
+c automatically added by nekautomake
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
+      return
+      end
+c
