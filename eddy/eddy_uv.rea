@@ -12,7 +12,7 @@
    1.00000         CONDUCT
   0.000000E+00     QVOL
   0.000000E+00     FINTIME
-2 100   1000.00         NSTEPS
+   1000.00         NSTEPS
  -1.000000E-04     DT
   0.000000E+00     IOCOMM
   0.000000E+00     IOTIME
@@ -114,8 +114,8 @@
   T     IFFLOW
   F     IFHEAT
   T     IFTRAN
-  T T IFNAV & IFADVC (convection in P.S. fields)
-  F F IFTMSH (IF mesh for this field is T mesh)
+  T F F F F F F F F F F IFNAV & IFADVC (convection in P.S. fields)
+  F F T T T T T T T T T T IFTMSH (IF mesh for this field is T mesh)
   F     IFAXIS
   F     IFSTRS
   F     IFSPLIT

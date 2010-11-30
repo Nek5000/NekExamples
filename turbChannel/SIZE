@@ -3,7 +3,7 @@ C
 C     HCUBE array dimensions
 C
       parameter (ldim=3)
-      parameter (lx1=6,ly1=lx1,lz1=lx1,lelt=520,lelv=lelt)
+      parameter (lx1=8,ly1=lx1,lz1=lx1,lelt=520,lelv=lelt)
       parameter (lxd=12,lyd=lxd,lzd=lxd)
       parameter (lelx=8,lely=lelx,lelz=lelx)
 c
@@ -90,20 +90,8 @@ c automatically added by makenek
       parameter(lxo   = lx1) ! max output grid size (lxo>=lx1)
 
 c automatically added by makenek
-      parameter(lpart = 1000  ) ! max number of particles
+      parameter(lpart = 1  ) ! max number of particles
 
 c automatically added by makenek
       integer ax1,ay1,az1,ax2,ay2,az2
       parameter (ax1=lx1,ay1=ly1,az1=lz1,ax2=lx2,ay2=ly2,az2=lz2) ! running averages
-
-c automatically added by nekautomake
-      integer cv_maxl
-      parameter(cv_maxl = 20  ) ! Size of Krylov Space
-
-c automatically added by nekautomake
-      real cv_delt
-      parameter(cv_delt = 0.1 ) ! linear convergence factor 
-
-c automatically added by nekautomake
-      real cv_sigs
-      parameter(cv_sigs = 0.01) ! Jacobian DQ perturbation scaling factor

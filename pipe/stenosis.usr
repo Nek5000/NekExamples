@@ -165,10 +165,3 @@ c     call exitt
       return
       end
 c-----------------------------------------------------------------------
-c
-c automatically added by nekautomake
-      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
-      integer*8 glo_num(1)
-      return
-      end
-c

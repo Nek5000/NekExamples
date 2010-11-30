@@ -136,15 +136,6 @@ c
      &              ,  wo2(lx1,ly1,lz1,lelv)
      &              ,  wo3(lx1,ly1,lz1,lelv)
 
-      character*132  newfld, oldfld, newgfld
-      data newfld, oldfld, newgfld 
-     &     /'new0.f0001','base.fld','new_geom.f0000'/
-c
-c      return
-      call g2gi(newfld, oldfld, newgfld) ! grid2grid interpolation
-      call exitt()
-
-
       n=nx1*ny1*nz1*nelv
 
       pi    = 4.*atan(1.0)

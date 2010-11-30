@@ -12,18 +12,18 @@
    1.              CONDUCT
   0.000000E+00     QVOL
   0.000000E+00     FINTIME
-30 300      5.0e3        NSTEPS
+      5.0e3        NSTEPS
       1.0e-3       DT (negative value -> forcing)
   0.000000E+00     IOCOMM
   0.000000E+00     IOTIME
-100      5.0e2        IOSTEP
+      5.0e2        IOSTEP
   0.000000E+00     PSSOLVER (1: Helmholz, 2: CVODE)
   0.000000E+00
   0.000000E+00
   0.000000E+00
    5.00000         NORDER   (only used by prenek)
-       1.0E-05     DIVERGENCE
-       1.0E-10     HELMHOLTZ
+       1.0E-08     DIVERGENCE
+       1.0E-12     HELMHOLTZ
        0.0         NPSCAL
        1.0E-06     TOLREL
        1.0E-10     TOLABS
@@ -94,9 +94,9 @@
   0.000000E+00
   0.000000E+00
   0.000000E+00
-0  20.0000          number of previous sol'ns to save
-0  5.00000          start saving velocity+scalar soln's after this
-0  5.00000          start saving pressure soln's after this
+  20.0000          number of previous sol'ns to save
+  5.00000          start saving velocity+scalar soln's after this
+  5.00000          start saving pressure soln's after this
   0.000000E+00
   0.000000E+00
   0.000000E+00
