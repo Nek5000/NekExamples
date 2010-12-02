@@ -2,6 +2,417 @@
     2.610000     NEKTON VERSION
             3 DIMENSIONAL RUN
           103 PARAMETERS FOLLOW
+   1.00000         p1  DENSITY
+  -16000.          p2  VISCOS
+   0. 
+   0. 
+   0. 
+   0. 
+   1.00000         p7  RHOCP
+  -6400.           p8  CONDUCT
+   0. 
+   0.              p10 FINTIME
+   50000.          p11 NSTEPS
+  -5.00000E-03     p12 DT
+   0.              p13 IOCOMM
+   0.              p14 IOTIME
+   200.000         p15 IOSTEP
+   1.00000         p16 PSSOLVER
+   0. 
+   0.250000E-01    p18 GRID
+  -1.00000         p19 INTYPE
+   2.0000          p20 NORDER
+   5.000000E-05    p21 DIVERGENCE
+   1.000000E-08    p22 HELMHOLTZ
+   0.              p23 NPSCAL
+   0.100000E-07    p24 TOLREL
+   0.100000E-13    p25 TOLABS
+   2.00000         p26 COURANT/NTAU 
+   3.00000         p27 TORDER
+   0.              p28 TORDER: mesh velocity (0: p28=p27)
+   0.              p29 magnetic visc if > 0, = -1/Rm if < 0
+   0.              p30 > 0 ==> properties set in uservp()
+   0.              p31 NPERT: #perturbation modes
+   1.00000         p32 #BCs in re2 file, if > 0
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p41 1-->multiplicative SEMG
+   0.              p42 0=gmres/1=pcg
+   1.00000         p43 0=semg/1=schwarz
+   0.              p44 0=E-based/1=A-based prec.
+   0.              p45 Relaxation factor for DTFS
+   0.              p46 reserved
+   0.              p47 vnu: mesh matieral prop
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p52 IOHIS
+   0. 
+   0.              p54 1,2,3-->fixed flow rate dir=x,y,z
+   0.              p55 vol.flow rate (p54>0) or Ubar (p54<0)
+   0. 
+   0. 
+   0. 
+   0.              p59 !=0 --> full Jac. eval. for each el.
+   0.              p60 !=0 --> init. velocity to small nonzero
+   0. 
+   0.              p62 >0 --> force byte_swap for output
+   0.              p63 =8 --> force 8-byte output
+   0.              p64 =1 --> perturbation restart
+   0.              p65 #iofiles (eg, 0 or 64); <0 --> sep. dirs
+   0.              p66 output : <0=ascii, else binary
+   0.              p67 restart: <0=ascii, else binary
+   0.              p68 iastep: freq for avg_all
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p74 verbose Helmholtz
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.               p84 !=0 --> sets initial timestep if p12>0
+   0.               p85 dt ratio if p84 !=0, for timesteps>0
+   0.               p86 reserved
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   20.0000          p93 Number of previous pressure solns saved
+   5.00000          p94 start projecting velocity after p94 step
+   5.00000          p95 start projecting pressure after p95 step
+   0. 
+   0. 
+   0. 
+   4.00000          p99   dealiasing: <0--> off/3--> old/4--> new
+   0.              
+   1.0000           p101   No. of additional filter modes
+   5.00000          p102   Dump out divergence at each time step
+   .050             p103   weight of stabilizing filter (.01) 
+      4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   13  LOGICAL SWITCHES FOLLOW
+   T     IFFLOW
+   T     IFHEAT
+   T     IFTRAN
+   T  T  F  F  F  F  F  F  F  F  F IFNAV & IFADVC (convection in P.S. fields)
+   F  F  T  T  T  T  T  T  T  T  T  T IFTMSH (IF mesh for this field is T mesh)
+   F     IFAXIS
+   F     IFSTRS
+   F     IFSPLIT
+   F     IFMGRID
+   F     IFMODEL
+   F     IFKEPS
+   F     IFMVBD
+   F     IFCHAR
+   8.00000       8.00000     -0.500000      -4.00000     XFAC,YFAC,XZERO,YZERO
+  *** MESH DATA ***
+        10         2        10           NEL,NDIM,NELV
+            ELEMENT       1 [    1a]  GROUP  0
+  0.000000E+00  0.900000      0.900000      0.000000E+00
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       2 [    1b]  GROUP  0
+  0.900000       1.80000       1.80000      0.900000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       3 [    1c]  GROUP  0
+   1.80000       2.70000       2.70000       1.80000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       4 [    1d]  GROUP  0
+   2.70000       3.60000       3.60000       2.70000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       5 [    1e]  GROUP  0
+   3.60000       4.50000       4.50000       3.60000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       6 [    1f]  GROUP  0
+   4.50000       5.40000       5.40000       4.50000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       7 [    1g]  GROUP  0
+   5.40000       6.30000       6.30000       5.40000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       8 [    1h]  GROUP  0
+   6.30000       7.20000       7.20000       6.30000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT       9 [    1i]  GROUP  0
+   7.20000       8.10000       8.10000       7.20000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+            ELEMENT      10 [    1j]  GROUP  0
+   8.10000       9.00000       9.00000       8.10000    
+  0.000000E+00  0.000000E+00   1.00000       1.00000    
+  ***** CURVED SIDE DATA *****
+     0 Curved sides follow IEDGE,IEL,CURVE(I),I=1,5, CCURVE
+  ***** BOUNDARY CONDITIONS *****
+  ***** FLUID   BOUNDARY CONDITIONS *****
+ W    1  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    1  2  2.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    1  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P    1  4  10.00000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    2  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  2  3.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    2  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  4  1.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    3  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    3  2  4.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    3  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    3  4  2.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    4  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    4  2  5.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    4  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    4  4  3.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    5  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    5  2  6.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    5  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    5  4  4.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    6  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    6  2  7.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    6  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    6  4  5.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    7  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    7  2  8.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    7  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    7  4  6.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    8  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    8  2  9.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    8  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    8  4  7.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    9  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    9  2  10.00000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W    9  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    9  4  8.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W   10  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P   10  2  1.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ W   10  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E   10  4  9.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+  ***** THERMAL BOUNDARY CONDITIONS *****
+ t    1  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    1  2  2.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    1  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P    1  4  10.00000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    2  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  2  3.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    2  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    2  4  1.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    3  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    3  2  4.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    3  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    3  4  2.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    4  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    4  2  5.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    4  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    4  4  3.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    5  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    5  2  6.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    5  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    5  4  4.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    6  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    6  2  7.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    6  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    6  4  5.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    7  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    7  2  8.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    7  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    7  4  6.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    8  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    8  2  9.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    8  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    8  4  7.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    9  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    9  2  10.00000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t    9  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E    9  4  8.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t   10  1 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ P   10  2  1.000000      4.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+ t   10  3 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00 0.0000000E+00
+ E   10  4  9.000000      2.000000     0.0000000E+00 0.0000000E+00 0.0000000E+00
+   0 PRESOLVE/RESTART OPTIONS  *****
+   7         INITIAL CONDITIONS *****
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+  ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
+   4                 Lines of Drive force data follow
+C
+C
+C
+C
+  ***** Variable Property Data ***** Overrrides Parameter data.
+   1 Lines follow.
+   0 PACKETS OF DATA FOLLOW
+  ***** HISTORY AND INTEGRAL DATA *****
+ 001   POINTS.  Hcode, I,J,H,IEL
+ UV PT    H      3    3    1    1
+  ***** OUTPUT FIELD SPECIFICATION *****
+   6 SPECIFICATIONS FOLLOW
+   F      COORDINATES
+   T      VELOCITY
+   T      PRESSURE
+   T      TEMPERATURE
+   F      TEMPERATURE GRADIENT
+   0      PASSIVE SCALARS
+  ***** OBJECT SPECIFICATION *****
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects
+   1.00000         DENSITY
+   -10935.         Re_b 
+  0.000000E+00     BETAG
+   0.00000         GTHETA
+  0.000000E+00     PGRADX
+  0.000000E+00     FLOWRATE
+   0.00000         RHOCP
+   0.00000         CONDUCT
+  0.000000E+00     QVOL
+  0.000000E+00     FINTIME
+  10000.           NSTEPS
+ -.020             DT
+  0.000000E+00     IOCOMM
+  0.000000E+00     IOTIME
+   1000            IOSTEP
+  0.000000E+00     EQTYPE
+   1.00000         AXIS
+  0.500000E-01     GRID
+  -1.00000         INTYPE
+   7.00000         NORDER
+  1.000000E-05     DIVERGENCE
+  1.000000E-08     HELMHOLTZ
+  0.000000E+00     NPSCAL
+  0.100000E-01     TOLREL
+  0.100000E-01     TOLABS
+   2.00000         TARGET COURANT NUMBER
+   3.00000         TORDER
+  0.000000E+00
+   0.0000        
+  0.000000E+00    
+  0.000000E+00
+  0.000000E+00    
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00   
+  0.000000E+00 
+  0.000000E+00  
+  0.000000E+00   
+  0.000000E+00     
+  0.000000E+00   
+  0.000000E+00     
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00   
+  0.000000E+00
+  0.000000E+00     
+  0.000000E+00    
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00 
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+   1.00000        
+   0.00000         write format 
+   0.00000         read format 
+   1000            iostep for avg_all (if ^= 0, else = iostep)
+  0.000000E+00
+  0.000000E+00
+  0.0024           initial guess for ffx
+  0.000000E+00
+  0.000000E+00
+   0.00000
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00    
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  20.000           Number of pressure sol'ns saved
+  5.00000          start saving pressure soln's after this
+  5.00000          start saving pressure soln's after this
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  4.000000E+00     dealiasing
+  0.000000E+00
+  1.000000E+00     addl filter modes
+  1.00000          dump out divergence at each time step
+  0.050            filter weight of last mode
+            0  SCALAR DATA FOLLOW (CONDUCT; RHOCP)
+            4  LOGICAL SWITCHES FOLLOW
+  T     IFFLOW
+  T     IFTRAN
+  T     IFADVC (one entry per field)
+  T     IFCHAR
+   8.00000   8.00000  -0.500000   -4.00000     XFAC,YFAC,XZERO,YZERO
+ ** MESH DATA ** 
+       -1 3        1 NEL,NDIM,NELV
+            0 RESTART OPTIONS FOLLOW
+            1 INITIAL CONDITIONS *****
+C Default
+  ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
+            0                 Lines of Drive force data follow
+  ***** Variable Property Data ***** Overrrides Parameter data.
+            1 Lines follow.
+            0 PACKETS OF DATA FOLLOW
+  ***** HISTORY AND INTEGRAL DATA *****
+            0   POINTS.  Hcode, I,J,H,IEL
+  ***** OUTPUT FIELD SPECIFICATION *****
+            8 SPECIFICATIONS FOLLOW
+  T      COORDINATES
+  T      VELOCITY
+  T      PRESSURE
+  F      TEMPERATURE
+  F      TEMPERATURE GRADIENT
+            2      PASSIVE SCALARS
+  T      PS1
+  T      PS2
+  ***** OBJECT SPECIFICATION *****
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects
    1.00000         DENSITY
      -16000.        VISCOS
   0.000000E+00     BETAG
@@ -105,6 +516,7 @@
   1.000000E+00    add modes to filter
    5.00000        print divergence
   0.0500000       filter param new filt., <0 disabled
+uuuu
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000

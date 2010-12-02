@@ -2,109 +2,109 @@
    2.610000      NEKTON VERSION
    2  DIMENSIONAL RUN
  103  PARAMETERS FOLLOW
-   1.00000         DENSITY
-   1.0000          VISCOS   (<0 -> Reynolds number else 1/Re)
-  0.000000E+00     BETAG    (>0 use Boussinesq approx) 
-  0.000000E+00     GTHETA   
-  0.000000E+00     
-  0.000000E+00     
-   1.00000         RHOCP
-   1.              CONDUCT
-  0.000000E+00     QVOL
-  0.000000E+00     FINTIME
-      5.0e3        NSTEPS
-      1.0e-3       DT (negative value -> forcing)
-  0.000000E+00     IOCOMM
-  0.000000E+00     IOTIME
-      5.0e2        IOSTEP
-  0.000000E+00     PSSOLVER (1: Helmholz, 2: CVODE)
-  0.000000E+00    
-  0.000000E+00    
-  0.000000E+00     
-   5.00000         NORDER   (only used by prenek)
-       1.0E-09     DIVERGENCE 
-       1.0E-12     HELMHOLTZ
-       0.0         NPSCAL
-       1.0E-06     TOLREL
-       1.0E-10     TOLABS
-   0.35000         COURANT
-   3.00000         TORDER
-  0.000000E+00     NABMSH       (0: extrapolation >0: AB)
-  0.000000E+00     MHD_VISCOS   (>0 enable MHD)
-  1.000000E+00     USERVP       (0: constand prop 1: user prop)
-  0.000000E+00     NPERT        (number of pert modes)
-  0.000000E+00     NBCRE2       (number of BCs in re2 file, 0: all)
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     Linear equation solver (0: GMRES, 1:CG)
-  1.000000E+00     (0: additive mulilevel, 1:2 level scheme)
-  0.000000E+00     p44
-  0.000000E+00     p45
-  0.000000E+00     (>0: do not set IC)
-  0.000000E+00     p47
-  0.000000E+00     
-  0.000000         mixing length factor
-  0.000000E+00    
-  0.000000E+00     1: get_local_crs, else get_local_crs_galerkin
-  0.000000E+00     HISTEP (>1_ history point dump freq)
-  0.000000E+00     
-  0.000000E+00     direction of fixed massflow (1: X, 2: Y, 3: Z)
-  0.000000E+00     bulk velocity for fixed massflow (!=0 adust flow)
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00     !=0 deformed elements (only relevant for FDM)
-  0.000000E+00     !=0 init velocity to 1e-10 (for steady Stokes)
-  0.000000E+00
-  0.000000E+00     >0 swap bytes for output
-  0.000000E+00     WDSIZO (8: 8-bytes reals else 4 byte reals)
-  0.000000E+00
-  0.000000E+00     p65 number of i/o nodes (< 0 multi subdirectories)
-  0.000000E+00     write format (<0: ASCII else BINARY)
-  0.000000E+00     read form 
-  0.000000E+00     averaging frequency in avg_all (0: every timestep)
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00     >0: print Helmholz solver iterations
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00     
-  0.000000E+00     ntaupf
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-   2.00000         dimension of coarse grid (2 -> linear, etc.)
-  0.000000E+00
-  0.000000E+00     >0: use this value as inital time step 
-  0.000000E+00     set dt in setdt
-  0.000000E+00     0: convective from else skey-symmetric form
-  0.000000E+00     
-  0.000000E+00
-  0.000000E+00      coarse grid weighting (default=10.0)
-  0.000000E+00     
-  0.000000E+00
-  0.000000E+00
-  20.0000          number of previous sol'ns to save
-  5.00000          start saving velocity+scalar soln's after this
-  5.00000          start saving pressure soln's after this
-  0.000000E+00     
-  0.000000E+00     
-  0.000000E+00     
-    3.00000        <0: turn off dealiasing
-  0.000000E+00     pres CG precond (0: 2-level Schwarz else Jacobi)
-  0.000000E+00     number of additional modes to filter
-   1.00000         dump out divergence at each time st
-   .05             filter weight (< 0 no filtering)
+   1.00000         p1  DENSITY
+   1.00000         p2  VISCOS
+   0. 
+   0. 
+   0. 
+   0. 
+   1.00000         p7  RHOCP
+   1.00000         p8  CONDUCT
+   0. 
+   0.              p10 FINTIME
+   5.0e3           p11 NSTEPS
+   1.0e-3          p12 DT
+   0.              p13 IOCOMM
+   0.              p14 IOTIME
+   5.0e2           p15 IOSTEP
+   0.              p16 PSSOLVER
+   0. 
+   0.              p18 GRID
+   0.              p19 INTYPE
+   5.0000          p20 NORDER
+   1.0E-09         p21 DIVERGENCE
+   1.0E-12         p22 HELMHOLTZ
+   0.              p23 NPSCAL
+   1.0E-06         p24 TOLREL
+   1.0E-10         p25 TOLABS
+   0.35000         p26 COURANT/NTAU 
+   3.00000         p27 TORDER
+   0.              p28 TORDER: mesh velocity (0: p28=p27)
+   0.              p29 magnetic visc if > 0, = -1/Rm if < 0
+   1.00000         p30 > 0 ==> properties set in uservp()
+   0.              p31 NPERT: #perturbation modes
+   0.              p32 #BCs in re2 file, if > 0
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p41 1-->multiplicative SEMG
+   0.              p42 0=gmres/1=pcg
+   1.00000         p43 0=semg/1=schwarz
+   0.              p44 0=E-based/1=A-based prec.
+   0.              p45 Relaxation factor for DTFS
+   0.              p46 reserved
+   0.              p47 vnu: mesh matieral prop
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p52 IOHIS
+   0. 
+   0.              p54 1,2,3-->fixed flow rate dir=x,y,z
+   0.              p55 vol.flow rate (p54>0) or Ubar (p54<0)
+   0. 
+   0. 
+   0. 
+   0.              p59 !=0 --> full Jac. eval. for each el.
+   0.              p60 !=0 --> init. velocity to small nonzero
+   0. 
+   0.              p62 >0 --> force byte_swap for output
+   0.              p63 =8 --> force 8-byte output
+   0.              p64 =1 --> perturbation restart
+   0.              p65 #iofiles (eg, 0 or 64); <0 --> sep. dirs
+   0.               p66 output : <0=ascii, else binary
+   0.              p67 restart: <0=ascii, else binary
+   0.              p68 iastep: freq for avg_all
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p74 verbose Helmholtz
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.               p84 !=0 --> sets initial timestep if p12>0
+   0.               p85 dt ratio if p84 !=0, for timesteps>0
+   0.               p86 reserved
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   20.0000          p93 Number of previous pressure solns saved
+   5.00000          p94 start projecting velocity after p94 step
+   5.00000          p95 start projecting pressure after p95 step
+   0. 
+   0. 
+   0. 
+   3.00000          p99   dealiasing: <0--> off/3--> old/4--> new
+   0.              
+   0.               p101   No. of additional filter modes
+   1.00000          p102   Dump out divergence at each time step
+   .05              p103   weight of stabilizing filter (.01) 
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000
