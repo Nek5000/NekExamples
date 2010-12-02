@@ -178,10 +178,11 @@ c
       u0   = param(96)
       v0   = param(97)
       call exact  (ue,ve,xm1,ym1,n,time,visc,u0,v0)
-      if (istep.eq.0) call outpost(ue,ve,vx,pr,t,'   ')
+      if (istep.eq.0     ) call outpost(ue,ve,vx,pr,t,'   ')
 
       call sub3   (ud,ue,vx,n)
       call sub3   (vd,ve,vy,n)
+      if (istep.eq.nsteps) call outpost(ud,vd,vx,pr,t,'   ')
 
       umx = glamax(vx,n)
       vmx = glamax(vy,n)
