@@ -76,8 +76,8 @@
    0. 
    0. 
    0.              p74 verbose Helmholtz
-   0. 
-   0. 
+   0.              p75 k_c critical wave number (in .usr)
+   1.e80           p76 Rayleigh number (in .usr)
    0. 
    0. 
    0. 

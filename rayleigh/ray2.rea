@@ -76,8 +76,8 @@
    0. 
    0. 
    0.              p74 verbose Helmholtz
-   0. 
-   0. 
+   0.              p75 epsilon for RB criticality (in .usr)
+   1750.           p76 Rayleigh number (in .usr)
    0. 
    0. 
    0. 

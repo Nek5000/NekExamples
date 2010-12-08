@@ -76,8 +76,8 @@
    0. 
    0. 
    0.              p74 verbose Helmholtz
-   0. 
-   0. 
+   0.03059         p75 k_c critical wave number (in .usr)
+   1707.76.        p76 Rayleigh number (in .usr)
    0. 
    0. 
    0. 
@@ -122,9 +122,9 @@
    0.              p118 !=0: z elements for fast tensor product
    0.              
    0.              
-   0.              
-   0.              
-   0.              
+   8.0632          p121 epsilon2 for 2nd case (in .usr)
+   0.018879        p122 epsilon3 for 3rd case (in .usr)
+   0.010095        p123 steady state tolerance (in .usr)
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000

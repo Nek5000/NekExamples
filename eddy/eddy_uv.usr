@@ -191,9 +191,11 @@ c
       udx = glamax(ud,n)
       vdx = glamax(vd,n)
 
-      write(6,11) istep,time,udx,umx,uex,u0,'  X err'
-      write(6,11) istep,time,vdx,vmx,vex,v0,'  Y err'
-   11 format(i5,1p5e14.6,a7)
+      if (nid.eq.0) then
+          write(6,11) istep,time,udx,umx,uex,u0,'  X err'
+          write(6,11) istep,time,vdx,vmx,vex,v0,'  Y err'
+   11     format(i5,1p5e14.6,a7)
+      endif
 
 
       if (istep.le.5) then        !  Reset velocity to eliminate 
