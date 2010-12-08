@@ -186,7 +186,7 @@ DFdPhrase("Tools/INT",log,value)
 print("\nBEGIN Pn-Pn TESTING")  
 #Test0001 
 log = "./mpiLog/test0001.log.1"
-value = [['total solver time',0,400,2],['ANS1',5.742723E-07,1e-06,8]]
+value = [['total solver time',0.01,400,2],['ANS1',5.742723E-07,1e-06,8]]
 Run("Test0001/MPI: Serial",log,value)
 
 log = "./mpiLog/test0001.log.4"
@@ -196,17 +196,17 @@ Run("Test0001/MPI: Parallel-error",log,value)
 
 #axi 
 log = "./mpiLog/axi.log.1"
-value = [['total solver time',0,2,2]]
+value = [['total solver time',0.01,2,2]]
 Run("Example axi/MPI: Serial-time",log,value)
 
 
 #benard 
 log = "./mpiLog/ray_9.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_9/MPI: Serial-time",log,value)
 
 log = "./mpiLog/ray_dd.log.1"
-value = [['total solver time',0,34,2]]
+value = [['total solver time',0.01,34,2]]
 Run("Example benard/ray_dd/MPI: Serial-time",log,value)
 
 log = "./mpiLog/benard.err"
@@ -214,7 +214,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ray_dn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_dn/MPI: Serial-time",log,value)
 
 log = "./mpiLog/benard.err"
@@ -222,7 +222,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ray_nn.log.1"
-value = [['total solver time',0,50,2]]
+value = [['total solver time',0.01,50,2]]
 Run("Example benard/ray_nn/MPI: Serial-time",log,value)
 
 log = "./mpiLog/benard.err"
@@ -232,7 +232,7 @@ Run("Example benard/ray_nn/MPI: Serial-error",log,value)
 
 #conj_ht
 log = "./mpiLog/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/MPI: Serial-time",log,value)
 
 log = "./mpiLog/conj_ht.err.1"
@@ -246,7 +246,7 @@ Run("Example conj_ht/MPI: Parallel-error",log,value)
 
 #eddy
 log = "./mpiLog/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/MPI: Serial-time",log,value)
 
 log = "./mpiLog/eddy_uv.err.1"
@@ -260,7 +260,7 @@ Run("Example eddy/MPI: Parallel-error",log,value)
 
 #vortex 
 log = "./mpiLog/r1854a.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example vortex/MPI: Serial-time",log,value)
 
 log = "./mpiLog/vortex.err.1"
@@ -310,7 +310,7 @@ FindPhrase("Example fs_hydro/MPI: Parallel",log,value)
 
 #kovasznay
 log = "./mpiLog/kov.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example kov/MPI: Serial-time",log,value)
 
 log = "./mpiLog/kov.err.1"
@@ -324,7 +324,7 @@ Run("Example kov/MPI: Parallel-error",log,value)
 
 #lowMach_test 
 log = "./mpiLog/lowMach_test.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example lowMach_test/MPI: Serial-time",log,value)
 
 log = "./mpiLog/lowMach_test.err.1"
@@ -348,7 +348,7 @@ FindPhrase("Example peris/MPI: Parallel",log,value)
 
 #pipe 
 log = "./mpiLog/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/MPI: Serial-time",log,value)
 
 log = "./mpiLog/helix.err.1"
@@ -360,13 +360,13 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/MPI: Serial-error",log,value)
 
 log = "./mpiLog/stenosis.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example stenosis/MPI: Serial-time",log,value)
 
 
 #rayleigh 
 log = "./mpiLog/ray1.log.1"
-value = [['total solver time',0,5,2]]
+value = [['total solver time',0.01,5,2]]
 Run("Example ray1/MPI: Serial-time",log,value)
 
 log = "./mpiLog/ray1.err.1"
@@ -378,7 +378,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/MPI: Parallel-error",log,value)
 
 log = "./mpiLog/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/MPI: Serial-time",log,value)
 
 log = "./mpiLog/ray2.err.1"
@@ -392,7 +392,7 @@ Run("Example ray2/MPI: Parallel-error",log,value)
 
 #shear4 
 log = "./mpiLog/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/MPI: Serial-time",log,value)
 
 log = "./mpiLog/shear4.err.1"
@@ -404,7 +404,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/MPI: Parallel-error",log,value)
 
 log = "./mpiLog/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/MPI: Serial-time",log,value)
 
 log = "./mpiLog/thin.err.1"
@@ -418,7 +418,7 @@ Run("Example shear4/thin/MPI: Parallel-error",log,value)
 
 #turbChannel 
 log = "./mpiLog/turbChannel.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example turbChannel/MPI: Serial-time",log,value)
 
 ######################################################################
@@ -426,17 +426,17 @@ Run("Example turbChannel/MPI: Serial-time",log,value)
 #---------------------Pn-Pn--------------------------------------------
 #axi
 log = "./pgiLog/axi.log.1"
-value = [['total solver time',0,2,2]]
+value = [['total solver time',0.01,2,2]]
 Run("Example axi/PGI: Serial-time",log,value)
 
 
 #benard 
 log = "./pgiLog/ray_9.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_9/PGI: Serial-time",log,value)
 
 log = "./pgiLog/ray_dd.log.1"
-value = [['total solver time',0,24,2]]
+value = [['total solver time',0.01,24,2]]
 Run("Example benard/ray_dd/PGI: Serial-time",log,value)
 
 log = "./pgiLog/benard.err"
@@ -444,7 +444,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/PGI: Serial-error",log,value)
 
 log = "./pgiLog/ray_dn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_dn/PGI: Serial-time",log,value)
 
 log = "./pgiLog/benard.err"
@@ -452,7 +452,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/PGI: Serial-error",log,value)
 
 log = "./pgiLog/ray_nn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_nn/PGI: Serial-time",log,value)
 
 log = "./pgiLog/benard.err"
@@ -462,7 +462,7 @@ Run("Example benard/ray_nn/PGI: Serial-error",log,value)
 
 #conj_ht 
 log = "./pgiLog/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/PGI: Serial-time",log,value)
 
 log = "./pgiLog/conj_ht.err.1"
@@ -472,7 +472,7 @@ Run("Example conj_ht/PGI: Serial-error",log,value)
 
 #eddy 
 log = "./pgiLog/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/PGI: Serial-time",log,value)
 
 log = "./pgiLog/eddy_uv.err.1"
@@ -482,7 +482,7 @@ Run("Example eddy/PGI: Serial-error",log,value)
 
 #vortex
 log = "./pgiLog/r1854a.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example vortext/PGI: Serial-time",log,value)
 
 log = "./pgiLog/vortex.err.1"
@@ -512,7 +512,7 @@ FindPhrase("Example fs_hydro/PGI: Serial",log,value)
 
 #kovaszany 
 log = "./pgiLog/kov.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example kov/PGI: Serial-time",log,value)
 
 log = "./pgiLog/kov.err.1"
@@ -522,7 +522,7 @@ Run("Example kov/PGI: Serial-error",log,value)
 
 #lowMach_test
 log = "./pgiLog/lowMach_test.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example lowMach_test/PGI: Serial-time",log,value)
 
 log = "./pgiLog/lowMach_test.err.1"
@@ -538,7 +538,7 @@ FindPhrase("Example peris/PGI: Serial",log,value)
 
 #pipe
 log = "./pgiLog/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/PGI: Serial-time",log,value)
 
 log = "./pgiLog/helix.err.1"
@@ -548,7 +548,7 @@ Run("Example helix/PGI: Serial-error",log,value)
 
 #rayleigh
 log = "./pgiLog/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/PGI: Serial-time",log,value)
 
 log = "./pgiLog/ray1.err.1"
@@ -556,7 +556,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/PGI: Serial-error",log,value)
 
 log = "./pgiLog/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/PGI: Serial-time",log,value)
 
 log = "./pgiLog/ray2.err.1"
@@ -566,7 +566,7 @@ Run("Example ray2/PGI: Serial-error",log,value)
 
 #shear4 
 log = "./pgiLog/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/PGI: Serial-time",log,value)
 
 log = "./pgiLog/shear4.err.1"
@@ -574,7 +574,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/PGI: Serial-error",log,value)
 
 log = "./pgiLog/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/PGI: Serial-time",log,value)
 
 log = "./pgiLog/thin.err.1"
@@ -583,7 +583,7 @@ Run("Example shear4/thin/PGI: Serial-error",log,value)
 
 #turbChannel 
 log = "./pgiLog/turbChannel.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example turbChannel/PGI: Serial-time",log,value)
 
 ######################################################################
@@ -591,17 +591,17 @@ Run("Example turbChannel/PGI: Serial-time",log,value)
 #---------------------Pn-Pn--------------------------------------------
 #axi 
 log = "./gnuLog/axi.log.1"
-value = [['total solver time',0,2,2]]
+value = [['total solver time',0.01,2,2]]
 Run("Example axi/GNU: Serial-time",log,value)
 
 
 #benard
 log = "./gnuLog/ray_9.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_9/GNU: Serial-time",log,value)
 
 log = "./gnuLog/ray_dd.log.1"
-value = [['total solver time',0,24,2]]
+value = [['total solver time',0.01,24,2]]
 Run("Example benard/ray_dd/GNU: Serial-time",log,value)
 
 log = "./gnuLog/benard.err"
@@ -609,7 +609,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/GNU: Serial-error",log,value)
 
 log = "./gnuLog/ray_dn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_dn/GNU: Serial-time",log,value)
 
 log = "./gnuLog/benard.err"
@@ -617,7 +617,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/GNU: Serial-error",log,value)
 
 log = "./gnuLog/ray_nn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_nn/GNU: Serial-time",log,value)
 
 log = "./gnuLog/benard.err"
@@ -627,7 +627,7 @@ Run("Example benard/ray_nn/GNU: Serial-error",log,value)
 
 #conj_ht 
 log = "./gnuLog/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/GNU: Serial-time",log,value)
 
 log = "./gnuLog/conj_ht.err.1"
@@ -637,7 +637,7 @@ Run("Example conj_ht/GNU: Serial-error",log,value)
 
 #eddy 
 log = "./gnuLog/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/GNU: Serial-time",log,value)
 
 log = "./gnuLog/eddy_uv.err.1"
@@ -647,7 +647,7 @@ Run("Example eddy/GNU: Serial-error",log,value)
 
 #vortex
 log = "./gnuLog/r1854a.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example vortex/GNU: Serial-time",log,value)
 
 log = "./gnuLog/vortex.err.1"
@@ -677,7 +677,7 @@ FindPhrase("Example fs_hydro/GNU: Serial",log,value)
 
 #kovaszany 
 log = "./gnuLog/kov.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example kov/GNU: Serial-time",log,value)
 
 log = "./gnuLog/kov.err.1"
@@ -687,7 +687,7 @@ Run("Example kov/GNU: Serial-error",log,value)
 
 #lowMach_test
 log = "./gnuLog/lowMach_test.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example lowMach_test/GNU: Serial-time",log,value)
 
 log = "./gnuLog/lowMach_test.err.1"
@@ -703,7 +703,7 @@ FindPhrase("Example peris/GNU: Serial",log,value)
 
 #pipe 
 log = "./gnuLog/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/GNU: Serial-time",log,value)
 
 log = "./gnuLog/helix.err.1"
@@ -711,13 +711,13 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/GNU: Serial-error",log,value)
 
 log = "./gnuLog/stenosis.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example stenosis/GNU: Serial-time",log,value)
 
 
 #rayleigh
 log = "./gnuLog/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/GNU: Serial-time",log,value)
 
 log = "./gnuLog/ray1.err.1"
@@ -725,7 +725,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/GNU: Serial-error",log,value)
 
 log = "./gnuLog/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/GNU: Serial-time",log,value)
 
 log = "./gnuLog/ray2.err.1"
@@ -735,7 +735,7 @@ Run("Example ray2/GNU: Serial-error",log,value)
 
 #shear4 
 log = "./gnuLog/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/GNU: Serial-time",log,value)
 
 log = "./gnuLog/shear4.err.1"
@@ -743,7 +743,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/GNU: Serial-error",log,value)
 
 log = "./gnuLog/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/GNU: Serial-time",log,value)
 
 log = "./gnuLog/thin.err.1"
@@ -753,7 +753,7 @@ Run("Example shear4/thin/GNU: Serial-error",log,value)
 
 #turbChannel 
 log = "./gnuLog/turbChannel.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example turbChannel/GNU: Serial-time",log,value)
 
 ######################################################################
@@ -761,17 +761,17 @@ Run("Example turbChannel/GNU: Serial-time",log,value)
 #---------------------Pn-Pn--------------------------------------------
 #axi 
 log = "./intLog/axi.log.1"
-value = [['total solver time',0,2,2]]
+value = [['total solver time',0.01,2,2]]
 Run("Example axi/INT: Serial-time",log,value)
 
 
 #benard 
 log = "./intLog/ray_9.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_9/INT: Serial-time",log,value)
 
 log = "./intLog/ray_dd.log.1"
-value = [['total solver time',0,24,2]]
+value = [['total solver time',0.01,24,2]]
 Run("Example benard/ray_dd/INT: Serial-time",log,value)
 
 log = "./intLog/benard.err"
@@ -779,7 +779,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/INT: Serial-error",log,value)
 
 log = "./intLog/ray_dn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_dn/INT: Serial-time",log,value)
 
 log = "./intLog/benard.err"
@@ -787,7 +787,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/INT: Serial-error",log,value)
 
 log = "./intLog/ray_nn.log.1"
-value = [['total solver time',0,30,2]]
+value = [['total solver time',0.01,30,2]]
 Run("Example benard/ray_nn/INT: Serial-time",log,value)
 
 log = "./intLog/benard.err"
@@ -797,7 +797,7 @@ Run("Example benard/ray_nn/INT: Serial-error",log,value)
 
 #conj_ht 
 log = "./intLog/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/INT: Serial-time",log,value)
 
 log = "./intLog/conj_ht.err.1"
@@ -807,7 +807,7 @@ Run("Example conj_ht/INT: Serial-error",log,value)
 
 #eddy 
 log = "./intLog/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/INT: Serial-time",log,value)
 
 log = "./intLog/eddy_uv.err.1"
@@ -817,7 +817,7 @@ Run("Example eddy/INT: Serial-error",log,value)
 
 #vortex
 log = "./intLog/r1854a.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example vortex/INT: Serial-time",log,value)
 
 log = "./intLog/vortex.err.1"
@@ -847,7 +847,7 @@ FindPhrase("Example fs_hydro/INT: Serial",log,value)
 
 #kovaszany 
 log = "./intLog/kov.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example kov/INT: Serial-time",log,value)
 
 log = "./intLog/kov.err.1"
@@ -857,7 +857,7 @@ Run("Example kov/INT: Serial-error",log,value)
 
 #lowMach_test
 log = "./intLog/lowMach_test.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example lowMach_test/INT: Serial-time",log,value)
 
 log = "./intLog/lowMach_test.err.1"
@@ -873,7 +873,7 @@ FindPhrase("Example peris/INT: Serial",log,value)
 
 #pipe 
 log = "./intLog/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/INT: Serial-time",log,value)
 
 log = "./intLog/helix.err.1"
@@ -881,13 +881,13 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/INT: Serial-error",log,value)
 
 log = "./intLog/stenosis.log.1"
-value = [['total solver time',0,60,2]]
+value = [['total solver time',0.01,60,2]]
 Run("Example stenosis/INT: Serial-time",log,value)
 
 
 #rayleigh 
 log = "./intLog/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/INT: Serial-time",log,value)
 
 log = "./intLog/ray1.err.1"
@@ -895,7 +895,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/INT: Serial-error",log,value)
 
 log = "./intLog/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/INT: Serial-time",log,value)
 
 log = "./intLog/ray2.err.1"
@@ -905,7 +905,7 @@ Run("Example ray2/INT: Serial-error",log,value)
 
 #shear4 
 log = "./intLog/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/INT: Serial-time",log,value)
 
 log = "./intLog/shear4.err.1"
@@ -913,7 +913,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/INT: Serial-error",log,value)
 
 log = "./intLog/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/INT: Serial-time",log,value)
 
 log = "./intLog/thin.err.1"
@@ -923,7 +923,7 @@ Run("Example shear4/thin/INT: Serial-error",log,value)
 
 #turbChannel
 log = "./intLog/turbChannel.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example turbChannel/INT: Serial-time",log,value)
 
 ###############################################################################################
@@ -932,7 +932,7 @@ Run("Example turbChannel/INT: Serial-time",log,value)
 print("\nBEGIN Pn-Pn-2 TESTING")  
 #Test0001 
 log = "./mpi2Log/test0001.log.1"
-value = [['total solver time',0,166,2],['ANS1',5.742723E-07,1e-06,8]]
+value = [['total solver time',0.01,166,2],['ANS1',5.742723E-07,1e-06,8]]
 Run("Test0001/MPI2: Serial",log,value)
 
 log = "./mpi2Log/test0001.log.4"
@@ -942,17 +942,17 @@ Run("Test0001/MPI2: Parallel-error",log,value)
 
 #axi 
 log = "./mpi2Log/axi.log.1"
-value = [['total solver time',0,4,2]]
+value = [['total solver time',0.01,4,2]]
 Run("Example axi/MPI2: Serial-time",log,value)
 
 
 #benard 
 log = "./mpi2Log/ray_9.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example benard/ray_9/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/ray_dd.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_dd/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/benard.err"
@@ -960,7 +960,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ray_dn.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example benard/ray_dn/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/benard.err"
@@ -968,7 +968,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ray_nn.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_nn/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/benard.err"
@@ -978,7 +978,7 @@ Run("Example benard/ray_nn/MPI2: Serial-error",log,value)
 
 #conj_ht
 log = "./mpi2Log/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/conj_ht.err.1"
@@ -992,7 +992,7 @@ Run("Example conj_ht/MPI2: Parallel-error",log,value)
 
 #eddy
 log = "./mpi2Log/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/eddy_uv.err.1"
@@ -1006,7 +1006,7 @@ Run("Example eddy/MPI2: Parallel-error",log,value)
 
 #vortex 
 log = "./mpi2Log/r1854a.log.1"
-value = [['total solver time',0,50,2]]
+value = [['total solver time',0.01,50,2]]
 Run("Example vortex/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/vortex.err.1"
@@ -1020,7 +1020,7 @@ Run("Example vortex/MPI2: Parallel-error",log,value)
 
 #fs_2 
 log = "./mpi2Log/st1.log.1"
-value = [['total solver time',0,27.3,2]]
+value = [['total solver time',0.01,27.3,2]]
 Run("Example st1/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/st1.err.1"
@@ -1032,7 +1032,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/MPI2: Parallel-error",log,value)
 
 log = "./mpi2Log/st2.log.1"
-value = [['total solver time',0,23,2]]
+value = [['total solver time',0.01,23,2]]
 Run("Example st2/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/st2.err.1"
@@ -1044,7 +1044,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/MPI2: Parallel-error",log,value)
 
 log = "./mpi2Log/std_wv.log.1"
-value = [['total solver time',0,21,2]]
+value = [['total solver time',0.01,21,2]]
 Run("Example std_wv/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/std_wv.err.1"
@@ -1058,7 +1058,7 @@ Run("Example std_wv/MPI2: Parallel-error",log,value)
 
 #fs_hydro 
 log = "./mpi2Log/fs_hydro.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example fs_hydro/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/fs_hydro.err.1"
@@ -1072,7 +1072,7 @@ Run("Example fs_hydro/MPI2: Parallel-error",log,value)
 
 #kovasznay
 log = "./mpi2Log/kov.log.1"
-value = [['total solver time',0,17,2]]
+value = [['total solver time',0.01,17,2]]
 Run("Example kov/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/kov.err.1"
@@ -1096,13 +1096,13 @@ FindPhrase("Example lowMach_test/MPI2: Parallel",log,value)
 
 #peris
 log = "./mpi2Log/peris.log.1"
-value = [['total solver time',0,13,2]]
+value = [['total solver time',0.01,13,2]]
 Run("Example peris/MPI2: Serial-time",log,value)
 
 
 #pipe 
 log = "./mpi2Log/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/helix.err.1"
@@ -1114,13 +1114,13 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/MPI2: Parallel-error",log,value)
 
 log = "./mpi2Log/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example stenosis/MPI2: Serial-time",log,value)
 
 
 #rayleigh 
 log = "./mpi2Log/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/ray1.err.1"
@@ -1132,7 +1132,7 @@ value = [['umax',3.897862E-03,1e-05,3]]
 Run("Example ray1/MPI2: Parallel-error",log,value)
 
 log = "./mpi2Log/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/ray2.err.1"
@@ -1146,7 +1146,7 @@ Run("Example ray2/MPI2: Parallel-error",log,value)
 
 #shear4 
 log = "./mpi2Log/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/shear4.err.1"
@@ -1158,7 +1158,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/MPI2: Parallel-error",log,value)
 
 log = "./mpi2Log/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/MPI2: Serial-time",log,value)
 
 log = "./mpi2Log/thin.err.1"
@@ -1172,7 +1172,7 @@ Run("Example shear4/thin/MPI2: Parallel-error",log,value)
 
 #turbChannel 
 log = "./mpi2Log/turbChannel.log.1"
-value = [['total solver time',0,140,2]]
+value = [['total solver time',0.01,140,2]]
 Run("Example turbChannel/MPI2: Serial-time",log,value)
 
 ######################################################################
@@ -1180,17 +1180,17 @@ Run("Example turbChannel/MPI2: Serial-time",log,value)
 #---------------------Pn-Pn-2------------------------------------------
 #axi
 log = "./pgi2Log/axi.log.1"
-value = [['total solver time',0,4,2]]
+value = [['total solver time',0.01,4,2]]
 Run("Example axi/PGI2: Serial-time",log,value)
 
 
 #benard 
 log = "./pgi2Log/ray_9.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example benard/ray_9/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/ray_dd.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_dd/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/benard.err"
@@ -1198,7 +1198,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/ray_dn.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example benard/ray_dn/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/benard.err"
@@ -1206,7 +1206,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/ray_nn.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_nn/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/benard.err"
@@ -1216,7 +1216,7 @@ Run("Example benard/ray_nn/PGI2: Serial-error",log,value)
 
 #conj_ht 
 log = "./pgi2Log/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/conj_ht.err.1"
@@ -1226,7 +1226,7 @@ Run("Example conj_ht/PGI2: Serial-error",log,value)
 
 #eddy 
 log = "./pgi2Log/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/eddy_uv.err.1"
@@ -1236,7 +1236,7 @@ Run("Example eddy/PGI2: Serial-error",log,value)
 
 #vortex
 log = "./pgi2Log/r1854a.log.1"
-value = [['total solver time',0,50,2]]
+value = [['total solver time',0.01,50,2]]
 Run("Example vortex/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/vortex.err.1"
@@ -1246,7 +1246,7 @@ Run("Example vortex/PGI2: Serial-error",log,value)
 
 #fs_2 
 log = "./pgi2Log/st1.log.1"
-value = [['total solver time',0,18.3,2]]
+value = [['total solver time',0.01,18.3,2]]
 Run("Example st1/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/st1.err.1"
@@ -1254,7 +1254,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/st2.log.1"
-value = [['total solver time',0,23,2]]
+value = [['total solver time',0.01,23,2]]
 Run("Example st2/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/st2.err.1"
@@ -1262,7 +1262,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/std_wv.log.1"
-value = [['total solver time',0,21,2]]
+value = [['total solver time',0.01,21,2]]
 Run("Example std_wv/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/std_wv.err.1"
@@ -1272,7 +1272,7 @@ Run("Example std_wv/PGI2: Serial-error",log,value)
 
 #fs_hydro 
 log = "./pgi2Log/fs_hydro.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example fs_hydro/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/fs_hydro.err.1"
@@ -1282,7 +1282,7 @@ Run("Example fs_hydro/PGI2: Serial-error",log,value)
 
 #kovasznay
 log = "./pgi2Log/kov.log.1"
-value = [['total solver time',0,17,2]]
+value = [['total solver time',0.01,17,2]]
 Run("Example kov/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/kov.err.1"
@@ -1298,13 +1298,13 @@ FindPhrase("Example lowMach_test/PGI2: Serial",log,value)
 
 #peris 
 log = "./pgi2Log/peris.log.1"
-value = [['total solver time',0,13,2]]
+value = [['total solver time',0.01,13,2]]
 Run("Example peris/PGI2: Serial-time",log,value)
 
 
 #pipe
 log = "./pgi2Log/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/helix.err.1"
@@ -1312,13 +1312,13 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example stenosis/PGI2: Serial-time",log,value)
 
 
 #rayleigh
 log = "./pgi2Log/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/ray1.err.1"
@@ -1326,7 +1326,7 @@ value = [['umax',3.897862E-03,1e-06,3]]
 Run("Example ray1/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/ray2.err.1"
@@ -1336,7 +1336,7 @@ Run("Example ray2/PGI2: Serial-error",log,value)
 
 #shear4 
 log = "./pgi2Log/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/shear4.err.1"
@@ -1344,7 +1344,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/PGI2: Serial-error",log,value)
 
 log = "./pgi2Log/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/PGI2: Serial-time",log,value)
 
 log = "./pgi2Log/thin.err.1"
@@ -1354,7 +1354,7 @@ Run("Example shear4/thin/PGI2: Serial-error",log,value)
 
 #turbChannel 
 log = "./pgi2Log/turbChannel.log.1"
-value = [['total solver time',0,140,2]]
+value = [['total solver time',0.01,140,2]]
 Run("Example turbChannel/PGI2: Serial-time",log,value)
 
 ######################################################################
@@ -1362,17 +1362,17 @@ Run("Example turbChannel/PGI2: Serial-time",log,value)
 #---------------------Pn-Pn-2------------------------------------------
 #axi 
 log = "./gnu2Log/axi.log.1"
-value = [['total solver time',0,9,2]]
+value = [['total solver time',0.01,9,2]]
 Run("Example axi/GNU2: Serial-time",log,value)
 
 
 #benard
 log = "./gnu2Log/ray_9.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example benard/ray_9/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/ray_dd.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_dd/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/benard.err"
@@ -1380,7 +1380,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/ray_dn.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example benard/ray_dn/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/benard.err"
@@ -1388,7 +1388,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/ray_nn.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_nn/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/benard.err"
@@ -1398,7 +1398,7 @@ Run("Example benard/ray_nn/GNU2: Serial-error",log,value)
 
 #conj_ht 
 log = "./gnu2Log/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/conj_ht.err.1"
@@ -1408,7 +1408,7 @@ Run("Example conj_ht/GNU2: Serial-error",log,value)
 
 #eddy 
 log = "./gnu2Log/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/eddy_uv.err.1"
@@ -1418,7 +1418,7 @@ Run("Example eddy/GNU2: Serial-error",log,value)
 
 #vortex
 log = "./gnu2Log/r1854a.log.1"
-value = [['total solver time',0,50,2]]
+value = [['total solver time',0.01,50,2]]
 Run("Example vortex/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/vortex.err.1"
@@ -1428,7 +1428,7 @@ Run("Example vortex/GNU2: Serial-error",log,value)
 
 #fs_2 
 log = "./gnu2Log/st1.log.1"
-value = [['total solver time',0,18.3,2]]
+value = [['total solver time',0.01,18.3,2]]
 Run("Example st1/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/st1.err.1"
@@ -1436,7 +1436,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/st2.log.1"
-value = [['total solver time',0,23,2]]
+value = [['total solver time',0.01,23,2]]
 Run("Example st2/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/st2.err.1"
@@ -1444,7 +1444,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/std_wv.log.1"
-value = [['total solver time',0,21,2]]
+value = [['total solver time',0.01,21,2]]
 Run("Example std_wv/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/std_wv.err.1"
@@ -1454,7 +1454,7 @@ Run("Example std_wv/GNU2: Serial-error",log,value)
 
 #fs_hydro
 log = "./gnu2Log/fs_hydro.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example fs_hydro/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/fs_hydro.err.1"
@@ -1464,7 +1464,7 @@ Run("Example fs_hydro/GNU2: Serial-error",log,value)
 
 #kovasznay
 log = "./gnu2Log/kov.log.1"
-value = [['total solver time',0,17,2]]
+value = [['total solver time',0.01,17,2]]
 Run("Example kov/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/kov.err.1"
@@ -1480,13 +1480,13 @@ FindPhrase("Example lowMach_test/GNU2: Serial",log,value)
 
 #peris 
 log = "./gnu2Log/peris.log.1"
-value = [['total solver time',0,13,2]]
+value = [['total solver time',0.01,13,2]]
 Run("Example peris/GNU2: Serial-time",log,value)
 
 
 #pipe 
 log = "./gnu2Log/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/helix.err.1"
@@ -1494,13 +1494,13 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example stenosis/GNU2: Serial-time",log,value)
 
 
 #rayleigh
 log = "./gnu2Log/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/ray1.err.1"
@@ -1508,7 +1508,7 @@ value = [['umax',3.897862E-03,1e-06,3]]
 Run("Example ray1/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/ray2.err.1"
@@ -1518,7 +1518,7 @@ Run("Example ray2/GNU2: Serial-error",log,value)
 
 #shear4 
 log = "./gnu2Log/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/shear4.err.1"
@@ -1526,7 +1526,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/GNU2: Serial-error",log,value)
 
 log = "./gnu2Log/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/GNU2: Serial-time",log,value)
 
 log = "./gnu2Log/thin.err.1"
@@ -1536,7 +1536,7 @@ Run("Example shear4/thin/GNU2: Serial-error",log,value)
 
 #turbChannel 
 log = "./gnu2Log/turbChannel.log.1"
-value = [['total solver time',0,140,2]]
+value = [['total solver time',0.01,140,2]]
 Run("Example turbChannel/GNU2: Serial-time",log,value)
 
 ######################################################################
@@ -1544,17 +1544,17 @@ Run("Example turbChannel/GNU2: Serial-time",log,value)
 #---------------------Pn-Pn-2------------------------------------------
 #axi 
 log = "./int2Log/axi.log.1"
-value = [['total solver time',0,4,2]]
+value = [['total solver time',0.01,4,2]]
 Run("Example axi/INT2: Serial-time",log,value)
 
 
 #benard 
 log = "./int2Log/ray_9.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example benard/ray_9/INT2: Serial-time",log,value)
 
 log = "./int2Log/ray_dd.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_dd/INT2: Serial-time",log,value)
 
 log = "./int2Log/benard.err"
@@ -1562,7 +1562,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/INT2: Serial-error",log,value)
 
 log = "./int2Log/ray_dn.log.1"
-value = [['total solver time',0,12,2]]
+value = [['total solver time',0.01,12,2]]
 Run("Example benard/ray_dn/INT2: Serial-time",log,value)
 
 log = "./int2Log/benard.err"
@@ -1570,7 +1570,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/INT2: Serial-error",log,value)
 
 log = "./int2Log/ray_nn.log.1"
-value = [['total solver time',0,20,2]]
+value = [['total solver time',0.01,20,2]]
 Run("Example benard/ray_nn/INT2: Serial-time",log,value)
 
 log = "./int2Log/benard.err"
@@ -1580,7 +1580,7 @@ Run("Example benard/ray_nn/INT2: Serial-error",log,value)
 
 #conj_ht 
 log = "./int2Log/conj_ht.log.1"
-value = [['total solver time',0,7,2]]
+value = [['total solver time',0.01,7,2]]
 Run("Example conj_ht/INT2: Serial-time",log,value)
 
 log = "./int2Log/conj_ht.err.1"
@@ -1590,7 +1590,7 @@ Run("Example conj_ht/INT2: Serial-error",log,value)
 
 #eddy 
 log = "./int2Log/eddy_uv.log.1"
-value = [['total solver time',0,80,2]]
+value = [['total solver time',0.01,80,2]]
 Run("Example eddy/INT2: Serial-time",log,value)
 
 log = "./int2Log/eddy_uv.err.1"
@@ -1600,7 +1600,7 @@ Run("Example eddy/INT2: Serial-error",log,value)
 
 #vortex
 log = "./int2Log/r1854a.log.1"
-value = [['total solver time',0,50,2]]
+value = [['total solver time',0.01,50,2]]
 Run("Example vortex/INT2: Serial-time",log,value)
 
 log = "./int2Log/vortex.err.1"
@@ -1610,7 +1610,7 @@ Run("Example vortex/INT2: Serial-error",log,value)
 
 #fs_2 
 log = "./int2Log/st1.log.1"
-value = [['total solver time',0,18.3,2]]
+value = [['total solver time',0.01,18.3,2]]
 Run("Example st1/INT2: Serial-time",log,value)
 
 log = "./int2Log/st1.err.1"
@@ -1618,7 +1618,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/INT2: Serial-error",log,value)
 
 log = "./int2Log/st2.log.1"
-value = [['total solver time',0,23,2]]
+value = [['total solver time',0.01,23,2]]
 Run("Example st2/INT2: Serial-time",log,value)
 
 log = "./int2Log/st2.err.1"
@@ -1626,7 +1626,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/INT2: Serial-error",log,value)
 
 log = "./int2Log/std_wv.log.1"
-value = [['total solver time',0,21,2]]
+value = [['total solver time',0.01,21,2]]
 Run("Example std_wv/INT2: Serial-time",log,value)
 
 log = "./int2Log/std_wv.err.1"
@@ -1636,7 +1636,7 @@ Run("Example std_wv/INT2: Serial-error",log,value)
 
 #fs_hydro 
 log = "./int2Log/fs_hydro.log.1"
-value = [['total solver time',0,200,2]]
+value = [['total solver time',0.01,200,2]]
 Run("Example fs_hydro/INT2: Serial-time",log,value)
 
 log = "./int2Log/fs_hydro.err.1"
@@ -1646,7 +1646,7 @@ Run("Example fs_hydro/INT2: Serial-error",log,value)
 
 #kovasznay
 log = "./int2Log/kov.log.1"
-value = [['total solver time',0,17,2]]
+value = [['total solver time',0.01,17,2]]
 Run("Example kov/INT2: Serial-time",log,value)
 
 log = "./int2Log/kov.err.1"
@@ -1662,13 +1662,13 @@ FindPhrase("Example lowMach_test/INT2: Serial",log,value)
 
 #peris 
 log = "./int2Log/peris.log.1"
-value = [['total solver time',0,13,2]]
+value = [['total solver time',0.01,13,2]]
 Run("Example peris/INT2: Serial-time",log,value)
 
 
 #pipe 
 log = "./int2Log/helix.log.1"
-value = [['total solver time',0,22,2]]
+value = [['total solver time',0.01,22,2]]
 Run("Example helix/INT2: Serial-time",log,value)
 
 log = "./int2Log/helix.err.1"
@@ -1676,13 +1676,13 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/INT2: Serial-error",log,value)
 
 log = "./int2Log/stenosis.log.1"
-value = [['total solver time',0,40,2]]
+value = [['total solver time',0.01,40,2]]
 Run("Example stenosis/INT2: Serial-time",log,value)
 
 
 #rayleigh 
 log = "./int2Log/ray1.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray1/INT2: Serial-time",log,value)
 
 log = "./int2Log/ray1.err.1"
@@ -1690,7 +1690,7 @@ value = [['umax',3.897862E-03,1e-06,3]]
 Run("Example ray1/INT2: Serial-error",log,value)
 
 log = "./int2Log/ray2.log.1"
-value = [['total solver time',0,3,2]]
+value = [['total solver time',0.01,3,2]]
 Run("Example ray2/INT2: Serial-time",log,value)
 
 log = "./int2Log/ray2.err.1"
@@ -1700,7 +1700,7 @@ Run("Example ray2/INT2: Serial-error",log,value)
 
 #shear4 
 log = "./int2Log/shear4.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thick/INT2: Serial-time",log,value)
 
 log = "./int2Log/shear4.err.1"
@@ -1708,7 +1708,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/INT2: Serial-error",log,value)
 
 log = "./int2Log/thin.log.1"
-value = [['total solver time',0,10,2]]
+value = [['total solver time',0.01,10,2]]
 Run("Example shear4/thin/INT2: Serial-time",log,value)
 
 log = "./int2Log/thin.err.1"
@@ -1718,7 +1718,7 @@ Run("Example shear4/thin/INT2: Serial-error",log,value)
 
 #turbChannel
 log = "./int2Log/turbChannel.log.1"
-value = [['total solver time',0,140,2]]
+value = [['total solver time',0.01,140,2]]
 Run("Example turbChannel/INT2: Serial-time",log,value)
 
 ###############################################################################################
