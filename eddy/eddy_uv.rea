@@ -97,8 +97,8 @@
    20.0000          p93 Number of previous pressure solns saved
    5.00000          p94 start projecting velocity after p94 step
    5.00000          p95 start projecting pressure after p95 step
-   0.               p96 u0 translational velocity (in .usr)
-   0.               p97 v0 translational velocity (in .usr)
+   1.00000          p96 u0 translational velocity (in .usr)
+   0.30000          p97 v0 translational velocity (in .usr)
    0. 
    3.00000          p99   dealiasing: <0--> off/3--> old/4--> new
    0.              
