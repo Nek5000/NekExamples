@@ -319,8 +319,8 @@ c---
       endif
 
    10 format('Wrong j or s5 in runtimeavg : ',i3,x,a5,x,a5)
-   20 format(i8,1p2e16.8,i3,'rtavg_',a5)
-   30 format(i8,1p3e16.8,i3,'rtavg_',a5)
+   20 format(i8,1p2e16.8,i3,' rtavg_',a5)
+   30 format(i8,1p3e16.8,i3,' rtavg_',a5)
 c
       return
       end

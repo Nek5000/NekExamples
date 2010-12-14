@@ -12,8 +12,8 @@ c
 c     parameter (lelx=1,lely=1,lelz=1)
 c
       parameter (lzl=3 + 2*(ldim-3))			! 1	3
-      PARAMETER (LX2=LX1-2)		! Pn - Pn-1 only
-      PARAMETER (LY2=LY1-2)
+      PARAMETER (lx2=lx1-2)		! Pn - Pn-1 only
+      PARAMETER (ly2=ly1-2)
       parameter (lz2=lz1-2*ldim+4)			! lz1	lz1-2
       parameter (lx3=3*lx1-2*lx2+ldim*(lx2-lx1))	! lx1	lx2
       parameter (ly3=3*ly1-2*ly2+ldim*(ly2-ly1))	! ly1	ly2
