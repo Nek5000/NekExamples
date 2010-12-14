@@ -1,0 +1,93 @@
+C     Dimension file to be included     ! 2D
+C                                       
+C     HCUBE array dimensions            
+C                                       
+      PARAMETER (LDIM=3)				! 2D	3D
+      PARAMETER (LX1=6,LY1=LX1,lz1=3-2*lx1+ldim*(lx1-1))! 1	lx1 ! order+1
+      PARAMETER (LELT=128,LELV=LELT)	! elements/proc
+      parameter (lxd=1+3*lx1/2,lyd=1+3*ly1/2,lzd=1+(3*lz1/2)*(ldim-2))
+c          make  lxd=even on BG/P!!!
+c
+      parameter (lelx=4,lely=4,lelz=8)	! nel_i for GTP as in .box
+c     parameter (lelx=1,lely=1,lelz=1)
+c
+      parameter (lzl=3 + 2*(ldim-3))			! 1	3
+      PARAMETER (LX2=LX1-2)		! Pn - Pn-1 only
+      PARAMETER (LY2=LY1-2)
+      parameter (lz2=lz1-2*ldim+4)			! lz1	lz1-2
+      parameter (lx3=3*lx1-2*lx2+ldim*(lx2-lx1))	! lx1	lx2
+      parameter (ly3=3*ly1-2*ly2+ldim*(ly2-ly1))	! ly1	ly2
+      parameter (lz3=3*lz1-2*lz2+ldim*(lz2-lz1))	! lz1	lz2
+c
+c     parameter (lpelv=lelv,lpelt=lelt,lpert=3)  ! perturbation 
+c     parameter (lpx1=lx1,lpy1=ly1,lpz1=lz1)     ! array sizes 
+c     parameter (lpx2=lx2,lpy2=ly2,lpz2=lz2)
+c
+      parameter (lpelv=1,lpelt=1,lpert=1)        ! perturbation 
+      parameter (lpx1=1,lpy1=1,lpz1=1)           ! array sizes 
+      parameter (lpx2=1,lpy2=1,lpz2=1)
+c
+c
+      parameter (lbelv=lelv,lbelt=lelt)          ! MHD 
+      parameter (lbx1=lx1,lby1=ly1,lbz1=lz1)     ! array sizes 
+      parameter (lbx2=lx2,lby2=ly2,lbz2=lz2)
+c
+c     parameter (lbelv=1,lbelt=1)                ! MHD 
+c     parameter (lbx1=1,lby1=1,lbz1=1)           ! array sizes 
+c     parameter (lbx2=1,lby2=1,lbz2=1)
+c
+C LX1M=LX1 when there are moving meshes; =1 otherwise
+      PARAMETER (LX1M=1,LY1M=1,LZ1M=1)
+      PARAMETER (LDIMT= 2)			! = IFHEAT + NPSCAL + IFMHD
+      PARAMETER (LDIMT1=LDIMT+1)
+      PARAMETER (LDIMT3=LDIMT+3)
+      PARAMETER (LP = 128)                
+      PARAMETER (LELG   = 128)          
+C     PARAMETER (LELG   = LP*LELT)          
+c
+c
+c     Note:  In the new code, LELGEC should be about sqrt(LELG)
+c
+      PARAMETER (LELGEC = 1)
+      PARAMETER (LXYZ2  = 1)
+      PARAMETER (LXZ21  = 1)
+c
+      PARAMETER (LMAXV=LX1*LY1*LZ1*LELV)
+      PARAMETER (LMAXT=LX1*LY1*LZ1*LELT)
+      PARAMETER (LMAXP=LX2*LY2*LZ2*LELV)
+      PARAMETER (LXZ=LX1*LZ1)
+      PARAMETER (LORDER=3)              
+      PARAMETER (MAXOBJ=2,MAXMBR=LELT*6,lhis=200)
+C                                       
+C     Common Block Dimensions           
+C
+      PARAMETER (LCTMP0 =2*LX1*LY1*LZ1*LELT)     
+      PARAMETER (LCTMP1 =4*LX1*LY1*LZ1*LELT)    
+C
+C     The parameter LVEC controls whether an additional 42 field arrays
+C     are required for Steady State Solutions.  If you are not using
+C     Steady State, it is recommended that LVEC=1.
+C
+      PARAMETER (LVEC=1)
+C
+C     Uzawa projection array dimensions
+C
+      parameter (mxprev = 20)
+      parameter (lgmres = 20)
+C
+C     Split projection array dimensions
+C
+      parameter(lmvec = 1)
+      parameter(lsvec = 1)
+      parameter(lstore=lmvec*lsvec)
+c
+c     NONCONFORMING STUFF
+c
+      parameter (maxmor = lelt)
+C
+C     Array dimensions                  
+C
+      COMMON/DIMN/NELV,NELT,NX1,NY1,NZ1,NX2,NY2,NZ2
+     $,NX3,NY3,NZ3,NDIM,NFIELD,NPERT,NID
+     $,NXD,NYD,NZD
+

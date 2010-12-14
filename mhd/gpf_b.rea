@@ -1,0 +1,182 @@
+ ****** PARAMETERS *****
+    2.610000     NEKTON VERSION
+   3 DIMENSIONAL RUN
+          121 PARAMETERS FOLLOW
+   1.00000         p1  DENSITY
+  -10.             p2  VISCOS
+   0. 
+   0. 
+   0. 
+   0. 
+   1.00000         p7  RHOCP
+   1.00000         p8  CONDUCT
+   0. 
+   0.000000E+00    p10 FINTIME
+350.   20000.          p11 NSTEPS
+  -1.0e-2          p12 DT
+   0.              p13 IOCOMM
+   0.              p14 IOTIME
+   2500.0          p15 IOSTEP
+   0.              p16 PSSOLVER
+   0. 
+  -20.0000         p18 GRID
+  -1.00000         p19 INTYPE
+   5.00000         p20 NORDER
+0.   1.000000E-07    p21 DIVERGENCE
+0.   1.000000E-09    p22 HELMHOLTZ
+   0.              p23 NPSCAL
+   1.000000E-06    p24 TOLREL
+   1.000000E-06    p25 TOLABS
+   0.50000         p26 COURANT/NTAU 
+   3.00000         p27 TORDER
+   0.              p28 TORDER: mesh velocity (0: p28=p27)
+  -10.             p29 magnetic visc if > 0, = -1/Rm if < 0
+   0.              p30 > 0 ==> properties set in uservp()
+   0.              p31 NPERT: #perturbation modes
+   0.              p32 #BCs in re2 file, if > 0
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p41 1-->multiplicative SEMG
+   0.              p42 0=gmres/1=pcg
+   0.              p43 0=semg/1=schwarz
+   0.              p44 0=E-based/1=A-based prec.
+   0.              p45 Relaxation factor for DTFS
+   0.              p46 reserved
+   0.              p47 vnu: mesh matieral prop
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p52 IOHIS
+   0. 
+   0.              p54 1,2,3-->fixed flow rate dir=x,y,z
+   0.              p55 vol.flow rate (p54>0) or Ubar (p54<0)
+   0. 
+   0. 
+   0. 
+   0.              p59 !=0 --> full Jac. eval. for each el.
+   0.              p60 !=0 --> init. velocity to small nonzero
+   0. 
+   0.              p62 >0 --> force byte_swap for output
+   0.              p63 =8 --> force 8-byte output
+   0.              p64 =1 --> perturbation restart
+   1.00000         p65 #iofiles (eg, 0 or 64); <0 --> sep. dirs
+   4.00000         p66 output : <0=ascii, else binary
+   4.00000         p67 restart: <0=ascii, else binary
+   0.              p68 iastep: freq for avg_all
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.              p74 verbose Helmholtz
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0.               p84 !=0 --> sets initial timestep if p12>0
+   0.               p85 dt ratio if p84 !=0, for timesteps>0
+   0.               p86 reserved
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   0. 
+   20.0000          p93 Number of previous pressure solns saved
+   3.00000          p94 start projecting velocity after p94 step
+   5.00000          p95 start projecting pressure after p95 step
+   0. 
+   0. 
+   0. 
+   3.00000          p99   dealiasing: <0--> off/3--> old/4--> new
+   0.              
+   0.               p101   No. of additional filter modes
+   1.00000          p102   Dump out divergence at each time step
+   0.05             p103   weight of stabilizing filter (.01) 
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+0 -4.000000E+00	    p116 = +-nelx for gtp solver w/ .map
+0  4.000000E+00	    p117 = +-nelx for gtp solver w/ .map
+0  8.000000E+00	    p118 = +-nelx for gtp solver w/ .map
+  0.000000E+00
+351.	5000.0           p120 nstep before quitting averaging
+3.	1850.0           p121 nstep before starting averaging
+      4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+           13  LOGICAL SWITCHES FOLLOW
+  T     IFFLOW
+  T     IFHEAT
+  T     IFTRAN
+  T T F F F F F F F F F IFNAV & IFADVC (convection in P.S. fields)
+  F F F T T T T T T T T T IFTMSH (IF mesh for this field is T mesh)
+  F     IFAXIS
+  F     IFSTRS
+  F     IFSPLIT
+  F     IFMGRID
+  F     IFMODEL
+  F     IFKEPS
+  F     IFMVBD
+  F     IFCHAR
+   42.0000       40.0000      -11.0000      -21.0000     XFAC,YFAC,XZERO,YZERO
+  *** MESH DATA ***
+       128        -3       128           NEL,NDIM,NELV
+            2 PRESOLVE/RESTART OPTIONS  *****
+gpf.fld02i
+gpf.fld01i
+            7         INITIAL CONDITIONS *****
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+  ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
+            4                 Lines of Drive force data follow
+C
+C
+C
+C
+  ***** Variable Property Data ***** Overrrides Parameter data.
+            1 Lines follow.
+            0 PACKETS OF DATA FOLLOW
+  ***** HISTORY AND INTEGRAL DATA *****
+            0   POINTS.  Hcode, I,J,H,IEL
+  ***** OUTPUT FIELD SPECIFICATION *****
+            6 SPECIFICATIONS FOLLOW
+  T      COORDINATES
+  T      VELOCITY
+  T      PRESSURE
+  F      TEMPERATURE
+  F      TEMPERATURE GRADIENT
+            0      PASSIVE SCALARS
+  ***** OBJECT SPECIFICATION *****
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects
