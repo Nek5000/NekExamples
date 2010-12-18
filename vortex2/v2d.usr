@@ -1,0 +1,158 @@
+c-----------------------------------------------------------------------
+c
+c
+c     This is an axisymmetric example of the vortex breakdown problem
+c     described in the Nek5000 Examples document.   
+c
+c     The domain size is 2x1.  The rotating lid is located at x=2.
+c     For Re=1492, there is a single flow reversal (bubble) on the axis.
+c
+c     See
+c
+c     https://nek5000.mcs.anl.gov/index.php/UG#Documentation
+c
+c     and click on Examples, where more detail is given for this case.
+c     See also ../vortex in the /examples directory, which shows
+c     the corresponding 3D simulation configuration, but at Re=1854.
+c
+c
+c     In this example, the azimuthal velocity is stored in the temperature
+c     array t(...).
+c
+c     To have temperature serve the role of azimuthal velocity, you must
+c     set the flag IFAZIV to be true either in the .usr file or in the .rea
+c     file.
+c
+c     Note that the .rea and .box files specify "A  " on the y=0 boundary,
+c     which is requisite for any axisymmetric flow problem that includes
+c     the x-axis.
+c
+c     Also, any element touching the x-axis must be oriented with the "r"
+c     direction pointing in the positive x direction.  (This condition
+c     is automatically met for elements generated with genbox.)
+c
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+c     e = gllel(eg)
+
+      udiff =0.
+      utrans=0.
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+c     e = gllel(eg)
+
+
+c     Note: this is an acceleration term, NOT a force!
+c     Thus, ffx will subsequently be multiplied by rho(x,t).
+
+
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+ 
+      if (y.gt.0) ffy = temp*temp/y
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+ 
+      qvol = 0.
+      if (y.gt.0) then
+         visc = param(2)
+         qvol = -uy*temp/y
+      endif
+ 
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      include 'SIZE'
+      include 'TOTAL'
+
+      umin = 1.e9            ! Scan for min velocity near axis
+      n = nx1*ny1*nz1*nelv
+      do i=1,n
+         y=ym1(i,1,1,1)
+         if (y.le.0.01) umin = min(umin,vx(i,1,1,1))
+      enddo
+      umin = glmin(umin,1)
+
+      if (nid.eq.0.and.mod(istep,20).eq.0) write(6,1) istep,time,umin
+    1 format(i9,1p2e15.6,' umin')
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ux=0.0
+      uy=0.0
+      uz=0.0
+      temp=0
+
+      x1 = 2.00   ! Height of canister
+      x0 = 1.96   ! Location of start of highest element
+
+      xx = (x-x0)/(x1-x0)
+      if (x.gt.x0) temp=y*xx**(lx1-1)  ! Polynomial ramp
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      ux=0.0
+      uy=0.0
+      uz=0.0
+      temp=0
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+
+c     call platform_timer(0) ! not too verbose
+c     call platform_timer(1) ! mxm, ping-pong, and all_reduce timer
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+
+      param(66) = 4.   ! These give the std nek binary i/o and are 
+      param(67) = 4.   ! good default values
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+      include 'SIZE'
+      include 'TOTAL'
+c
+      return
+      end
+c-----------------------------------------------------------------------
