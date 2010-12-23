@@ -1,5 +1,5 @@
 base.rea
-3                      spatial dimension
+3                      spatial dimension  ( < 0 --> generate .rea/.re2 pair)
 1                      number of fields
 #=======================================================================
 #
