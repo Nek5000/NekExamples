@@ -2,8 +2,8 @@
 
 function build_tools()
 {
-sed -e "s:^F77*=\"\":F77=\"$1\":"  \
--e "s:^CC*=\"\":CC=\"$2\":"  maketools >maketools.buildbot
+sed -e "s:^F77*=\"gfortran\":F77=\"$1\":"  \
+-e "s:^CC*=\"gcc\":CC=\"$2\":"  maketools >maketools.buildbot
 chmod +x maketools.buildbot
 
 maketools.buildbot clean            $HERE_T
