@@ -17,7 +17,7 @@ $rea
 .05
 EOF
 
-./makenek.bb    clean
+./makenek.bb    clean     $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    $rea    $HERE_S
@@ -40,7 +40,7 @@ cp ../../trunk/nek/makenek.bb .
 ../../tests/tools/genbox < gb.in
 ../../tests/tools/genmap < gm.in
 mvn box axi
-./makenek.bb    clean      
+./makenek.bb    clean       $HERE_S    
 mkdir ./obj
 sleep 1
 ./makenek.bb    axi           $HERE_S
@@ -71,7 +71,7 @@ ray_nn
 .05
 EOF
 
-./makenek.bb    clean     
+./makenek.bb    clean          $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb ray_9            $HERE_S
@@ -79,7 +79,7 @@ sleep 1
 
 if  grep -q "lx2=lx1-2" SIZE 
     then
-      ./makenek.bb    clean  
+      ./makenek.bb    clean       $HERE_S
       mkdir ./obj
       sleep 1
       ./makenek.bb ray_cr           $HERE_S
@@ -92,7 +92,7 @@ else
       cp ../ray_dd.map .
       cp ../ray_dn.map .
       cp ../ray_nn.map .
-      ../makenek.bb    clean  
+      ../makenek.bb    clean       $HERE_S
       mkdir ./obj
       sleep 1
       ../makenek.bb ray_cr            $HERE_S
@@ -142,7 +142,7 @@ box
 EOF
 mvn box gpf
 cp gpf.map gpf_m.map
-./makenek.bb    clean
+./makenek.bb    clean     $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    gpf    $HERE_S
@@ -150,7 +150,7 @@ sleep 1
 grep "rtavg_gr_Em" gpf.log.1 | tail -1 > gpf.err.1
 
 cp ../../trunk/nek/ZPER2 ../../trunk/nek/ZPER
-./makenek.bb    clean
+./makenek.bb    clean     $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    gpf        $HERE_S
@@ -170,7 +170,7 @@ sed -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
     -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.0\":" makenek.bb>t.t
 mv t.t makenek.bb
 chmod +x makenek.bb
-./makenek.bb    clean
+./makenek.bb    clean     $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    pipe    $HERE_S
@@ -188,7 +188,7 @@ cp ../../trunk/nek/makenek.bb .
 peris
 .05
 EOF
-./makenek.bb    clean 
+./makenek.bb    clean      $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    peris         $HERE_S
@@ -200,7 +200,7 @@ tester pipe nek10s helix err2 1
  
 ../../tests/tools/n2to3  < n2to3.in
 ../../tests/tools/genmap < g.in
-./makenek.bb    clean    
+./makenek.bb    clean         $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    stenosis      $HERE_S
@@ -221,7 +221,7 @@ ray2
 .05
 EOF
 
-./makenek.bb    clean   
+./makenek.bb    clean        $HERE_S
 mkdir ./obj
 sleep 1
 ./makenek.bb    ray0          $HERE_S
