@@ -113,9 +113,6 @@ cd ..
 tester eddy nekbb eddy_uv err 2
 
 cd ..
-tester vortex nek10s r1854a VMIN 1
-
-cd ..
 tester fs_2 nek200s st1 amp 1
 cd ..
 tester fs_2 nek200s st2 amp 1
@@ -181,6 +178,9 @@ sleep 1
 
 
 cd ..
+tester os7000 nek1000s u3_t020_n13 egn 1
+
+cd ..
 cd peris 
 cp ../../trunk/tools/scripts/nek10s .
 cp ../../trunk/nek/makenek.bb .
@@ -237,4 +237,12 @@ tester shear4 nek10s shear4 vorticity 1
 cd ..
 tester shear4 nek10s thin vorticity 1
 
+cd ..
+tester vortex nek10s r1854a VMIN 1
+
+cd ..
+if  grep -q "lx2=lx1-2" SIZE 
+    then
+      tester vortex2 nekbb v2d umin 1
+fi
 ##############################################################

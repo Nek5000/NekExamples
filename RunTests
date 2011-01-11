@@ -64,13 +64,26 @@ cp ../nek/makenek ../nek/makenek.bb
 chmod +x ../nek/makenek.bb
 
 cd ../../
+#Tweak SIZE files 
 sed -i "s:lx2=:lx2=lx1)      \!:"  */*/SIZE
 sed -i "s:ly2=:ly2=ly1)      \!:"  */*/SIZE
 sed -i "s:lz2=:lz2=lz1)      \!:"  */*/SIZE
 sed -i "s:(lx1=4,ly1=lx1,lz1=lx1,lelt=1500,lelv=lelt):(lx1=4,ly1=lx1,lz1=lx1,lelt=6000,lelv=lelt):" examples/moab/SIZE
-cd tests/test0001/
+sed -i "s:(lx1=10,ly1=lx1,lz1=1,lelt=80,lelv=lelt):(lx1=8,ly1=lx1,lz1=1,lelt=80,lelv=lelt):" examples/vortex2/SIZE
+sed -i "s:(lxd=15,lyd=lxd,lzd=1):(lxd=12,lyd=lxd,lzd=1):" examples/vortex2/SIZE
+#Tweak .rea files 
+cd ./examples/eddy/
+sed "s/^.*DIVERGENCE$/  0.10000E-08/" eddy_uv.rea > n.rea      
+mv n.rea eddy_uv.rea
+cd ../lowMach_test
+sed "s/^.*IFNAV.*$/  T T IFNAV & IFADVC/" lowMach_test.rea > n.rea
+mv n.rea lowMach_test.rea
+cd ../vortex2
+sed -i "s/^.*p11.*$/ 8000&/" v2d.rea
+cd ../../tests/test0001/
 sed "s/^.*DIVERGENCE$/  0.10000E-08/" test0001.rea > n.rea      
 mv n.rea test0001.rea
+
 cd ../../trunk/nek
  
 rm -rf ../../examples/*/*.map
@@ -104,15 +117,6 @@ build_tools ifort icc ../../tests/inttools.out
 #Test INTEL Compiler
 cd ../nek
 submake ifort icc
-
-#Tweak Intel Compiler Specific 
-cd ../../examples/eddy/
-sed "s/^.*DIVERGENCE$/  0.10000E-08/" eddy_uv.rea > n.rea      
-mv n.rea eddy_uv.rea
-cd ../lowMach_test
-sed "s/^.*IFNAV.*$/  T T IFNAV & IFADVC/" lowMach_test.rea > n.rea
-mv n.rea lowMach_test.rea
-cd ../../trunk/nek
 
 rm -rf ../../examples/*/*.map
 ../../tests/ExTest
