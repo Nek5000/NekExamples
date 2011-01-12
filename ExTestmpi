@@ -245,7 +245,7 @@ cd ..
 tester vortex nek10steps r1854a VMIN 1 
 
 cd ..
-if  grep -q "lx2=lx1-2" SIZE 
+if  grep -q "lx2=lx1-2" vortex2/SIZE 
     then
       tester vortex2 neklmpi v2d umin 1
 fi

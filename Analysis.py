@@ -584,7 +584,7 @@ Run("Example conj_ht/INT2: Serial-error",log,value)
 print("\n\neddy Example")  
 #MPI
 log = "./mpiLog/eddy_uv.log.1"
-value = [['gmres: ',38,3,6]]
+value = [['gmres: ',31,3,6]]
 Run("Example eddy/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/eddy_uv.err.1"
@@ -592,7 +592,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/MPI: Serial-error",log,value)
 
 log = "./mpiLog/eddy_uv.log.4"
-value = [['gmres: ',38,3,6]]
+value = [['gmres: ',31,3,6]]
 Run("Example eddy/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/eddy_uv.err.4"
@@ -601,7 +601,7 @@ Run("Example eddy/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/eddy_uv.log.1"
 value = [['total solver time',0.1,80,2],
-         ['gmres: ',38,3,6]]
+         ['gmres: ',31,3,6]]
 Run("Example eddy/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/eddy_uv.err.1"
@@ -609,7 +609,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/eddy_uv.log.1"
-value = [['gmres: ',38,3,6]]
+value = [['gmres: ',31,3,6]]
 Run("Example eddy/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/eddy_uv.err.1"
@@ -1966,11 +1966,11 @@ value = [['VMIN',-1.910312E-03,1e-06,2]]
 Run("Example vortex/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/r1854a.log.1"
-value = [['gmres: ',62,3,6]]
+value = [['gmres: ',58,3,6]]
 Run("Example vortex/INT: Serial-iter",log,value)
 
 log = "./intLog/r1854a.err.1"
-value = [['VMIN',-1.910312E-03,1e-06,2]]
+value = [['VMIN',-1.910312E-03,1e-05,2]]
 Run("Example vortex/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/r1854a.log.1"
