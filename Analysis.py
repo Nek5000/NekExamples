@@ -1930,6 +1930,51 @@ Run("Example turbChannel/INT2: Serial-iter",log,value)
 
 
 
+print("\n\nvar_vis Example")  
+#MPI 
+log = "./mpiLog/st2.log.1"
+value = "ABORT: Stress"
+FindPhrase("Example var_vis/MPI: Serial",log,value)
+
+log = "./mpiLog/st2.log.4"
+value = "ABORT: Stressy"
+FindPhrase("Example var_vis/MPI: Parallel",log,value)
+#PGI
+log = "./pgiLog/st2.log.1"
+value = "ABORT: Stress"
+FindPhrase("Example var_vis/PGI: Serial",log,value)
+#GNU
+log = "./gnuLog/st2.log.1"
+value = "ABORT: Stress"
+FindPhrase("Example var_vis/GNU: Serial",log,value)
+#INT
+log = "./intLog/st2.log.1"
+value = "ABORT: Stress"
+FindPhrase("Example var_vis/INT: Serial",log,value)
+#MPI2
+log = "./mpi2Log/st2.log.1"
+value = [['gmres: ',16,3,6]]
+Run("Example var_vis/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/st2.log.4"
+value = [['gmres: ',16,3,6]]
+Run("Example var_vis/MPI2: Parallel-iter",log,value)
+#PGI2
+log = "./pgi2Log/st2.log.1"
+value = [['total solver time',0.1,30,2],
+         ['gmres: ',16,3,6]]
+Run("Example var_vis/PGI2: Serial-time/iter",log,value)
+#GNU2
+log = "./gnu2Log/st2.log.1"
+value = [['gmres: ',16,3,6]]
+Run("Example var_vis/GNU2: Serial-iter",log,value)
+#INT2
+log = "./int2Log/st2.log.1"
+value = [['gmres: ',16,3,6]]
+Run("Example var_vis/INT2: Serial-iter",log,value)
+
+
+
 print("\n\nvortex Example")  
 #MPI
 log = "./mpiLog/r1854a.log.1"

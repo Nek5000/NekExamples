@@ -238,6 +238,21 @@ cd ..
 tester shear4 nek10s thin vorticity 1
 
 cd ..
+cd var_vis
+cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/nek/makenek.bb .
+../../tests/tools/genmap << EOF
+st2
+.05
+EOF
+./makenek.bb    clean      $HERE_S
+mkdir ./obj
+sleep 1
+./makenek.bb    st2         $HERE_S
+./nekbb st2
+
+
+cd ..
 tester vortex nek10s r1854a VMIN 1
 
 cd ..
