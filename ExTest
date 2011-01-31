@@ -250,6 +250,7 @@ mkdir ./obj
 sleep 1
 ./makenek.bb    st2         $HERE_S
 ./nekbb st2
+mv st2.log.1 var_vis.log.1
 
 
 cd ..

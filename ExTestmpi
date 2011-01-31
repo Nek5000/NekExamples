@@ -253,6 +253,8 @@ EOF
 ./makenek.bb    st2           $HERE_S
 ./neklmpi st2 1
 ./neklmpi st2 4
+mv st2.log.1 var_vis.log.1
+mv st2.log.4 var_vis.log.4
 
 
 cd ..
