@@ -119,6 +119,10 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
+      real tlast,vlast,tcurr,vcurr,t0,t1
+      save tlast,vlast,tcurr,vcurr,t0,t1
+      data tlast,vlast,tcurr,vcurr,t0,t1 / 6*0 /
+
       integer e,eg,eg0,e0
 
       eg0 = 622          ! Identify element/processor in wake
@@ -133,12 +137,18 @@ c-----------------------------------------------------------------------
          vlast = vcurr
 
          tcurr = time
-         vcurr = vy(nx1,ny1,1,e0)
+         vcurr = vy (1,ny1,1,e0)
 
-         if (vlast.ne.0.and.vcurr*vlast.le.0) then ! zero crossing
-            t1  = t0
-            t0  = tlast + (tcurr-tlast)*(vlast-0)/(vlast-vcurr)
-            per = 2*(t1-t0)
+         xcurr = xm1(1,ny1,1,e0)
+         ycurr = ym1(1,ny1,1,e0)
+
+         write(6,2) istep,time,vcurr,xcurr,ycurr
+    2    format(i9,1p4e13.5,' vcurr')
+
+         if (vlast.gt.0.and.vcurr.le.0) then ! zero crossing w/ negative slope
+            t0  = t1
+            t1  = tlast + (tcurr-tlast)*(vlast-0)/(vlast-vcurr)
+            per = t1-t0
             if (per.gt.0) st = 1./per
          endif
       endif
