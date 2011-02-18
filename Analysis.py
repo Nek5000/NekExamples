@@ -667,6 +667,92 @@ Run("Example eddy/INT2: Serial-error",log,value)
 
 
 
+print("\n\next_cyl Example")  
+#MPI 
+log = "./mpiLog/ext_cyl.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example ext_cyl/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/ext_cyl.err.1"
+value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+Run("Example ext_cyl/MPI: Serial-error",log,value)
+
+log = "./mpiLog/ext_cyl.log.4"
+value = [['gmres: ',82,3,6]]
+Run("Example ext_cyl/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/ext_cyl.err.4"
+value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+Run("Example ext_cyl/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/ext_cyl.log.1"
+value = [['total solver time',0.1,400,2],
+         ['gmres: ',82,3,6]]
+Run("Example ext_cyl/PGI: Serial-time/iter",log,value)
+
+log = "./pgiLog/ext_cyl.err.1"
+value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+Run("Example ext_cyl/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/ext_cyl.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example ext_cyl/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/ext_cyl.err.1"
+value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+Run("Example ext_cyl/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/ext_cyl.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example ext_cyl/INT: Serial-iter",log,value)
+
+log = "./intLog/ext_cyl.err.1"
+value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+Run("Example ext_cyl/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/ext_cyl.log.1"
+value = [['gmres: ',23,3,6]]
+Run("Example ext_cyl/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/ext_cyl.err.1"
+value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+Run("Example ext_cyl/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/ext_cyl.log.4"
+value = [['gmres: ',23,3,6]]
+Run("Example ext_cyl/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/ext_cyl.err.4"
+value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+Run("Example ext_cyl/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/ext_cyl.log.1"
+value = [['total solver time',0.1,380,2],
+         ['gmres: ',23,3,6]]
+Run("Example ext_cyl/PGI2: Serial-time/iter",log,value)
+
+log = "./pgi2Log/ext_cyl.err.1"
+value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+Run("Example ext_cyl/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/ext_cyl.log.1"
+value = [['gmres: ',23,3,6]]
+Run("Example ext_cyl/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/ext_cyl.err.1"
+value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+Run("Example ext_cyl/GNU2: Serial-error",log,value)
+#INT
+log = "./int2Log/ext_cyl.log.1"
+value = [['gmres: ',23,3,6]]
+Run("Example ext_cyl/INT2: Serial-iter",log,value)
+
+log = "./int2Log/ext_cyl.err.1"
+value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+Run("Example ext_cyl/INT2: Serial-error",log,value)
+
+
+
 print("\n\nfs_2-st1 Example")  
 #MPI 
 log = "./mpiLog/st1.log.1"

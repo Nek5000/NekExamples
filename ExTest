@@ -113,6 +113,9 @@ cd ..
 tester eddy nekbb eddy_uv err 2
 
 cd ..
+tester ext_cyl nek1000s ext_cyl drag 2
+
+cd ..
 tester fs_2 nek200s st1 amp 1
 cd ..
 tester fs_2 nek200s st2 amp 1
