@@ -1230,23 +1230,23 @@ Run("Example MHD-gpf/INT2: Serial-error",log,value)
 print("\n\nmhd-gpf_m Example")  
 #MPI
 log = "./mpiLog/gpf_m.log.1"
-value = "ABORT: MHD"
+value = "ERROR: FDM"
 FindPhrase("Example MHD-gpf_m/MPI: Serial",log,value)
 
 log = "./mpiLog/gpf_m.log.4"
-value = "ABORT: MHD"
+value = "ERROR: FDM"
 FindPhrase("Example MHD-gpf_m/MPI: Parallel",log,value)
 #PGI
 log = "./pgiLog/gpf_m.log.1"
-value = "ABORT: MHD"
+value = "ERROR: FDM"
 FindPhrase("Example MHD-gpf_m/PGI: Serial",log,value)
 #GNU
 log = "./gnuLog/gpf_m.log.1"
-value = "ABORT: MHD"
+value = "ERROR: FDM"
 FindPhrase("Example MHD-gpf_m/GNU: Serial",log,value)
 #INT
 log = "./intLog/gpf_m.log.1"
-value = "ABORT: MHD"
+value = "ERROR: FDM"
 FindPhrase("Example MHD-gpf_m/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/gpf_m.err.1"
