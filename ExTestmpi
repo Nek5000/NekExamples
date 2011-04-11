@@ -23,6 +23,8 @@ EOF
 grep "$err" $rea.log.1 | tail -$5 > $rea.err.1
 ./$nek $rea 4
 grep "$err" $rea.log.4 | tail -$5 > $rea.err.4
+
+grep nek5000 compiler.out | tail -1 >> $rea.err.1
 }
 
 ##############################################################
@@ -38,6 +40,7 @@ EOF
 ./makenek.bb test0001         $HERE_S
 ./neklmpi test0001 1
 ./neklmpi test0001 4
+grep nek5000 compiler.out | tail -1 > test0001.err.1
 
 
 #Test all examples...
@@ -56,6 +59,7 @@ mvn box axi
 ./makenek.bb    axi           $HERE_S
 ./neklmpi axi 1
 ./neklmpi axi 4
+grep nek5000 compiler.out | tail -1 > axi.err.1
 
 
 cd ..
@@ -69,6 +73,7 @@ EOF
 ./makenek.bb clean     $HERE_S
 ./makenek.bb ray_9            $HERE_S
 ./neklmpi ray_9 1
+grep nek5000 compiler.out | tail -1 > ray_9.err.1
 
 ../../tests/tools/genmap << EOF
 ray_dd
@@ -93,6 +98,7 @@ if  grep -q "lx2=lx1-2" SIZE
       ./neklmpi ray_dn 1
       ./neklmpi ray_nn 1
       grep rayleigh *.log.1 > benard.err
+      grep nek5000 compiler.out | tail -1 >> benard.err
 else
       cd ./benard_split/
       cp ../ray_dd.map .
@@ -104,6 +110,7 @@ else
       ../neklmpi ray_dn 1
       ../neklmpi ray_nn 1
       grep rayleigh *.log.1 > benard.err
+      grep nek5000 compiler.out | tail -1 >> benard.err
       mv benard.err ../
       mv *.log.*    ../
       cd ../
@@ -155,6 +162,7 @@ cp gpf.map gpf_m.map
 grep "rtavg_gr_Em" gpf.log.1 | tail -1 > gpf.err.1
 ./neklmpi gpf 4
 grep "rtavg_gr_Em" gpf.log.4 | tail -1 > gpf.err.4
+grep nek5000 compiler.out | tail -1 >> gpf.err.1
 
 cp ../../trunk/nek/ZPER2 ../../trunk/nek/ZPER
 ./makenek.bb    clean     $HERE_S
@@ -163,6 +171,7 @@ cp ../../trunk/nek/ZPER2 ../../trunk/nek/ZPER
 grep "rtavg_gr_Em" gpf_m.log.1 | tail -1 > gpf_m.err.1
 ./neklmpi gpf_m 4
 grep "rtavg_gr_Em" gpf_m.log.4 | tail -1 > gpf_m.err.4
+grep nek5000 compiler.out | tail -1 >> gpf_m.err.1
 
 ./neklmpi gpf_b 1
 grep "rtavg_gr_Em" gpf_b.log.1 | tail -1 > gpf_b.err.1
@@ -182,6 +191,7 @@ chmod +x makenek.bb
 ./makenek.bb    pipe        $HERE_S
 ./nek10steps pipe 1
 ./nek10steps pipe 4
+grep nek5000 compiler.out | tail -1 > pipe.err.1
 
 
 cd ..
@@ -199,6 +209,7 @@ EOF
 ./makenek.bb    peris         $HERE_S
 ./nek10steps peris 1
 ./nek10steps peris 4
+grep nek5000 compiler.out | tail -1 > peris.err.1
  
 
 cd ..
@@ -210,21 +221,28 @@ tester pipe nek10steps helix err2 1
 ./makenek.bb    stenosis      $HERE_S
 ./nek10steps stenosis 1
 ./nek10steps stenosis 4
+grep nek5000 compiler.out | tail -1 > stenosis.err.1
  
 
 cd ..
 cd ./rayleigh
 cp ../../trunk/tools/scripts/nek200steps .
+cp ../../trunk/tools/scripts/mvn .
 cp ../../trunk/nek/makenek.bb .
+../../tests/tools/genbox << EOF
+ray2.box
+EOF
+
 ../../tests/tools/genmap << EOF
 ray1
 .05
 EOF
 
 ../../tests/tools/genmap << EOF
-ray2
+box
 .05
 EOF
+mvn box ray2
 
 ./makenek.bb    clean     $HERE_S
 ./makenek.bb    ray0          $HERE_S
@@ -232,6 +250,7 @@ EOF
 grep "umax" ray1.log.1 | tail -1 > ray1.err.1
 ./nek200steps ray1 4
 grep "umax" ray1.log.4 | tail -1 > ray1.err.4
+grep nek5000 compiler.out | tail -1 >> ray1.err.1
 
 ./nek200steps ray2 1
 grep "umax" ray2.log.1 | tail -1 > ray2.err.1
@@ -258,14 +277,12 @@ EOF
 ./neklmpi st2 4
 mv st2.log.1 var_vis.log.1
 mv st2.log.4 var_vis.log.4
+grep nek5000 compiler.out | tail -1 > var_vis.err.1
 
 
 cd ..
 tester vortex nek10steps r1854a VMIN 1 
 
 cd ..
-if  grep -q "lx2=lx1-2" vortex2/SIZE 
-    then
-      tester vortex2 neklmpi v2d umin 1
-fi
+tester vortex2 neklmpi v2d umin 1
 ##############################################################

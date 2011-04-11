@@ -187,12 +187,12 @@ print("\nTest0001")
 log = "./mpiLog/test0001.log.1"
 value = [['ANS1',5.742723E-07,1e-06,8], 
          ['gmres: ',32,3,6]]
-Run("MPI: Serial",log,value)
+Run("Test0001/MPI: Serial",log,value)
 
 log = "./mpiLog/test0001.log.4"
 value = [['ANS1',5.742723E-07,1e-06,8],
          ['gmres: ',32,3,6]]
-Run("MPI: Parallel-error",log,value)
+Run("Test0001/MPI: Parallel-error",log,value)
 #MPI2
 log = "./mpi2Log/test0001.log.1"
 value = [['ANS1',5.742723E-07,1e-06,8],
@@ -204,52 +204,49 @@ value = [['ANS1',5.742723E-07,1e-06,8],
          ['gmres: ',12,3,6]]
 Run("Test0001/MPI2: Parallel-error",log,value)
 
-
- 
 print("\n\naxi Example")  
 #MPI
 log = "./mpiLog/axi.log.1"
-value = [['PRES: ',76,3,4]]
-Run("MPI: Serial-iter",log,value)
+value = [['PRES: ',73,3,4]]
+Run("Example axi/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/axi.log.4"
-value = [['PRES: ',76,3,4]]
-Run("MPI: Parallel-iter",log,value)
+value = [['PRES: ',73,3,4]]
+Run("Example axi/MPI: Parallel-iter",log,value)
 #PGI
 log = "./pgiLog/axi.log.1"
 value = [['total solver time',0.1,2,2],
-         ['PRES: ',76,3,4]]
+         ['PRES: ',73,3,4]]
 Run("Example axi/PGI: Serial-time/iter",log,value)
 #GNU
 log = "./gnuLog/axi.log.1"
-value = [['PRES: ',76,3,4]]
+value = [['PRES: ',73,3,4]]
 Run("Example axi/GNU: Serial-iter",log,value)
 #INT
 log = "./intLog/axi.log.1"
-value = [['PRES: ',76,3,4]]
+value = [['PRES: ',73,3,4]]
 Run("Example axi/INT: Serial-iter",log,value)
 #MPI2
 log = "./mpi2Log/axi.log.1"
-value = [['U-Press ',104,3,5]]
+value = [['U-Press ',101,3,5]]
 Run("Example axi/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/axi.log.4"
-value = [['U-Press ',104,3,5]]
+value = [['U-Press ',101,3,5]]
 Run("Example axi/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/axi.log.1"
 value = [['total solver time',0.1,4,2],
-         ['U-Press ',104,3,5]]
+         ['U-Press ',101,3,5]]
 Run("Example axi/PGI2: Serial-iter",log,value)
 #GNU2
 log = "./gnu2Log/axi.log.1"
-value = [['U-Press ',104,3,5]]
+value = [['U-Press ',101,3,5]]
 Run("Example axi/GNU2: Serial-iter",log,value)
 #INT2
-###Currently Commented out because of issue with intel in calcz.f, for axisym probelms
-#log = "./int2Log/axi.log.1"
-#value = [['U-Press ',104,3,5]]
-#Run("Example axi/INT2: Serial-iter",log,value)
+log = "./int2Log/axi.log.1"
+value = [['U-Press ',101,3,5]]
+Run("Example axi/INT2: Serial-iter",log,value)
 
 
 
@@ -271,7 +268,6 @@ Run("Example benard/ray_9/GNU: Serial-iter",log,value)
 log = "./intLog/ray_9.log.1"
 value = [['gmres: ',20,3,6]]
 Run("Example benard/ray_9/INT: Serial-iter",log,value)
-#here here here
 #MPI2
 log = "./mpi2Log/ray_9.log.1"
 value = [['gmres: ',8,3,6]]
@@ -2149,12 +2145,55 @@ Run("Example vortex/INT2: Serial-error",log,value)
 
 
 print("\n\nvortex2 Example")  
+#MPI
+#first nine time steps fail in pressure
+log = "./mpiLog/v2d.log.1"
+value = [['PRES:  ',97,3,4]]
+Run("Example vortex2/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/v2d.err.1"
+value = [['umin',-1.453402E-03,1e-06,2]]
+Run("Example vortex2/MPI: Serial-error",log,value)
+
+log = "./mpiLog/v2d.log.4"
+value = [['PRES:  ',97,3,4]]
+Run("Example vortex2/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/v2d.err.4"
+value = [['umin',-1.453402E-03,1e-06,2]]
+Run("Example vortex2/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/v2d.log.1"
+value = [['total solver time',0.1,80,2],
+         ['PRES: ',97,3,4]]
+Run("Example vortex2/PGI: Serial-time/iter",log,value)
+
+log = "./pgiLog/v2d.err.1"
+value = [['umin',-1.453402E-03,1e-06,2]]
+Run("Example vortex2/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/v2d.log.1"
+value = [['PRES: ',97,3,4]]
+Run("Example vortex2/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/v2d.err.1"
+value = [['umin',-1.453402E-03,1e-06,2]]
+Run("Example vortex2/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/v2d.log.1"
+value = [['PRES: ',97,3,4]]
+Run("Example vortex2/INT: Serial-iter",log,value)
+
+log = "./intLog/v2d.err.1"
+value = [['umin',-1.453402E-03,1e-06,2]]
+Run("Example vortex2/INT: Serial-error",log,value)
+#MPI2
 log = "./mpi2Log/v2d.log.1"
 value = [['U-Press ',1,3,5]]
 Run("Example vortex2/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/v2d.err.1"
-value = [['umin',-1.855435E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2]]
 Run("Example vortex2/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/v2d.log.4"
@@ -2162,7 +2201,7 @@ value = [['U-Press ',1,3,5]]
 Run("Example vortex2/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/v2d.err.4"
-value = [['umin',-1.855435E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2]]
 Run("Example vortex2/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/v2d.log.1"
@@ -2171,7 +2210,7 @@ value = [['total solver time',0.1,80,2],
 Run("Example vortex2/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/v2d.err.1"
-value = [['umin',-1.855435E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2]]
 Run("Example vortex2/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/v2d.log.1"
@@ -2179,17 +2218,16 @@ value = [['U-Press ',1,3,5]]
 Run("Example vortex2/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/v2d.err.1"
-value = [['umin',-1.855435E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2]]
 Run("Example vortex2/GNU2: Serial-error",log,value)
 #INT2
-###Currently Commented out because of issue with intel in calcz.f, for axisym probelms
-#log = "./int2Log/v2d.log.1"
-#value = [['U-Press ',1,3,5]]
-#Run("Example vortex2/INT2: Serial-iter",log,value)
+log = "./int2Log/v2d.log.1"
+value = [['U-Press ',1,3,5]]
+Run("Example vortex2/INT2: Serial-iter",log,value)
 
-#log = "./int2Log/v2d.err.1"
-#value = [['umin',-1.855435E-03,1e-06,2]]
-#Run("Example vortex2/INT2: Serial-error",log,value)
+log = "./int2Log/v2d.err.1"
+value = [['umin',-2.448980E-03,1e-06,2]]
+Run("Example vortex2/INT2: Serial-error",log,value)
 ###############################################################################
 ###############################################################################
 print("\n\nTest Summary :     %i/%i tests were successful"%(num_success,num_test))
