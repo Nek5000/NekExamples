@@ -237,7 +237,7 @@ EOF
 box
 .05
 EOF
-mnv box ray2
+mvn box ray2
 
 ./makenek.bb    clean        $HERE_S
 mkdir ./obj
