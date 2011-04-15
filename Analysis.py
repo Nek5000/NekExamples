@@ -663,6 +663,54 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/INT2: Serial-error",log,value)
 
 
+ 
+print("\n\neddy_neknek Example")  
+#MPI
+log = "./mpiLog/eddy_neknek.log.2"
+value = [['gmres: ',140,3,6]]
+Run("Example eddy_neknek/MPI: 2--iter",log,value)
+
+log = "./mpiLog/eddy_neknek.err.2"
+value = [['X err inside' ,4.550086E-04,1e-06,7],
+         ['Y err inside' ,6.630053E-04,1e-06,7],
+         ['X err outside',4.595605E-04,1e-06,7],
+         ['Y err outside',6.887475E-04,1e-06,7]]
+Run("Example eddy_neknek/MPI: 2--error",log,value)
+
+log = "./mpiLog/eddy_neknek.log.4"
+value = [['gmres: ',140,3,6]]
+Run("Example eddy_neknek/MPI: 4--iter",log,value)
+
+log = "./mpiLog/eddy_neknek.err.4"
+value = [['X err inside' ,4.550086E-04,1e-06,7],
+         ['Y err inside' ,6.630053E-04,1e-06,7],
+         ['X err outside',4.595605E-04,1e-06,7],
+         ['Y err outside',6.887475E-04,1e-06,7]]
+Run("Example eddy_neknek/MPI: 4--error",log,value)
+#MPI2
+log = "./mpi2Log/eddy_neknek.log.2"
+value = [['gmres: ',81,3,6]]
+Run("Example eddy_neknek/MPI2: 2--iter",log,value)
+
+log = "./mpi2Log/eddy_neknek.err.2"
+value = [['X err inside' ,3.925388E-03,1e-06,7],
+         ['Y err inside' ,6.299443E-03,1e-06,7],
+         ['X err outside',6.604101E-04,1e-06,7],
+         ['Y err outside',7.844337E-04,1e-06,7]]
+Run("Example eddy_neknek/MPI2: 2--error",log,value)
+
+log = "./mpi2Log/eddy_neknek.log.4"
+value = [['gmres: ',81,3,6]]
+Run("Example eddy_neknek/MPI2: 4--iter",log,value)
+
+log = "./mpi2Log/eddy_neknek.err.4"
+value = [['X err inside' ,3.925388E-03,1e-06,7],
+         ['Y err inside' ,6.299443E-03,1e-06,7],
+         ['X err outside',6.604101E-04,1e-06,7],
+         ['Y err outside',7.844337E-04,1e-06,7]]
+Run("Example eddy_neknek/MPI2: 4--error",log,value)
+
+
 
 print("\n\next_cyl Example")  
 #MPI 
