@@ -131,8 +131,8 @@ cp ../../trunk/nek/makenek.bb .
 sed -e "s:^#PPLIST=\"?\":PPLIST=\"NEKNEK\":" makenek.bb>t.t
 mv t.t makenek.bb
 chmod +x makenek.bb
-./makenek clean     $HERE_S
-./makenek eddy_uv   $HERE_S
+./makenek.bb clean     $HERE_S
+./makenek.bb eddy_uv   $HERE_S
 
 ./neknek inside outside 1 1
 cp inside.log eddy_neknek.log.2
