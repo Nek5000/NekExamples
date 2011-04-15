@@ -123,6 +123,26 @@ tester conj_ht neklmpi conj_ht tmax 1
 cd ..
 tester eddy neklmpi eddy_uv err 2 
 
+
+cd ..
+cd eddy_neknek
+cp ../../trunk/tools/scripts/neknek .
+cp ../../trunk/nek/makenek.bb .
+sed -e "s:^#PPLIST=\"?\":PPLIST=\"NEKNEK\":" makenek.bb>t.t
+mv t.t makenek.bb
+chmod +x makenek.bb
+./makenek clean     $HERE_S
+./makenek eddy_uv   $HERE_S
+
+./neknek inside outside 1 1
+cp inside.log eddy_neknek.log.2
+grep err inside.log | tail -4 > eddy_neknek.err.2
+
+./neknek inside outside 2 2
+cp inside.log eddy_neknek.log.4
+grep err inside.log | tail -4 > eddy_neknek.err.4
+
+
 cd ..
 tester ext_cyl nek1000steps ext_cyl drag 2
 
