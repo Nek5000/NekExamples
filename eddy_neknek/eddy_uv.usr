@@ -275,16 +275,23 @@ c-----------------------------------------------------------------------
       subroutine usrdat
       include 'SIZE'
       include 'TOTAL'
+      include 'NEKNEK'
     
 c     Ngeom - parameter controlling the number of iterations,
 c     set to Ngeom=2 by default (no iterations) 
 c     One could change the number of iterations as
-c     if (IFNEKNEK) ngeom = 3
+c     ngeom = 3
 
 c     Ninter - parameter controlling the order of interface extrapolation for neknek,
 c     set to NINTER=1 by default
 c     One could change it as
-c     if (IFNEKNEK) Ninter = 2
+c     Ninter = 2
+
+c     Set number of fields to interpolate
+c     nfld = 3 - u,v,w velocitites  
+c     nfld = 4 - u,v,w velocitites + temperature 
+
+      nfld=3
 
       param(66) = 4
       param(67) = 4
@@ -305,6 +312,7 @@ c-----------------------------------------------------------------------
       call cmult(ym1,twopi,n)
 
 c     This routine initializes the mulitdomain coupling          
+      
       call multimesh_create
 
       return
