@@ -128,16 +128,22 @@ cd ..
 cd eddy_neknek
 cp ../../trunk/tools/scripts/neknek .
 cp ../../trunk/nek/makenek.bb .
+../../tests/tools/genmap << EOF
+inside
+.05
+EOF
+../../tests/tools/genmap << EOF
+outside
+.05
+EOF
 sed -e "s:^#PPLIST=\"?\":PPLIST=\"NEKNEK\":" makenek.bb>t.t
 mv t.t makenek.bb
 chmod +x makenek.bb
 ./makenek.bb clean     $HERE_S
 ./makenek.bb eddy_uv   $HERE_S
-
 ./neknek inside outside 1 1
 cp inside.log eddy_neknek.log.2
 grep err inside.log | tail -4 > eddy_neknek.err.2
-
 ./neknek inside outside 2 2
 cp inside.log eddy_neknek.log.4
 grep err inside.log | tail -4 > eddy_neknek.err.4
