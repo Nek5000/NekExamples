@@ -671,10 +671,10 @@ value = [['gmres: ',140,3,6]]
 Run("Example eddy_neknek/MPI: 2--iter",log,value)
 
 log = "./mpiLog/eddy_neknek.err.2"
-value = [['X err inside' ,4.550086E-04,1e-06,7],
-         ['Y err inside' ,6.630053E-04,1e-06,7],
-         ['X err outside',4.595605E-04,1e-06,7],
-         ['Y err outside',6.887475E-04,1e-06,7]]
+value = [['X err  inside' ,4.550086E-04,1e-06,7],
+         ['Y err  inside' ,6.630053E-04,1e-06,7],
+         ['X err  outside',4.595605E-04,1e-06,7],
+         ['Y err  outside',6.887475E-04,1e-06,7]]
 Run("Example eddy_neknek/MPI: 2--error",log,value)
 
 log = "./mpiLog/eddy_neknek.log.4"
@@ -682,10 +682,10 @@ value = [['gmres: ',140,3,6]]
 Run("Example eddy_neknek/MPI: 4--iter",log,value)
 
 log = "./mpiLog/eddy_neknek.err.4"
-value = [['X err inside' ,4.550086E-04,1e-06,7],
-         ['Y err inside' ,6.630053E-04,1e-06,7],
-         ['X err outside',4.595605E-04,1e-06,7],
-         ['Y err outside',6.887475E-04,1e-06,7]]
+value = [['X err  inside' ,4.550086E-04,1e-06,7],
+         ['Y err  inside' ,6.630053E-04,1e-06,7],
+         ['X err  outside',4.595605E-04,1e-06,7],
+         ['Y err  outside',6.887475E-04,1e-06,7]]
 Run("Example eddy_neknek/MPI: 4--error",log,value)
 #MPI2
 log = "./mpi2Log/eddy_neknek.log.2"
@@ -693,10 +693,10 @@ value = [['gmres: ',81,3,6]]
 Run("Example eddy_neknek/MPI2: 2--iter",log,value)
 
 log = "./mpi2Log/eddy_neknek.err.2"
-value = [['X err inside' ,3.925388E-03,1e-06,7],
-         ['Y err inside' ,6.299443E-03,1e-06,7],
-         ['X err outside',6.604101E-04,1e-06,7],
-         ['Y err outside',7.844337E-04,1e-06,7]]
+value = [['X err  inside' ,3.925388E-03,1e-06,7],
+         ['Y err  inside' ,6.299443E-03,1e-06,7],
+         ['X err  outside',6.604101E-04,1e-06,7],
+         ['Y err  outside',7.844337E-04,1e-06,7]]
 Run("Example eddy_neknek/MPI2: 2--error",log,value)
 
 log = "./mpi2Log/eddy_neknek.log.4"
@@ -704,10 +704,10 @@ value = [['gmres: ',81,3,6]]
 Run("Example eddy_neknek/MPI2: 4--iter",log,value)
 
 log = "./mpi2Log/eddy_neknek.err.4"
-value = [['X err inside' ,3.925388E-03,1e-06,7],
-         ['Y err inside' ,6.299443E-03,1e-06,7],
-         ['X err outside',6.604101E-04,1e-06,7],
-         ['Y err outside',7.844337E-04,1e-06,7]]
+value = [['X err  inside' ,3.925388E-03,1e-06,7],
+         ['Y err  inside' ,6.299443E-03,1e-06,7],
+         ['X err  outside',6.604101E-04,1e-06,7],
+         ['Y err  outside',7.844337E-04,1e-06,7]]
 Run("Example eddy_neknek/MPI2: 4--error",log,value)
 
 
@@ -719,7 +719,7 @@ value = [['gmres: ',82,3,6]]
 Run("Example ext_cyl/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/ext_cyl.err.1"
-value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ext_cyl.log.4"
@@ -727,7 +727,7 @@ value = [['gmres: ',82,3,6]]
 Run("Example ext_cyl/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/ext_cyl.err.4"
-value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/ext_cyl.log.1"
@@ -736,7 +736,7 @@ value = [['total solver time',0.1,400,2],
 Run("Example ext_cyl/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/ext_cyl.err.1"
-value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ext_cyl.log.1"
@@ -744,7 +744,7 @@ value = [['gmres: ',82,3,6]]
 Run("Example ext_cyl/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/ext_cyl.err.1"
-value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ext_cyl.log.1"
@@ -752,7 +752,7 @@ value = [['gmres: ',82,3,6]]
 Run("Example ext_cyl/INT: Serial-iter",log,value)
 
 log = "./intLog/ext_cyl.err.1"
-value = [['dragx',1.2135393E+00,1e-06,4],['dragy',9.3165736E-08,1e-06,4]]
+value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ext_cyl.log.1"
@@ -760,7 +760,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/ext_cyl.err.1"
-value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ext_cyl.log.4"
@@ -768,7 +768,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/ext_cyl.err.4"
-value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/ext_cyl.log.1"
@@ -777,7 +777,7 @@ value = [['total solver time',0.1,380,2],
 Run("Example ext_cyl/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/ext_cyl.err.1"
-value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ext_cyl.log.1"
@@ -785,7 +785,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/ext_cyl.err.1"
-value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/GNU2: Serial-error",log,value)
 #INT
 log = "./int2Log/ext_cyl.log.1"
@@ -793,7 +793,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/INT2: Serial-iter",log,value)
 
 log = "./int2Log/ext_cyl.err.1"
-value = [['dragx',1.2135834E+00,1e-06,4],['dragy',7.3629409E-07,1e-06,4]]
+value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/INT2: Serial-error",log,value)
 
 
