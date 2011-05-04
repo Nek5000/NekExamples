@@ -18,6 +18,8 @@ $rea
 EOF
 
 ./makenek.bb    clean $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    $rea $HERE_S
 ./$nek $rea 1
 grep "$err" $rea.log.1 | tail -$5 > $rea.err.1
@@ -37,6 +39,8 @@ test0001
 .05
 EOF
 ./makenek.bb clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb test0001         $HERE_S
 ./neklmpi test0001 1
 ./neklmpi test0001 4
@@ -56,6 +60,8 @@ cp ../../trunk/nek/makenek.bb .
 ../../tests/tools/genmap < gm.in
 mvn box axi
 ./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    axi           $HERE_S
 ./neklmpi axi 1
 ./neklmpi axi 4
@@ -71,6 +77,8 @@ ray_9
 .05
 EOF
 ./makenek.bb clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb ray_9            $HERE_S
 ./neklmpi ray_9 1
 grep nek5000 compiler.out | tail -1 > ray_9.err.1
@@ -93,6 +101,8 @@ EOF
 if  grep -q "lx2=lx1-2" SIZE   
     then
       ./makenek.bb clean     $HERE_S
+      mkdir ./obj
+      sleep 1
       ./makenek.bb ray_cr           $HERE_S
       ./neklmpi ray_dd 1
       ./neklmpi ray_dn 1
@@ -105,6 +115,8 @@ else
       cp ../ray_dn.map .
       cp ../ray_nn.map .
       ../makenek.bb clean     $HERE_S
+      mkdir ./obj
+      sleep 1
       ../makenek.bb ray_cr            $HERE_S
       ../neklmpi ray_dd 1
       ../neklmpi ray_dn 1
@@ -140,6 +152,8 @@ sed -e "s:^#PPLIST=\"?\":PPLIST=\"NEKNEK\":" makenek.bb>t.t
 mv t.t makenek.bb
 chmod +x makenek.bb
 ./makenek.bb clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb eddy_uv   $HERE_S
 ./neknek inside outside 1 1
 cp inside.log eddy_neknek.log.2
@@ -183,6 +197,8 @@ EOF
 mvn box gpf
 cp gpf.map gpf_m.map
 ./makenek.bb clean      $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb   gpf       $HERE_S
 ./neklmpi gpf 1
 grep "rtavg_gr_Em" gpf.log.1 | tail -1 > gpf.err.1
@@ -192,6 +208,8 @@ grep nek5000 compiler.out | tail -1 >> gpf.err.1
 
 cp ../../trunk/nek/ZPER2 ../../trunk/nek/ZPER
 ./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    gpf        $HERE_S
 ./neklmpi gpf_m 1
 grep "rtavg_gr_Em" gpf_m.log.1 | tail -1 > gpf_m.err.1
@@ -214,6 +232,8 @@ sed -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
 mv t.t makenek.bb
 chmod +x makenek.bb
 ./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    pipe        $HERE_S
 ./nek10steps pipe 1
 ./nek10steps pipe 4
@@ -232,6 +252,8 @@ peris
 .05
 EOF
 ./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    peris         $HERE_S
 ./nek10steps peris 1
 ./nek10steps peris 4
@@ -244,6 +266,8 @@ tester pipe nek10steps helix err2 1
 ../../tests/tools/n2to3  < n2to3.in
 ../../tests/tools/genmap < g.in
 ./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    stenosis      $HERE_S
 ./nek10steps stenosis 1
 ./nek10steps stenosis 4
@@ -271,6 +295,8 @@ EOF
 mvn box ray2
 
 ./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    ray0          $HERE_S
 ./nek200steps ray1 1
 grep "umax" ray1.log.1 | tail -1 > ray1.err.1
@@ -298,6 +324,8 @@ st2
 .05
 EOF
 ./makenek.bb    clean         $HERE_S
+mkdir ./obj
+sleep 1
 ./makenek.bb    st2           $HERE_S
 ./neklmpi st2 1
 ./neklmpi st2 4
