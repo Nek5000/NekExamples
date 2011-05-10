@@ -760,7 +760,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/ext_cyl.err.1"
-value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
+value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ext_cyl.log.4"
@@ -768,7 +768,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/ext_cyl.err.4"
-value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
+value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/ext_cyl.log.1"
@@ -777,7 +777,7 @@ value = [['total solver time',0.1,380,2],
 Run("Example ext_cyl/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/ext_cyl.err.1"
-value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
+value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ext_cyl.log.1"
@@ -785,7 +785,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/ext_cyl.err.1"
-value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
+value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/GNU2: Serial-error",log,value)
 #INT
 log = "./int2Log/ext_cyl.log.1"
@@ -793,7 +793,7 @@ value = [['gmres: ',23,3,6]]
 Run("Example ext_cyl/INT2: Serial-iter",log,value)
 
 log = "./int2Log/ext_cyl.err.1"
-value = [['dragx',1.2139222E+00,1e-06,4],['dragy',3.2334222E-07,1e-06,4]]
+value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/INT2: Serial-error",log,value)
 
 
@@ -1521,24 +1521,24 @@ value = "ABORT: Moving boundary"
 FindPhrase("Example peris/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/peris.log.1"
-value = [['gmres: ',24,3,6]]
+value = [['gmres: ',11,3,6]]
 Run("Example peris/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/peris.log.4"
-value = [['gmres: ',24,3,6]]
+value = [['gmres: ',11,3,6]]
 Run("Example peris/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/peris.log.1"
 value = [['total solver time',0.1,13,2],
-         ['gmres: ',24,3,6]]
+         ['gmres: ',11,3,6]]
 Run("Example peris/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/peris.log.1"
-value = [['gmres: ',24,3,6]]
+value = [['gmres: ',11,3,6]]
 Run("Example peris/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/peris.log.1"
-value = [['gmres: ',24,3,6]]
+value = [['gmres: ',11,3,6]]
 Run("Example peris/INT2: Serial-iter",log,value)
 
 
