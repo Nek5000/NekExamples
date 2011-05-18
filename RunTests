@@ -41,12 +41,6 @@ mkdir pgiLog;  mkdir pgi2Log
 cd tools
 HERE_T=`pwd`
 
-#GTP SOLVER SWITCH
-cd ../../trunk/nek
-cp ZPER ZPER1  
-sed -e "s:(lelg_sm=2):(lelg_sm=lelg):" \
-    -e "s:(ltfdm2 =2):(ltfdm2=2\*lx2\*ly2\*lz2\*lelt):" ZPER>ZPER2
-
 ##############################################################
 ##############################################################
 #Test all Compilers for Pn-Pn Case
