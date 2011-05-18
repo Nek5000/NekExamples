@@ -157,7 +157,7 @@ sleep 1
 grep "rtavg_gr_Em" gpf.log.1 | tail -1 > gpf.err.1
 grep nek5000 compiler.out | tail -1 >> gpf.err.1
 
-cp ../../trunk/nek/ZPER2 ../../trunk/nek/ZPER
+sed -i "s:lfdm=0:lfdm=1:"  SIZE
 ./makenek.bb    clean     $HERE_S
 mkdir ./obj
 sleep 1
@@ -168,7 +168,8 @@ grep nek5000 compiler.out | tail -1 >> gpf_m.err.1
 
 ./nekbb gpf_b
 grep "rtavg_gr_Em" gpf_b.log.1 | tail -1 > gpf_b.err.1
-cp ../../trunk/nek/ZPER1 ../../trunk/nek/ZPER
+sed -i "s:lfdm=1:lfdm=0:"  SIZE
+
 
 
 cd ..
