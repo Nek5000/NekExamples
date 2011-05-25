@@ -1,0 +1,15 @@
+
+
+These cases provide examples of the convecting cone problem illustrated 
+in Gottlieb & Orszg (1972) and Deville, Fischer, & Mund (2002).
+
+Typically, to run them you would change SIZE such that the product
+lx1*E1 = 32, where the total number of elements in the given case
+is E=E1*E1.   For cone016 we have E=16 and E1=4, etc.  Thus, set lx1
+as follows:
+
+    cone256    lx1=2   
+    cone064    lx1=4   
+    cone016    lx1=8   
+
+
