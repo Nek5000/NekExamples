@@ -131,13 +131,19 @@ fi
 
 cd ..
 cd cone/cone016
+cp ../../../trunk/tools/scripts/neklmpi .
+cp ../../../trunk/tools/scripts/mvn .
+cp ../../../trunk/nek/makenek.bb .
+../../../tests/tools/genbox << EOF
+cone016.box
+EOF
+../../../tests/tools/genmap << EOF
+box
+.05
+EOF
+mvn box cone016
 if  grep -q "lx2=lx1)" SIZE 
-      cp ../../../trunk/tools/scripts/nekbb .
-      cp ../../../trunk/nek/makenek.bb .
-      ../../../tests/tools/genbox << EOF
-      cone016
-      .05
-      EOF
+    then
       ./makenek.bb  clean  $HERE_S
       mkdir ./obj
       sleep 1
@@ -148,12 +154,22 @@ if  grep -q "lx2=lx1)" SIZE
       grep Tmax cone016.log.4  > cone016.err.4
       grep nek5000 compiler.out | tail -1 >> cone016.err.1
       cp cone016.log.* cone016.err.* ../
+fi
 
-      cd ../cone064
-      ../../../tests/tools/genbox << EOF
-      cone064
-      .05
-      EOF
+cd ../cone064
+cp ../../../trunk/tools/scripts/neklmpi .
+cp ../../../trunk/tools/scripts/mvn .
+cp ../../../trunk/nek/makenek.bb .
+../../../tests/tools/genbox << EOF
+cone064.box
+EOF
+../../../tests/tools/genmap << EOF
+box
+.05
+EOF
+mvn box cone064
+if  grep -q "lx2=lx1)" SIZE 
+    then
       ./makenek.bb  clean  $HERE_S
       mkdir ./obj
       sleep 1
@@ -164,12 +180,22 @@ if  grep -q "lx2=lx1)" SIZE
       grep Tmax cone064.log.4  > cone064.err.4
       grep nek5000 compiler.out | tail -1 >> cone064.err.1
       cp cone064.log.* cone064.err.* ../
+fi
 
-      cd ../cone256
-      ../../../tests/tools/genbox << EOF
-      cone256
-      .05
-      EOF
+cd ../cone256
+cp ../../../trunk/tools/scripts/neklmpi .
+cp ../../../trunk/tools/scripts/mvn .
+cp ../../../trunk/nek/makenek.bb .
+../../../tests/tools/genbox << EOF
+cone256.box
+EOF
+../../../tests/tools/genmap << EOF
+box
+.05
+EOF
+mvn box cone256
+if  grep -q "lx2=lx1)" SIZE 
+    then
       ./makenek.bb  clean  $HERE_S
       mkdir ./obj
       sleep 1
