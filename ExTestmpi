@@ -130,7 +130,63 @@ fi
 
 
 cd ..
+cd cone/cone016
+if  grep -q "lx2=lx1)" SIZE 
+      cp ../../../trunk/tools/scripts/nekbb .
+      cp ../../../trunk/nek/makenek.bb .
+      ../../../tests/tools/genbox << EOF
+      cone016
+      .05
+      EOF
+      ./makenek.bb  clean  $HERE_S
+      mkdir ./obj
+      sleep 1
+      ./makenek.bb  cone   $HERE_S
+      ./neklmpi cone016 1
+      grep Tmax cone016.log.1  > cone016.err.1
+      ./neklmpi cone016 4
+      grep Tmax cone016.log.4  > cone016.err.4
+      grep nek5000 compiler.out | tail -1 >> cone016.err.1
+      cp cone016.log.* cone016.err.* ../
+
+      cd ../cone064
+      ../../../tests/tools/genbox << EOF
+      cone064
+      .05
+      EOF
+      ./makenek.bb  clean  $HERE_S
+      mkdir ./obj
+      sleep 1
+      ./makenek.bb  cone   $HERE_S
+      ./neklmpi cone064 1
+      grep Tmax cone064.log.1  > cone064.err.1
+      ./neklmpi cone064 4
+      grep Tmax cone064.log.4  > cone064.err.4
+      grep nek5000 compiler.out | tail -1 >> cone064.err.1
+      cp cone064.log.* cone064.err.* ../
+
+      cd ../cone256
+      ../../../tests/tools/genbox << EOF
+      cone256
+      .05
+      EOF
+      ./makenek.bb  clean  $HERE_S
+      mkdir ./obj
+      sleep 1
+      ./makenek.bb  cone   $HERE_S
+      ./neklmpi cone256 1
+      grep Tmax cone256.log.1  > cone256.err.1
+      ./neklmpi cone256 4
+      grep Tmax cone256.log.4  > cone256.err.4
+      grep nek5000 compiler.out | tail -1 >> cone256.err.1
+      cp cone256.log.* cone256.err.* ../
+fi
+cd ../
+
+
+cd ..
 tester conj_ht neklmpi conj_ht tmax 1 
+
 
 cd ..
 tester eddy neklmpi eddy_uv err 2 
