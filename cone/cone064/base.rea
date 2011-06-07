@@ -1,5 +1,5 @@
  ****** PARAMETERS *****
-    2.610000     NEKTON VERSION
+    2.610000     NEKTON VERSION 
             2 DIMENSIONAL RUN
           103 PARAMETERS FOLLOW
    1.00000         DENSITY
@@ -106,10 +106,10 @@
    1.00000           Dump out divergence at each time step
   0.000000E-01       weight of filter
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
-   1.00000       1.00000       1.00000       1.00000       1.00000
-   1.00000       1.00000       1.00000       1.00000
-   1.00000       1.00000       1.00000       1.00000       1.00000
-   1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000       1.00000    
+   1.00000       1.00000       1.00000       1.00000    
+   1.00000       1.00000       1.00000       1.00000       1.00000    
+   1.00000       1.00000       1.00000       1.00000    
            13  LOGICAL SWITCHES FOLLOW
   F     IFFLOW
   T     IFHEAT
@@ -125,60 +125,60 @@
   F     IFMVBD
   F     IFCHAR
    8.00000       8.00000     -0.500000      -4.00000     XFAC,YFAC,XZERO,YZERO
-  *** MESH DATA ***
-        16         2        16           NEL,NDIM,NELV
-            ELEMENT       1 [    1a]  GROUP  0
-  -1.00000     -0.500000     -0.500000      -1.00000    
-  -1.00000      -1.00000     -0.500000     -0.500000    
-            ELEMENT       2 [    1b]  GROUP  0
- -0.500000       0.00000       0.00000     -0.500000    
-  -1.00000      -1.00000     -0.500000     -0.500000    
-            ELEMENT       3 [    1c]  GROUP  0
-   0.00000      0.500000      0.500000       0.00000    
-  -1.00000      -1.00000     -0.500000     -0.500000    
-            ELEMENT       4 [    1d]  GROUP  0
-  0.500000       1.00000       1.00000      0.500000    
-  -1.00000      -1.00000     -0.500000     -0.500000    
-            ELEMENT       5 [    1e]  GROUP  0
-  -1.00000     -0.500000     -0.500000      -1.00000    
- -0.500000     -0.500000       0.00000       0.00000    
-            ELEMENT       6 [    1f]  GROUP  0
- -0.500000       0.00000       0.00000     -0.500000    
- -0.500000     -0.500000       0.00000       0.00000    
-            ELEMENT       7 [    1g]  GROUP  0
-   0.00000      0.500000      0.500000       0.00000    
- -0.500000     -0.500000       0.00000       0.00000    
-            ELEMENT       8 [    1h]  GROUP  0
-  0.500000       1.00000       1.00000      0.500000    
- -0.500000     -0.500000       0.00000       0.00000    
-            ELEMENT       9 [    1i]  GROUP  0
-  -1.00000     -0.500000     -0.500000      -1.00000    
-   0.00000       0.00000      0.500000      0.500000    
-            ELEMENT      10 [    1j]  GROUP  0
- -0.500000       0.00000       0.00000     -0.500000    
-   0.00000       0.00000      0.500000      0.500000    
-            ELEMENT      11 [    1k]  GROUP  0
-   0.00000      0.500000      0.500000       0.00000    
-   0.00000       0.00000      0.500000      0.500000    
-            ELEMENT      12 [    1l]  GROUP  0
-  0.500000       1.00000       1.00000      0.500000    
-   0.00000       0.00000      0.500000      0.500000    
-            ELEMENT      13 [    1m]  GROUP  0
-  -1.00000     -0.500000     -0.500000      -1.00000    
-  0.500000      0.500000       1.00000       1.00000    
-            ELEMENT      14 [    1n]  GROUP  0
- -0.500000       0.00000       0.00000     -0.500000    
-  0.500000      0.500000       1.00000       1.00000    
-            ELEMENT      15 [    1o]  GROUP  0
-   0.00000      0.500000      0.500000       0.00000    
-  0.500000      0.500000       1.00000       1.00000    
-            ELEMENT      16 [    1p]  GROUP  0
-  0.500000       1.00000       1.00000      0.500000    
-  0.500000      0.500000       1.00000       1.00000    
+ **MESH DATA** 1st line is X of corner 1,2,3,4. 2nd line is Y.
+    16     2    16           NEL,NDIM,NELV
+            ELEMENT    1 [    1b]    GROUP     0
+  0.250000      0.500000      0.500000      0.250000    
+  0.250000      0.250000      0.500000      0.500000    
+            ELEMENT    2 [    1b]    GROUP     0
+  0.000000E+00  0.250000      0.250000      0.000000E+00
+  0.250000      0.250000      0.500000      0.500000    
+            ELEMENT    3 [    1b]    GROUP     0
+  0.000000E+00  0.250000      0.250000      0.000000E+00
+  0.000000E+00  0.000000E+00  0.250000      0.250000    
+            ELEMENT    4 [    1b]    GROUP     0
+  0.250000      0.500000      0.500000      0.250000    
+  0.000000E+00  0.000000E+00  0.250000      0.250000    
+            ELEMENT    5 [    1d]    GROUP     0
+  0.250000      0.500000      0.500000      0.250000    
+  0.750000      0.750000       1.00000       1.00000    
+            ELEMENT    6 [    1e]    GROUP     0
+  0.750000       1.00000       1.00000      0.750000    
+  0.750000      0.750000       1.00000       1.00000    
+            ELEMENT    7 [    1c]    GROUP     0
+  0.750000       1.00000       1.00000      0.750000    
+  0.000000E+00  0.000000E+00  0.250000      0.250000    
+            ELEMENT    8 [    1c]    GROUP     0
+  0.500000      0.750000      0.750000      0.500000    
+  0.000000E+00  0.000000E+00  0.250000      0.250000    
+            ELEMENT    9 [    1c]    GROUP     0
+  0.750000       1.00000       1.00000      0.750000    
+  0.250000      0.250000      0.500000      0.500000    
+            ELEMENT   10 [    1d]    GROUP     0
+  0.000000E+00  0.250000      0.250000      0.000000E+00
+  0.750000      0.750000       1.00000       1.00000    
+            ELEMENT   11 [    1d]    GROUP     0
+  0.250000      0.500000      0.500000      0.250000    
+  0.500000      0.500000      0.750000      0.750000    
+            ELEMENT   12 [    1d]    GROUP     0
+  0.000000E+00  0.250000      0.250000      0.000000E+00
+  0.500000      0.500000      0.750000      0.750000    
+            ELEMENT   13 [    1c]    GROUP     0
+  0.500000      0.750000      0.750000      0.500000    
+  0.250000      0.250000      0.500000      0.500000    
+            ELEMENT   14 [    1e]    GROUP     0
+  0.750000       1.00000       1.00000      0.750000    
+  0.500000      0.500000      0.750000      0.750000    
+            ELEMENT   15 [    1e]    GROUP     0
+  0.500000      0.750000      0.750000      0.500000    
+  0.500000      0.500000      0.750000      0.750000    
+            ELEMENT   16 [    1e]    GROUP     0
+  0.500000      0.750000      0.750000      0.500000    
+  0.750000      0.750000       1.00000       1.00000    
   ***** CURVED SIDE DATA *****
      0 Curved sides follow IEDGE,IEL,CURVE(I),I=1,5, CCURVE
   ***** BOUNDARY CONDITIONS *****
-  ***** FLUID   BOUNDARY CONDITIONS *****
+  ***** NO FLUID   BOUNDARY CONDITIONS *****
   ***** THERMAL BOUNDARY CONDITIONS *****
  E    1  1   4.00000       3.00000      0.000000E+00  0.000000E+00  0.000000E+00
  E    1  2   13.0000       4.00000      0.000000E+00  0.000000E+00  0.000000E+00
@@ -246,23 +246,23 @@
  E   16  4   5.00000       2.00000      0.000000E+00  0.000000E+00  0.000000E+00
             0 PRESOLVE/RESTART OPTIONS  *****
             7         INITIAL CONDITIONS *****
-C Default
-C Default
-C Default
-C Default
-C Default
-C Default
-C Default
+C Default                                                                       
+C Default                                                                       
+C Default                                                                       
+C Default                                                                       
+C Default                                                                       
+C Default                                                                       
+C Default                                                                       
   ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
             4                 Lines of Drive force data follow
-C
-C
-C
-C
+C                                                                               
+C                                                                               
+C                                                                               
+C                                                                               
   ***** Variable Property Data ***** Overrrides Parameter data.
             1 Lines follow.
             0 PACKETS OF DATA FOLLOW
-  ***** HISTORY AND INTEGRAL DATA *****
+  ***** HISTORY AND INTEGRAL DATA ***** 
             0   POINTS.  Hcode, I,J,H,IEL
   ***** OUTPUT FIELD SPECIFICATION *****
             6 SPECIFICATIONS FOLLOW
@@ -273,7 +273,7 @@ C
   F      TEMPERATURE GRADIENT
             0      PASSIVE SCALARS
   ***** OBJECT SPECIFICATION *****
-       0 Surface Objects
-       0 Volume  Objects
-       0 Edge    Objects
-       0 Point   Objects
+       0 Surface Objects 
+       0 Volume  Objects 
+       0 Edge    Objects 
+       0 Point   Objects 

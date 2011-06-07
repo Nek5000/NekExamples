@@ -4,7 +4,7 @@ C     HCUBE array dimensions
 C
       parameter (ldim=2)
       parameter (lx1=9,ly1=lx1,lz1=1,lelt=280,lelv=lelt)
-      parameter (lxd=9,lyd=lxd,lzd=1)
+      parameter (lxd=14,lyd=lxd,lzd=1)
       parameter (lelx=20,lely=20,lelz=1)
 c
       parameter (lzl=3 + 2*(ldim-3))

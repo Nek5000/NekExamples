@@ -1,6 +1,6 @@
 base.rea
 2                      spatial dimension
-1                      number of fields
+-1                      number of fields
 #========================================================
 #
 # Build an E1 x E1 box for the convecting cone problem
@@ -8,7 +8,7 @@ base.rea
 #========================================================
 #
 Box
--16 -16              nelx,nely,nelz for Box)
+-4  -4               nelx,nely,nelz for Box)
 -1.0    1.0    1.0   x0 x1 ratio 
 -1.0    1.0    1.0   y0 y1 ratio 
 P  ,P  ,P  ,P  ,     bc's  (3 characters each, including blanks!)
