@@ -606,30 +606,6 @@ Run("Example cone016/GNU: Serial-error",log,value)
 log = "./intLog/cone016.err.1"
 value = [['Tmax',5.7669E-01,1e-06,2]]
 Run("Example cone016/INT: Serial-error",log,value)
-#MPI2
-log = "./mpi2Log/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone016/MPI2: Serial-error",log,value)
-
-log = "./mpi2Log/cone016.err.4"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone016/MPI2: Parallel-error",log,value)
-#PGI2
-log = "./pgi2Log/cone016.log.1"
-value = [['total solver time',0.1,14,2]]
-Run("Example cone016/PGI2: Serial-time",log,value)
-
-log = "./pgi2Log/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone016/PGI2: Serial-error",log,value)
-#GNU2
-log = "./gnu2Log/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone016/GNU2: Serial-error",log,value)
-#INT2
-log = "./int2Log/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone016/INT2: Serial-error",log,value)
 
 
 
@@ -658,30 +634,6 @@ Run("Example cone064/GNU: Serial-error",log,value)
 log = "./intLog/cone064.err.1"
 value = [['Tmax',6.4755E-01,1e-06,2]]
 Run("Example cone064/INT: Serial-error",log,value)
-#MPI2
-log = "./mpi2Log/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
-Run("Example cone064/MPI2: Serial-error",log,value)
-
-log = "./mpi2Log/cone064.err.4"
-value = [['Tmax',6.4755E-01,1e-06,2]]
-Run("Example cone064/MPI2: Parallel-error",log,value)
-#PGI2
-log = "./pgi2Log/cone064.log.1"
-value = [['total solver time',0.1,7,2]]
-Run("Example cone064/PGI2: Serial-time",log,value)
-
-log = "./pgi2Log/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
-Run("Example cone064/PGI2: Serial-error",log,value)
-#GNU2
-log = "./gnu2Log/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
-Run("Example cone064/GNU2: Serial-error",log,value)
-#INT2
-log = "./int2Log/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
-Run("Example cone064/INT2: Serial-error",log,value)
 
 
 
@@ -710,30 +662,8 @@ Run("Example cone256/GNU: Serial-error",log,value)
 log = "./intLog/cone256.err.1"
 value = [['Tmax',3.6963E-01,1e-06,2]]
 Run("Example cone256/INT: Serial-error",log,value)
-#MPI2
-log = "./mpi2Log/cone256.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone256/MPI2: Serial-error",log,value)
 
-log = "./mpi2Log/cone256.err.4"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone256/MPI2: Parallel-error",log,value)
-#PGI2
-log = "./pgi2Log/cone256.log.1"
-value = [['total solver time',0.1,14,2]]
-Run("Example cone256/PGI2: Serial-time",log,value)
 
-log = "./pgi2Log/cone256.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone256/PGI2: Serial-error",log,value)
-#GNU2
-log = "./gnu2Log/cone256.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone256/GNU2: Serial-error",log,value)
-#INT2
-log = "./int2Log/cone256.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
-Run("Example cone256/INT2: Serial-error",log,value)
 
 print("\n\neddy Example")  
 #MPI
