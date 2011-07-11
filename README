@@ -1,0 +1,80 @@
+Buildbot:
+
+***To Run Buildbot Manually On Any Platform(with at least 4 processors)****
+1)  Make sure you have a current set of the examples from the repo
+    in your nek5_svn/examples directoy. (And your nek5_svn/tests directory
+    is up to date as well)
+
+2) >> cd nek5_svn/tests
+   >> RunTests
+   >>Analysis.py
+
+The logfiles from each run will be placed in a sub-directory under 
+nek5_svn/tests.  These directories are named:  mpiLog, pgiLog,
+gnuLog, intLog, mpi2Log, pgi2Log, gnu2Log, int2Log (refering to the
+compiler and if it is a Pn-Pn or a Pn-Pn-2 test).   If this is not the 
+first time you have ran the Buildbot tests, you may want to move 
+or delete previous logfiles to prevent false positives in the Analysis.
+
+Analysis.py is the script that will actually run the analysis on the 
+tests done in RunTests.  An ' F ' is shown for tests that have failed.
+
+3) A quick way to check what tests failed is to:
+   >>Analysis.py | grep ' F ' 
+
+
+***Overview of the Buildbot Scripts***
+
+RunTests:
+RunTests is the main driver of the buildbot tests.  This script compiles
+the nek tools for three compilers (Intel, GNU, Portland)
+and calls scripts, ExTestmpi and ExTest.
+
+For Pn-Pn cases, the .map files are removed and generated from the 
+Nek5000 tool, genmap,  and all tools are re-compiled with the appropriate
+compiler for each set of runs.  Pn-Pn-2 cases are ran without removing .map files
+or rebuilding tools.  In summary, RunTests will:
+
+	-make directories to store tools and logs
+	-build tools using pgf77/pgcc compiler
+
+	-change all SIZE files to use Pn-Pn
+        -remove .map files, test in Parallel, move logs to mpiLog
+	-test with pgi compiler(serial), move logs to pgiLog
+
+	-clean and build tools using gnu compilers
+	-remove .map files, test with gnu(serial), move logs to gnuLog
+
+	-clean and build tools using intel compilers
+	-remove .map files, test with int(serial), move logs to intLog
+
+	-change all SIZE files to use Pn-Pn-2
+	-test in Parallel, move logs to mpi2Log
+	-test with pgi compiler(serial), move logs to pgi2Log
+	-test with gnu compilers(serial), move logs to gnu2Log
+	-test with intel compilers(serial), move logs with int2Log
+
+ExTestmpi:
+This is the script that RunTests calls that has the set of parallel
+tests for each example using the mpif77 compiler.
+
+ExTest:  
+This is the script RunTests calls that has the set of serial tests for
+each example. It is called three times, with three different compilers.
+
+Analysis.py	
+Python script used to analyze the results of RunTests:
+	-Tests for successful 'tools' compilation
+	-Tests Serial time elapsed for pgi complier, only
+	-Tests for Serial and Parallel error checks
+	-Tests Examples for iteration counts in pressure solver
+
+        - Typically:
+                      Analysis.py>t.t; grep ' F ' t.t
+          will redirect the output of Analysis into the file t.t and then only
+          output the failed tests to the screen.
+
+**NOTE:  When running Buildbot manually, the output of RunTests will
+be output to the screen, and thus lost if not re-directed.  However,
+even when re-directed, certain error messages are still printed to the screen
+and can be lost from the re-directed logfile.

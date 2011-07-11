@@ -191,6 +191,38 @@ tester conj_ht nekbb conj_ht tmax 1
 cd ..
 tester eddy nekbb eddy_uv err 2
 
+cp ../../trunk/tools/scripts/cpn .
+./cpn eddy_uv amg_eddy
+sed -i "s:#IFAMG=:IFAMG=:" makenek.bb
+sed -i "s:#IFAMG_DUMP=:IFAMG_DUMP=:" makenek.bb
+./makenek.bb clean     $HERE_S
+mkdir ./obj
+sleep 1
+./makenek.bb amg_eddy   $HERE_S
+./nekbb amg_eddy 
+
+cd ../../trunk/tools/amg_matlab
+cp ../../../examples/eddy/amgdmp*.dat .
+echo .5   >  input
+echo .9   >>input
+echo .5   >>input
+echo 1e-4 >>input
+echo exit >>input
+matlab -r go < input
+mv *.dat ../../../examples/eddy/
+rm input
+cd ../../../examples/eddy
+
+sed -i "s:IFAMG_DUMP=:#IFAMG_DUMP=:" makenek.bb
+./makenek.bb clean     $HERE_S
+mkdir ./obj
+sleep 1
+./makenek.bb amg_eddy   $HERE_S
+./nekbb amg_eddy 
+grep err amg_eddy.log.1 | tail -2 > amg_eddy.err.1
+grep nek5000 compiler.out | tail -1 >> amg_eddy.err.1
+
+
 cd ..
 tester ext_cyl nek1000s ext_cyl drag 2
 
