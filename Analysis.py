@@ -750,6 +750,91 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/INT2: Serial-error",log,value)
 
 
+
+print("\n\nAMG_eddy Example")  
+#MPI
+log = "./mpiLog/amg_eddy.log.1"
+value = [['gmres: ',34,3,6]]
+Run("Example AMG_eddy/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/amg_eddy.err.1"
+value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+Run("Example AMG_eddy/MPI: Serial-error",log,value)
+
+log = "./mpiLog/amg_eddy.log.4"
+value = [['gmres: ',34,3,6]]
+Run("Example AMG_eddy/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/amg_eddy.err.4"
+value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+Run("Example AMG_eddy/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/amg_eddy.log.1"
+value = [['total solver time',0.1,80,2],
+         ['gmres: ',34,3,6]]
+Run("Example AMG_eddy/PGI: Serial-time/iter",log,value)
+
+log = "./pgiLog/amg_eddy.err.1"
+value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+Run("Example AMG_eddy/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/amg_eddy.log.1"
+value = [['gmres: ',34,3,6]]
+Run("Example AMG_eddy/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/amg_eddy.err.1"
+value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+Run("Example AMG_eddy/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/amg_eddy.log.1"
+value = [['gmres: ',34,3,6]]
+Run("Example AMG_eddy/INT: Serial-iter",log,value)
+
+log = "./intLog/amg_eddy.err.1"
+value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+Run("Example AMG_eddy/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/amg_eddy.log.1"
+value = [['gmres: ',36,3,6]]
+Run("Example AMG_eddy/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/amg_eddy.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example AMG_eddy/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/amg_eddy.log.4"
+value = [['gmres: ',36,3,6]]
+Run("Example AMG_eddy/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/amg_eddy.err.4"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example AMG_eddy/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/amg_eddy.log.1"
+value = [['total solver time',0.1,120,2],
+         ['gmres: ',36,3,6]]
+Run("Example AMG_eddy/PGI2: Serial-time/iter",log,value)
+
+log = "./pgi2Log/amg_eddy.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example AMG_eddy/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/amg_eddy.log.1"
+value = [['gmres: ',36,3,6]]
+Run("Example AMG_eddy/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/amg_eddy.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example AMG_eddy/GNU2: Serial-error",log,value)
+#INT2
+log = "./int2Log/amg_eddy.log.1"
+value = [['gmres: ',36,3,6]]
+Run("Example AMG_eddy/INT2: Serial-iter",log,value)
+
+log = "./int2Log/amg_eddy.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example AMG_eddy/INT2: Serial-error",log,value)
+
  
 print("\n\neddy_neknek Example")  
 #MPI
