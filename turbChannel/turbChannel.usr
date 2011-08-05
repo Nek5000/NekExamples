@@ -228,7 +228,6 @@ c     Compute perturbation energy
         call avg2(wrms,vz   ,alpha,beta,n,'wrms',ifverbose)
         call avg3(uvms,vx,vy,alpha,beta,n,'uvmm',ifverbose)
 
-        call avg1(ffx_avg,ffx_new,alpha,beta,1,'ffxa',ifverbose)
         dragx_avg = alpha*dragx_avg + beta*0.5*(dragx(1)+dragx(2))
 
         ! averaging over statistical homogeneous directions (r-t)
@@ -251,8 +250,8 @@ c     Compute perturbation energy
       tw     = dragx_avg/A_w + 1.e-50
       u_tau  = sqrt(tw/rho)
       Re_tau = u_tau*delta/dnu
-      diff   = (tw-ffx_avg)/tw
 
+      diff   = (tw-ffx_new)/tw
       if(nid.eq.0) write(6,1) istep,time,e2,ffx_new,diff
     1              format(i6,1p4e17.9,' err2')
 
