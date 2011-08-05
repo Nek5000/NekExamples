@@ -234,7 +234,7 @@ echo .9   >>input
 echo .5   >>input
 echo 1e-4 >>input
 echo exit >>input
-matlab -r go < input
+/soft/com/packages/Matlab_2010b/bin/matlab -r go < input
 mv *.dat ../../../examples/eddy/
 rm input
 cd ../../../examples/eddy
