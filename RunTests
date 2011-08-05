@@ -6,6 +6,7 @@ sed -e "s:^F77*=\"gfortran\":F77=\"$1\":"  \
 -e "s:^CC*=\"gcc\":CC=\"$2\":"  maketools >maketools.buildbot
 chmod +x maketools.buildbot
 
+
 maketools.buildbot clean            $HERE_T
 
 cd prenek
@@ -40,21 +41,14 @@ mkdir pgiLog;  mkdir pgi2Log
 #Create variable to store source path for tools
 cd tools
 HERE_T=`pwd`
-
-##############################################################
-##############################################################
-#Test all Compilers for Pn-Pn Case
-#Builds tools with all compilers
-##############################################################
-##############################################################
-#Build tools with pgi compiler
-cd ../../trunk/tools/
-build_tools pgf77 pgcc ../../tests/pgitools.out
-
-cp ../nek/makenek ../nek/makenek.bb
-chmod +x ../nek/makenek.bb
-
 cd ../../
+
+#Prep maketools file:
+sed -i "s:BIGMEM=\"true\":BIGMEM=\"false\":" ./trunk/tools/maketools
+
+#AMG Matlab Prep:
+sed -i "/max(lanczos(sparse/d" ./trunk/tools/amg_matlab/coarse_par.m
+
 #Tweak SIZE files 
 sed -i "s:lx2=:lx2=lx1)      \!:"  */*/SIZE
 sed -i "s:lx2=:lx2=lx1)      \!:"  examples/cone/*/SIZE
@@ -80,9 +74,23 @@ cd ../../tests/test0001/
 sed "s/^.*DIVERGENCE$/  0.10000E-08/" test0001.rea > n.rea      
 mv n.rea test0001.rea
 
-cd ../../trunk/nek
- 
+#makenek.bb
+cd ../../
+cp ./trunk/nek/makenek ./trunk/nek/makenek.bb
+chmod +x ./trunk/nek/makenek.bb
+
+##############################################################
+##############################################################
+#Test all Compilers for Pn-Pn Case
+#Builds tools with all compilers
+##############################################################
+##############################################################
+#Build tools with pgi compiler
+cd ./trunk/tools/
+build_tools pgf77 pgcc ../../tests/pgitools.out
+
 #Test MPI Compiler
+cd ../nek
 rm -rf ../../examples/*/*.map
 ../../tests/ExTestmpi
 
