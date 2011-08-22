@@ -365,6 +365,10 @@ cd ..
 tester shear4 nek10s thin vorticity 1
 
 cd ..
+tester taylor nekbb taylor tq 1
+grep err taylor.log.1 |tail -1 >>taylor.err.1
+
+cd ..
 cd var_vis
 cp ../../trunk/tools/scripts/nekbb .
 cp ../../trunk/nek/makenek.bb .
@@ -386,4 +390,5 @@ tester vortex nek10s r1854a VMIN 1
 
 cd ..
 tester vortex2 nekbb v2d umin 1
+grep torq v2d.log.1 | tail -3 >>v2d.err.1
 ##############################################################
