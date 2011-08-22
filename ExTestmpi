@@ -432,6 +432,11 @@ cd ..
 tester shear4 nek10steps thin vorticity 1 
 
 cd ..
+tester taylor neklmpi taylor tq 1
+grep err taylor.log.1 |tail -1 >>taylor.log.1
+grep err taylor.log.4 |tail -1 >>taylor.log.4
+
+cd ..
 cd ./var_vis
 cp ../../trunk/tools/scripts/neklmpi .
 cp ../../trunk/nek/makenek.bb .
@@ -455,4 +460,6 @@ tester vortex nek10steps r1854a VMIN 1
 
 cd ..
 tester vortex2 neklmpi v2d umin 1
+grep torq v2d.log.1 | tail -3 >>v2d.err.1
+grep torq v2d.log.4 | tail -3 >>v2d.err.4
 ##############################################################

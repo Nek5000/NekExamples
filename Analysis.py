@@ -795,7 +795,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example AMG_eddy/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/amg_eddy.log.1"
-value = [['gmres: ',36,3,6]]
+value = [['gmres: ',35,3,6]]
 Run("Example AMG_eddy/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/amg_eddy.err.1"
@@ -803,7 +803,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/amg_eddy.log.4"
-value = [['gmres: ',36,3,6]]
+value = [['gmres: ',35,3,6]]
 Run("Example AMG_eddy/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/amg_eddy.err.4"
@@ -812,7 +812,7 @@ Run("Example AMG_eddy/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/amg_eddy.log.1"
 value = [['total solver time',0.1,120,2],
-         ['gmres: ',36,3,6]]
+         ['gmres: ',35,3,6]]
 Run("Example AMG_eddy/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/amg_eddy.err.1"
@@ -820,7 +820,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/amg_eddy.log.1"
-value = [['gmres: ',36,3,6]]
+value = [['gmres: ',35,3,6]]
 Run("Example AMG_eddy/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/amg_eddy.err.1"
@@ -828,7 +828,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/amg_eddy.log.1"
-value = [['gmres: ',36,3,6]]
+value = [['gmres: ',35,3,6]]
 Run("Example AMG_eddy/INT2: Serial-iter",log,value)
 
 log = "./int2Log/amg_eddy.err.1"
@@ -2172,6 +2172,102 @@ Run("Example shear4/thin/INT2: Serial-error",log,value)
 
 
 
+print("\n\nTaylor Example")  
+#MPI
+log = "./mpiLog/taylor.log.1"
+value = [['gmres: ',20,3,6]]
+Run("Example taylor/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/taylor.err.1"
+value = [['tq',4.13037E-06,1e-06,5],
+         ['err',2.973648E-09,1e-06,2]]
+Run("Example taylor/MPI: Serial-error",log,value)
+
+log = "./mpiLog/taylor.log.4"
+value = [['gmres: ',20,3,6]]
+Run("Example taylor/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/taylor.err.4"
+value = [['tq',4.13037E-06,1e-06,5],
+         ['err',2.973648E-09,1e-06,2]]
+Run("Example taylor/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/taylor.log.1"
+value = [['total solver time',0.1,30,2],
+         ['gmres: ',20,3,6]]
+Run("Example taylor/PGI: Serial-time/iter",log,value)
+
+log = "./pgiLog/taylor.err.1"
+value = [['tq',4.13037E-06,1e-06,5],
+         ['err',2.973648E-09,1e-06,2]]
+Run("Example taylor/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/taylor.log.1"
+value = [['gmres: ',20,3,6]]
+Run("Example taylor/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/taylor.err.1"
+value = [['tq',4.13037E-06,1e-06,5],
+         ['err',2.973648E-09,1e-06,2]]
+Run("Example taylor/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/taylor.log.1"
+value = [['gmres: ',20,3,6]]
+Run("Example taylor/INT: Serial-iter",log,value)
+
+log = "./intLog/taylor.err.1"
+value = [['tq',4.13037E-06,1e-06,5],
+         ['err',2.973648E-09,1e-06,2]]
+Run("Example taylor/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/taylor.log.1"
+value = [['gmres: ',11,3,6]]
+Run("Example taylor/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/taylor.err.1"
+value = [['tq',4.10783E-06,1e-06,5],
+         ['err',2.826284E-10,1e-06,2]]
+Run("Example taylor/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/taylor.log.4"
+value = [['gmres: ',11,3,6]]
+Run("Example taylor/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/taylor.err.4"
+value = [['tq',4.10783E-06,1e-06,5],
+         ['err',2.826284E-10,1e-06,2]]
+Run("Example taylor/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/taylor.log.1"
+value = [['total solver time',0.1,40,2],
+         ['gmres: ',11,3,6]]
+Run("Example taylor/PGI2: Serial-time/iter",log,value)
+
+log = "./pgi2Log/taylor.err.1"
+value = [['tq',4.10783E-06,1e-06,5],
+         ['err',2.826284E-10,1e-06,2]]
+Run("Example taylor/PGI2: Serial-error",log,value)
+#GNU
+log = "./gnu2Log/taylor.log.1"
+value = [['gmres: ',11,3,6]]
+Run("Example taylor/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/taylor.err.1"
+value = [['tq',4.10783E-06,1e-06,5],
+         ['err',2.826284E-10,1e-06,2]]
+Run("Example taylor/GNU2: Serial-error",log,value)
+#INT
+log = "./int2Log/taylor.log.1"
+value = [['gmres: ',11,3,6]]
+Run("Example taylor/INT2: Serial-iter",log,value)
+
+log = "./int2Log/taylor.err.1"
+value = [['tq',4.10783E-06,1e-06,5],
+         ['err',2.826284E-10,1e-06,2]]
+Run("Example taylor/INT2: Serial-error",log,value)
+
+
+
 print("\n\nturbChannel Example")  
 #MPI
 log = "./mpiLog/turbChannel.log.1"
@@ -2357,7 +2453,8 @@ value = [['PRES:  ',97,3,4]]
 Run("Example vortex2/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/v2d.err.1"
-value = [['umin',-1.453402E-03,1e-06,2]]
+value = [['umin',-1.453402E-03,1e-06,2]
+         ['torqx',-1.7399905E-07,1e-06,2]]
 Run("Example vortex2/MPI: Serial-error",log,value)
 
 log = "./mpiLog/v2d.log.4"
@@ -2365,7 +2462,8 @@ value = [['PRES:  ',97,3,4]]
 Run("Example vortex2/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/v2d.err.4"
-value = [['umin',-1.453402E-03,1e-06,2]]
+value = [['umin',-1.453402E-03,1e-06,2],
+         ['torqx',-1.7399905E-07,1e-06,2]]
 Run("Example vortex2/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/v2d.log.1"
@@ -2374,7 +2472,8 @@ value = [['total solver time',0.1,80,2],
 Run("Example vortex2/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/v2d.err.1"
-value = [['umin',-1.453402E-03,1e-06,2]]
+value = [['umin',-1.453402E-03,1e-06,2],
+         ['torqx',-1.7399905E-07,1e-06,2]]
 Run("Example vortex2/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/v2d.log.1"
@@ -2382,7 +2481,8 @@ value = [['PRES: ',97,3,4]]
 Run("Example vortex2/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/v2d.err.1"
-value = [['umin',-1.453402E-03,1e-06,2]]
+value = [['umin',-1.453402E-03,1e-06,2],
+         ['torqx',-1.7399905E-07,1e-06,2]]
 Run("Example vortex2/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/v2d.log.1"
@@ -2390,7 +2490,8 @@ value = [['PRES: ',97,3,4]]
 Run("Example vortex2/INT: Serial-iter",log,value)
 
 log = "./intLog/v2d.err.1"
-value = [['umin',-1.453402E-03,1e-06,2]]
+value = [['umin',-1.453402E-03,1e-06,2],
+         ['torqx',-1.7399905E-07,1e-06,2]]
 Run("Example vortex2/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/v2d.log.1"
@@ -2398,7 +2499,8 @@ value = [['U-Press ',1,3,5]]
 Run("Example vortex2/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/v2d.err.1"
-value = [['umin',-2.448980E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2],
+         ['torqx',-1.6276138E-07,1e-06,2]]
 Run("Example vortex2/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/v2d.log.4"
@@ -2406,7 +2508,8 @@ value = [['U-Press ',1,3,5]]
 Run("Example vortex2/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/v2d.err.4"
-value = [['umin',-2.448980E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2],
+         ['torqx',-1.6276138E-07,1e-06,2]]
 Run("Example vortex2/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/v2d.log.1"
@@ -2415,7 +2518,8 @@ value = [['total solver time',0.1,80,2],
 Run("Example vortex2/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/v2d.err.1"
-value = [['umin',-2.448980E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2],
+         ['torqx',-1.6276138E-07,1e-06,2]]
 Run("Example vortex2/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/v2d.log.1"
@@ -2423,7 +2527,8 @@ value = [['U-Press ',1,3,5]]
 Run("Example vortex2/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/v2d.err.1"
-value = [['umin',-2.448980E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2],
+         ['torqx',-1.6276138E-07,1e-06,2]]
 Run("Example vortex2/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/v2d.log.1"
@@ -2431,7 +2536,8 @@ value = [['U-Press ',1,3,5]]
 Run("Example vortex2/INT2: Serial-iter",log,value)
 
 log = "./int2Log/v2d.err.1"
-value = [['umin',-2.448980E-03,1e-06,2]]
+value = [['umin',-2.448980E-03,1e-06,2],
+         ['torqx',-1.6276138E-07,1e-06,2]]
 Run("Example vortex2/INT2: Serial-error",log,value)
 ###############################################################################
 ###############################################################################
