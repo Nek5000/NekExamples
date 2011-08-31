@@ -2453,7 +2453,7 @@ value = [['PRES:  ',97,3,4]]
 Run("Example vortex2/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/v2d.err.1"
-value = [['umin',-1.453402E-03,1e-06,2]
+value = [['umin',-1.453402E-03,1e-06,2],
          ['torqx',-1.7399905E-07,1e-06,2]]
 Run("Example vortex2/MPI: Serial-error",log,value)
 
