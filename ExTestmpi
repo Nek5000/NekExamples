@@ -433,8 +433,8 @@ tester shear4 nek10steps thin vorticity 1
 
 cd ..
 tester taylor neklmpi taylor tq 1
-grep err taylor.log.1 |tail -1 >>taylor.log.1
-grep err taylor.log.4 |tail -1 >>taylor.log.4
+grep err taylor.log.1 |tail -1 >>taylor.err.1
+grep err taylor.log.4 |tail -1 >>taylor.err.4
 
 cd ..
 cd ./var_vis
