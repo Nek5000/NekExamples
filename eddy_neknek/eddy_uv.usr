@@ -166,6 +166,7 @@ c-----------------------------------------------------------------------
       subroutine userchk
       include 'SIZE'  
       include 'TOTAL' 
+      include 'NEKNEK'
 c
       common /exacu/ ue(lx1,ly1,lz1,lelt),ve(lx1,ly1,lz1,lelt)
       common /exacd/ ud(lx1,ly1,lz1,lelt),vd(lx1,ly1,lz1,lelt)
@@ -191,10 +192,30 @@ c
       udx = glamax(ud,n)
       vdx = glamax(vd,n)
 
+c    Global error calculation
+      if (IFNEKNEK) then 
+      call setintercomm(nekcommtrue,nptrue)    ! nekcomm=iglobalcomml 
+      umx_gl = glamax(vx,n)
+      vmx_gl = glamax(vy,n)
+      uex_gl = glamax(ue,n)
+      vex_gl = glamax(ve,n)
+      udx_gl = glamax(ud,n)
+      vdx_gl = glamax(vd,n)
+
+      call unsetintercomm(nekcommtrue,nptrue)  ! nekcomm=nekcomm_original
+      end if  
+
+
       if (nid.eq.0) then
           write(6,11) istep,time,udx,umx,uex,u0,'  X err', session
           write(6,11) istep,time,vdx,vmx,vex,v0,'  Y err', session
-   11     format(i5,1p5e14.6,a7,2x,a10)
+      end if
+      if (nid_global.eq.0) then	  
+          write(6,11) istep,time,udx_gl,umx_gl,uex_gl,u0,'  X err',
+     & 'global'
+          write(6,11) istep,time,vdx_gl,vmx_gl,vex_gl,v0,'  Y err',
+     & 'global'
+   11     format(i5,1p5e14.6,a7,2x,a7)
       endif
 
 
@@ -277,15 +298,17 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKNEK'
     
-c     Ngeom - parameter controlling the number of iterations,
-c     set to Ngeom=2 by default (no iterations) 
+c     ngeom - parameter controlling the number of iterations,
+c     set to ngeom=2 by default (no iterations) 
 c     One could change the number of iterations as
 c     ngeom = 3
 
-c     Ninter - parameter controlling the order of interface extrapolation for neknek,
-c     set to NINTER=1 by default
+c     ninter - parameter controlling the order of interface extrapolation for neknek,
+c     set to ninter=1 by default
 c     One could change it as
-c     Ninter = 2
+c     ninter = 2
+c     Caution: if ninter greater than 1 is chosen, ngeom greater than 2 should be used for stability
+
 
 c     Set number of fields to interpolate
 c     nfld = 3 - u,v,w velocitites  
