@@ -272,10 +272,10 @@ sleep 1
 ./makenek.bb eddy_uv   $HERE_S
 ./neknek inside outside 1 1
 cp inside.log eddy_neknek.log.2
-grep err inside.log | tail -6 > eddy_neknek.err.2
+grep global inside.log | tail -2 > eddy_neknek.err.2
 ./neknek inside outside 2 2
 cp inside.log eddy_neknek.log.4
-grep err inside.log | tail -6 > eddy_neknek.err.4
+grep global inside.log | tail -2 > eddy_neknek.err.4
 
 
 cd ..
