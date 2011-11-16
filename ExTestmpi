@@ -80,7 +80,7 @@ EOF
 mkdir ./obj
 sleep 1
 ./makenek.bb ray_9            $HERE_S
-./neklmpi ray_9 1
+./nek1000steps ray_9 1
 grep nek5000 compiler.out | tail -1 > ray_9.err.1
 
 ../../tests/tools/genmap << EOF

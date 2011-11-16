@@ -76,7 +76,7 @@ EOF
 mkdir ./obj
 sleep 1
 ./makenek.bb ray_9            $HERE_S
-./nekbb ray_9 
+./nek1000s ray_9 
 grep nek5000 compiler.out | tail -1 > ray_9.err.1
 
 if  grep -q "lx2=lx1-2" SIZE 
