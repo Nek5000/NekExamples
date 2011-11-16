@@ -839,23 +839,23 @@ Run("Example AMG_eddy/INT2: Serial-error",log,value)
 print("\n\neddy_neknek Example")  
 #MPI
 log = "./mpiLog/eddy_neknek.err.2"
-value = [['X err  global' ,4.595605E-04,1e-06,7],
-         ['Y err  global' ,6.887475E-04,1e-06,7]]
+value = [['X err   global' ,4.595605E-04,1e-06,7],
+         ['Y err   global' ,6.887475E-04,1e-06,7]]
 Run("Example eddy_neknek/MPI: 2--error",log,value)
 
 log = "./mpiLog/eddy_neknek.err.4"
-value = [['X err  global' ,4.595605E-04,1e-06,7],
-         ['Y err  global' ,6.887475E-04,1e-06,7]]
+value = [['X err   global' ,4.595605E-04,1e-06,7],
+         ['Y err   global' ,6.887475E-04,1e-06,7]]
 Run("Example eddy_neknek/MPI: 4--error",log,value)
 #MPI2
 log = "./mpi2Log/eddy_neknek.err.2"
-value = [['X err  global' ,3.925388E-03,1e-06,7],
-         ['Y err  global',6.299443E-04,1e-06,7]]
+value = [['X err   global' ,3.925388E-03,1e-06,7],
+         ['Y err   global',6.299443E-03,1e-06,7]]
 Run("Example eddy_neknek/MPI2: 2--error",log,value)
 
 log = "./mpi2Log/eddy_neknek.err.4"
-value = [['X err  global' ,3.925388E-03,1e-06,7],
-         ['Y err  global',6.299443E-04,1e-06,7]]
+value = [['X err   global' ,3.925388E-03,1e-06,7],
+         ['Y err   global',6.299443E-03,1e-06,7]]
 Run("Example eddy_neknek/MPI2: 4--error",log,value)
 
 
