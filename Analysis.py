@@ -949,23 +949,23 @@ Run("Example ext_cyl/INT2: Serial-error",log,value)
 print("\n\nfs_2-st1 Example")  
 #MPI 
 log = "./mpiLog/st1.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st1/MPI: Serial",log,value)
 
 log = "./mpiLog/st1.log.4"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st1/MPI: Parallel",log,value)
 #PGI
 log = "./pgiLog/st1.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st1/PGI: Serial",log,value)
 #GNU
 log = "./gnuLog/st1.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st1/GNU: Serial",log,value)
 #INT
 log = "./intLog/st1.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st1/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/st1.log.1"
@@ -1013,23 +1013,23 @@ Run("Example st1/INT2: Serial-error",log,value)
 print("\n\nfs_2-st2 Example")  
 #MPI 
 log = "./mpiLog/st2.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st2/MPI: Serial",log,value)
 
 log = "./mpiLog/st2.log.4"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st2/MPI: Parallel",log,value)
 #PGI
 log = "./pgiLog/st2.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st2/PGI: Serial",log,value)
 #GNU
 log = "./gnuLog/st2.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st2/GNU: Serial",log,value)
 #INT
 log = "./intLog/st2.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example st2/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/st2.log.1"
@@ -1077,23 +1077,23 @@ Run("Example st2/INT2: Serial-error",log,value)
 print("\n\nfs_2-std_wv Example")  
 #MPI 
 log = "./mpiLog/std_wv.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example std_wv/MPI: Serial",log,value)
 
 log = "./mpiLog/std_wv.log.4"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example std_wv/MPI: Parallel",log,value)
 #PGI
 log = "./pgiLog/std_wv.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example std_wv/PGI: Serial",log,value)
 #GNU
 log = "./gnuLog/std_wv.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example std_wv/GNU: Serial",log,value)
 #INT
 log = "./intLog/std_wv.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example std_wv/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/std_wv.log.1"
@@ -1142,23 +1142,23 @@ Run("Example std_wv/INT2: Serial-error",log,value)
 print("\n\nfs_hydro Example")  
 #MPI
 log = "./mpiLog/fs_hydro.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example fs_hydro/MPI: Serial",log,value)
 
 log = "./mpiLog/fs_hydro.log.4"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example fs_hydro/MPI: Parallel",log,value)
 #PGI
 log = "./pgiLog/fs_hydro.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example fs_hydro/PGI: Serial",log,value)
 #GNU
 log = "./gnuLog/fs_hydro.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example fs_hydro/GNU: Serial",log,value)
 #INT
 log = "./intLog/fs_hydro.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example fs_hydro/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/fs_hydro.log.1"
@@ -1649,23 +1649,23 @@ Run("Example os7000/int2: Serial-error",log,value)
 print("\n\nperis Example")  
 #MPI
 log = "./mpiLog/peris.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example peris/MPI: Serial",log,value)
 
 log = "./mpiLog/peris.log.4"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example peris/MPI: Parallel",log,value)
 #PGI
 log = "./pgiLog/peris.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example peris/PGI: Serial",log,value)
 #GNU
 log = "./gnuLog/peris.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example peris/GNU: Serial",log,value)
 #INT
 log = "./intLog/peris.log.1"
-value = "ABORT: Moving boundary"
+value = "ABORT: Stress formulation "
 FindPhrase("Example peris/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/peris.log.1"
