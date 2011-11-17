@@ -51,6 +51,7 @@ grep nek5000 compiler.out | tail -1 > axi.err.1
 cd ..
 cd ./benard
 cp ../../trunk/tools/scripts/nekbb .
+cp ../../trunk/tools/scripts/nek1000s .
 cp ../../trunk/nek/makenek.bb .
 ../../tests/tools/genmap << EOF
 ray_9
