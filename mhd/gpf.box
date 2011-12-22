@@ -1,6 +1,6 @@
 gpf.rea
 3                    (spatial dimensions: <0 for .re2)
-3                    (number of fields)	: v,T,B
+2.1                   (number of fields)	: v,T,B
 #
 #    Circular Polarized Flow of Galloway & Proctor (Dynamo)
 #

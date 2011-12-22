@@ -123,7 +123,7 @@
   F     IFMODEL
   F     IFKEPS
   F     IFMVBD
-  F     IFCHAR
+  T     IFCHAR
    5.00000       5.00000      -2.75000      -2.75000     XFAC,YFAC,XZERO,YZERO
  **MESH DATA** 6 lines are X,Y,Z;X,Y,Z. Columns corners 1-4;5-8
        400         3       400           NEL,NDIM,NELV
