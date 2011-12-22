@@ -54,38 +54,73 @@ C Set user forcing function for scalars
       end
 
 C=======================================================================
-
       subroutine userchk
 
-      include 'SIZE'
-      include 'TOTAL'
+#ifdef MOAB
 
-      real tag(lx1,ly1,lz1,lelt)
-      character*3 cbv
+#define IMESH_ASSERT \
+      if (ierr.ne.0) call imesh_err(ierr,imeshh,'pipe.f ',__LINE__)
+#ifdef PTRSIZE8
+#define IMESH_HANDLE integer*8
+#else
+#define IMESH_HANDLE integer*4
+#endif
 
-      n = nx1*ny1*nz1
+#include "NEKMOAB"
+      include 'TSTEP'
+      include 'SOLN'
+      include 'GEOM'
 
-      return
+      integer iten, ione, ierr
+      CHARACTER*10 NAME
+      CHARACTER*132 options
+      CHARACTER*1   NAM1(10)
+      EQUIVALENCE  (NAME,NAM1)
+      CHARACTER*1  NUMRL(0:9)
+      DATA NUMRL          /'0','1','2','3','4','5','6','7','8','9'/
+      data options /''/
+      data name /'pipe00.h5m'/
 
-c tag boundary conditions
-      do iel  = 1,nelt
-      do ifc=1,2*ndim
-         cbv = cbc(ifc,iel,1)
-         if (cbv.eq.'W  ') then 
-            call rone(tag(1,1,1,iel),n)
-         else if (cbv.eq.'v  ') then 
-            call rone(tag(1,1,1,iel),n)
-            call cmult(tag(1,1,1,iel),2.0,n)
-         else if (cbv.eq.'O  ') then 
-            call rone(tag(1,1,1,iel),n)
-            call cmult(tag(1,1,1,iel),3.0,n)
-         endif
+c name the output files 'pipe??.h5m'      
+      iten = istep / 10
+      ione = MOD(istep,10)
+      nam1(5) = numrl(iten)
+      nam1(6) = numrl(ione)
+
+c copy data from nek
+      do l = 1, lelt
+         do k = 1, lz1
+            do j = 1, ly1
+               do i = 1, lx1
+                  tl(i,j,k,l) = t(i,j,k,l,1)
+                  xm1l(i,j,k,l) = xm1(i,j,k,l)
+                  ym1l(i,j,k,l) = ym1(i,j,k,l)
+                  zm1l(i,j,k,l) = zm1(i,j,k,l)
+                  vxl(i,j,k,l) = vx(i,j,k,l)
+                  vyl(i,j,k,l) = vy(i,j,k,l)
+                  vzl(i,j,k,l) = vz(i,j,k,l)
+               enddo
+            enddo
+         enddo
       enddo
-      enddo
+      if (lx2.eq.lx1 .and. ly2.eq.ly1 .and. lz2.eq.lz1) then
+         do l = 1, lelt
+            do k = 1, lz1
+               do j = 1, ly1
+                  do i = 1, lx1
+                     prl(i,j,k,l) = pr(i,j,k,l)
+                  enddo
+               enddo
+            enddo
+         enddo
+      endif
 
-      call outpost(tag,tag,tag,tag,tag,'tst')
-      call exitt
- 
+      if(mod(istep,iostep) .eq. 0) then
+         call iMesh_save(%VAL(imeshh),%VAL(rootset),name,options, ierr)
+         IMESH_ASSERT
+      endif
+#endif
+
       return
       end
 
