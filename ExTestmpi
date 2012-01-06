@@ -214,6 +214,16 @@ cd ../
 cd ..
 tester conj_ht neklmpi conj_ht tmax 1 
 
+cd ..
+tester cyl_restart neklmpi ca dragy 1
+cd .. 
+tester cyl_restart neklmpi cb dragy 1
+cd .. 
+tester cyl_restart neklmpi pa dragy 1
+cd .. 
+tester cyl_restart neklmpi pb dragy 1
+
+
 
 cd ..
 tester eddy neklmpi eddy_uv err 2 
@@ -345,7 +355,8 @@ cd moab
 cp ../../trunk/tools/scripts/nek10steps .
 cp ../../trunk/nek/makenek.bb .
 sed -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
-    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.0\":" makenek.bb>t.t
+    -e "s:^#USR_LFLAGS:USR_LFLAGS:"  \
+    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOABpar-current\":" makenek.bb>t.t
 mv t.t makenek.bb
 chmod +x makenek.bb
 ./makenek.bb    clean     $HERE_S
