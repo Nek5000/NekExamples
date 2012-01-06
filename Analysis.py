@@ -665,6 +665,337 @@ Run("Example cone256/INT: Serial-error",log,value)
 
 
 
+print("\n\cyl_restart Example")
+print("\n\ca:::")
+#MPI
+log = "./mpiLog/ca.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-ca/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/ca.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-ca/MPI: Serial-error",log,value)
+
+log = "./mpiLog/ca.log.4"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-ca/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/ca.err.4"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-ca/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/ca.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-ca/PGI: Serial-iter",log,value)
+
+log = "./pgiLog/ca.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-ca/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/ca.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-ca/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/ca.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-ca/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/ca.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-ca/INT: Serial-iter",log,value)
+
+log = "./intLog/ca.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-ca/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/ca.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-ca/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/ca.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-ca/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/ca.log.4"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-ca/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/ca.err.4"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-ca/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/ca.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-ca/PGI2: Serial-iter",log,value)
+
+log = "./pgi2Log/ca.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-ca/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/ca.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-ca/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/ca.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-ca/GNU2: Serial-error",log,value)
+#INT2
+log = "./int2Log/ca.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-ca/INT2: Serial-iter",log,value)
+
+log = "./int2Log/ca.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-ca/INT2: Serial-error",log,value)
+
+print("\n\cb:::")
+#MPI
+log = "./mpiLog/cb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-cb/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/cb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-cb/MPI: Serial-error",log,value)
+
+log = "./mpiLog/cb.log.4"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-cb/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/cb.err.4"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-cb/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/cb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-cb/PGI: Serial-iter",log,value)
+
+log = "./pgiLog/cb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-cb/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/cb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-cb/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/cb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-cb/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/cb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-cb/INT: Serial-iter",log,value)
+
+log = "./intLog/cb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-cb/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/cb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-cb/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/cb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-cb/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/cb.log.4"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-cb/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/cb.err.4"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-cb/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/cb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-cb/PGI2: Serial-iter",log,value)
+
+log = "./pgi2Log/cb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-cb/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/cb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-cb/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/cb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-cb/GNU2: Serial-error",log,value)
+#INT2
+log = "./int2Log/cb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-cb/INT2: Serial-iter",log,value)
+
+log = "./int2Log/cb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-cb/INT2: Serial-error",log,value)
+
+print("\n\pa:::")
+#MPI
+log = "./mpiLog/pa.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-pa/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/pa.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pa/MPI: Serial-error",log,value)
+
+log = "./mpiLog/pa.log.4"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-pa/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/pa.err.4"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pa/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/pa.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-pa/PGI: Serial-iter",log,value)
+
+log = "./pgiLog/pa.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pa/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/pa.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-pa/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/pa.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pa/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/pa.log.1"
+value = [['gmres: ',82,3,6]]
+Run("Example restart-pa/INT: Serial-iter",log,value)
+
+log = "./intLog/pa.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pa/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/pa.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-pa/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/pa.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pa/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/pa.log.4"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-pa/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/pa.err.4"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pa/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/pa.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-pa/PGI2: Serial-iter",log,value)
+
+log = "./pgi2Log/pa.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pa/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/pa.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-pa/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/pa.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pa/GNU2: Serial-error",log,value)
+#INT2
+log = "./int2Log/pa.log.1"
+value = [['gmres: ',26,3,6]]
+Run("Example restart-pa/INT2: Serial-iter",log,value)
+
+log = "./int2Log/pa.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pa/INT2: Serial-error",log,value)
+
+print("\n\pb:::")
+#MPI
+log = "./mpiLog/pb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-pb/MPI: Serial-iter",log,value)
+
+log = "./mpiLog/pb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pb/MPI: Serial-error",log,value)
+
+log = "./mpiLog/pb.log.4"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-pb/MPI: Parallel-iter",log,value)
+
+log = "./mpiLog/pb.err.4"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pb/MPI: Parallel-error",log,value)
+#PGI
+log = "./pgiLog/pb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-pb/PGI: Serial-iter",log,value)
+
+log = "./pgiLog/pb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pb/PGI: Serial-error",log,value)
+#GNU
+log = "./gnuLog/pb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-pb/GNU: Serial-iter",log,value)
+
+log = "./gnuLog/pb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pb/GNU: Serial-error",log,value)
+#INT
+log = "./intLog/pb.log.1"
+value = [['gmres: ',74,3,6]]
+Run("Example restart-pb/INT: Serial-iter",log,value)
+
+log = "./intLog/pb.err.1"
+value = [['dragy',5.37986119139E-03,1e-06,4]]
+Run("Example restart-pb/INT: Serial-error",log,value)
+#MPI2
+log = "./mpi2Log/pb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-pb/MPI2: Serial-iter",log,value)
+
+log = "./mpi2Log/pb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pb/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/pb.log.4"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-pb/MPI2: Parallel-iter",log,value)
+
+log = "./mpi2Log/pb.err.4"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pb/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/pb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-pb/PGI2: Serial-iter",log,value)
+
+log = "./pgi2Log/pb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pb/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/pb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-pb/GNU2: Serial-iter",log,value)
+
+log = "./gnu2Log/pb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pb/GNU2: Serial-error",log,value)
+#INT2
+log = "./int2Log/pb.log.1"
+value = [['gmres: ',25,3,6]]
+Run("Example restart-pb/INT2: Serial-iter",log,value)
+
+log = "./int2Log/pb.err.1"
+value = [['dragy',5.09547531705E-02,1e-06,4]]
+Run("Example restart-pb/INT2: Serial-error",log,value)
+
+
+
 print("\n\neddy Example")  
 #MPI
 log = "./mpiLog/eddy_uv.log.1"
