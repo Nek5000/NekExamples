@@ -186,7 +186,7 @@ c copy data from nek
          do k = 1, nz1
             do j = 1, ny1
                do i = 1, nx1
-                  tl(i,j,k,l) = t(i,j,k,l,1)
+                  tl(i,j,k,l,1) = t(i,j,k,l,1)
                   xm1l(i,j,k,l) = xm1(i,j,k,l)
                   ym1l(i,j,k,l) = ym1(i,j,k,l)
                   zm1l(i,j,k,l) = zm1(i,j,k,l)
