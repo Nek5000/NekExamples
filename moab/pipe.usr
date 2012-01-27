@@ -148,6 +148,9 @@ C=======================================================================
 
       subroutine usr_moab_output()
 
+      common /nekmpi/ nid_,np,nekcomm,nekgroup,nekreal
+      integer nekcomm, nekgroup, nekreal, nid_, np
+
 #define IMESH_ASSERT \
       if (ierr.ne.0) call imesh_err(ierr,imeshh,'pipe.f ',__LINE__)
 
@@ -211,8 +214,15 @@ c copy data from nek
 #endif
 
       if(mod(istep,iostep) .eq. 0) then
-c         call iMesh_save(%VAL(imeshh),%VAL(rootset),name,options, ierr)
-c         IMESH_ASSERT
+         call iMesh_save(%VAL(imeshh),%VAL(rootset),name,options, ierr)
+c no check for error, just print something and continue
+         if (ierr .ne. 0 .and. nid_ .eq. 0) then
+            write(6, "('      H5M file write failed on step ', i4)") 
+     *           istep
+         else if (nid_ .eq. 0) then
+            write(6, "('      Wrote MOAB H5M file for step ', i4)") 
+     *           istep
+         endif
       endif
 
       return
