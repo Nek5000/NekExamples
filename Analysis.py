@@ -1847,47 +1847,47 @@ Run("Example MHD-gpf_b/INT2: Serial-error",log,value)
 
 print("\n\nmoab Example")  
 #MPI
-log = "./mpiLog/pipe.log.1"
-value = [['gmres: ',35,3,6]]
-Run("Example moab/MPI: Serial-iter",log,value)
+#log = "./mpiLog/pipe.log.1"
+#value = [['gmres: ',35,3,6]]
+#Run("Example moab/MPI: Serial-iter",log,value)
 
-log = "./mpiLog/pipe.log.4"
-value = [['gmres: ',35,3,6]]
-Run("Example moab/MPI: Parallel-iter",log,value)
+#log = "./mpiLog/pipe.log.4"
+#value = [['gmres: ',35,3,6]]
+#Run("Example moab/MPI: Parallel-iter",log,value)
 #PGI
-log = "./pgiLog/pipe.log.1"
-value = [['total solver time',0.1,180,2],
-         ['gmres: ',35,3,6]]
-Run("Example moab/PGI: Serial-time/iter",log,value)
+#log = "./pgiLog/pipe.log.1"
+#value = [['total solver time',0.1,180,2],
+#         ['gmres: ',35,3,6]]
+#Run("Example moab/PGI: Serial-time/iter",log,value)
 #GNU
-log = "./gnuLog/pipe.log.1"
-value = [['gmres: ',35,3,6]]
-Run("Example moab/GNU: Serial-iter",log,value)
+#log = "./gnuLog/pipe.log.1"
+#value = [['gmres: ',35,3,6]]
+#Run("Example moab/GNU: Serial-iter",log,value)
 #INT
-log = "./intLog/pipe.log.1"
-value = [['gmres: ',35,3,6]]
-Run("Example moab/INT: Serial-iter",log,value)
+#log = "./intLog/pipe.log.1"
+#value = [['gmres: ',35,3,6]]
+#Run("Example moab/INT: Serial-iter",log,value)
 #MPI2
-log = "./mpi2Log/pipe.log.1"
-value = [['gmres: ',19,3,6]]
-Run("Example moab/MPI2: Serial-iter",log,value)
+#log = "./mpi2Log/pipe.log.1"
+#value = [['gmres: ',19,3,6]]
+#Run("Example moab/MPI2: Serial-iter",log,value)
 
-log = "./mpi2Log/pipe.log.4"
-value = [['gmres: ',19,3,6]]
-Run("Example moab/MPI2: Parallel-iter",log,value)
+#log = "./mpi2Log/pipe.log.4"
+#value = [['gmres: ',19,3,6]]
+#Run("Example moab/MPI2: Parallel-iter",log,value)
 #PGI2
-log = "./pgi2Log/pipe.log.1"
-value = [['total solver time',0.1,180,2],
-         ['gmres: ',19,3,6]]
-Run("Example moab/PGI2: Serial-time/iter",log,value)
+#log = "./pgi2Log/pipe.log.1"
+#value = [['total solver time',0.1,180,2],
+#         ['gmres: ',19,3,6]]
+#Run("Example moab/PGI2: Serial-time/iter",log,value)
 #GNU2
-log = "./gnu2Log/pipe.log.1"
-value = [['gmres: ',19,3,6]]
-Run("Example moab/GNU2: Serial-iter",log,value)
+#log = "./gnu2Log/pipe.log.1"
+#value = [['gmres: ',19,3,6]]
+#Run("Example moab/GNU2: Serial-iter",log,value)
 #INT2
-log = "./int2Log/pipe.log.1"
-value = [['gmres: ',19,3,6]]
-Run("Example moab/INT2: Serial-iter",log,value)
+#log = "./int2Log/pipe.log.1"
+#value = [['gmres: ',19,3,6]]
+#Run("Example moab/INT2: Serial-iter",log,value)
 
 
 
@@ -2000,24 +2000,24 @@ value = "ABORT: "
 FindPhrase("Example peris/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/peris.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',15,3,6]]
 Run("Example peris/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/peris.log.4"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',15,3,6]]
 Run("Example peris/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/peris.log.1"
 value = [['total solver time',0.1,13,2],
-         ['gmres: ',11,3,6]]
+         ['gmres: ',15,3,6]]
 Run("Example peris/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/peris.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',15,3,6]]
 Run("Example peris/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/peris.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',15,3,6]]
 Run("Example peris/INT2: Serial-iter",log,value)
 
 
@@ -2493,6 +2493,52 @@ log = "./int2Log/thin.err.1"
 value = [['peak vorticity',9.991556E+01,1e-06,3]]
 Run("Example shear4/thin/INT2: Serial-error",log,value)
 
+print("\n\nSolid Example")  
+#MPI
+log = "./mpiLog/solid.log.1"
+value = "ABORT: "
+FindPhrase("Example solid/MPI: Serial",log,value)
+
+log = "./mpiLog/solid.log.4"
+value = "ABORT: "
+FindPhrase("Example solid/MPI: Parallel",log,value)
+#PGI
+log = "./pgiLog/solid.log.1"
+value = "ABORT: "
+FindPhrase("Example solid/PGI: Serial",log,value)
+#GNU
+log = "./gnuLog/solid.log.1"
+value = "ABORT: "
+FindPhrase("Example solid/GNU: Serial",log,value)
+#INT
+log = "./intLog/solid.log.1"
+value = "ABORT: "
+FindPhrase("Example solid/INT: Serial",log,value)
+#MPI2
+log = "./mpi2Log/solid.err.1"
+value = [['error',7.821228E-05,1e-06,2]]
+Run("Example solid/MPI2: Serial-error",log,value)
+
+log = "./mpi2Log/solid.err.4"
+value = [['error',7.821228E-05,1e-06,2]]
+Run("Example solid/MPI2: Parallel-error",log,value)
+#PGI2
+log = "./pgi2Log/solid.log.1"
+value = [['total solver time',0,1,2]]
+Run("Example solid/PGI2: Serial-time",log,value)
+
+log = "./pgi2Log/solid.err.1"
+value = [['error',7.821228E-05,1e-06,2]]
+Run("Example solid/PGI2: Serial-error",log,value)
+#GNU2
+log = "./gnu2Log/solid.err.1"
+value = [['error',7.821228E-05,1e-06,2]]
+Run("Example solid/GNU2: Serial-error",log,value)
+#INT2
+log = "./int2Log/solid.err.1"
+value = [['error',7.821228E-05,1e-06,2]]
+Run("Example solid/INT2: Serial-error",log,value)
+
 
 
 print("\n\nTaylor Example")  
@@ -2570,7 +2616,7 @@ log = "./pgi2Log/taylor.err.1"
 value = [['tq',4.10783E-06,1e-06,5],
          ['err',2.826284E-10,1e-06,2]]
 Run("Example taylor/PGI2: Serial-error",log,value)
-#GNU
+#GNU2
 log = "./gnu2Log/taylor.log.1"
 value = [['gmres: ',11,3,6]]
 Run("Example taylor/GNU2: Serial-iter",log,value)
@@ -2579,7 +2625,7 @@ log = "./gnu2Log/taylor.err.1"
 value = [['tq',4.10783E-06,1e-06,5],
          ['err',2.826284E-10,1e-06,2]]
 Run("Example taylor/GNU2: Serial-error",log,value)
-#INT
+#INT2
 log = "./int2Log/taylor.log.1"
 value = [['gmres: ',11,3,6]]
 Run("Example taylor/INT2: Serial-iter",log,value)
