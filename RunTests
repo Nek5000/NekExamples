@@ -50,12 +50,12 @@ sed -i "s:BIGMEM=\"true\":BIGMEM=\"false\":" ./trunk/tools/maketools
 sed -i "/max(lanczos(sparse/d" ./trunk/tools/amg_matlab/coarse_par.m
 
 #Tweak SIZE files 
-sed -i "s:lx2=:lx2=lx1)      \!:"  */*/SIZE
-sed -i "s:lx2=:lx2=lx1)      \!:"  examples/cone/*/SIZE
-sed -i "s:ly2=:ly2=ly1)      \!:"  */*/SIZE
-sed -i "s:ly2=:ly2=ly1)      \!:"  examples/cone/*/SIZE
-sed -i "s:lz2=:lz2=lz1)      \!:"  */*/SIZE
-sed -i "s:lz2=:lz2=lz1)      \!:"  examples/cone/*/SIZE
+sed -i "s:lx2=.*:lx2=lx1):"  */*/SIZE
+sed -i "s:lx2=.*:lx2=lx1):"  examples/cone/*/SIZE
+sed -i "s:ly2=.*:ly2=ly1):"  */*/SIZE
+sed -i "s:ly2=.*:ly2=ly1):"  examples/cone/*/SIZE
+sed -i "s:lz2=.*:lz2=lz1):"  */*/SIZE
+sed -i "s:lz2=.*:lz2=lz1):"  examples/cone/*/SIZE
 
 sed -i "s:(lx1=4,ly1=lx1,lz1=lx1,lelt=1500,lelv=lelt):(lx1=4,ly1=lx1,lz1=lx1,lelt=6000,lelv=lelt):" examples/moab/SIZE
 sed -i "s:(lx1=10,ly1=lx1,lz1=1,lelt=80,lelv=lelt):(lx1=8,ly1=lx1,lz1=1,lelt=80,lelv=lelt):" examples/vortex2/SIZE
@@ -94,7 +94,7 @@ build_tools pgf77 pgcc ../../tests/pgitools.out
 #Tweak MOAB makenek
 cd ../../examples/moab
 cp ../../trunk/nek/makenek.bb .
-sed -i "s:^#USR_LFLAGS$:USR_LFLAGS=\"-pgcpplibs\":" makenek.bb
+sed -i "s:^#USR_LFLAGS.*:USR_LFLAGS=\"-pgcpplibs\":" makenek.bb
 cd ../../trunk/nek
 
 rm -rf ../../examples/*/*.map
@@ -108,7 +108,9 @@ mv ../../tests/test0001/*log.*  ../../tests/mpiLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-sed -i "s:^MOAB_DIR$:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
+cp makenek.bb makenek
+submake pgf77 pgcc
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
 cd ../../trunk/nek
 
 submake pgf77 pgcc
@@ -119,8 +121,10 @@ moveLog ../../tests/pgiLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-sed -i "s:^MOAB_DIR$:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
-sed -i "s:^USR_LFLAGS$:USR_LFLAGS=\"-lmpi_cxx -lstdc++\":" makenek.bb
+cp makenek.bb makenek
+submake gfortran gcc
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
+sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-lmpi_cxx -lstdc++\":" makenek.bb
 cd ../../trunk/nek
 
 cd ../tools/
@@ -139,7 +143,9 @@ moveLog     ../../tests/gnuLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-sed -i "s:^USR_LFLAGS$:USR_LFLAGS=\"-cxxlib\":" makenek.bb
+cp makenek.bb makenek
+submake ifort icc
+sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-cxxlib\"$:" makenek.bb
 cd ../../trunk/nek
 
 cd ../tools/
@@ -160,17 +166,17 @@ moveLog     ../../tests/intLog
 cp makenek makenek.bb
 
 cd ../../
-sed -i "s:lx2=$:lx2=lx1-2)      \!:"  */*/SIZE
-sed -i "s:lx2=$:lx2=lx1-2)      \!:"  examples/cone/*/SIZE
-sed -i "s:ly2=$:ly2=ly1-2)      \!:"  */*/SIZE
-sed -i "s:ly2=$:ly2=ly1-2)      \!:"  examples/cone/*/SIZE
+sed -i "s:lx2=.*:lx2=lx1-2):"  */*/SIZE
+sed -i "s:lx2=.*:lx2=lx1-2):"  examples/cone/*/SIZE
+sed -i "s:ly2=.*:ly2=ly1-2):"  */*/SIZE
+sed -i "s:ly2=.*:ly2=ly1-2):"  examples/cone/*/SIZE
 
-sed -i "s:lz2=$:lz2=lz1-2)      \!:"  examples/vortex/SIZE
-sed -i "s:lz2=$:lz2=lz1-2)      \!:"  examples/mhd/SIZE
-sed -i "s:lz2=$:lz2=lz1-2)      \!:"  examples/moab/SIZE
-sed -i "s:lz2=$:lz2=lz1-2)      \!:"  examples/peris/SIZE
-sed -i "s:lz2=$:lz2=lz1-2)      \!:"  examples/pipe/SIZE
-sed -i "s:lz2=$:lz2=lz1-2)      \!:"  examples/turbChannel/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/vortex/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/mhd/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/moab/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/peris/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/pipe/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/turbChannel/SIZE
 cd ./trunk/nek
 
 ####Test MPI Compiler####
@@ -178,7 +184,7 @@ cd ./trunk/nek
 #Tweak MOAB makenek
 cd ../../examples/moab
 cp ../../trunk/nek/makenek.bb .
-sed -i "s:^#USR_LFLAGS$:USR_LFLAGS=\"-pgcpplibs\":" makenek.bb
+sed -i "s:^#USR_LFLAGS.*:USR_LFLAGS=\"-pgcpplibs\":" makenek.bb
 cd ../../trunk/nek
 
 ../../tests/ExTestmpi
@@ -189,7 +195,9 @@ mv ../../tests/test0001/*log.* ../../tests/mpi2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-sed -i "s:^MOAB_DIR$:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
+cp makenek.bb makenek
+submake pgf77 pgcc
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
 cd ../../trunk/nek
 
 submake pgf77 pgcc
@@ -200,8 +208,10 @@ moveLog     ../../tests/pgi2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-sed -i "s:^MOAB_DIR$:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
-sed -i "s:^USR_LFLAGS$:USR_LFLAGS=\"-lmpi_cxx -lstdc++\":" makenek.bb
+cp makenek.bb makenek
+submake gfortran gcc
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
+sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-lmpi_cxx -lstdc++\":" makenek.bb
 cd ../../trunk/nek
 
 submake gfortran gcc
@@ -212,7 +222,9 @@ moveLog     ../../tests/gnu2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-sed -i "s:^USR_LFLAGS$:USR_LFLAGS=\"-cxxlib\":" makenek.bb
+cp makenek.bb makenek
+submake ifort icc
+sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-cxxlib\":" makenek.bb
 cd ../../trunk/nek
 
 submake ifort icc
