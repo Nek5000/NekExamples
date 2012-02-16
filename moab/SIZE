@@ -43,7 +43,7 @@ c
       parameter (lbx2=1,lby2=1,lbz2=1)
 
 C     LX1M=LX1 when there are moving meshes; =1 otherwise
-      integer lx1m, ly1m, lz1m, ldimt, ldimt1, ldimt3, lp, lelg
+      integer lx1m, ly1m, lz1m, ldimt, ldimt1, ldimt3
 
       parameter (lx1m=1,ly1m=1,lz1m=1)
       parameter (ldimt= 1)                       ! 3 passive scalars + T

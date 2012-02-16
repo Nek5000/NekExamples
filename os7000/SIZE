@@ -2,6 +2,8 @@ C     Dimension file to be included
 C
 C     HCUBE array dimensions
 C
+      parameter(lx0 =  13 )
+
       parameter (ldim=2)
       parameter (lx1=lx0+1,ly1=lx1,lz1=1,lelt=200,lelv=lelt)
       parameter (lxd=3*lx1/2,lyd=lxd,lzd=1)
