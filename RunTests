@@ -94,7 +94,7 @@ build_tools pgf77 pgcc ../../tests/pgitools.out
 #Tweak MOAB makenek
 cd ../../examples/moab
 cp ../../trunk/nek/makenek.bb .
-sed -i "s:^#USR_LFLAGS.*:USR_LFLAGS=\"-pgcpplibs\":" makenek.bb
+sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" makenek.bb
 cd ../../trunk/nek
 
 rm -rf ../../examples/*/*.map
@@ -124,7 +124,7 @@ cd ../../examples/moab
 cp makenek.bb makenek
 submake gfortran gcc
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
-sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-lmpi_cxx -lstdc++\":" makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
 cd ../../trunk/nek
 
 cd ../tools/
@@ -145,7 +145,7 @@ moveLog     ../../tests/gnuLog
 cd ../../examples/moab
 cp makenek.bb makenek
 submake ifort icc
-sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-cxxlib\"$:" makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
 cd ../../trunk/nek
 
 cd ../tools/
@@ -176,6 +176,7 @@ sed -i "s:lz2=.*:lz2=lz1-2):"  examples/mhd/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/moab/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/peris/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/pipe/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/solid/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/turbChannel/SIZE
 cd ./trunk/nek
 
@@ -184,7 +185,7 @@ cd ./trunk/nek
 #Tweak MOAB makenek
 cd ../../examples/moab
 cp ../../trunk/nek/makenek.bb .
-sed -i "s:^#USR_LFLAGS.*:USR_LFLAGS=\"-pgcpplibs\":" makenek.bb
+sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" makenek.bb
 cd ../../trunk/nek
 
 ../../tests/ExTestmpi
@@ -211,7 +212,7 @@ cd ../../examples/moab
 cp makenek.bb makenek
 submake gfortran gcc
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
-sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-lmpi_cxx -lstdc++\":" makenek.bb
+sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
 cd ../../trunk/nek
 
 submake gfortran gcc
@@ -224,7 +225,7 @@ moveLog     ../../tests/gnu2Log
 cd ../../examples/moab
 cp makenek.bb makenek
 submake ifort icc
-sed -i "s:^USR_LFLAGS.*:USR_LFLAGS=\"-cxxlib\":" makenek.bb
+sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
 cd ../../trunk/nek
 
 submake ifort icc
