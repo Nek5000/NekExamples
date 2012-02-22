@@ -2523,10 +2523,6 @@ log = "./mpi2Log/solid.err.4"
 value = [['error',7.821228E-05,1e-06,2]]
 Run("Example solid/MPI2: Parallel-error",log,value)
 #PGI2
-log = "./pgi2Log/solid.log.1"
-value = [['total solver time',0,1,2]]
-Run("Example solid/PGI2: Serial-time",log,value)
-
 log = "./pgi2Log/solid.err.1"
 value = [['error',7.821228E-05,1e-06,2]]
 Run("Example solid/PGI2: Serial-error",log,value)

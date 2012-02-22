@@ -353,10 +353,6 @@ sed -i "s:lfdm=1:lfdm=0:"  SIZE
 cd ..
 cd moab
 cp ../../trunk/tools/scripts/nek10steps .
-sed -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
-    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-par-mpich-pgi\":" makenek.bb>t.t
-mv t.t makenek.bb
-chmod +x makenek.bb
 ./makenek.bb    clean     $HERE_S
 mkdir ./obj
 sleep 1
