@@ -5,7 +5,7 @@ C
       integer ldim, lx1, ly1, lz1, lelt, lelv, lxd, lyd, lzd, lzl
       integer lx2, ly2, lz2, lx3, ly3, lz3, lelx, lely, lelz,lp,lelg
       parameter (ldim=3)
-      parameter (lx1=4,ly1=lx1,lz1=lx1,lelt=5976,lelv=lelt)
+      parameter (lx1=4,ly1=lx1,lz1=lx1,lelt=5496,lelv=lelt)
       parameter (lxd=6,lyd=lxd,lzd=lxd)
       parameter (lelx=1,lely=1,lelz=1)
  
@@ -17,9 +17,6 @@ C
       parameter (lx3=lx1)
       parameter (ly3=ly1)
       parameter (lz3=lz1)
-
-      parameter (lp   = 128)
-      parameter (lelg = 40000)
 
       integer lpelv, lpelt, lpert, lpx1, lpy1, lpz1
       integer lpx2, lpy2, lpz2
@@ -49,6 +46,9 @@ C     LX1M=LX1 when there are moving meshes; =1 otherwise
       parameter (ldimt= 1)                       ! 3 passive scalars + T
       parameter (ldimt1=ldimt+1)
       parameter (ldimt3=ldimt+3)
+      parameter (lp   = 128)
+      parameter (lelg = 40000)
+
 c
 c     Note:  In the new code, LELGEC should be about sqrt(LELG)
 c
