@@ -2768,7 +2768,7 @@ value = [['VMIN',-1.910312E-03,1e-05,2]]
 Run("Example vortex/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/r1854a.log.1"
-value = [['gmres: ',0,17,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example vortex/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/r1854a.err.1"
@@ -2776,7 +2776,7 @@ value = [['VMIN',-1.839120E-03,1e-06,2]]
 Run("Example vortex/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/r1854a.log.4"
-value = [['gmres: ',0,17,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example vortex/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/r1854a.err.4"
@@ -2785,7 +2785,7 @@ Run("Example vortex/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/r1854a.log.1"
 value = [['total solver time',0.1,50,2],
-         ['gmres: ',0,17,6]]
+         ['gmres: ',0,18,6]]
 Run("Example vortex/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/r1854a.err.1"
@@ -2793,7 +2793,7 @@ value = [['VMIN',-1.839120E-03,1e-06,2]]
 Run("Example vortex/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/r1854a.log.1"
-value = [['gmres: ',0,17,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example vortex/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/r1854a.err.1"
@@ -2801,7 +2801,7 @@ value = [['VMIN',-1.839120E-03,1e-06,2]]
 Run("Example vortex/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/r1854a.log.1"
-value = [['gmres: ',0,17,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example vortex/INT2: Serial-iter",log,value)
 
 log = "./int2Log/r1854a.err.1"
