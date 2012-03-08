@@ -186,66 +186,66 @@ print("\nTest0001")
 #MPI
 log = "./mpiLog/test0001.log.1"
 value = [['ANS1',5.742723E-07,1e-06,8], 
-         ['gmres: ',32,3,6]]
+         ['gmres: ',0,34,7]]
 Run("Test0001/MPI: Serial",log,value)
 
 log = "./mpiLog/test0001.log.4"
 value = [['ANS1',5.742723E-07,1e-06,8],
-         ['gmres: ',32,3,6]]
+         ['gmres: ',0,34,7]]
 Run("Test0001/MPI: Parallel-error",log,value)
 #MPI2
 log = "./mpi2Log/test0001.log.1"
 value = [['ANS1',5.742723E-07,1e-06,8],
-         ['gmres: ',12,3,6]]
+         ['gmres: ',0,15,6]]
 Run("Test0001/MPI2: Serial",log,value)
 
 log = "./mpi2Log/test0001.log.4"
 value = [['ANS1',5.742723E-07,1e-06,8],
-         ['gmres: ',12,3,6]]
+         ['gmres: ',0,15,6]]
 Run("Test0001/MPI2: Parallel-error",log,value)
 
 print("\n\naxi Example")  
 #MPI
 log = "./mpiLog/axi.log.1"
-value = [['PRES: ',73,3,4]]
+value = [['PRES: ',0,76,4]]
 Run("Example axi/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/axi.log.4"
-value = [['PRES: ',73,3,4]]
+value = [['PRES: ',0,76,4]]
 Run("Example axi/MPI: Parallel-iter",log,value)
 #PGI
 log = "./pgiLog/axi.log.1"
 value = [['total solver time',0.1,2,2],
-         ['PRES: ',73,3,4]]
+         ['PRES: ',0,76,4]]
 Run("Example axi/PGI: Serial-time/iter",log,value)
 #GNU
 log = "./gnuLog/axi.log.1"
-value = [['PRES: ',73,3,4]]
+value = [['PRES: ',0,76,4]]
 Run("Example axi/GNU: Serial-iter",log,value)
 #INT
 log = "./intLog/axi.log.1"
-value = [['PRES: ',73,3,4]]
+value = [['PRES: ',0,76,4]]
 Run("Example axi/INT: Serial-iter",log,value)
 #MPI2
 log = "./mpi2Log/axi.log.1"
-value = [['U-Press ',101,3,5]]
+value = [['U-Press ',0,104,5]]
 Run("Example axi/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/axi.log.4"
-value = [['U-Press ',101,3,5]]
+value = [['U-Press ',0,104,5]]
 Run("Example axi/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/axi.log.1"
 value = [['total solver time',0.1,4,2],
-         ['U-Press ',101,3,5]]
+         ['U-Press ',0,104,5]]
 Run("Example axi/PGI2: Serial-iter",log,value)
 #GNU2
 log = "./gnu2Log/axi.log.1"
-value = [['U-Press ',101,3,5]]
+value = [['U-Press ',0,104,5]]
 Run("Example axi/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/axi.log.1"
-value = [['U-Press ',101,3,5]]
+value = [['U-Press ',0,104,5]]
 Run("Example axi/INT2: Serial-iter",log,value)
 
 
@@ -253,44 +253,44 @@ Run("Example axi/INT2: Serial-iter",log,value)
 print("\n\nbenard-ray_9 Example")  
 #MPI
 log = "./mpiLog/ray_9.log.1"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example benard/ray_9/MPI: Serial-iter",log,value)
 #PGI
 log = "./pgiLog/ray_9.log.1"
 value = [['total solver time',0.1,30,2],
-         ['gmres: ',20,3,6]]
+         ['gmres: ',0,23,7]]
 Run("Example benard/ray_9/PGI: Serial-iter",log,value)
 #GNU
 log = "./gnuLog/ray_9.log.1"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example benard/ray_9/GNU: Serial-iter",log,value)
 #INT
 log = "./intLog/ray_9.log.1"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example benard/ray_9/INT: Serial-iter",log,value)
 #MPI2
 log = "./mpi2Log/ray_9.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_9/MPI2: Serial-iter",log,value)
 #PGI2
 log = "./pgi2Log/ray_9.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example benard/ray_9/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/ray_9.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_9/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/ray_9.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_9/INT2: Serial-iter",log,value)
 
 
 print("\n\nbenard-ray_dd Example")  
 #MPI
 log = "./mpiLog/ray_dd.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/benard.err"
@@ -299,7 +299,7 @@ Run("Example benard/ray_dd/MPI: Serial-error",log,value)
 #PGI
 log = "./pgiLog/ray_dd.log.1"
 value = [['total solver time',0.1,24,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/benard.err"
@@ -307,7 +307,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ray_dd.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/benard.err"
@@ -315,7 +315,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ray_dd.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/INT: Serial-iter",log,value)
 
 log = "./intLog/benard.err"
@@ -323,7 +323,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ray_dd.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/benard.err"
@@ -332,7 +332,7 @@ Run("Example benard/ray_dd/MPI2: Serial-error",log,value)
 #PGI2
 log = "./pgi2Log/ray_dd.log.1"
 value = [['total solver time',0.1,20,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/benard.err"
@@ -340,7 +340,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ray_dd.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/benard.err"
@@ -348,7 +348,7 @@ value = [['ray_dd.log.1',1707.760,1,7]]
 Run("Example benard/ray_dd/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/ray_dd.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dd/INT2: Serial-iter",log,value)
 
 log = "./int2Log/benard.err"
@@ -359,7 +359,7 @@ Run("Example benard/ray_dd/INT2: Serial-error",log,value)
 print("\n\nbenard-ray_dn Example")  
 #MPI
 log = "./mpiLog/ray_dn.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/benard.err"
@@ -368,7 +368,7 @@ Run("Example benard/ray_dn/MPI: Serial-error",log,value)
 #PGI
 log = "./pgiLog/ray_dn.log.1"
 value = [['total solver time',0.1,30,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/benard.err"
@@ -376,7 +376,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ray_dn.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/benard.err"
@@ -384,7 +384,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ray_dn.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/INT: Serial-iter",log,value)
 
 log = "./intLog/benard.err"
@@ -392,7 +392,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ray_dn.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/benard.err"
@@ -401,7 +401,7 @@ Run("Example benard/ray_dn/MPI2: Serial-error",log,value)
 #PGI2
 log = "./pgi2Log/ray_dn.log.1"
 value = [['total solver time',0.1,12,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/benard.err"
@@ -409,7 +409,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ray_dn.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/benard.err"
@@ -417,7 +417,7 @@ value = [['ray_dn.log.1',1100.650,1,7]]
 Run("Example benard/ray_dn/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/ray_dn.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example benard/ray_dn/INT2: Serial-iter",log,value)
 
 log = "./int2Log/benard.err"
@@ -428,7 +428,7 @@ Run("Example benard/ray_dn/INT2: Serial-error",log,value)
 print("\n\nbenard-ray_nn Example")  
 #MPI
 log = "./mpiLog/ray_nn.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/benard.err"
@@ -437,7 +437,7 @@ Run("Example benard/ray_nn/MPI: Serial-error",log,value)
 #PGI
 log = "./pgiLog/ray_nn.log.1"
 value = [['total solver time',0.1,30,2],
-         ['gmres: ',11,3,6]]
+         ['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/benard.err"
@@ -445,7 +445,7 @@ value = [['ray_nn.log.1',657.511,.1,7]]
 Run("Example benard/ray_nn/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ray_nn.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/benard.err"
@@ -453,7 +453,7 @@ value = [['ray_nn.log.1',657.511,.1,7]]
 Run("Example benard/ray_nn/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ray_nn.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/INT: Serial-iter",log,value)
 
 log = "./intLog/benard.err"
@@ -461,7 +461,7 @@ value = [['ray_nn.log.1',657.511,.1,7]]
 Run("Example benard/ray_nn/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ray_nn.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/benard.err"
@@ -470,7 +470,7 @@ Run("Example benard/ray_nn/MPI2: Serial-error",log,value)
 #PGI2
 log = "./pgi2Log/ray_nn.log.1"
 value = [['total solver time',0.1,20,2],
-         ['gmres: ',11,3,6]]
+         ['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/benard.err"
@@ -478,7 +478,7 @@ value = [['ray_nn.log.1',657.511,.1,7]]
 Run("Example benard/ray_nn/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ray_nn.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/benard.err"
@@ -486,7 +486,7 @@ value = [['ray_nn.log.1',657.511,.1,7]]
 Run("Example benard/ray_nn/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/ray_nn.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example benard/ray_nn/INT2: Serial-iter",log,value)
 
 log = "./int2Log/benard.err"
@@ -498,7 +498,7 @@ Run("Example benard/ray_nn/INT2: Serial-error",log,value)
 print("\n\nconj_ht Example")  
 #MPI
 log = "./mpiLog/conj_ht.log.1"
-value = [['gmres: ',43,3,6]]
+value = [['gmres: ',0,46,7]]
 Run("Example conj_ht/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/conj_ht.err.1"
@@ -506,7 +506,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/MPI: Serial-error",log,value)
 
 log = "./mpiLog/conj_ht.log.4"
-value = [['gmres: ',43,3,6]]
+value = [['gmres: ',0,46,7]]
 Run("Example conj_ht/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/conj_ht.err.4"
@@ -515,7 +515,7 @@ Run("Example conj_ht/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/conj_ht.log.1"
 value = [['total solver time',0.1,7,2],
-         ['gmres: ',43,3,6]]
+         ['gmres: ',0,46,7]]
 Run("Example conj_ht/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/conj_ht.err.1"
@@ -523,7 +523,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/conj_ht.log.1"
-value = [['gmres: ',43,3,6]]
+value = [['gmres: ',0,46,7]]
 Run("Example conj_ht/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/conj_ht.err.1"
@@ -531,7 +531,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/conj_ht.log.1"
-value = [['gmres: ',43,3,6]]
+value = [['gmres: ',0,46,7]]
 Run("Example conj_ht/INT: Serial-iter",log,value)
 
 log = "./intLog/conj_ht.err.1"
@@ -539,7 +539,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/conj_ht.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example conj_ht/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/conj_ht.err.1"
@@ -547,7 +547,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/conj_ht.log.4"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example conj_ht/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/conj_ht.err.4"
@@ -556,7 +556,7 @@ Run("Example conj_ht/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/conj_ht.log.1"
 value = [['total solver time',0.1,7,2],
-         ['gmres: ',23,3,6]]
+         ['gmres: ',0,26,6]]
 Run("Example conj_ht/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/conj_ht.err.1"
@@ -564,7 +564,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/conj_ht.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example conj_ht/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/conj_ht.err.1"
@@ -572,7 +572,7 @@ value = [['tmax',1.31190E+01,1e-06,2]]
 Run("Example conj_ht/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/conj_ht.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example conj_ht/INT2: Serial-iter",log,value)
 
 log = "./int2Log/conj_ht.err.1"
@@ -669,7 +669,7 @@ print("\n\cyl_restart Example")
 print("\n\ca:::")
 #MPI
 log = "./mpiLog/ca.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-ca/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/ca.err.1"
@@ -677,7 +677,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-ca/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ca.log.4"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-ca/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/ca.err.4"
@@ -685,7 +685,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-ca/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/ca.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-ca/PGI: Serial-iter",log,value)
 
 log = "./pgiLog/ca.err.1"
@@ -693,7 +693,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-ca/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ca.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-ca/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/ca.err.1"
@@ -701,7 +701,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-ca/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ca.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-ca/INT: Serial-iter",log,value)
 
 log = "./intLog/ca.err.1"
@@ -709,7 +709,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-ca/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ca.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-ca/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/ca.err.1"
@@ -717,7 +717,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-ca/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ca.log.4"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-ca/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/ca.err.4"
@@ -725,7 +725,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-ca/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/ca.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-ca/PGI2: Serial-iter",log,value)
 
 log = "./pgi2Log/ca.err.1"
@@ -733,7 +733,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-ca/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ca.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-ca/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/ca.err.1"
@@ -741,7 +741,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-ca/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/ca.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-ca/INT2: Serial-iter",log,value)
 
 log = "./int2Log/ca.err.1"
@@ -751,7 +751,7 @@ Run("Example restart-ca/INT2: Serial-error",log,value)
 print("\n\cb:::")
 #MPI
 log = "./mpiLog/cb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-cb/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/cb.err.1"
@@ -759,7 +759,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-cb/MPI: Serial-error",log,value)
 
 log = "./mpiLog/cb.log.4"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-cb/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/cb.err.4"
@@ -767,7 +767,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-cb/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/cb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-cb/PGI: Serial-iter",log,value)
 
 log = "./pgiLog/cb.err.1"
@@ -775,7 +775,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-cb/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/cb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-cb/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/cb.err.1"
@@ -783,7 +783,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-cb/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/cb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-cb/INT: Serial-iter",log,value)
 
 log = "./intLog/cb.err.1"
@@ -791,7 +791,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-cb/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/cb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-cb/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/cb.err.1"
@@ -799,7 +799,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-cb/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/cb.log.4"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-cb/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/cb.err.4"
@@ -807,7 +807,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-cb/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/cb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-cb/PGI2: Serial-iter",log,value)
 
 log = "./pgi2Log/cb.err.1"
@@ -815,7 +815,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-cb/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/cb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-cb/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/cb.err.1"
@@ -823,7 +823,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-cb/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/cb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-cb/INT2: Serial-iter",log,value)
 
 log = "./int2Log/cb.err.1"
@@ -833,7 +833,7 @@ Run("Example restart-cb/INT2: Serial-error",log,value)
 print("\n\pa:::")
 #MPI
 log = "./mpiLog/pa.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-pa/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/pa.err.1"
@@ -841,7 +841,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pa/MPI: Serial-error",log,value)
 
 log = "./mpiLog/pa.log.4"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-pa/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/pa.err.4"
@@ -849,7 +849,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pa/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/pa.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-pa/PGI: Serial-iter",log,value)
 
 log = "./pgiLog/pa.err.1"
@@ -857,7 +857,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pa/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/pa.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-pa/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/pa.err.1"
@@ -865,7 +865,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pa/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/pa.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example restart-pa/INT: Serial-iter",log,value)
 
 log = "./intLog/pa.err.1"
@@ -873,7 +873,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pa/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/pa.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-pa/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/pa.err.1"
@@ -881,7 +881,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pa/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/pa.log.4"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-pa/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/pa.err.4"
@@ -889,7 +889,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pa/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/pa.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-pa/PGI2: Serial-iter",log,value)
 
 log = "./pgi2Log/pa.err.1"
@@ -897,7 +897,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pa/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/pa.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-pa/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/pa.err.1"
@@ -905,7 +905,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pa/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/pa.log.1"
-value = [['gmres: ',26,3,6]]
+value = [['gmres: ',0,29,6]]
 Run("Example restart-pa/INT2: Serial-iter",log,value)
 
 log = "./int2Log/pa.err.1"
@@ -915,7 +915,7 @@ Run("Example restart-pa/INT2: Serial-error",log,value)
 print("\n\pb:::")
 #MPI
 log = "./mpiLog/pb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-pb/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/pb.err.1"
@@ -923,7 +923,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pb/MPI: Serial-error",log,value)
 
 log = "./mpiLog/pb.log.4"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-pb/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/pb.err.4"
@@ -931,7 +931,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pb/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/pb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-pb/PGI: Serial-iter",log,value)
 
 log = "./pgiLog/pb.err.1"
@@ -939,7 +939,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pb/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/pb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-pb/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/pb.err.1"
@@ -947,7 +947,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pb/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/pb.log.1"
-value = [['gmres: ',74,3,6]]
+value = [['gmres: ',0,77,7]]
 Run("Example restart-pb/INT: Serial-iter",log,value)
 
 log = "./intLog/pb.err.1"
@@ -955,7 +955,7 @@ value = [['dragy',5.37986119139E-03,1e-06,4]]
 Run("Example restart-pb/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/pb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-pb/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/pb.err.1"
@@ -963,7 +963,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pb/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/pb.log.4"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-pb/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/pb.err.4"
@@ -971,7 +971,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pb/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/pb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-pb/PGI2: Serial-iter",log,value)
 
 log = "./pgi2Log/pb.err.1"
@@ -979,7 +979,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pb/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/pb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-pb/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/pb.err.1"
@@ -987,7 +987,7 @@ value = [['dragy',5.09547531705E-02,1e-06,4]]
 Run("Example restart-pb/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/pb.log.1"
-value = [['gmres: ',25,3,6]]
+value = [['gmres: ',0,28,6]]
 Run("Example restart-pb/INT2: Serial-iter",log,value)
 
 log = "./int2Log/pb.err.1"
@@ -999,7 +999,7 @@ Run("Example restart-pb/INT2: Serial-error",log,value)
 print("\n\neddy Example")  
 #MPI
 log = "./mpiLog/eddy_uv.log.1"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example eddy/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/eddy_uv.err.1"
@@ -1007,7 +1007,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/MPI: Serial-error",log,value)
 
 log = "./mpiLog/eddy_uv.log.4"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example eddy/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/eddy_uv.err.4"
@@ -1016,7 +1016,7 @@ Run("Example eddy/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/eddy_uv.log.1"
 value = [['total solver time',0.1,80,2],
-         ['gmres: ',31,3,6]]
+         ['gmres: ',0,34,7]]
 Run("Example eddy/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/eddy_uv.err.1"
@@ -1024,7 +1024,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/eddy_uv.log.1"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example eddy/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/eddy_uv.err.1"
@@ -1032,7 +1032,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/eddy_uv.log.1"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example eddy/INT: Serial-iter",log,value)
 
 log = "./intLog/eddy_uv.err.1"
@@ -1040,7 +1040,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example eddy/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/eddy_uv.log.1"
-value = [['gmres: ',19,3,6]]
+value = [['gmres: ',0,22,6]]
 Run("Example eddy/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/eddy_uv.err.1"
@@ -1048,7 +1048,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/eddy_uv.log.4"
-value = [['gmres: ',19,3,6]]
+value = [['gmres: ',0,22,6]]
 Run("Example eddy/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/eddy_uv.err.4"
@@ -1057,7 +1057,7 @@ Run("Example eddy/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/eddy_uv.log.1"
 value = [['total solver time',0.1,80,2],
-         ['gmres: ',19,3,6]]
+         ['gmres: ',0,22,6]]
 Run("Example eddy/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/eddy_uv.err.1"
@@ -1065,7 +1065,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/eddy_uv.log.1"
-value = [['gmres: ',19,3,6]]
+value = [['gmres: ',0,22,6]]
 Run("Example eddy/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/eddy_uv.err.1"
@@ -1073,7 +1073,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/eddy_uv.log.1"
-value = [['gmres: ',19,3,6]]
+value = [['gmres: ',0,22,6]]
 Run("Example eddy/INT2: Serial-iter",log,value)
 
 log = "./int2Log/eddy_uv.err.1"
@@ -1085,7 +1085,7 @@ Run("Example eddy/INT2: Serial-error",log,value)
 print("\n\nAMG_eddy Example")  
 #MPI
 log = "./mpiLog/amg_eddy.log.1"
-value = [['gmres: ',34,3,6]]
+value = [['gmres: ',0,37,7]]
 Run("Example AMG_eddy/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/amg_eddy.err.1"
@@ -1093,7 +1093,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example AMG_eddy/MPI: Serial-error",log,value)
 
 log = "./mpiLog/amg_eddy.log.4"
-value = [['gmres: ',34,3,6]]
+value = [['gmres: ',0,37,7]]
 Run("Example AMG_eddy/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/amg_eddy.err.4"
@@ -1102,7 +1102,7 @@ Run("Example AMG_eddy/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/amg_eddy.log.1"
 value = [['total solver time',0.1,80,2],
-         ['gmres: ',34,3,6]]
+         ['gmres: ',0,37,7]]
 Run("Example AMG_eddy/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/amg_eddy.err.1"
@@ -1110,7 +1110,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example AMG_eddy/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/amg_eddy.log.1"
-value = [['gmres: ',34,3,6]]
+value = [['gmres: ',0,37,7]]
 Run("Example AMG_eddy/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/amg_eddy.err.1"
@@ -1118,7 +1118,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example AMG_eddy/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/amg_eddy.log.1"
-value = [['gmres: ',34,3,6]]
+value = [['gmres: ',0,37,7]]
 Run("Example AMG_eddy/INT: Serial-iter",log,value)
 
 log = "./intLog/amg_eddy.err.1"
@@ -1126,7 +1126,7 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example AMG_eddy/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/amg_eddy.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,37,6]]
 Run("Example AMG_eddy/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/amg_eddy.err.1"
@@ -1134,7 +1134,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/amg_eddy.log.4"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,37,6]]
 Run("Example AMG_eddy/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/amg_eddy.err.4"
@@ -1143,7 +1143,7 @@ Run("Example AMG_eddy/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/amg_eddy.log.1"
 value = [['total solver time',0.1,120,2],
-         ['gmres: ',35,3,6]]
+         ['gmres: ',0,37,6]]
 Run("Example AMG_eddy/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/amg_eddy.err.1"
@@ -1151,7 +1151,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/amg_eddy.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,37,6]]
 Run("Example AMG_eddy/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/amg_eddy.err.1"
@@ -1159,7 +1159,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/amg_eddy.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,37,6]]
 Run("Example AMG_eddy/INT2: Serial-iter",log,value)
 
 log = "./int2Log/amg_eddy.err.1"
@@ -1194,7 +1194,7 @@ Run("Example eddy_neknek/MPI2: 4--error",log,value)
 print("\n\next_cyl Example")  
 #MPI 
 log = "./mpiLog/ext_cyl.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example ext_cyl/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/ext_cyl.err.1"
@@ -1202,7 +1202,7 @@ value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ext_cyl.log.4"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example ext_cyl/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/ext_cyl.err.4"
@@ -1211,7 +1211,7 @@ Run("Example ext_cyl/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/ext_cyl.log.1"
 value = [['total solver time',0.1,400,2],
-         ['gmres: ',82,3,6]]
+         ['gmres: ',0,85,7]]
 Run("Example ext_cyl/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/ext_cyl.err.1"
@@ -1219,7 +1219,7 @@ value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ext_cyl.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example ext_cyl/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/ext_cyl.err.1"
@@ -1227,7 +1227,7 @@ value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ext_cyl.log.1"
-value = [['gmres: ',82,3,6]]
+value = [['gmres: ',0,85,7]]
 Run("Example ext_cyl/INT: Serial-iter",log,value)
 
 log = "./intLog/ext_cyl.err.1"
@@ -1235,7 +1235,7 @@ value = [['dragx',1.2138790E+00,1e-06,4],['dragy',1.3040301E-07,1e-06,4]]
 Run("Example ext_cyl/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ext_cyl.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example ext_cyl/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/ext_cyl.err.1"
@@ -1243,7 +1243,7 @@ value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ext_cyl.log.4"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example ext_cyl/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/ext_cyl.err.4"
@@ -1252,7 +1252,7 @@ Run("Example ext_cyl/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/ext_cyl.log.1"
 value = [['total solver time',0.1,380,2],
-         ['gmres: ',23,3,6]]
+         ['gmres: ',0,26,6]]
 Run("Example ext_cyl/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/ext_cyl.err.1"
@@ -1260,7 +1260,7 @@ value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ext_cyl.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example ext_cyl/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/ext_cyl.err.1"
@@ -1268,7 +1268,7 @@ value = [['dragx',1.2138878E+00,1e-05,4],['dragy',3.2334222E-07,1e-06,4]]
 Run("Example ext_cyl/GNU2: Serial-error",log,value)
 #INT
 log = "./int2Log/ext_cyl.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example ext_cyl/INT2: Serial-iter",log,value)
 
 log = "./int2Log/ext_cyl.err.1"
@@ -1300,7 +1300,7 @@ value = "ABORT: "
 FindPhrase("Example st1/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/st1.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st1/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/st1.err.1"
@@ -1308,7 +1308,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/st1.log.4"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st1/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/st1.err.4"
@@ -1317,7 +1317,7 @@ Run("Example st1/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/st1.log.1"
 value = [['total solver time',0.1,18.3,2],
-         ['gmres: ',35,3,6]]
+         ['gmres: ',0,38,6]]
 Run("Example st1/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/st1.err.1"
@@ -1325,7 +1325,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/st1.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st1/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/st1.err.1"
@@ -1333,7 +1333,7 @@ value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/st1.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st1/INT2: Serial-iter",log,value)
 
 log = "./int2Log/st1.err.1"
@@ -1364,7 +1364,7 @@ value = "ABORT: "
 FindPhrase("Example st2/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/st2.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st2/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/st2.err.1"
@@ -1372,7 +1372,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/st2.log.4"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st2/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/st2.err.4"
@@ -1381,7 +1381,7 @@ Run("Example st2/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/st2.log.1"
 value = [['total solver time',0.1,23,2],
-         ['gmres: ',35,3,6]]
+         ['gmres: ',0,38,6]]
 Run("Example st2/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/st2.err.1"
@@ -1389,7 +1389,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/st2.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st2/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/st2.err.1"
@@ -1397,7 +1397,7 @@ value = [['amp',6.376303E-01,1e-06,2]]
 Run("Example st2/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/st2.log.1"
-value = [['gmres: ',35,3,6]]
+value = [['gmres: ',0,38,6]]
 Run("Example st2/INT2: Serial-iter",log,value)
 
 log = "./int2Log/st2.err.1"
@@ -1428,7 +1428,7 @@ value = "ABORT: "
 FindPhrase("Example std_wv/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/std_wv.log.1"
-value = [['gmres: ',17,3,6]]
+value = [['gmres: ',0,20,6]]
 Run("Example std_wv/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/std_wv.err.1"
@@ -1436,7 +1436,7 @@ value = [['amp',1.403051E-01,1e-06,2]]
 Run("Example std_wv/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/std_wv.log.4"
-value = [['gmres: ',17,3,6]]
+value = [['gmres: ',0,20,6]]
 Run("Example std_wv/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/std_wv.err.4"
@@ -1445,7 +1445,7 @@ Run("Example std_wv/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/std_wv.log.1"
 value = [['total solver time',0.1,21,2],
-         ['gmres: ',17,3,6]]
+         ['gmres: ',0,20,6]]
 Run("Example std_wv/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/std_wv.err.1"
@@ -1453,7 +1453,7 @@ value = [['amp',1.403051E-01,1e-06,2]]
 Run("Example std_wv/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/std_wv.log.1"
-value = [['gmres: ',17,3,6]]
+value = [['gmres: ',0,20,6]]
 Run("Example std_wv/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/std_wv.err.1"
@@ -1461,7 +1461,7 @@ value = [['amp',1.403051E-01,1e-06,2]]
 Run("Example std_wv/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/std_wv.log.1"
-value = [['gmres: ',17,3,6]]
+value = [['gmres: ',0,20,6]]
 Run("Example std_wv/INT2: Serial-iter",log,value)
 
 log = "./int2Log/std_wv.err.1"
@@ -1493,7 +1493,7 @@ value = "ABORT: "
 FindPhrase("Example fs_hydro/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/fs_hydro.log.1"
-value = [['gmres: ',105,3,6]]
+value = [['gmres: ',0,108,6]]
 Run("Example fs_hydro/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/fs_hydro.err.1"
@@ -1501,7 +1501,7 @@ value = [['AMP',-6.4616452E-05,2e-03,2]]
 Run("Example fs_hydro/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/fs_hydro.log.4"
-value = [['gmres: ',105,3,6]]
+value = [['gmres: ',0,108,6]]
 Run("Example fs_hydro/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/fs_hydro.err.4"
@@ -1510,7 +1510,7 @@ Run("Example fs_hydro/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/fs_hydro.log.1"
 value = [['total solver time',0.1,200,2],
-         ['gmres: ',105,3,6]]
+         ['gmres: ',0,108,6]]
 Run("Example fs_hydro/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/fs_hydro.err.1"
@@ -1518,7 +1518,7 @@ value = [['AMP',-6.4616452E-05,2e-03,2]]
 Run("Example fs_hydro/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/fs_hydro.log.1"
-value = [['gmres: ',105,3,6]]
+value = [['gmres: ',0,108,6]]
 Run("Example fs_hydro/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/fs_hydro.err.1"
@@ -1526,7 +1526,7 @@ value = [['AMP',-6.4616452E-05,2e-03,2]]
 Run("Example fs_hydro/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/fs_hydro.log.1"
-value = [['gmres: ',105,3,6]]
+value = [['gmres: ',0,108,6]]
 Run("Example fs_hydro/INT2: Serial-iter",log,value)
 
 log = "./int2Log/fs_hydro.err.1"
@@ -1538,7 +1538,7 @@ Run("Example fs_hydro/INT2: Serial-error",log,value)
 print("\n\nkovasznay Example")  
 #MPI
 log = "./mpiLog/kov.log.1"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example kov/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/kov.err.1"
@@ -1546,7 +1546,7 @@ value = [['err',5.14316E-13,1e-06,3]]
 Run("Example kov/MPI: Serial-error",log,value)
 
 log = "./mpiLog/kov.log.4"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example kov/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/kov.err.4"
@@ -1555,7 +1555,7 @@ Run("Example kov/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/kov.log.1"
 value = [['total solver time',0.1,12,2],
-         ['gmres: ',31,3,6]]
+         ['gmres: ',0,34,7]]
 Run("Example kov/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/kov.err.1"
@@ -1563,7 +1563,7 @@ value = [['err',5.14316E-13,1e-06,3]]
 Run("Example kov/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/kov.log.1"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example kov/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/kov.err.1"
@@ -1571,7 +1571,7 @@ value = [['err',5.14316E-13,1e-06,3]]
 Run("Example kov/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/kov.log.1"
-value = [['gmres: ',31,3,6]]
+value = [['gmres: ',0,34,7]]
 Run("Example kov/INT: Serial-iter",log,value)
 
 log = "./intLog/kov.err.1"
@@ -1579,7 +1579,7 @@ value = [['err',5.14316E-13,1e-06,3]]
 Run("Example kov/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/kov.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example kov/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/kov.err.1"
@@ -1587,7 +1587,7 @@ value = [['err',5.90551E-13,1e-06,3]]
 Run("Example kov/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/kov.log.4"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example kov/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/kov.err.4"
@@ -1596,7 +1596,7 @@ Run("Example kov/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/kov.log.1"
 value = [['total solver time',0.1,17,2],
-         ['gmres: ',11,3,6]]
+         ['gmres: ',0,14,6]]
 Run("Example kov/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/kov.err.1"
@@ -1604,7 +1604,7 @@ value = [['err',5.90551E-13,1e-06,3]]
 Run("Example kov/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/kov.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example kov/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/kov.err.1"
@@ -1612,7 +1612,7 @@ value = [['err',5.90551E-13,1e-06,3]]
 Run("Example kov/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/kov.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example kov/INT2: Serial-iter",log,value)
 
 log = "./int2Log/kov.err.1"
@@ -1624,7 +1624,7 @@ Run("Example kov/INT2: Serial-error",log,value)
 print("\n\nlowMach_test Example")  
 #MPI
 log = "./mpiLog/lowMach_test.log.1"
-value = [['gmres: ',97,3,6]]
+value = [['gmres: ',0,100,7]]
 Run("Example lowMach_test/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/lowMach_test.err.1"
@@ -1632,7 +1632,7 @@ value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e
 Run("Example lowMach_test/MPI: Serial-error",log,value)
 
 log = "./mpiLog/lowMach_test.log.4"
-value = [['gmres: ',97,3,6]]
+value = [['gmres: ',0,100,7]]
 Run("Example lowMach_test/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/lowMach_test.err.4"
@@ -1641,7 +1641,7 @@ Run("Example lowMach_test/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/lowMach_test.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',97,3,6]]
+         ['gmres: ',0,100,7]]
 Run("Example lowMach_test/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/lowMach_test.err.1"
@@ -1649,7 +1649,7 @@ value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e
 Run("Example lowMach_test/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/lowMach_test.log.1"
-value = [['gmres: ',97,3,6]]
+value = [['gmres: ',0,100,7]]
 Run("Example lowMach_test/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/lowMach_test.err.1"
@@ -1657,7 +1657,7 @@ value = [['VX',2.4635E-09,1e-06,5],['T',4.5408E-12,1e-06,5],['QTL',2.6557E-06,1e
 Run("Example lowMach_test/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/lowMach_test.log.1"
-value = [['gmres: ',97,3,6]]
+value = [['gmres: ',0,100,7]]
 Run("Example lowMach_test/INT: Serial-iter",log,value)
 
 log = "./intLog/lowMach_test.err.1"
@@ -1709,7 +1709,7 @@ value = "ABORT: MHD"
 FindPhrase("Example MHD-gpf/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/gpf.log.1"
-value = [['gmres: ',12,3,6]]
+value = [['gmres: ',0,15,6]]
 Run("Example MHD-gpf/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/gpf.err.1"
@@ -1717,7 +1717,7 @@ value = [['rtavg_gr_Em', 2.56712250E-01,.02,4]]
 Run("Example MHD-gpf/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/gpf.log.4"
-value = [['gmres: ',12,3,6]]
+value = [['gmres: ',0,15,6]]
 Run("Example MHD-gpf/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/gpf.err.4"
@@ -1726,7 +1726,7 @@ Run("Example MHD-gpf/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/gpf.log.1"
 value = [['total solver time',0.1,130,2],
-         ['gmres: ',12,3,6]]
+         ['gmres: ',0,15,6]]
 Run("Example MHD-gpf/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/gpf.err.1"
@@ -1734,7 +1734,7 @@ value = [['rtavg_gr_Em', 2.56712250E-01,.02,4]]
 Run("Example MHD-gpf/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/gpf.log.1"
-value = [['gmres: ',12,3,6]]
+value = [['gmres: ',0,15,6]]
 Run("Example MHD-gpf/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/gpf.err.1"
@@ -1742,7 +1742,7 @@ value = [['rtavg_gr_Em', 2.56712250E-01,.02,4]]
 Run("Example MHD-gpf/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/gpf.log.1"
-value = [['gmres: ',12,3,6]]
+value = [['gmres: ',0,15,6]]
 Run("Example MHD-gpf/INT2: Serial-iter",log,value)
 
 log = "./int2Log/gpf.err.1"
@@ -1848,45 +1848,45 @@ Run("Example MHD-gpf_b/INT2: Serial-error",log,value)
 print("\n\nmoab Example")  
 #MPI
 #log = "./mpiLog/pipe.log.1"
-#value = [['gmres: ',35,3,6]]
+#value = [['gmres: ',0,38,6]]
 #Run("Example moab/MPI: Serial-iter",log,value)
 
 #log = "./mpiLog/pipe.log.4"
-#value = [['gmres: ',35,3,6]]
+#value = [['gmres: ',0,38,6]]
 #Run("Example moab/MPI: Parallel-iter",log,value)
 #PGI
 #log = "./pgiLog/pipe.log.1"
 #value = [['total solver time',0.1,180,2],
-#         ['gmres: ',35,3,6]]
+#         ['gmres: ',0,38,6]]
 #Run("Example moab/PGI: Serial-time/iter",log,value)
 #GNU
 #log = "./gnuLog/pipe.log.1"
-#value = [['gmres: ',35,3,6]]
+#value = [['gmres: ',0,38,6]]
 #Run("Example moab/GNU: Serial-iter",log,value)
 #INT
 #log = "./intLog/pipe.log.1"
-#value = [['gmres: ',35,3,6]]
+#value = [['gmres: ',0,38,6]]
 #Run("Example moab/INT: Serial-iter",log,value)
 #MPI2
 #log = "./mpi2Log/pipe.log.1"
-#value = [['gmres: ',19,3,6]]
+#value = [['gmres: ',0,22,6]]
 #Run("Example moab/MPI2: Serial-iter",log,value)
 
 #log = "./mpi2Log/pipe.log.4"
-#value = [['gmres: ',19,3,6]]
+#value = [['gmres: ',0,22,6]]
 #Run("Example moab/MPI2: Parallel-iter",log,value)
 #PGI2
 #log = "./pgi2Log/pipe.log.1"
 #value = [['total solver time',0.1,180,2],
-#         ['gmres: ',19,3,6]]
+#         ['gmres: ',0,22,6]]
 #Run("Example moab/PGI2: Serial-time/iter",log,value)
 #GNU2
 #log = "./gnu2Log/pipe.log.1"
-#value = [['gmres: ',19,3,6]]
+#value = [['gmres: ',0,22,6]]
 #Run("Example moab/GNU2: Serial-iter",log,value)
 #INT2
 #log = "./int2Log/pipe.log.1"
-#value = [['gmres: ',19,3,6]]
+#value = [['gmres: ',0,22,6]]
 #Run("Example moab/INT2: Serial-iter",log,value)
 
 
@@ -1894,7 +1894,7 @@ print("\n\nmoab Example")
 print("\n\nos7000 Example")  
 #MPI
 log = "./mpiLog/u3_t020_n13.log.1"
-value = [['gmres: ',206,3,6]]
+value = [['gmres: ',0,209,7]]
 Run("Example os7000/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/u3_t020_n13.err.1"
@@ -1902,7 +1902,7 @@ value = [['egn',4.74797903E-05,1e-06,2]]
 Run("Example os7000/MPI: Serial-error",log,value)
 
 log = "./mpiLog/u3_t020_n13.log.4"
-value = [['gmres: ',206,3,6]]
+value = [['gmres: ',0,209,7]]
 Run("Example os7000/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/u3_t020_n13.err.4"
@@ -1911,7 +1911,7 @@ Run("Example os7000/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/u3_t020_n13.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',206,3,6]]
+         ['gmres: ',0,209,7]]
 Run("Example os7000/PGI: Serial-time/iter",log,value)
 
 log = "./mpiLog/u3_t020_n13.err.1"
@@ -1919,7 +1919,7 @@ value = [['egn',4.74797903E-05,1e-06,2]]
 Run("Example os7000/MPI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/u3_t020_n13.log.1"
-value = [['gmres: ',206,3,6]]
+value = [['gmres: ',0,209,7]]
 Run("Example os7000/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/u3_t020_n13.err.1"
@@ -1927,7 +1927,7 @@ value = [['egn',4.74797903E-05,1e-06,2]]
 Run("Example os7000/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/u3_t020_n13.log.1"
-value = [['gmres: ',206,3,6]]
+value = [['gmres: ',0,209,7]]
 Run("Example os7000/INT: Serial-iter",log,value)
 
 log = "./intLog/u3_t020_n13.err.1"
@@ -1935,7 +1935,7 @@ value = [['egn',4.74797903E-05,1e-06,2]]
 Run("Example os7000/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/u3_t020_n13.log.1"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,6]]
 Run("Example os7000/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/u3_t020_n13.err.1"
@@ -1943,7 +1943,7 @@ value = [['egn',5.93471252E-05,1e-06,2]]
 Run("Example os7000/MPI2: Serial-error",log,value)
     
 log = "./mpi2Log/u3_t020_n13.log.4"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,6]]
 Run("Example os7000/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/u3_t020_n13.err.4"
@@ -1952,7 +1952,7 @@ Run("Example os7000/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/u3_t020_n13.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',28,3,6]]
+         ['gmres: ',0,31,6]]
 Run("Example os7000/PGI2: Serial-iter",log,value)
 
 log = "./pgi2Log/u3_t020_n13.err.1"
@@ -1960,7 +1960,7 @@ value = [['egn',5.93471252E-05,1e-06,2]]
 Run("Example os7000/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/u3_t020_n13.log.1"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,6]]
 Run("Example os7000/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/u3_t020_n13.err.1"
@@ -1968,7 +1968,7 @@ value = [['egn',5.93471252E-05,1e-06,2]]
 Run("Example os7000/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/u3_t020_n13.log.1"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,6]]
 Run("Example os7000/int2: Serial-iter",log,value)
 
 log = "./int2Log/u3_t020_n13.err.1"
@@ -2000,24 +2000,24 @@ value = "ABORT: "
 FindPhrase("Example peris/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/peris.log.1"
-value = [['gmres: ',15,3,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example peris/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/peris.log.4"
-value = [['gmres: ',15,3,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example peris/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/peris.log.1"
 value = [['total solver time',0.1,13,2],
-         ['gmres: ',15,3,6]]
+         ['gmres: ',0,18,6]]
 Run("Example peris/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/peris.log.1"
-value = [['gmres: ',15,3,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example peris/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/peris.log.1"
-value = [['gmres: ',15,3,6]]
+value = [['gmres: ',0,18,6]]
 Run("Example peris/INT2: Serial-iter",log,value)
 
 
@@ -2025,7 +2025,7 @@ Run("Example peris/INT2: Serial-iter",log,value)
 print("\n\npipe-helix Example")  
 #MPI 
 log = "./mpiLog/helix.log.1"
-value = [['gmres: ',58,3,6]]
+value = [['gmres: ',0,61,7]]
 Run("Example helix/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/helix.err.1"
@@ -2033,7 +2033,7 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/MPI: Serial-error",log,value)
 
 log = "./mpiLog/helix.log.4"
-value = [['gmres: ',58,3,6]]
+value = [['gmres: ',0,61,7]]
 Run("Example helix/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/helix.err.4"
@@ -2042,7 +2042,7 @@ Run("Example helix/MPI: Serial-error",log,value)
 #PGI
 log = "./pgiLog/helix.log.1"
 value = [['total solver time',0.1,22,2],
-         ['gmres: ',58,3,6]]
+         ['gmres: ',0,61,7]]
 Run("Example helix/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/helix.err.1"
@@ -2050,7 +2050,7 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/helix.log.1"
-value = [['gmres: ',58,3,6]]
+value = [['gmres: ',0,61,7]]
 Run("Example helix/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/helix.err.1"
@@ -2058,7 +2058,7 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/helix.log.1"
-value = [['gmres: ',58,3,6]]
+value = [['gmres: ',0,61,7]]
 Run("Example helix/INT: Serial-iter",log,value)
 
 log = "./intLog/helix.err.1"
@@ -2066,7 +2066,7 @@ value = [['err2',1.9077617E+00,1e-06,2]]
 Run("Example helix/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/helix.log.1"
-value = [['gmres: ',120,3,6]]
+value = [['gmres: ',0,123,6]]
 Run("Example helix/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/helix.err.1"
@@ -2074,7 +2074,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/helix.log.4"
-value = [['gmres: ',120,3,6]]
+value = [['gmres: ',0,123,6]]
 Run("Example helix/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/helix.err.4"
@@ -2083,7 +2083,7 @@ Run("Example helix/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/helix.log.1"
 value = [['total solver time',0.1,22,2],
-         ['gmres: ',120,3,6]]
+         ['gmres: ',0,123,6]]
 Run("Example helix/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/helix.err.1"
@@ -2091,7 +2091,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/helix.log.1"
-value = [['gmres: ',120,3,6]]
+value = [['gmres: ',0,123,6]]
 Run("Example helix/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/helix.err.1"
@@ -2099,7 +2099,7 @@ value = [['err2',1.9072258E+00,1e-06,2]]
 Run("Example helix/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/helix.log.1"
-value = [['gmres: ',120,3,6]]
+value = [['gmres: ',0,123,6]]
 Run("Example helix/INT2: Serial-iter",log,value)
 
 log = "./int2Log/helix.err.1"
@@ -2110,45 +2110,45 @@ Run("Example helix/INT2: Serial-error",log,value)
 print("\n\npipe-stenosis Example")  
 #MPI 
 log = "./mpiLog/stenosis.log.1"
-value = [['gmres: ',193,3,6]]
+value = [['gmres: ',0,196,7]]
 Run("Example stenosis/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/stenosis.log.4"
-value = [['gmres: ',193,3,6]]
+value = [['gmres: ',0,196,7]]
 Run("Example stenosis/MPI: Parallel-iter",log,value)
 #PGI
 log = "./pgiLog/stenosis.log.1"
 value = [['total solver time',0.1,80,2],
-         ['gmres: ',193,3,6]]
+         ['gmres: ',0,196,7]]
 Run("Example stenosis/PGI: Serial-time/iter",log,value)
 #GNU
 log = "./gnuLog/stenosis.log.1"
-value = [['gmres: ',193,3,6]]
+value = [['gmres: ',0,196,7]]
 Run("Example stenosis/GNU: Serial-iter",log,value)
 #INT
 log = "./intLog/stenosis.log.1"
-value = [['gmres: ',193,3,6]]
+value = [['gmres: ',0,196,7]]
 Run("Example stenosis/INT: Serial-iter",log,value)
 #MPI2
 log = "./mpi2Log/stenosis.log.1"
-value = [['gmres: ',48,3,6]]
+value = [['gmres: ',0,51,6]]
 Run("Example stenosis/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/stenosis.log.4"
-value = [['gmres: ',48,3,6]]
+value = [['gmres: ',0,51,6]]
 Run("Example stenosis/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/stenosis.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',48,3,6]]
+         ['gmres: ',0,51,6]]
 Run("Example stenosis/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/stenosis.log.1"
-value = [['gmres: ',48,3,6]]
+value = [['gmres: ',0,51,6]]
 Run("Example stenosis/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/stenosis.log.1"
-value = [['gmres: ',48,3,6]]
+value = [['gmres: ',0,51,6]]
 Run("Example stenosis/INT2: Serial-iter",log,value)
 
 
@@ -2156,7 +2156,7 @@ Run("Example stenosis/INT2: Serial-iter",log,value)
 print("\n\nrayleigh-ray1 Example")  
 #MPI
 log = "./mpiLog/ray1.log.1"
-value = [['gmres: ',29,3,6]]
+value = [['gmres: ',0,32,7]]
 Run("Example ray1/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/ray1.err.1"
@@ -2164,7 +2164,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ray1.log.4"
-value = [['gmres: ',29,3,6]]
+value = [['gmres: ',0,32,7]]
 Run("Example ray1/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/ray1.err.4"
@@ -2173,7 +2173,7 @@ Run("Example ray1/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/ray1.log.1"
 value = [['total solver time',0.1,3,2],
-         ['gmres: ',29,3,6]]
+         ['gmres: ',0,32,7]]
 Run("Example ray1/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/ray1.err.1"
@@ -2181,7 +2181,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ray1.log.1"
-value = [['gmres: ',29,3,6]]
+value = [['gmres: ',0,32,7]]
 Run("Example ray1/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/ray1.err.1"
@@ -2189,7 +2189,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ray1.log.1"
-value = [['gmres: ',29,3,6]]
+value = [['gmres: ',0,32,7]]
 Run("Example ray1/INT: Serial-iter",log,value)
 
 log = "./intLog/ray1.err.1"
@@ -2197,7 +2197,7 @@ value = [['umax',2.792052E-03,1e-05,3]]
 Run("Example ray1/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ray1.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray1/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/ray1.err.1"
@@ -2205,7 +2205,7 @@ value = [['umax',3.897862E-03,1e-05,3]]
 Run("Example ray1/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ray1.log.4"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray1/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/ray1.err.4"
@@ -2214,7 +2214,7 @@ Run("Example ray1/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/ray1.log.1"
 value = [['total solver time',0.1,3,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example ray1/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/ray1.err.1"
@@ -2222,7 +2222,7 @@ value = [['umax',3.897862E-03,1e-06,3]]
 Run("Example ray1/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ray1.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray1/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/ray1.err.1"
@@ -2230,7 +2230,7 @@ value = [['umax',3.897862E-03,1e-06,3]]
 Run("Example ray1/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/ray1.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray1/INT2: Serial-iter",log,value)
 
 log = "./int2Log/ray1.err.1"
@@ -2241,7 +2241,7 @@ Run("Example ray1/INT2: Serial-error",log,value)
 print("\n\nrayleigh-ray2 Example")  
 #MPI
 log = "./mpiLog/ray2.log.1"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,7]]
 Run("Example ray2/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/ray2.err.1"
@@ -2249,7 +2249,7 @@ value = [['umax',4.833071E-03,1e-05,3]]
 Run("Example ray2/MPI: Serial-error",log,value)
 
 log = "./mpiLog/ray2.log.4"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,7]]
 Run("Example ray2/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/ray2.err.4"
@@ -2258,7 +2258,7 @@ Run("Example ray2/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/ray2.log.1"
 value = [['total solver time',0.1,3,2],
-         ['gmres: ',28,3,6]]
+         ['gmres: ',0,31,7]]
 Run("Example ray2/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/ray2.err.1"
@@ -2266,7 +2266,7 @@ value = [['umax',4.833071E-03,1e-05,3]]
 Run("Example ray2/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/ray2.log.1"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,7]]
 Run("Example ray2/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/ray2.err.1"
@@ -2274,7 +2274,7 @@ value = [['umax',4.833071E-03,1e-05,3]]
 Run("Example ray2/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/ray2.log.1"
-value = [['gmres: ',28,3,6]]
+value = [['gmres: ',0,31,7]]
 Run("Example ray2/INT: Serial-iter",log,value)
 
 log = "./intLog/ray2.err.1"
@@ -2282,7 +2282,7 @@ value = [['umax',4.833071E-03,1e-05,3]]
 Run("Example ray2/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/ray2.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray2/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/ray2.err.1"
@@ -2290,7 +2290,7 @@ value = [['umax',6.091663E-03,1e-05,3]]
 Run("Example ray2/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/ray2.log.4"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray2/MPI2: Parellel-iter",log,value)
 
 log = "./mpi2Log/ray2.err.4"
@@ -2299,7 +2299,7 @@ Run("Example ray2/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/ray2.log.1"
 value = [['total solver time',0.1,3,2],
-         ['gmres: ',8,3,6]]
+         ['gmres: ',0,11,6]]
 Run("Example ray2/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/ray2.err.1"
@@ -2307,7 +2307,7 @@ value = [['umax',6.091663E-03,1e-06,3]]
 Run("Example ray2/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/ray2.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray2/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/ray2.err.1"
@@ -2315,7 +2315,7 @@ value = [['umax',6.091663E-03,1e-06,3]]
 Run("Example ray2/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/ray2.log.1"
-value = [['gmres: ',8,3,6]]
+value = [['gmres: ',0,11,6]]
 Run("Example ray2/INT2: Serial-iter",log,value)
 
 log = "./int2Log/ray2.err.1"
@@ -2327,7 +2327,7 @@ Run("Example ray2/INT2: Serial-error",log,value)
 print("\n\nshear4-shear4 Example")  
 #MPI 
 log = "./mpiLog/shear4.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thick/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/shear4.err.1"
@@ -2335,7 +2335,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/MPI: Serial-error",log,value)
 
 log = "./mpiLog/shear4.log.4"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thick/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/shear4.err.4"
@@ -2344,7 +2344,7 @@ Run("Example shear4/thick/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/shear4.log.1"
 value = [['total solver time',0.1,10,2],
-         ['gmres: ',23,3,6]]
+         ['gmres: ',0,26,7]]
 Run("Example shear4/thick/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/shear4.err.1"
@@ -2352,7 +2352,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/shear4.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thick/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/shear4.err.1"
@@ -2360,7 +2360,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/shear4.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thick/INT: Serial-iter",log,value)
 
 log = "./intLog/shear4.err.1"
@@ -2368,7 +2368,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/shear4.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thick/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/shear4.err.1"
@@ -2376,7 +2376,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/shear4.log.4"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thick/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/shear4.err.4"
@@ -2385,7 +2385,7 @@ Run("Example shear4/thick/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/shear4.log.1"
 value = [['total solver time',0.1,10,2],
-         ['gmres: ',14,3,6]]
+         ['gmres: ',0,17,6]]
 Run("Example shear4/thick/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/shear4.err.1"
@@ -2393,7 +2393,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/shear4.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thick/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/shear4.err.1"
@@ -2401,7 +2401,7 @@ value = [['peak vorticity',3.031328E+01,1e-06,3]]
 Run("Example shear4/thick/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/shear4.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thick/INT2: Serial-iter",log,value)
 
 log = "./int2Log/shear4.err.1"
@@ -2412,7 +2412,7 @@ Run("Example shear4/thick/INT2: Serial-error",log,value)
 print("\n\nshear4-thin Example")  
 #MPI
 log = "./mpiLog/thin.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thin/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/thin.err.1"
@@ -2420,7 +2420,7 @@ value = [['peak vorticity',9.991753E+01,1e-06,3]]
 Run("Example shear4/thin/MPI: Serial-error",log,value)
 
 log = "./mpiLog/thin.log.4"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thin/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/thin.err.4"
@@ -2429,7 +2429,7 @@ Run("Example shear4/thin/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/thin.log.1"
 value = [['total solver time',0.1,10,2],
-         ['gmres: ',23,3,6]]
+         ['gmres: ',0,26,7]]
 Run("Example shear4/thin/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/thin.err.1"
@@ -2437,7 +2437,7 @@ value = [['peak vorticity',9.991753E+01,1e-06,3]]
 Run("Example shear4/thin/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/thin.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thin/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/thin.err.1"
@@ -2445,7 +2445,7 @@ value = [['peak vorticity',9.991753E+01,1e-06,3]]
 Run("Example shear4/thin/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/thin.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,7]]
 Run("Example shear4/thin/INT: Serial-iter",log,value)
 
 log = "./intLog/thin.err.1"
@@ -2453,7 +2453,7 @@ value = [['peak vorticity',9.991753E+01,1e-06,3]]
 Run("Example shear4/thin/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/thin.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thin/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/thin.err.1"
@@ -2461,7 +2461,7 @@ value = [['peak vorticity',9.991556E+01,1e-06,3]]
 Run("Example shear4/thin/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/thin.log.4"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thin/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/thin.err.4"
@@ -2470,7 +2470,7 @@ Run("Example shear4/thin/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/thin.log.1"
 value = [['total solver time',0.1,10,2],
-         ['gmres: ',14,3,6]]
+         ['gmres: ',0,17,6]]
 Run("Example shear4/thin/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/thin.err.1"
@@ -2478,7 +2478,7 @@ value = [['peak vorticity',9.991556E+01,1e-06,3]]
 Run("Example shear4/thin/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/thin.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thin/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/thin.err.1"
@@ -2486,7 +2486,7 @@ value = [['peak vorticity',9.991556E+01,1e-06,3]]
 Run("Example shear4/thin/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/thin.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example shear4/thin/INT2: Serial-iter",log,value)
 
 log = "./int2Log/thin.err.1"
@@ -2540,7 +2540,7 @@ Run("Example solid/INT2: Serial-error",log,value)
 print("\n\nTaylor Example")  
 #MPI
 log = "./mpiLog/taylor.log.1"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example taylor/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/taylor.err.1"
@@ -2549,7 +2549,7 @@ value = [['tq',4.13037E-06,1e-06,5],
 Run("Example taylor/MPI: Serial-error",log,value)
 
 log = "./mpiLog/taylor.log.4"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example taylor/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/taylor.err.4"
@@ -2559,7 +2559,7 @@ Run("Example taylor/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/taylor.log.1"
 value = [['total solver time',0.1,30,2],
-         ['gmres: ',20,3,6]]
+         ['gmres: ',0,23,7]]
 Run("Example taylor/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/taylor.err.1"
@@ -2568,7 +2568,7 @@ value = [['tq',4.13037E-06,1e-06,5],
 Run("Example taylor/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/taylor.log.1"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example taylor/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/taylor.err.1"
@@ -2577,7 +2577,7 @@ value = [['tq',4.13037E-06,1e-06,5],
 Run("Example taylor/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/taylor.log.1"
-value = [['gmres: ',20,3,6]]
+value = [['gmres: ',0,23,7]]
 Run("Example taylor/INT: Serial-iter",log,value)
 
 log = "./intLog/taylor.err.1"
@@ -2586,7 +2586,7 @@ value = [['tq',4.13037E-06,1e-06,5],
 Run("Example taylor/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/taylor.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example taylor/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/taylor.err.1"
@@ -2595,7 +2595,7 @@ value = [['tq',4.10783E-06,1e-06,5],
 Run("Example taylor/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/taylor.log.4"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example taylor/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/taylor.err.4"
@@ -2605,7 +2605,7 @@ Run("Example taylor/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/taylor.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',11,3,6]]
+         ['gmres: ',0,14,6]]
 Run("Example taylor/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/taylor.err.1"
@@ -2614,7 +2614,7 @@ value = [['tq',4.10783E-06,1e-06,5],
 Run("Example taylor/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/taylor.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example taylor/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/taylor.err.1"
@@ -2623,7 +2623,7 @@ value = [['tq',4.10783E-06,1e-06,5],
 Run("Example taylor/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/taylor.log.1"
-value = [['gmres: ',11,3,6]]
+value = [['gmres: ',0,14,6]]
 Run("Example taylor/INT2: Serial-iter",log,value)
 
 log = "./int2Log/taylor.err.1"
@@ -2636,45 +2636,45 @@ Run("Example taylor/INT2: Serial-error",log,value)
 print("\n\nturbChannel Example")  
 #MPI
 log = "./mpiLog/turbChannel.log.1"
-value = [['gmres: ',92,3,6]]
+value = [['gmres: ',0,95,7]]
 Run("Example turbChannel/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/turbChannel.log.4"
-value = [['gmres: ',92,3,6]]
+value = [['gmres: ',0,95,7]]
 Run("Example turbChannel/MPI: Parallel-iter",log,value)
 #PGI
 log = "./pgiLog/turbChannel.log.1"
 value = [['total solver time',0.1,200,2],
-         ['gmres: ',92,3,6]]
+         ['gmres: ',0,95,7]]
 Run("Example turbChannel/PGI: Serial-time/iter",log,value)
 #GNU
 log = "./gnuLog/turbChannel.log.1"
-value = [['gmres: ',92,3,6]]
+value = [['gmres: ',0,95,7]]
 Run("Example turbChannel/GNU: Serial-iter",log,value)
 #INT
 log = "./intLog/turbChannel.log.1"
-value = [['gmres: ',92,3,6]]
+value = [['gmres: ',0,95,7]]
 Run("Example turbChannel/INT: Serial-iter",log,value)
 #MPI2
 log = "./mpi2Log/turbChannel.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example turbChannel/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/turbChannel.log.4"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example turbChannel/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/turbChannel.log.1"
 value = [['total solver time',0.1,140,2],
-         ['gmres: ',23,3,6]]
+         ['gmres: ',0,26,6]]
 Run("Example turbChannel/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/turbChannel.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example turbChannel/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/turbChannel.log.1"
-value = [['gmres: ',23,3,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example turbChannel/INT2: Serial-iter",log,value)
 
 
@@ -2702,24 +2702,24 @@ value = "ABORT: "
 FindPhrase("Example var_vis/INT: Serial",log,value)
 #MPI2
 log = "./mpi2Log/var_vis.log.1"
-value = [['gmres: ',16,3,6]]
+value = [['gmres: ',0,19,6]]
 Run("Example var_vis/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/var_vis.log.4"
-value = [['gmres: ',16,3,6]]
+value = [['gmres: ',0,19,6]]
 Run("Example var_vis/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/var_vis.log.1"
 value = [['total solver time',0.1,30,2],
-         ['gmres: ',16,3,6]]
+         ['gmres: ',0,19,6]]
 Run("Example var_vis/PGI2: Serial-time/iter",log,value)
 #GNU2
 log = "./gnu2Log/var_vis.log.1"
-value = [['gmres: ',16,3,6]]
+value = [['gmres: ',0,19,6]]
 Run("Example var_vis/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/var_vis.log.1"
-value = [['gmres: ',16,3,6]]
+value = [['gmres: ',0,19,6]]
 Run("Example var_vis/INT2: Serial-iter",log,value)
 
 
@@ -2727,7 +2727,7 @@ Run("Example var_vis/INT2: Serial-iter",log,value)
 print("\n\nvortex Example")  
 #MPI
 log = "./mpiLog/r1854a.log.1"
-value = [['gmres: ',62,3,6]]
+value = [['gmres: ',0,65,7]]
 Run("Example vortex/MPI: Serial-int",log,value)
 
 log = "./mpiLog/r1854a.err.1"
@@ -2735,7 +2735,7 @@ value = [['VMIN',-1.910312E-03,1e-06,2]]
 Run("Example vortex/MPI: Serial-error",log,value)
 
 log = "./mpiLog/r1854a.log.4"
-value = [['gmres: ',62,3,6]]
+value = [['gmres: ',0,65,7]]
 Run("Example vortex/MPI: Parallel-int",log,value)
 
 log = "./mpiLog/r1854a.err.4"
@@ -2744,7 +2744,7 @@ Run("Example vortex/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/r1854a.log.1"
 value = [['total solver time',0.1,60,2],
-         ['gmres: ',62,3,6]]
+         ['gmres: ',0,65,7]]
 Run("Example vortex/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/r1854a.err.1"
@@ -2752,7 +2752,7 @@ value = [['VMIN',-1.910312E-03,1e-06,2]]
 Run("Example vortex/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/r1854a.log.1"
-value = [['gmres: ',62,3,6]]
+value = [['gmres: ',0,65,7]]
 Run("Example vortex/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/r1854a.err.1"
@@ -2760,7 +2760,7 @@ value = [['VMIN',-1.910312E-03,1e-06,2]]
 Run("Example vortex/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/r1854a.log.1"
-value = [['gmres: ',58,3,6]]
+value = [['gmres: ',0,61,7]]
 Run("Example vortex/INT: Serial-iter",log,value)
 
 log = "./intLog/r1854a.err.1"
@@ -2768,7 +2768,7 @@ value = [['VMIN',-1.910312E-03,1e-05,2]]
 Run("Example vortex/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/r1854a.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example vortex/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/r1854a.err.1"
@@ -2776,7 +2776,7 @@ value = [['VMIN',-1.839120E-03,1e-06,2]]
 Run("Example vortex/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/r1854a.log.4"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example vortex/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/r1854a.err.4"
@@ -2785,7 +2785,7 @@ Run("Example vortex/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/r1854a.log.1"
 value = [['total solver time',0.1,50,2],
-         ['gmres: ',14,3,6]]
+         ['gmres: ',0,17,6]]
 Run("Example vortex/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/r1854a.err.1"
@@ -2793,7 +2793,7 @@ value = [['VMIN',-1.839120E-03,1e-06,2]]
 Run("Example vortex/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/r1854a.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example vortex/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/r1854a.err.1"
@@ -2801,7 +2801,7 @@ value = [['VMIN',-1.839120E-03,1e-06,2]]
 Run("Example vortex/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/r1854a.log.1"
-value = [['gmres: ',14,3,6]]
+value = [['gmres: ',0,17,6]]
 Run("Example vortex/INT2: Serial-iter",log,value)
 
 log = "./int2Log/r1854a.err.1"
@@ -2814,7 +2814,7 @@ print("\n\nvortex2 Example")
 #MPI
 #first nine time steps fail in pressure
 log = "./mpiLog/v2d.log.1"
-value = [['PRES:  ',97,3,4]]
+value = [['PRES:  ',0,100,4]]
 Run("Example vortex2/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/v2d.err.1"
@@ -2823,7 +2823,7 @@ value = [['umin',-1.453402E-03,1e-06,2],
 Run("Example vortex2/MPI: Serial-error",log,value)
 
 log = "./mpiLog/v2d.log.4"
-value = [['PRES:  ',97,3,4]]
+value = [['PRES:  ',0,100,4]]
 Run("Example vortex2/MPI: Parallel-iter",log,value)
 
 log = "./mpiLog/v2d.err.4"
@@ -2833,7 +2833,7 @@ Run("Example vortex2/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/v2d.log.1"
 value = [['total solver time',0.1,80,2],
-         ['PRES: ',97,3,4]]
+         ['PRES: ',0,100,4]]
 Run("Example vortex2/PGI: Serial-time/iter",log,value)
 
 log = "./pgiLog/v2d.err.1"
@@ -2842,7 +2842,7 @@ value = [['umin',-1.453402E-03,1e-06,2],
 Run("Example vortex2/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/v2d.log.1"
-value = [['PRES: ',97,3,4]]
+value = [['PRES: ',0,100,4]]
 Run("Example vortex2/GNU: Serial-iter",log,value)
 
 log = "./gnuLog/v2d.err.1"
@@ -2851,7 +2851,7 @@ value = [['umin',-1.453402E-03,1e-06,2],
 Run("Example vortex2/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/v2d.log.1"
-value = [['PRES: ',97,3,4]]
+value = [['PRES: ',0,100,4]]
 Run("Example vortex2/INT: Serial-iter",log,value)
 
 log = "./intLog/v2d.err.1"
@@ -2860,7 +2860,7 @@ value = [['umin',-1.453402E-03,1e-06,2],
 Run("Example vortex2/INT: Serial-error",log,value)
 #MPI2
 log = "./mpi2Log/v2d.log.1"
-value = [['U-Press ',1,3,5]]
+value = [['U-Press ',0,4,5]]
 Run("Example vortex2/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/v2d.err.1"
@@ -2869,7 +2869,7 @@ value = [['umin',-2.448980E-03,1e-06,2],
 Run("Example vortex2/MPI2: Serial-error",log,value)
 
 log = "./mpi2Log/v2d.log.4"
-value = [['U-Press ',1,3,5]]
+value = [['U-Press ',0,4,5]]
 Run("Example vortex2/MPI2: Parallel-iter",log,value)
 
 log = "./mpi2Log/v2d.err.4"
@@ -2879,7 +2879,7 @@ Run("Example vortex2/MPI2: Parallel-error",log,value)
 #PGI2
 log = "./pgi2Log/v2d.log.1"
 value = [['total solver time',0.1,80,2],
-         ['U-Press ',1,3,5]]
+         ['U-Press ',0,4,5]]
 Run("Example vortex2/PGI2: Serial-time/iter",log,value)
 
 log = "./pgi2Log/v2d.err.1"
@@ -2888,7 +2888,7 @@ value = [['umin',-2.448980E-03,1e-06,2],
 Run("Example vortex2/PGI2: Serial-error",log,value)
 #GNU2
 log = "./gnu2Log/v2d.log.1"
-value = [['U-Press ',1,3,5]]
+value = [['U-Press ',0,4,5]]
 Run("Example vortex2/GNU2: Serial-iter",log,value)
 
 log = "./gnu2Log/v2d.err.1"
@@ -2897,7 +2897,7 @@ value = [['umin',-2.448980E-03,1e-06,2],
 Run("Example vortex2/GNU2: Serial-error",log,value)
 #INT2
 log = "./int2Log/v2d.log.1"
-value = [['U-Press ',1,3,5]]
+value = [['U-Press ',0,4,5]]
 Run("Example vortex2/INT2: Serial-iter",log,value)
 
 log = "./int2Log/v2d.err.1"

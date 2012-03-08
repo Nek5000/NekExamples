@@ -68,6 +68,8 @@ mv n.rea eddy_uv.rea
 cd ../lowMach_test
 sed "s/^.*IFNAV.*$/  T T IFNAV & IFADVC/" lowMach_test.rea > n.rea
 mv n.rea lowMach_test.rea
+cd ../moab
+sed -i "s/^.*p15.*$/ 100&/" pipe.rea
 cd ../vortex2
 sed -i "s/^.*p11.*$/ 8000&/" v2d.rea
 cd ../../tests/test0001/
@@ -94,7 +96,13 @@ build_tools pgf77 pgcc ../../tests/pgitools.out
 #Tweak MOAB makenek
 cd ../../examples/moab
 cp ../../trunk/nek/makenek.bb .
-sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" makenek.bb
+sed -e "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" \
+    -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
+    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-par-mpich-pgi\":" makenek.bb>t.t
+mv t.t makenek.bb
+chmod +x makenek.bb
+
+
 cd ../../trunk/nek
 
 rm -rf ../../examples/*/*.map
@@ -185,8 +193,13 @@ cd ./trunk/nek
 #Tweak MOAB makenek
 cd ../../examples/moab
 cp ../../trunk/nek/makenek.bb .
-sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" makenek.bb
+sed -e  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" \
+    -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
+    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-par-mpich-pgi\":" makenek.bb>t.t
+mv t.t makenek.bb
+chmod +x makenek.bb
 cd ../../trunk/nek
+
 
 ../../tests/ExTestmpi
 moveLog     ../../tests/mpi2Log
@@ -212,7 +225,7 @@ cd ../../examples/moab
 cp makenek.bb makenek
 submake gfortran gcc
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
-sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
 cd ../../trunk/nek
 
 submake gfortran gcc
@@ -225,7 +238,7 @@ moveLog     ../../tests/gnu2Log
 cd ../../examples/moab
 cp makenek.bb makenek
 submake ifort icc
-sed -i  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
 cd ../../trunk/nek
 
 submake ifort icc
