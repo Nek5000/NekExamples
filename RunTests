@@ -116,8 +116,9 @@ mv ../../tests/test0001/*log.*  ../../tests/mpiLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-cp makenek.bb makenek
-submake pgf77 pgcc
+sed -i "s:^F77*=\".*:F77=\"pgf77\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"pgcc\":"     makenek.bb
+sed -i "s:\#IFMPI*=:IFMPI=:"          makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
 cd ../../trunk/nek
 
@@ -129,8 +130,8 @@ moveLog ../../tests/pgiLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-cp makenek.bb makenek
-submake gfortran gcc
+sed -i "s:^F77*=\".*:F77=\"gfortran\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"gcc\":"       makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
 cd ../../trunk/nek
@@ -151,8 +152,8 @@ moveLog     ../../tests/gnuLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-cp makenek.bb makenek
-submake ifort icc
+sed -i "s:^F77*=\".*:F77=\"ifort\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"icc\":"       makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
 cd ../../trunk/nek
 
@@ -209,8 +210,9 @@ mv ../../tests/test0001/*log.* ../../tests/mpi2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-cp makenek.bb makenek
-submake pgf77 pgcc
+sed -i "s:^F77*=\".*:F77=\"pgf77\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"pgcc\":"     makenek.bb
+sed -i "s:\#IFMPI*=:IFMPI=:"          makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
 cd ../../trunk/nek
 
@@ -222,8 +224,8 @@ moveLog     ../../tests/pgi2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-cp makenek.bb makenek
-submake gfortran gcc
+sed -i "s:^F77*=\".*:F77=\"gfortran\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"gcc\":"       makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
 cd ../../trunk/nek
@@ -236,8 +238,8 @@ moveLog     ../../tests/gnu2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
-cp makenek.bb makenek
-submake ifort icc
+sed -i "s:^F77*=\".*:F77=\"ifort\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"icc\":"       makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
 cd ../../trunk/nek
 
