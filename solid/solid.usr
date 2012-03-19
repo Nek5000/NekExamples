@@ -130,7 +130,8 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       integer e
 
-!     Project grid nodes on a surface of a spherical shell with double precision           
+!     Project grid nodes on a surface of a spherical shell 
+!     with double precision           
 
       r1 = 0.5
       r2 = 1.0

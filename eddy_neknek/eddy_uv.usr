@@ -194,15 +194,12 @@ c
 
 c    Global error calculation
       if (IFNEKNEK) then 
-      call setintercomm(nekcommtrue,nptrue)    ! nekcomm=iglobalcomml 
-      umx_gl = glamax(vx,n)
-      vmx_gl = glamax(vy,n)
-      uex_gl = glamax(ue,n)
-      vex_gl = glamax(ve,n)
-      udx_gl = glamax(ud,n)
-      vdx_gl = glamax(vd,n)
-
-      call unsetintercomm(nekcommtrue,nptrue)  ! nekcomm=nekcomm_original
+      umx_gl = uglamax(vx,n)
+      vmx_gl = uglamax(vy,n)
+      uex_gl = uglamax(ue,n)
+      vex_gl = uglamax(ve,n)
+      udx_gl = uglamax(ud,n)
+      vdx_gl = uglamax(vd,n)
       end if  
 
 
@@ -224,7 +221,8 @@ c    Global error calculation
          call copy (vy,ve,n)      !  temporal-accuracy behavior.
       endif
 
-c    The rest of the routine deals with the information exchange between multiple sessions
+c     The rest of the routine deals with the information exchange between 
+c     multiple sessions
     
       call userchk_set_xfer
       call bcopy
@@ -303,11 +301,13 @@ c     set to ngeom=2 by default (no iterations)
 c     One could change the number of iterations as
 c     ngeom = 3
 
-c     ninter - parameter controlling the order of interface extrapolation for neknek,
+c     ninter - parameter controlling the order of interface extrapolation 
+c     for neknek,
 c     set to ninter=1 by default
 c     One could change it as
 c     ninter = 2
-c     Caution: if ninter greater than 1 is chosen, ngeom greater than 2 should be used for stability
+c     Caution: if ninter greater than 1 is chosen, ngeom greater than 2 
+c     should be used for stability
 
 
 c     Set number of fields to interpolate
