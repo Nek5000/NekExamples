@@ -157,7 +157,7 @@ c copy data from nek
 #endif
 
       if(mod(istep,iostep) .eq. 0) then
-         call iMesh_save(%VAL(imeshh),%VAL(rootset),name,options, ierr)
+         call iMesh_save(%VAL(imeshh),%VAL(fileset),name,options, ierr)
 c no check for error, just print something and continue
          if (ierr .ne. 0 .and. nid .eq. 0) then
             write(6, "('      H5M file write failed on step ', i4)") 

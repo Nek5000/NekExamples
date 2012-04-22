@@ -25,6 +25,7 @@ block 20 volume 3
 block 30 volume 2
 block all element type hex27
 volume all size 1
+curve 26 int 1
 mesh volume all
 export genesis "moab_conjht.g" overwrite
 
