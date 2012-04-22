@@ -1,0 +1,203 @@
+C-----------------------------------------------------------------------
+C  nek5000 user-file template
+C
+C  user specified routines:
+C     - userbc : boundary conditions
+C     - useric : initial conditions
+C     - uservp : variable properties
+C     - userf  : local acceleration term for fluid
+C     - userq  : local source term for scalars
+C     - userchk: general purpose routine for checking errors etc.
+C
+C-----------------------------------------------------------------------
+      subroutine uservp(ix,iy,iz,eg) ! set variable properties
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+c     e = gllel(eg)
+
+      if (ifield.eq.1) then
+         utrans  = param(1)
+         udiff   = param(2)
+
+      else
+
+         utrans  = param(7)        ! thermal properties
+         udiff   = param(8)
+
+         if (ieg .gt. nelgv) then  ! properties in the solid
+            udiff   = 0.1*param(8) ! conductivity
+            utrans  = 1.0
+         endif
+
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf(ix,iy,iz,eg) ! set acceleration term
+c
+c     Note: this is an acceleration term, NOT a force!
+c     Thus, ffx will subsequently be multiplied by rho(x,t).
+c
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+c     e = gllel(eg)
+
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq(ix,iy,iz,eg) ! set source term
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+c     e = gllel(eg)
+
+      qvol   = 0.0
+      if (ieg .gt. nelgv) qvol = 1.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc(ix,iy,iz,iside,ieg) ! set up boundary conditions
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+c      if (cbc(iside,gllel(ieg),ifield).eq.'v01')
+
+      ux   = 0.0
+      uy   = 4.0*(x+1.5)*(1.5-x)
+      uz   = 0.0
+      temp = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric(ix,iy,iz,ieg) ! set up initial conditions
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ux   = 0.0
+      uy   = 4.0*(x+1.5)*(1.5-x)
+      uz   = 0.0
+      temp = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk()
+      include 'SIZE'
+      include 'TOTAL'
+
+      nv = nx1*ny1*nz1*nelv
+      nt = nx1*ny1*nz1*nelt
+
+      if (istep.eq.0) call outpost(vx,vy,vz,pr,t,'   ')
+
+      if (mod(istep,10).eq.0) then
+         tmax = glmax(t ,nt)
+c        umax = glmax(vx,nt)
+         umax = glmin(vx,nt)
+         if (nid.eq.0) write(6,1) istep,time,umax,tmax
+   1     format(i9,1p3e12.5,' tmax')
+      endif
+
+
+#ifdef MOAB
+      call usr_moab_output()
+#endif
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat()   ! This routine to modify element vertices
+      include 'SIZE'
+      include 'TOTAL'
+
+c      call gen_rea(2)
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2()  ! This routine to modify mesh coordinates
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3()
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+C=======================================================================
+#ifdef MOAB
+      subroutine usr_moab_output()
+
+      implicit none
+#include "NEKMOAB"
+      include 'TSTEP'
+
+      integer iten, ione, ierr, nid_
+      CHARACTER*10 NAME
+      CHARACTER*132 options
+      CHARACTER*1   NAM1(10)
+      EQUIVALENCE  (NAME,NAM1)
+      CHARACTER*1  NUMRL(0:9)
+      DATA NUMRL          /'0','1','2','3','4','5','6','7','8','9'/
+      data options /''/
+      data name /'pipe00.h5m'/
+
+c name the output files 'zero??.h5m'      
+      iten = istep / 10
+      ione = MOD(istep,10)
+      nam1(5) = numrl(iten)
+      nam1(6) = numrl(ione)
+
+c #define MOAB_MEM
+#ifndef MOAB_MEM
+c copy data from nek to MOAB
+      call nekMOAB_copy_vars
+#endif
+
+      if(istep .eq. 0 .or. iostep .eq. 0 .or. 
+     $     mod(istep,iostep) .eq. 0) then
+         call iMesh_save(%VAL(imeshh),%VAL(rootset),name,options, ierr)
+c no check for error, just print something and continue
+         if (ierr .ne. 0 .and. nid_ .eq. 0) then
+            write(6, "('      H5M file write failed on step ', i4)") 
+     *           istep
+         else if (nid_ .eq. 0) then
+            write(6, "('      Wrote MOAB H5M file for step ', i4)") 
+     *           istep
+         endif
+      endif
+
+      return
+      end
+
+      subroutine usr_moab_input(ix, iy, iz, el, qvol, source)
+
+      implicit none
+      integer ix, iy, iz, el
+      real qvol, source
+#include "NEKMOAB"
+
+      
+#endif
+      return
+      end
+c-----------------------------------------------------------------------

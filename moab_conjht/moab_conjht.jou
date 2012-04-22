@@ -1,0 +1,30 @@
+## /cubit/cubit12.2/bin/cubitx
+## Cubit Version 12.2
+## Cubit Build 44580
+## Revised 2010-10-18 08:44:37 -0600 (Mon, 18 Oct 2010)
+## Running 04/21/2012 08:15:28 PM
+## Command Options:
+## -warning = On
+## -information = On
+## -initfile /home/tautges/.cubit
+#set attrib on
+brick x 1
+vol {Id("Volume")} mov x -2
+vol {Id("Volume")} copy mov x 4
+brick x 3 y 1 z 1
+merge all
+sideset 100 surface 15
+sideset 200 surface 5 17 11
+sideset 300 surface 6 wrt volume 3
+sideset 300 surface 10 wrt volume 3
+sideset 400 surface 1 4 2 7 12 8
+sideset 500 surf 3 9
+sideset 600 surf 13 14
+block 10 volume 1
+block 20 volume 3
+block 30 volume 2
+block all element type hex27
+volume all size 1
+mesh volume all
+export genesis "moab_conjht.g" overwrite
+

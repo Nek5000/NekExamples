@@ -117,9 +117,9 @@ input.h5m
 1 0      1 fluid set, 0 other/solid sets
 10       fluid set #10
 3         no. bc sets; bc set id, bc type: (f=flux, c=convective, t=dirichlet, I=adiabatic)
-100  v     (inflow, const velocity)
-200  O     (outflow)
-300  W     (fluid wall)
+100  1    v     (inflow, const velocity)
+200  1    O     (outflow)
+300  1    W     (fluid wall)
             0 PRESOLVE/RESTART OPTIONS  *****
             7         INITIAL CONDITIONS *****
 C Default
