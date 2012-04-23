@@ -296,8 +296,9 @@ cp ../../trunk/tools/scripts/nek10s .
 mkdir ./obj
 sleep 1
 ./makenek.bb    pipe    $HERE_S
-./nek10s pipe 
+./nek10s pipe
 grep nek5000 compiler.out | tail -1 > pipe.err.1
+
 
 
 cd ..
