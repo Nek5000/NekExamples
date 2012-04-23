@@ -114,6 +114,14 @@ c
 c
 c-----------------------------------------------------------------------
       subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+
+      one = 1.
+      pi  = 4.*atan(one)
+      dt  = pi/1000.
+      param(12) = -dt   ! lock dt to be pi/1000 to 15 digits
+
       return
       end
 c-----------------------------------------------------------------------
@@ -123,6 +131,11 @@ c-----------------------------------------------------------------------
 
       param(66) = 0 ! 4    ! Std nek file output format (binary)
       param(67) = 0 ! 4
+
+      xmin = 0
+      xmax = 1
+      call rescale_x(xm1,xmin,xmax)  ! Put geometry on [0:1] x [0:1]
+      call rescale_x(ym1,xmin,xmax)
 
       return
       end
