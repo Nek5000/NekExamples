@@ -111,6 +111,7 @@
   T     IFTRAN
   T     IFADVC (for each field)
   T     IFMOAB
+  T     IFSCHCLOB
    5.00000       5.10000      -1.00000      -1.00000     XFAC,YFAC,XZERO,YZERO
  **MESH DATA** 6 lines are X,Y,Z;X,Y,Z. Columns corners 1-4;5-8
 input.h5m

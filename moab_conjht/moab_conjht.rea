@@ -110,7 +110,7 @@
    1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000
-           13  LOGICAL SWITCHES FOLLOW
+           14  LOGICAL SWITCHES FOLLOW
   T     IFFLOW
   T     IFHEAT
   T     IFTRAN
@@ -124,6 +124,7 @@
   F     IFKEPS
   T     IFMOAB
   F     IFCHAR
+  T     IFSCHCLOB
 8.00000, 8.00000, -0.500000, -4.00000  XFAC,YFAC,XZERO,YZERO
   *** MESH DATA ***
 moab_conjht.h5m
