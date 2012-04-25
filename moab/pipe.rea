@@ -106,7 +106,7 @@
    5.00000          p102   Dump out divergence at each time step
    0.05             p103   weight of stabilizing filter (.01) 
       0  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
-      4  LOGICAL SWITCHES FOLLOW
+      5  LOGICAL SWITCHES FOLLOW
   T     IFFLOW
   T     IFTRAN
   T     IFADVC (for each field)
