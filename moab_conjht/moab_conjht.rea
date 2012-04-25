@@ -12,11 +12,11 @@
    0.50000         p8  CONDUCT
    0.
    0.              p10 FINTIME
- 50   25            p11 NSTEPS
+   200.            p11 NSTEPS
    .05000          p12 DT
    0.              p13 IOCOMM
    0.              p14 IOTIME
-   10              p15 IOSTEP
+200.   50              p15 IOSTEP
    1.00000         p16 PSSOLVER
    0.
    0.250000E-01    p18 GRID
@@ -24,7 +24,7 @@
    10.0000         p20 NORDER
    1.000000E-06    p21 DIVERGENCE
    1.000000E-08    p22 HELMHOLTZ
-  0              p23 NPSCAL
+   0.              p23 NPSCAL
    1.000000E-05    p24 TOLREL
    1.000000E-09    p25 TOLABS
    0.50000         p26 COURANT/NTAU

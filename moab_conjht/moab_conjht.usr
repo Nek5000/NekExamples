@@ -65,7 +65,7 @@ c-----------------------------------------------------------------------
 c     e = gllel(eg)
 
       qvol   = 0.0
-      if (ieg .gt. nelgv) qvol = 1.0
+      if (eg .gt. nelgv) qvol = 1.0
 
       return
       end
@@ -109,8 +109,7 @@ c-----------------------------------------------------------------------
 
       if (mod(istep,10).eq.0) then
          tmax = glmax(t ,nt)
-c        umax = glmax(vx,nt)
-         umax = glmin(vx,nt)
+         umax = glmax(vy,nt)
          if (nid.eq.0) write(6,1) istep,time,umax,tmax
    1     format(i9,1p3e12.5,' tmax')
       endif
@@ -126,7 +125,7 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      call gen_rea(2)
+c     call gen_rea(2)
       return
       end
 c-----------------------------------------------------------------------
@@ -161,7 +160,7 @@ C=======================================================================
       DATA NUMRL          /'0','1','2','3','4','5','6','7','8','9'/
       data seroptions /''/
       data paroptions /' moab:PARALLEL=WRITE_PART '/
-      data name /'pipe00.h5m'/
+      data name /'mcjh00.h5m'/
 
 c name the output files 'zero??.h5m'      
       iten = istep / 10
