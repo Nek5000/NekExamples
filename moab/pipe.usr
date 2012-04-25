@@ -54,6 +54,22 @@ C Set user forcing function for scalars
       end
 
 C=======================================================================
+      subroutine userq2(q) ! set source term
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      real q(lx1, ly1, lz1, lelt, ldimt1)
+
+c      if (ifcoup) then
+c         call nekMOAB_import_vars(tTag, 0, q)
+c      elseif (ifvcoup) then
+c         call nekMOAB_import_vars(vtTag, 1, q)
+c      endif
+
+      return
+      end
+C=======================================================================
       subroutine userchk
       include 'SIZE'
       include 'TOTAL'
