@@ -64,8 +64,8 @@ c-----------------------------------------------------------------------
       integer e,f,eg
 c     e = gllel(eg)
 
-      qvol   = 0.0
-      if (eg .gt. nelgv) qvol = 1.0
+c      qvol   = 0.0
+c      if (eg .gt. nelgv) qvol = 1.0
 
       return
       end
@@ -75,7 +75,20 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      real q(lx1, ly1, lz1, lelt, ldimt1)
+      real q(lx1*ly1*lz1*lelt)
+
+      if (eg .gt. nelgv) qvol = 1.0
+      ntot1 = nx1*ny1*nz1*nelv
+      do i = 1, ntot1
+         q(i) = 0
+      enddo
+
+      ntot2 = nx1*ny1*nz1*nelt
+      do i = ntot1+1, ntot2
+         q(i) = 1
+      enddo
+
+c      write(*,*) 'mapped heating rate.'
 
 c      if (ifcoup) then
 c         call nekMOAB_import_vars(tTag, 0, q)

@@ -59,7 +59,7 @@ C=======================================================================
       include 'TOTAL'
       include 'NEKUSE'
 
-      real q(lx1, ly1, lz1, lelt, ldimt1)
+      real q(lx1, ly1, lz1, lelt)
 
 c      if (ifcoup) then
 c         call nekMOAB_import_vars(tTag, 0, q)
