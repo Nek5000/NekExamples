@@ -363,6 +363,20 @@ grep nek5000 compiler.out | tail -1 > pipe.err.1
 
 
 cd ..
+cd moab_conjht
+cp ../../trunk/tools/scripts/neklmpi .
+./makenek.bb    clean     $HERE_S
+mkdir ./obj
+sleep 1
+./makenek.bb  moab_conjht $HERE_S
+./neklmpi moab_conjht 1
+./neklmpi moab_conjht 2
+grep tmax moab_conjht.log.1 | tail -1 > moab_conjht.err.1
+grep tmax moab_conjht.log.2 | tail -1 > moab_conjht.err.2
+grep nek5000 compiler.out | tail -1 >> moab_conjht.err.1
+
+
+cd ..
 tester os7000 nek1000steps u3_t020_n13 egn 1 
 
 cd ..

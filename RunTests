@@ -101,7 +101,13 @@ sed -e "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" \
     -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-par-mpich-pgi\":" makenek.bb>t.t
 mv t.t makenek.bb
 chmod +x makenek.bb
-
+cd ../moab_conjht
+cp ../../trunk/nek/makenek.bb .
+sed -e "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" \
+    -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
+    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-par-mpich-pgi\":" makenek.bb>t.t
+mv t.t makenek.bb
+chmod +x makenek.bb
 
 cd ../../trunk/nek
 
@@ -120,6 +126,11 @@ sed -i "s:^F77*=\".*:F77=\"pgf77\":"  makenek.bb
 sed -i "s:^CC*=\".*:CC=\"pgcc\":"     makenek.bb
 sed -i "s:\#IFMPI*=:IFMPI=:"          makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
+cd ../moab_conjht
+sed -i "s:^F77*=\".*:F77=\"pgf77\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"pgcc\":"     makenek.bb
+sed -i "s:\#IFMPI*=:IFMPI=:"          makenek.bb
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
 cd ../../trunk/nek
 
 submake pgf77 pgcc
@@ -130,6 +141,11 @@ moveLog ../../tests/pgiLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
+sed -i "s:^F77*=\".*:F77=\"gfortran\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"gcc\":"       makenek.bb
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
+cd ../moab_conjht
 sed -i "s:^F77*=\".*:F77=\"gfortran\":"  makenek.bb
 sed -i "s:^CC*=\".*:CC=\"gcc\":"       makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
@@ -152,6 +168,10 @@ moveLog     ../../tests/gnuLog
 
 #Tweak MOAB makenek
 cd ../../examples/moab
+sed -i "s:^F77*=\".*:F77=\"ifort\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"icc\":"       makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
+cd ../moab_conjht
 sed -i "s:^F77*=\".*:F77=\"ifort\":"  makenek.bb
 sed -i "s:^CC*=\".*:CC=\"icc\":"       makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
@@ -183,6 +203,7 @@ sed -i "s:ly2=.*:ly2=ly1-2):"  examples/cone/*/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/vortex/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/mhd/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/moab/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/moab_conjht/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/peris/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/pipe/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/solid/SIZE
@@ -193,6 +214,13 @@ cd ./trunk/nek
 
 #Tweak MOAB makenek
 cd ../../examples/moab
+cp ../../trunk/nek/makenek.bb .
+sed -e  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" \
+    -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
+    -e "s:^#MOAB_DIR=\"\$HOME\/moab\":MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-par-mpich-pgi\":" makenek.bb>t.t
+mv t.t makenek.bb
+chmod +x makenek.bb
+cd ../moab_conjht
 cp ../../trunk/nek/makenek.bb .
 sed -e  "0,/^#USR_LFLAGS.*/s//USR_LFLAGS=\"-pgcpplibs\"/" \
     -e "s:^#PPLIST=\"?\":PPLIST=\"MOAB\":" \
@@ -214,6 +242,11 @@ sed -i "s:^F77*=\".*:F77=\"pgf77\":"  makenek.bb
 sed -i "s:^CC*=\".*:CC=\"pgcc\":"     makenek.bb
 sed -i "s:\#IFMPI*=:IFMPI=:"          makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
+cd ../moab_conjht
+sed -i "s:^F77*=\".*:F77=\"pgf77\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"pgcc\":"     makenek.bb
+sed -i "s:\#IFMPI*=:IFMPI=:"          makenek.bb
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-pgi\":" makenek.bb
 cd ../../trunk/nek
 
 submake pgf77 pgcc
@@ -228,6 +261,11 @@ sed -i "s:^F77*=\".*:F77=\"gfortran\":"  makenek.bb
 sed -i "s:^CC*=\".*:CC=\"gcc\":"       makenek.bb
 sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
+cd ../moab_conjht
+sed -i "s:^F77*=\".*:F77=\"gfortran\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"gcc\":"       makenek.bb
+sed -i "s:^MOAB_DIR.*:MOAB_DIR=\"\/home\/fathom\/libs\/MOAB-4.5pre-ser-intel\":" makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-lmpi_cxx -lstdc++\"/" makenek.bb
 cd ../../trunk/nek
 
 submake gfortran gcc
@@ -238,6 +276,10 @@ moveLog     ../../tests/gnu2Log
 
 #Tweak MOAB makenek
 cd ../../examples/moab
+sed -i "s:^F77*=\".*:F77=\"ifort\":"  makenek.bb
+sed -i "s:^CC*=\".*:CC=\"icc\":"       makenek.bb
+sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb
+cd ../moab_conjht
 sed -i "s:^F77*=\".*:F77=\"ifort\":"  makenek.bb
 sed -i "s:^CC*=\".*:CC=\"icc\":"       makenek.bb
 sed -i  "0,/USR_LFLAGS.*/s//USR_LFLAGS=\"-cxxlib\"/" makenek.bb

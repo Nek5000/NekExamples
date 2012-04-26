@@ -584,11 +584,11 @@ Run("Example conj_ht/INT2: Serial-error",log,value)
 print("\n\ncone016 Example")  
 #MPI
 log = "./mpiLog/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
+value = [['Tmax',8.5065E-01,1e-06,2]]
 Run("Example cone016/MPI: Serial-error",log,value)
 
 log = "./mpiLog/cone016.err.4"
-value = [['Tmax',5.7669E-01,1e-06,2]]
+value = [['Tmax',8.5065E-01,1e-06,2]]
 Run("Example cone016/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/cone016.log.1"
@@ -596,15 +596,15 @@ value = [['total solver time',0.1,7,2]]
 Run("Example cone016/PGI: Serial-time",log,value)
 
 log = "./pgiLog/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
+value = [['Tmax',8.5065E-01,1e-06,2]]
 Run("Example cone016/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
+value = [['Tmax',8.5065E-01,1e-06,2]]
 Run("Example cone016/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/cone016.err.1"
-value = [['Tmax',5.7669E-01,1e-06,2]]
+value = [['Tmax',8.5065E-01,1e-06,2]]
 Run("Example cone016/INT: Serial-error",log,value)
 
 
@@ -612,11 +612,11 @@ Run("Example cone016/INT: Serial-error",log,value)
 print("\n\ncone064 Example")  
 #MPI
 log = "./mpiLog/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
+value = [['Tmax',7.9285E-01,1e-06,2]]
 Run("Example cone064/MPI: Serial-error",log,value)
 
 log = "./mpiLog/cone064.err.4"
-value = [['Tmax',6.4755E-01,1e-06,2]]
+value = [['Tmax',7.9285E-01,1e-06,2]]
 Run("Example cone064/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/cone064.log.1"
@@ -624,15 +624,15 @@ value = [['total solver time',0.1,7,2]]
 Run("Example cone064/PGI: Serial-time",log,value)
 
 log = "./pgiLog/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
+value = [['Tmax',7.9285E-01,1e-06,2]]
 Run("Example cone064/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
+value = [['Tmax',7.9285E-01,1e-06,2]]
 Run("Example cone064/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/cone064.err.1"
-value = [['Tmax',6.4755E-01,1e-06,2]]
+value = [['Tmax',7.9285E-01,1e-06,2]]
 Run("Example cone064/INT: Serial-error",log,value)
 
 
@@ -640,11 +640,11 @@ Run("Example cone064/INT: Serial-error",log,value)
 print("\n\ncone256 Example")  
 #MPI
 log = "./mpiLog/cone256.err.1"
-value = [['Tmax',3.6963E-01,1e-06,2]]
+value = [['Tmax',7.4924E-01,1e-06,2]]
 Run("Example cone256/MPI: Serial-error",log,value)
 
 log = "./mpiLog/cone256.err.4"
-value = [['Tmax',3.6963E-01,1e-06,2]]
+value = [['Tmax',7.4924E-01,1e-06,2]]
 Run("Example cone256/MPI: Parallel-error",log,value)
 #PGI
 log = "./pgiLog/cone256.log.1"
@@ -652,15 +652,15 @@ value = [['total solver time',0.1,9,2]]
 Run("Example cone256/PGI: Serial-time",log,value)
 
 log = "./pgiLog/cone256.err.1"
-value = [['Tmax',3.6963E-01,1e-06,2]]
+value = [['Tmax',7.4924E-01,1e-06,2]]
 Run("Example cone256/PGI: Serial-error",log,value)
 #GNU
 log = "./gnuLog/cone256.err.1"
-value = [['Tmax',3.6963E-01,1e-06,2]]
+value = [['Tmax',7.4924E-01,1e-06,2]]
 Run("Example cone256/GNU: Serial-error",log,value)
 #INT
 log = "./intLog/cone256.err.1"
-value = [['Tmax',3.6963E-01,1e-06,2]]
+value = [['Tmax',7.4924E-01,1e-06,2]]
 Run("Example cone256/INT: Serial-error",log,value)
 
 
@@ -1848,46 +1848,112 @@ Run("Example MHD-gpf_b/INT2: Serial-error",log,value)
 print("\n\nmoab Example")  
 #MPI
 log = "./mpiLog/pipe.log.1"
-value = [['gmres: ',0,14,6]]
+value = [['gmres: ',0,17,7]]
 Run("Example moab/MPI: Serial-iter",log,value)
 
 log = "./mpiLog/pipe.log.4"
-value = [['gmres: ',0,14,6]]
+value = [['gmres: ',0,17,7]]
 Run("Example moab/MPI: Parallel-iter",log,value)
 #PGI
 log = "./pgiLog/pipe.log.1"
 value = [['total solver time',0.1,180,2],
-         ['gmres: ',0,14,6]]
+         ['gmres: ',0,17,7]]
 Run("Example moab/PGI: Serial-time/iter",log,value)
 #GNU
 #log = "./gnuLog/pipe.log.1"
-#value = [['gmres: ',0,14,6]]
+#value = [['gmres: ',0,17,7]]
 #Run("Example moab/GNU: Serial-iter",log,value)
 #INT
 log = "./intLog/pipe.log.1"
-value = [['gmres: ',0,14,6]]
+value = [['gmres: ',0,17,7]]
 Run("Example moab/INT: Serial-iter",log,value)
 #MPI2
 log = "./mpi2Log/pipe.log.1"
-value = [['gmres: ',0,23,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example moab/MPI2: Serial-iter",log,value)
 
 log = "./mpi2Log/pipe.log.4"
-value = [['gmres: ',0,23,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example moab/MPI2: Parallel-iter",log,value)
 #PGI2
 log = "./pgi2Log/pipe.log.1"
 value = [['total solver time',0.1,180,2],
-         ['gmres: ',0,23,6]]
+         ['gmres: ',0,26,6]]
 Run("Example moab/PGI2: Serial-time/iter",log,value)
 #GNU2
 #log = "./gnu2Log/pipe.log.1"
-#value = [['gmres: ',0,22,6]]
+#value = [['gmres: ',0,26,6]]
 #Run("Example moab/GNU2: Serial-iter",log,value)
 #INT2
 log = "./int2Log/pipe.log.1"
-value = [['gmres: ',0,23,6]]
+value = [['gmres: ',0,26,6]]
 Run("Example moab/INT2: Serial-iter",log,value)
+ 
+
+
+#print("\n\nmoab_conjht Example")  
+#MPI
+#log = "./mpiLog/moab_conjht.log.1"
+#value = [['gmres: ',0,13,6]]
+#Run("Example moab_conjht/MPI: Serial-iter",log,value)
+#
+#log = "./mpiLog/moab_conjht.err.1"
+#value = [['tmax',3.13266E+00,1e-06,2]]
+#Run("Example moab_conjht/MPI: Serial-error",log,value)
+#
+#log = "./mpiLog/moab_conjht.log.2"
+#value = [['gmres: ',0,13,6]]
+#Run("Example moab_conjht/MPI: Parallel-iter",log,value)
+#
+#log = "./mpiLog/moab_conjht.err.2"
+#value = [['tmax',3.13266E+00,1e-06,2]]
+#Run("Example moab_conjht/MPI: Parallel-error",log,value)
+#PGI
+#log = "./pgiLog/moab_conjht.log.1"
+#value = [['total solver time',0.1,10,2],
+#         ['gmres: ',0,35,6]]
+#Run("Example moab_conjht/PGI: Serial-time/iter",log,value)
+#
+#log = "./pgiLog/moab_conjht.err.1"
+#value = [['tmax',1.59864E+00,1e-06,2]]
+#Run("Example moab_conjht/PGI: Serial-error",log,value)
+#GNU
+#log = "./gnuLog/moab_conjht.log.1"
+#value = [['gmres: ',0,23,6]]
+#Run("Example moab_conjht/GNU: Serial-iter",log,value)
+#
+#log = "./gnuLog/moab_conjht.err.1"
+#value = [['tmax',2.35283E+00,1e-06,2]]
+#Run("Example moab_conjht/GNU: Serial-error",log,value)
+#INT
+#log = "./intLog/moab_conjht.log.1"
+#value = [['gmres: ',0,35,6]]
+#Run("Example moab_conjht/INT: Serial-iter",log,value)
+#
+#log = "./intLog/moab_conjht.err.1"
+#value = [['tmax',1.83828E-01,1e-06,2]]
+#Run("Example moab_conjht/INT: Serial-error",log,value)
+#MPI2
+#log = "./mpi2Log/moab_conjht.log.1"
+#value = [['gmres: ',0,23,6]]
+#Run("Example moab_conjht/MPI2: Serial-iter",log,value)
+#
+#log = "./mpi2Log/moab_conjht.log.2"
+#value = [['gmres: ',0,23,6]]
+#Run("Example moab_conjht/MPI2: Parallel-iter",log,value)
+#PGI2
+#log = "./pgi2Log/moab_conjht.log.1"
+#value = [['total solver time',0.1,180,2],
+#         ['gmres: ',0,23,6]]
+#Run("Example moab_conjht/PGI2: Serial-time/iter",log,value)
+#GNU2
+#log = "./gnu2Log/moab_conjht.log.1"
+#value = [['gmres: ',0,22,6]]
+#Run("Example moab_conjht/GNU2: Serial-iter",log,value)
+#INT2
+#log = "./int2Log/moab_conjht.log.1"
+#value = [['gmres: ',0,23,6]]
+#Run("Example moab_conjht/INT2: Serial-iter",log,value)
 
 
 
