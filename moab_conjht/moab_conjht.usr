@@ -70,20 +70,19 @@ c      if (eg .gt. nelgv) qvol = 1.0
       return
       end
 c-----------------------------------------------------------------------
-      subroutine userq2(q) ! set source term
+      subroutine userq2(q) ! set source term w/ MOAB
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
 
       real q(lx1*ly1*lz1*lelt)
 
-      if (eg .gt. nelgv) qvol = 1.0
-      ntot1 = nx1*ny1*nz1*nelv
+      ntot1 = nx1*ny1*nz1*nelv	! fluid
       do i = 1, ntot1
          q(i) = 0
       enddo
 
-      ntot2 = nx1*ny1*nz1*nelt
+      ntot2 = nx1*ny1*nz1*nelt	! solid
       do i = ntot1+1, ntot2
          q(i) = 1
       enddo
