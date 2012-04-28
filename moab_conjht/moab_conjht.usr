@@ -27,7 +27,7 @@ c     e = gllel(eg)
          utrans  = param(7)        ! thermal properties
          udiff   = param(8)
 
-         if (ieg .gt. nelgv) then  ! properties in the solid
+         if (eg .gt. nelgv) then  ! properties in the solid
             udiff   = 0.1*param(8) ! conductivity
             utrans  = 1.0
          endif
