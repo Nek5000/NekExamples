@@ -1868,26 +1868,26 @@ log = "./intLog/pipe.log.1"
 value = [['gmres: ',0,17,7]]
 Run("Example moab/INT: Serial-iter",log,value)
 #MPI2
-log = "./mpi2Log/pipe.log.1"
-value = [['gmres: ',0,26,6]]
-Run("Example moab/MPI2: Serial-iter",log,value)
-
-log = "./mpi2Log/pipe.log.4"
-value = [['gmres: ',0,26,6]]
-Run("Example moab/MPI2: Parallel-iter",log,value)
+#log = "./mpi2Log/pipe.log.1"
+#value = [['gmres: ',0,26,6]]
+#Run("Example moab/MPI2: Serial-iter",log,value)
+#
+#log = "./mpi2Log/pipe.log.4"
+#value = [['gmres: ',0,26,6]]
+#Run("Example moab/MPI2: Parallel-iter",log,value)
 #PGI2
-log = "./pgi2Log/pipe.log.1"
-value = [['total solver time',0.1,180,2],
-         ['gmres: ',0,26,6]]
-Run("Example moab/PGI2: Serial-time/iter",log,value)
+#log = "./pgi2Log/pipe.log.1"
+#value = [['total solver time',0.1,180,2],
+#         ['gmres: ',0,26,6]]
+#Run("Example moab/PGI2: Serial-time/iter",log,value)
 #GNU2
 #log = "./gnu2Log/pipe.log.1"
 #value = [['gmres: ',0,26,6]]
 #Run("Example moab/GNU2: Serial-iter",log,value)
 #INT2
-log = "./int2Log/pipe.log.1"
-value = [['gmres: ',0,26,6]]
-Run("Example moab/INT2: Serial-iter",log,value)
+#log = "./int2Log/pipe.log.1"
+#value = [['gmres: ',0,26,6]]
+#Run("Example moab/INT2: Serial-iter",log,value)
  
 
 
