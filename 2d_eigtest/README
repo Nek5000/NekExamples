@@ -1,0 +1,92 @@
+
+5/28/2012
+
+This example demonstrates spectral convergence of eigenvalues of 
+the Laplacian for a problem that has deformed geometry (specifically,
+for a quarter of a circular disk).
+
+!----------------------------------------------------------------------!
+!                                                                      !
+!    NOTE:  For this test to work, you must modify hmholtz.f to use    !
+!           binvm1() as the preconditioner!                            !
+!                                                                      !
+!           The script "doall" takes care of this by making a local    !
+!           copy and then modifying the copied source.                 !
+!                                                                      !
+!----------------------------------------------------------------------!
+
+This case provides a reasonable test of the influence of 
+geometric deformation on the accuracy of the SEM.
+
+It should, however, be improved by accounting for both the 
+azimuthal and radial modes using a full circle geometry instead 
+of the quarter-circle given here.
+
+To run this test, copy the current makenek from the repo 
+source and then type:
+
+   doall
+
+The script will run through several polynomial orders and should 
+produce two curves demonstrating spectral convergence for the 
+lowest eigenvalue and for the max error over the first five radial
+eigenvalues.    
+
+The theory is outlined in eig1.usr, which is also given below.
+
+c-----------------------------------------------------------------------
+c
+c     Determing the lowest eigenvalue of Laplace equation in a circle.
+c
+c     NOTE:  For this test to work, you must modify hmholtz.f to use
+c            binvm1() as the preconditioner!
+c
+c
+c     For the analytic solution, the eigenvalues come in two forms, the
+c     purely radial (m=0 mode), and the mth-wavenumber azimuthal mode.
+c     This code computes approximations to all of these.
+c
+c     Here, we are interested in comparing to the radial mode only, but
+c     we could compute analytic solutions for both types.   
+c
+c     For the unit disk (R:=1), the radial modes have eigenvalues that
+c     are the square of the roots of J0, five of which are listed here:
+c
+c       5.52007811028631 8.65372791291101 11.7915344390142 14.9309177084877 
+c
+c     The basic theoretical aspects of this test are listed below.
+c
+c     General solution to u_t = -A u is a series expansion in the
+c     eigenfunctions of A:
+c
+c         u(X,t) = sum_k   exp ( - lam_k t ) phi_k (X) .
+c
+c     For Laplace in the unit disk with homogeneous Dirichlet conditions,
+c
+c         phi_k(X) = J_0 ( sqrt(lam_k) r ) .
+c
+c     Since phi_k(r=1) == 0, we have that
+c
+c         sqrt(lam_k) = x_k, the kth-zero of J_0(),  for k=1,2,... ,
+c
+c     so, 
+c
+c         lam_k(A) = (x_k)^2 .
+c
+c
+c
+c     In this example, we find lam_k() by solving a Poisson equation
+c     with conjugate gradient (CG) iteration and then exploit the 
+c     relationship between CG and Lanczos to get the eigenvalues of A.
+c
+c     If Ax=b is solved using preconditioned CG with preconditioner M,
+c     the estimated spectrum approximates that of inv(M)*A.  In the
+c     spectral element method, inv(B)*A approximates the Laplacian,
+c     where B is the diagonal mass matrix and A the stiffness matrix.
+c     Hence, CG will generate the desired eigenvalues if we set M=B.
+c     To do so, one should uncomment 3 lines in setprec(), found in
+c     hmholtz.f in the source directory.   We give a copy of the
+c     modified source in hmholtz_b_prec.f.   The "doall" script
+c     makes the requisite substitution in a local copy of the source.
+c
+c-----------------------------------------------------------------------
