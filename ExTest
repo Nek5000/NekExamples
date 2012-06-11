@@ -33,6 +33,19 @@ cd ../../examples
 tester turbChannel nek10s turbChannel err2 1
 
 cd ..
+cd ./2d_eigtest
+cp ../../trunk/tools/scripts/nekl .
+cp ../../trunk/nek/makenek.bb .
+../../tests/tools/genmap << EOF
+eig1
+.05
+EOF
+sed -i "s:makenek:makenek.bb:" doall
+./doall
+mv err.tot eig1.err
+
+
+cd ..
 cd ./axi
 cp ../../trunk/tools/scripts/nekbb .
 cp ../../trunk/tools/scripts/mvn .
