@@ -40,7 +40,6 @@ cp ../../trunk/nek/makenek.bb .
 eig1
 .05
 EOF
-sed -i "s:makenek:makenek.bb:" doall
 sed -i "s:\$HOME\/nek5_svn\/trunk\/nek:$HERE_S:" doall
 ./doall
 mv err.tot eig1.err
