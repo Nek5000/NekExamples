@@ -46,8 +46,8 @@ cd ../../
 #Prep maketools file:
 sed -i "s:BIGMEM=\"true\":BIGMEM=\"false\":" ./trunk/tools/maketools
 
-#AMG Matlab Prep:
-sed -i "/max(lanczos(sparse/d" ./trunk/tools/amg_matlab/coarse_par.m
+#2d_eig test tweak
+sed -i "s:makenek:makenek.bb:" ./examples/2d_eigtest/doall
 
 #Tweak SIZE files 
 sed -i "s:lx2=.*:lx2=lx1):"  */*/SIZE
