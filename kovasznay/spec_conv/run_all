@@ -1,0 +1,15 @@
+cp $HOME/nek5_svn/trunk/nek/makenek .
+
+run_it 3
+run_it 4
+run_it 5
+run_it 6
+run_it 7
+run_it 8
+run_it 9
+run_it 10
+run_it 11
+run_it 12
+run_it 13
+run_it 14
+run_it 15

@@ -1,0 +1,6 @@
+set term x11;
+set logscale y; set size square
+set title 'Nek5000: Error vs. N for Kovasznay Flow'
+set xlabel 'Polynomial Order, N'
+set ylabel 'Max Pointwise Error, ||u-u_exact||'
+plot 'err.tot' u 2:6 w lp
