@@ -35,6 +35,7 @@ tester turbChannel nek10s turbChannel err2 1
 cd ..
 cd ./2d_eigtest
 cp ../../trunk/tools/scripts/nekl .
+cp ../../trunk/tools/scripts/nek .
 cp ../../trunk/nek/makenek.bb .
 ../../tests/tools/genmap << EOF
 eig1

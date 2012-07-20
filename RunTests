@@ -47,7 +47,8 @@ cd ../../
 sed -i "s:BIGMEM=\"true\":BIGMEM=\"false\":" ./trunk/tools/maketools
 
 #2d_eig test tweak
-sed -i "s:makenek:makenek.bb:" ./examples/2d_eigtest/doall
+sed -i "s:makenek:makenek.bb:g" ./examples/2d_eigtest/doall
+sed -i "s:makenek:makenek.bb:g" ./examples/2d_eigtest/doit
 
 #Tweak SIZE files 
 sed -i "s:lx2=.*:lx2=lx1):"  */*/SIZE
