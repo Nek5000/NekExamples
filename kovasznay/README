@@ -1,0 +1,9 @@
+ Kovasznay flow, an analytical two-dimensional steady solution  to the
+ incompressible Navier-Stokes equations.
+
+ stokes_test example uses the basics of the kovasznay problem to test
+ user-explicit treatment of the nonlinear terms.
+
+ s_convg demonstrates spectral convergence of the Kovasznay
+ solution for the case of PN-PN
+
