@@ -164,6 +164,8 @@ if "mpi" in TestsToDo:
    ifmpi = True 
 else:
    ifmpi = False
+   print("NO MPI TESTS BEING RAN! ")
+   print("If incorrect, call Analysis with 'mpi' as an argument")
 ###############################################################################
 num_test = 0 
 num_success = 0
@@ -181,35 +183,6 @@ DFdPhrase("Tools",log,value)
 ###############################################################################
 #---------------------MPI------------------------------------------------------
 #---------------------Pn-Pn----------------------------------------------------
-print("\nTest0001")  
-#MPI
-if ifmpi:
-
-    log = "./mpiLog/test0001.log.1"
-    value = [['ANS1',5.742723E-07,1e-06,8], 
-             ['gmres: ',0,34,7]]
-    Run("Test0001/MPI: Serial",log,value)
-
-    log = "./mpiLog/test0001.log.4"
-    value = [['ANS1',5.742723E-07,1e-06,8],
-             ['gmres: ',0,34,7]]
-    Run("Test0001/MPI: Parallel-error",log,value)
-
-#MPI2
-if ifmpi:
-
-    log = "./mpi2Log/test0001.log.1"
-    value = [['ANS1',5.742723E-07,1e-06,8],
-             ['gmres: ',0,15,6]]
-    Run("Test0001/MPI2: Serial",log,value)
-
-    log = "./mpi2Log/test0001.log.4"
-    value = [['ANS1',5.742723E-07,1e-06,8],
-             ['gmres: ',0,15,6]]
-    Run("Test0001/MPI2: Parallel-error",log,value)
-
-
-
 print("\n\n2d_eig Example")  
 #SRL
 log = "./srlLog/eig1.err"
