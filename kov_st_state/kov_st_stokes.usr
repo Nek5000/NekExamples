@@ -1,10 +1,12 @@
 c-----------------------------------------------------------------------
 c
-c Kovasznay flow, an analytical two-dimensional steady solution to the
-c incompressible Navier-Stokes equations.  
+c    This case tests the steady-Stokes formulation for Kovasznay flow, 
+c    which is an analytical two-dimensional steady solution to the
+c    incompressible Navier-Stokes equations.  
 c
+c    NOTE:  This works only for Pn-Pn-2 formulation, which is 
+c           set by setting lx2=lx1-2, ly2=ly1-2.
 c 
-c This case tests the steady-Stokes formulation
 c 
 c User specified routines 
 c     - boundary conditions
