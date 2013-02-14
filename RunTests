@@ -12,7 +12,7 @@ chmod +x maketools.buildbot
 ./maketools.buildbot clean            $HERE_T
 
 cd prenek
-sed -e "s:1 000 000:10 000:" basics.inc > t.t
+sed -e "s:3 000 000:10 000:" basics.inc > t.t
 mv basics.inc basics.inc_old
 mv t.t basics.inc
 
@@ -65,6 +65,9 @@ echo "### MOAB LIBRARIES AND PATH"
 echo ${MOAB_LIB}
 echo ${MOAB_DIR_SRL}
 echo ${MOAB_DIR_PAR}
+
+echo "### COMMUNICATION TESTS? "
+echo ${COMM_TEST}
 
 # Local directory
 HERE=`pwd`
@@ -137,6 +140,12 @@ then
     mkdir -v mpi2Log
 fi
 
+if [ "${COMM_TEST}" == "on" ]
+then
+    mkdir -v commLog
+    mkdir -v comm2Log
+fi
+
 # Path for tools directory
 cd tools
 HERE_T=`pwd`
@@ -158,11 +167,11 @@ chmod +x ./examples/2d_eigtest/doall_test
 chmod +x ./examples/2d_eigtest/doit_test
 
 #Tweak SIZE files 
-sed -i "s:lx2=.*:lx2=lx1):"  */*/SIZE
+sed -i "s:lx2=.*:lx2=lx1):"  examples/*/SIZE
 sed -i "s:lx2=.*:lx2=lx1):"  examples/cone/*/SIZE
-sed -i "s:ly2=.*:ly2=ly1):"  */*/SIZE
+sed -i "s:ly2=.*:ly2=ly1):"  examples/*/SIZE
 sed -i "s:ly2=.*:ly2=ly1):"  examples/cone/*/SIZE
-sed -i "s:lz2=.*:lz2=lz1):"  */*/SIZE
+sed -i "s:lz2=.*:lz2=lz1):"  examples/*/SIZE
 sed -i "s:lz2=.*:lz2=lz1):"  examples/cone/*/SIZE
 
 # MOAB
@@ -191,12 +200,6 @@ fi
 
 cd ../vortex2
 sed -i "s/^.*p11.*$/ 8000&/" v2d.rea
-
-# .rea file in test
-cd ../../tests/test0001/
-sed "s/^.*DIVERGENCE$/  0.10000E-08/" test0001.rea > n.rea      
-mv n.rea test0001.rea
-
 
 cd ../../
 ##############################################################
@@ -258,8 +261,6 @@ then
     source ../../tests/ExTestmpi
 
     moveLog ../../tests/mpiLog
-    mv ../../tests/test0001/*log.*  ../../tests/mpiLog
-    mv ../../tests/test0001/compiler.out.*  ../../tests/mpiLog
 
 # test list
     for i in $PERFORMED_TESTS
@@ -305,6 +306,20 @@ do
     PERFORMED_TESTS_L=${PERFORMED_TESTS_L}' srl'$i
 done
 
+####Communication setup tests######
+if [ "${COMM_TEST}" == "on" ]
+then
+    source ../../tests/CommTest 1
+    mv ../../examples/*/*comm* ../../tests/commLog
+
+    source ../../tests/CommTest 2
+    mv ../../examples/*/*comm* ../../tests/commLog
+
+    source ../../tests/CommTest 3
+    mv ../../examples/*/*comm* ../../tests/commLog
+    
+fi
+
 ##############################################################
 ##############################################################
 ### Test Pn-Pn-2 Case
@@ -317,9 +332,9 @@ echo "####################################################################"
 ##############################################################
 # Tweak SIZE files 
 cd ../../
-sed -i "s:lx2=.*:lx2=lx1-2):"  */*/SIZE
+sed -i "s:lx2=.*:lx2=lx1-2):"  examples/*/SIZE
 sed -i "s:lx2=.*:lx2=lx1-2):"  examples/cone/*/SIZE
-sed -i "s:ly2=.*:ly2=ly1-2):"  */*/SIZE
+sed -i "s:ly2=.*:ly2=ly1-2):"  examples/*/SIZE
 sed -i "s:ly2=.*:ly2=ly1-2):"  examples/cone/*/SIZE
 
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/vortex/SIZE
@@ -375,7 +390,6 @@ then
     source ../../tests/ExTestmpi
 
     moveLog ../../tests/mpi2Log
-    mv ../../tests/test0001/*log.*  ../../tests/mpi2Log
 
 # test list
     for i in $PERFORMED_TESTS
@@ -423,4 +437,18 @@ done
 
 PERFORMED_TESTS=$PERFORMED_TESTS_L
 
+####Communication setup tests######
+if [ "${COMM_TEST}" == "on" ]
+then
+    source ../../tests/CommTest 1
+    mv ../../examples/*/*comm* ../../tests/comm2Log
+
+    source ../../tests/CommTest 2
+    mv ../../examples/*/*comm* ../../tests/comm2Log
+
+    source ../../tests/CommTest 3
+    mv ../../examples/*/*comm* ../../tests/comm2Log
+fi
+
+####Return to test directory#######
 cd $HERE
