@@ -63,27 +63,6 @@ rm logfile
 ##############################################################
 #Begin testing...
 ##############################################################
-echo "####################################################################"
-echo "### test0001; test0001"
-echo "####################################################################"
-PERFORMED_TESTS=${PERFORMED_TESTS}' test0001'
-cd ../../tests/test0001
-cp ../../trunk/tools/scripts/neklmpi .
-cp ../../trunk/nek/makenek.bb .
-../tools/genmap << EOF
-test0001
-.05
-EOF
-./makenek.bb clean     $HERE_S
-mkdir ./obj
-sleep 1
-./makenek.bb test0001         $HERE_S
-./neklmpi test0001 1
-./neklmpi test0001 4
-grep nek5000 compiler.out | tail -1 > test0001.err.1
-# clean directory
-clean_dir neklmpi test0001 test0001
-
 #Test all examples...
 cd ../../examples
 echo "####################################################################"
