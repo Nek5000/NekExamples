@@ -1448,7 +1448,7 @@ if ifmpi:
 #SRL2
 log = "./srl2Log/pipe.log.1"
 value = "ABORT: "
-FindPhrase("Example moab/MPI2: Parallel",log,value)
+FindPhrase("Example moab/MPI2: Serial",log,value)
 
 
 #print("\n\nmoab_conjht Example")  

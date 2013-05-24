@@ -23,7 +23,7 @@ MATLAB='/soft/com/packages/Matlab_2010b/bin/matlab'
 MOAB_LIB='-pgcpplibs'
 # Paths
 # parallel
-MOAB_DIR_PAR='/home/fathon/libs/MOAB-4.5pre-par-mpich-pgi'
+MOAB_DIR_PAR='/home/fathom/libs/MOAB-4.5pre-par-mpich-pgi'
 # serial 
 MOAB_DIR_SRL='/home/fathom/libs/MOAB-4.5pre-ser-pgi'
 
