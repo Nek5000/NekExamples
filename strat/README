@@ -1,0 +1,32 @@
+c 
+c These are Boussinesq-based stratified-flow examples that illustrate 
+c the blocking phenomena in which fluid particles resist change in 
+c elevation because of the potential energy change required to overcome 
+c strong stratification.  The examples are based on a discussion found 
+c in Tritton, "Physical Fluid Dynamics"  (Oxford University Press, 1988).
+c Results for these cases can be found in the Nek5000 "users.pdf" examples
+c file.
+c 
+c In the simulations here, the hydrostatic pressure distribution is altered 
+c so that we solve for a field that is uniform (i.e., not varying in the 
+c y direction) at outflow, as this is the standard outflow condition in 
+c Nek5000.  To illustrate the point, consider that the Boussinesq approximation 
+c with a constant temperature field would give rise to a uniform body force in 
+c the negative y-direction, and that the resulting hydrostatic pressure field 
+c would vary linearly in y.   In the (linear) stratified flow case the forcing 
+c is of the form
+c 
+c       ffy = temp / Fr2
+c 
+c where Fr2 is the Froude number squared and the temperature field has for 
+c initial- and boundary-conditions a linear variation in y.   As it stands, 
+c such a forcing would lead to a hydrostatice pressure field that varies 
+c quadratically in y, and it is clear that p=0 at outflow would be incorrect.   
+c To account for the vertical loading, we modify the forcing term to be
+c 
+c       ffy = (temp-y) / Fr2
+c 
+c which implies that the computed pressure differs from the actual pressure 
+c by -.5*y*y/Fr2.  For the incompressible Navier-Stokes equations and the 
+c given boundary conditions this modification has no impact on the dynamics 
+c of the flow.
