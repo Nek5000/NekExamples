@@ -430,38 +430,41 @@ rm mvn
 if [ "${IF_MOAB}" == "on" ]
 then
     echo "####################################################################"
-    echo "### moab; pipe"
+    echo "### moab tests turned off while development still in progress"
     echo "####################################################################"
-    PERFORMED_TESTS=${PERFORMED_TESTS}' pipe'
+#    echo "####################################################################"
+#    echo "### moab; pipe"
+#    echo "####################################################################"
+#    PERFORMED_TESTS=${PERFORMED_TESTS}' pipe'
 # MOAB; this requres additional library
-    cd ..
-    cd moab
-    cp ../../trunk/tools/scripts/nek10s .
-    ./makenek.bb    clean     $HERE_S
-    mkdir ./obj
-    sleep 1
-    ./makenek.bb    pipe    $HERE_S
-    ./nek10s pipe
-    grep nek5000 compiler.out | tail -1 > pipe.err.1
+#    cd ..
+#    cd moab
+#    cp ../../trunk/tools/scripts/nek10s .
+#    ./makenek.bb    clean     $HERE_S
+#    mkdir ./obj
+#    sleep 1
+#    ./makenek.bb    pipe    $HERE_S
+#    ./nek10s pipe
+#    grep nek5000 compiler.out | tail -1 > pipe.err.1
 # clean directory
-    clean_dir nek10s pipe pipe
-
-    echo "####################################################################"
-    echo "### moab_conjht; moab_conjht"
-    echo "####################################################################"
-    PERFORMED_TESTS=${PERFORMED_TESTS}' moab_conjht'
-    cd ..
-    cd moab_conjht
-    cp ../../trunk/tools/scripts/nekbb .
-    ./makenek.bb    clean     $HERE_S
-    mkdir ./obj
-    sleep 1
-    ./makenek.bb moab_conjht  $HERE_S
-    ./nekbb moab_conjht
-    grep tmax moab_conjht.log.1 | tail -1 > moab_conjht.err.1
-    grep nek5000 compiler.out | tail -1 >> moab_conjht.err.1
+#    clean_dir nek10s pipe pipe
+#
+#    echo "####################################################################"
+#    echo "### moab_conjht; moab_conjht"
+#    echo "####################################################################"
+#    PERFORMED_TESTS=${PERFORMED_TESTS}' moab_conjht'
+#    cd ..
+#    cd moab_conjht
+#    cp ../../trunk/tools/scripts/nekbb .
+#    ./makenek.bb    clean     $HERE_S
+#    mkdir ./obj
+#    sleep 1
+#    ./makenek.bb moab_conjht  $HERE_S
+#    ./nekbb moab_conjht
+#    grep tmax moab_conjht.log.1 | tail -1 > moab_conjht.err.1
+#    grep nek5000 compiler.out | tail -1 >> moab_conjht.err.1
 # clean directory
-    clean_dir nekbb moab_conjht moab_conjht
+#    clean_dir nekbb moab_conjht moab_conjht
 fi
 
 echo "####################################################################"

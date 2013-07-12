@@ -191,9 +191,9 @@ value = [[' 2   ',0,21,6],
          [' 4   ',0,63,6],
          [' 10  ',0,402,6]]
 Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
-value = [[' 2   ',1.6329577E-01,1e-02,2],
-         [' 3   ',1.4437432E-01,1e-02,2],
-         [' 4   ',2.8477333E-02,1e-03,2],
+value = [[' 2   ',1.6329577E-01,1e-01,2],
+         [' 3   ',1.4437432E-01,1e-01,2],
+         [' 4   ',2.8477333E-02,1e-02,2],
          [' 10  ',6.8264260E-06,1e-06,2]]
 Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 
@@ -1416,42 +1416,42 @@ Run("Example MHD-gpf_b/SRL2: Serial-error",log,value)
 
 
 
-print("\n\nmoab Example")  
+#print("\n\nmoab Example")  
 #MPI
-if ifmpi:
-
-    log = "./mpiLog/pipe.log.1"
-    value = [['gmres: ',0,17,7]]
-    Run("Example moab/MPI: Serial-iter",log,value)
-
-    log = "./mpiLog/pipe.log.4"
-    value = [['gmres: ',0,17,7]]
-    Run("Example moab/MPI: Parallel-iter",log,value)
-
+#if ifmpi:
+#
+#    log = "./mpiLog/pipe.log.1"
+#    value = [['gmres: ',0,17,7]]
+#    Run("Example moab/MPI: Serial-iter",log,value)
+#
+#    log = "./mpiLog/pipe.log.4"
+#    value = [['gmres: ',0,17,7]]
+#    Run("Example moab/MPI: Parallel-iter",log,value)
+#
 #SRL
-log = "./srlLog/pipe.log.1"
-value = [['total solver time',0.1,180,2],
-         ['gmres: ',0,17,7]]
-Run("Example moab/SRL: Serial-time/iter",log,value)
-
-#MPI2
-if ifmpi:
-
-    log = "./mpi2Log/pipe.log.1"
-    value = "ABORT: "
-    FindPhrase("Example moab/MPI2: Serial",log,value)
-
-    log = "./mpi2Log/pipe.log.4"
-    value = "ABORT: "
-    FindPhrase("Example moab/MPI2: Parallel",log,value)
- 
-#SRL2
-log = "./srl2Log/pipe.log.1"
-value = "ABORT: "
-FindPhrase("Example moab/MPI2: Serial",log,value)
-
-
-#print("\n\nmoab_conjht Example")  
+#log = "./srlLog/pipe.log.1"
+#value = [['total solver time',0.1,180,2],
+#         ['gmres: ',0,17,7]]
+#Run("Example moab/SRL: Serial-time/iter",log,value)
+#
+##MPI2
+#if ifmpi:
+#
+#    log = "./mpi2Log/pipe.log.1"
+#    value = "ABORT: "
+#    FindPhrase("Example moab/MPI2: Serial",log,value)
+#
+#    log = "./mpi2Log/pipe.log.4"
+#    value = "ABORT: "
+#    FindPhrase("Example moab/MPI2: Parallel",log,value)
+# 
+##SRL2
+#log = "./srl2Log/pipe.log.1"
+#value = "ABORT: "
+#FindPhrase("Example moab/SRL2: Serial",log,value)
+#
+#
+##print("\n\nmoab_conjht Example")  
 #MPI
 #if ifmpi:
 #
@@ -1504,7 +1504,7 @@ print("\n\nos7000 Example")
 if ifmpi:
 
     log = "./mpiLog/u3_t020_n13.log.1"
-    value = [['gmres: ',0,209,7]]
+    value = [['gmres: ',0,43,7]]
     Run("Example os7000/MPI: Serial-iter",log,value)
 
     log = "./mpiLog/u3_t020_n13.err.1"
@@ -1512,7 +1512,7 @@ if ifmpi:
     Run("Example os7000/MPI: Serial-error",log,value)
 
     log = "./mpiLog/u3_t020_n13.log.4"
-    value = [['gmres: ',0,209,7]]
+    value = [['gmres: ',0,43,7]]
     Run("Example os7000/MPI: Parallel-iter",log,value)
 
     log = "./mpiLog/u3_t020_n13.err.4"
@@ -1522,18 +1522,18 @@ if ifmpi:
 #SRL
 log = "./srlLog/u3_t020_n13.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',0,209,7]]
+         ['gmres: ',0,43,7]]
 Run("Example os7000/SRL: Serial-time/iter",log,value)
 
-log = "./mpiLog/u3_t020_n13.err.1"
+log = "./srlLog/u3_t020_n13.err.1"
 value = [['egn',4.74797903E-05,1e-06,2]]
-Run("Example os7000/MPI: Serial-error",log,value)
+Run("Example os7000/SRL: Serial-error",log,value)
 
 #MPI2
 if ifmpi:
 
     log = "./mpi2Log/u3_t020_n13.log.1"
-    value = [['gmres: ',0,31,6]]
+    value = [['gmres: ',0,43,6]]
     Run("Example os7000/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/u3_t020_n13.err.1"
@@ -1541,7 +1541,7 @@ if ifmpi:
     Run("Example os7000/MPI2: Serial-error",log,value)
     
     log = "./mpi2Log/u3_t020_n13.log.4"
-    value = [['gmres: ',0,31,6]]
+    value = [['gmres: ',0,43,6]]
     Run("Example os7000/MPI2: Parallel-iter",log,value)
 
     log = "./mpi2Log/u3_t020_n13.err.4"
@@ -1551,7 +1551,7 @@ if ifmpi:
 #SRL2
 log = "./srl2Log/u3_t020_n13.log.1"
 value = [['total solver time',0.1,40,2],
-         ['gmres: ',0,31,6]]
+         ['gmres: ',0,43,6]]
 Run("Example os7000/SRL2: Serial-iter",log,value)
 
 log = "./srl2Log/u3_t020_n13.err.1"
@@ -1751,7 +1751,7 @@ value = [['total solver time',0.1,3,2],
 Run("Example ray1/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/ray1.err.1"
-value = [['umax',3.897862E-03,1e-06,3]]
+value = [['umax',3.897862E-03,1e-05,3]]
 Run("Example ray1/SRL2: Serial-error",log,value)
 
 
@@ -1812,7 +1812,7 @@ value = [['total solver time',0.1,3,2],
 Run("Example ray2/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/ray2.err.1"
-value = [['umax',6.091663E-03,1e-06,3]]
+value = [['umax',6.091663E-03,1e-05,3]]
 Run("Example ray2/SRL2: Serial-error",log,value)
 
 
@@ -2125,7 +2125,7 @@ if ifmpi:
     Run("Example vortex/MPI: Serial-int",log,value)
 
     log = "./mpiLog/r1854a.err.1"
-    value = [['VMIN',-1.910312E-03,1e-06,2]]
+    value = [['VMIN',-1.910312E-03,1e-05,2]]
     Run("Example vortex/MPI: Serial-error",log,value)
 
     log = "./mpiLog/r1854a.log.4"
@@ -2133,7 +2133,7 @@ if ifmpi:
     Run("Example vortex/MPI: Parallel-int",log,value)
 
     log = "./mpiLog/r1854a.err.4"
-    value = [['VMIN',-1.910312E-03,1e-06,2]]
+    value = [['VMIN',-1.910312E-03,1e-05,2]]
     Run("Example vortex/MPI: Parallel-error",log,value)
 
 #SRL
@@ -2143,7 +2143,7 @@ value = [['total solver time',0.1,60,2],
 Run("Example vortex/SRL: Serial-time/iter",log,value)
 
 log = "./srlLog/r1854a.err.1"
-value = [['VMIN',-1.910312E-03,1e-06,2]]
+value = [['VMIN',-1.910312E-03,1e-05,2]]
 Run("Example vortex/SRL: Serial-error",log,value)
 
 #MPI2
