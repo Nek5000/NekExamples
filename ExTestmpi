@@ -460,41 +460,44 @@ rm mvn
 if [ "${IF_MOAB}" == "on" ]
 then
     echo "####################################################################"
-    echo "### moab; pipe"
+    echo "### moab tests turned off while develepment in progress"
     echo "####################################################################"
-    PERFORMED_TESTS=${PERFORMED_TESTS}' pipe'
+#    echo "####################################################################"
+#    echo "### moab; pipe"
+#    echo "####################################################################"
+#    PERFORMED_TESTS=${PERFORMED_TESTS}' pipe'
 # MOAB; this requres additional library
-    cd ..
-    cd moab
-    cp ../../trunk/tools/scripts/nek10steps .
-    ./makenek.bb    clean     $HERE_S
-    mkdir ./obj
-    sleep 1
-    ./makenek.bb    pipe        $HERE_S
-    ./nek10steps pipe 1
-    ./nek10steps pipe 4
-    grep nek5000 compiler.out | tail -1 > pipe.err.1
+#    cd ..
+#    cd moab
+#    cp ../../trunk/tools/scripts/nek10steps .
+#    ./makenek.bb    clean     $HERE_S
+#    mkdir ./obj
+#    sleep 1
+#    ./makenek.bb    pipe        $HERE_S
+#    ./nek10steps pipe 1
+#    ./nek10steps pipe 4
+#    grep nek5000 compiler.out | tail -1 > pipe.err.1
 # clean directory
-    clean_dir nek10steps pipe pipe
-
-    echo "####################################################################"
-    echo "### moab_conjht; moab_conjht"
-    echo "####################################################################"
-    PERFORMED_TESTS=${PERFORMED_TESTS}' moab_conjht'
-    cd ..
-    cd moab_conjht
-    cp ../../trunk/tools/scripts/neklmpi .
-    ./makenek.bb    clean     $HERE_S
-    mkdir ./obj
-    sleep 1
-    ./makenek.bb  moab_conjht $HERE_S
-    ./neklmpi moab_conjht 1
-    ./neklmpi moab_conjht 2
-    grep tmax moab_conjht.log.1 | tail -1 > moab_conjht.err.1
-    grep tmax moab_conjht.log.2 | tail -1 > moab_conjht.err.2
-    grep nek5000 compiler.out | tail -1 >> moab_conjht.err.1
-# clean directory
-    clean_dir neklmpi moab_conjht moab_conjht
+#    clean_dir nek10steps pipe pipe
+#
+#    echo "####################################################################"
+#    echo "### moab_conjht; moab_conjht"
+#    echo "####################################################################"
+#    PERFORMED_TESTS=${PERFORMED_TESTS}' moab_conjht'
+#    cd ..
+#    cd moab_conjht
+#    cp ../../trunk/tools/scripts/neklmpi .
+#    ./makenek.bb    clean     $HERE_S
+#    mkdir ./obj
+#    sleep 1
+#    ./makenek.bb  moab_conjht $HERE_S
+#    ./neklmpi moab_conjht 1
+#    ./neklmpi moab_conjht 2
+#    grep tmax moab_conjht.log.1 | tail -1 > moab_conjht.err.1
+#    grep tmax moab_conjht.log.2 | tail -1 > moab_conjht.err.2
+#    grep nek5000 compiler.out | tail -1 >> moab_conjht.err.1
+## clean directory
+#    clean_dir neklmpi moab_conjht moab_conjht
 fi
 
 echo "####################################################################"
