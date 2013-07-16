@@ -88,3 +88,19 @@ C
      $,NX3,NY3,NZ3,NDIM,NFIELD,NPERT,NID
      $,NXD,NYD,NZD
 
+
+c automatically added by makenek
+      parameter(lxo   = lx1) ! max output grid size (lxo>=lx1)
+
+c automatically added by makenek
+      parameter(lpart = 1  ) ! max number of particles
+
+c automatically added by makenek
+      integer ax1,ay1,az1,ax2,ay2,az2
+      parameter (ax1=lx1,ay1=ly1,az1=lz1,ax2=lx2,ay2=ly2,az2=lz2) ! running averages
+
+c automatically added by makenek
+      parameter (lxs=1,lys=lxs,lzs=(lxs-1)*(ldim-2)+1) !New Pressure Preconditioner
+
+c automatically added by makenek
+      parameter (lfdm=1)  ! == 1 for fast diagonalization method
