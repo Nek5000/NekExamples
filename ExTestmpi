@@ -437,11 +437,6 @@ grep "rtavg_gr_Em" gpf.log.1 | tail -1 > gpf.err.1
 grep "rtavg_gr_Em" gpf.log.4 | tail -1 > gpf.err.4
 grep nek5000 compiler.out | tail -1 >> gpf.err.1
 
-sed -i "s:lfdm=0:lfdm=1:"  SIZE
-./makenek.bb    clean     $HERE_S
-mkdir ./obj
-sleep 1
-./makenek.bb    gpf        $HERE_S
 ./neklmpi gpf_m 1
 grep "rtavg_gr_Em" gpf_m.log.1 | tail -1 > gpf_m.err.1
 ./neklmpi gpf_m 4
@@ -452,7 +447,6 @@ grep nek5000 compiler.out | tail -1 >> gpf_m.err.1
 grep "rtavg_gr_Em" gpf_b.log.1 | tail -1 > gpf_b.err.1
 ./neklmpi gpf_b 4
 grep "rtavg_gr_Em" gpf_b.log.4 | tail -1 > gpf_b.err.4
-sed -i "s:lfdm=1:lfdm=0:"  SIZE
 # clean directory
 clean_dir neklmpi gpf gpf gpf_m gpf_b
 rm mvn

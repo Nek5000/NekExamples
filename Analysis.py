@@ -205,9 +205,9 @@ value = [[' 2   ',0,21,6],
          [' 10  ',0,402,6]]
 Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
 
-value = [[' 2   ',1.6329577E-01,1e-02,2],
-         [' 3   ',1.4437432E-01,1e-02,2],
-         [' 4   ',2.8477333E-02,1e-03,2],
+value = [[' 2   ',1.6329577E-01,1e-01,2],
+         [' 3   ',1.4437432E-01,1e-01,2],
+         [' 4   ',2.8477333E-02,1e-02,2],
          [' 10  ',6.8264260E-06,1e-06,2]]
 Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
 
@@ -2220,7 +2220,7 @@ if ifmpi:
     Run("Example vortex2/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/v2d.err.1"
-    value = [['umin',-2.448980E-03,1e-06,2],
+    value = [['umin',-2.448980E-03,1e-03,2],
              ['torqx',-1.6276138E-07,1e-06,2]]
     Run("Example vortex2/MPI2: Serial-error",log,value)
 
@@ -2229,7 +2229,7 @@ if ifmpi:
     Run("Example vortex2/MPI2: Parallel-iter",log,value)
 
     log = "./mpi2Log/v2d.err.4"
-    value = [['umin',-2.448980E-03,1e-06,2],
+    value = [['umin',-2.448980E-03,1e-03,2],
              ['torqx',-1.6276138E-07,1e-06,2]]
     Run("Example vortex2/MPI2: Parallel-error",log,value)
 
@@ -2240,7 +2240,7 @@ value = [['total solver time',0.1,80,2],
 Run("Example vortex2/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/v2d.err.1"
-value = [['umin',-2.448980E-03,1e-06,2],
+value = [['umin',-2.448980E-03,1e-03,2],
          ['torqx',-1.6276138E-07,1e-06,2]]
 Run("Example vortex2/SRL2: Serial-error",log,value)
 
