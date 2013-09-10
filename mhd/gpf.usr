@@ -182,6 +182,7 @@ C
       end
 c-----------------------------------------------------------------------
       subroutine userbc (ix,iy,iz,iside,ieg)
+c     NOTE ::: This subroutine MAY NOT be called by every process
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'

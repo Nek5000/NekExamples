@@ -130,6 +130,8 @@ C=======================================================================
 C=======================================================================
 
       SUBROUTINE USERBC (IX,IY,IZ,ISIDE,ieg)                
+c     NOTE ::: This subroutine MAY NOT be called by every process
+
 
 C  Set user boundary conditions
 

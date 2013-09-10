@@ -106,6 +106,7 @@ c     Compute the wall shear
       end
 c-----------------------------------------------------------------------
       subroutine userbc (i,j,k,iface,eg)
+c     NOTE ::: This subroutine MAY NOT be called by every process
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
