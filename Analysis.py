@@ -188,12 +188,12 @@ print("\n\n2d_eig Example")
 log = "./srlLog/eig1.err"
 value = [[' 2   ',0,21,6],
          [' 3   ',0,39,6],
-         [' 4   ',0,63,6],
+         [' 6   ',0,126,6],
          [' 10  ',0,402,6]]
 Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 value = [[' 2   ',1.6329577E-01,1e-01,2],
          [' 3   ',1.4437432E-01,1e-01,2],
-         [' 4   ',2.8477333E-02,1e-02,2],
+         [' 6   ',1.1637760E-02,1e-02,2],
          [' 10  ',6.8264260E-06,1e-06,2]]
 Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 
@@ -201,15 +201,16 @@ Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 log = "./srl2Log/eig1.err"
 value = [[' 2   ',0,21,6],
          [' 3   ',0,39,6],
-         [' 4   ',0,63,6],
+         [' 6   ',0,126,6],
          [' 10  ',0,402,6]]
 Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
 
 value = [[' 2   ',1.6329577E-01,1e-01,2],
          [' 3   ',1.4437432E-01,1e-01,2],
-         [' 4   ',2.8477333E-02,1e-02,2],
+         [' 6   ',1.1637760E-02,1e-02,2],
          [' 10  ',6.8264260E-06,1e-06,2]]
 Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
+
 
 
 
@@ -250,6 +251,7 @@ Run("Example axi/SRL2: Serial-iter",log,value)
 
 
 
+
 print("\n\nbenard-ray_9 Example")  
 #MPI
 if ifmpi:
@@ -276,6 +278,7 @@ log = "./srl2Log/ray_9.log.1"
 value = [['total solver time',0.1,40,2],
          ['gmres: ',0,11,6]]
 Run("Example benard/ray_9/SRL2: Serial-time/iter",log,value)
+
 
 
 
@@ -324,6 +327,7 @@ Run("Example benard/ray_dd/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nbenard-ray_dn Example")  
 #MPI
 if ifmpi:
@@ -369,6 +373,7 @@ Run("Example benard/ray_dn/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nbenard-ray_nn Example")  
 #MPI
 if ifmpi:
@@ -411,6 +416,68 @@ Run("Example benard/ray_nn/SRL2: Serial-time/iter",log,value)
 log = "./srl2Log/benard.err"
 value = [['ray_nn.log.1',657.511,.1,7]]
 Run("Example benard/ray_nn/SRL2: Serial-error",log,value)
+
+
+
+
+print("\n\nblasius Example")  
+#MPI
+if ifmpi:
+
+    log = "./mpiLog/blasius.log.1"
+    value = [['gmres: ',0,162,7]]
+    Run("Example blasius/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/blasius.err.1"
+    value = [['delta',1.26104E+00,1e-05,5]]
+    Run("Example blasius/MPI: Serial-error",log,value)
+
+    log = "./mpiLog/blasius.log.4"
+    value = [['gmres: ',0,162,7]]
+    Run("Example blasius/MPI: Parallel-iter",log,value)
+
+    log = "./mpiLog/blasius.err.4"
+    value = [['delta',1.26104E+00,1e-05,5]]
+    Run("Example blasius/MPI: Parallel-error",log,value)
+
+#SRL
+log = "./srlLog/blasius.log.1"
+value = [['total solver time',0.1,7,2],
+         ['gmres: ',0,162,7]]
+Run("Example blasius/SRL: Serial-time/iter",log,value)
+
+log = "./srlLog/blasius.err.1"
+value = [['delta',1.26104E+00,1e-05,5]]
+Run("Example blasius/SRL: Serial-error",log,value)
+
+#MPI2
+if ifmpi:
+
+    log = "./mpi2Log/blasius.log.1"
+    value = [['gmres: ',0,125,6]]
+    Run("Example blasius/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/blasius.err.1"
+    value = [['delta',1.26104E+00,1e-05,5]]
+    Run("Example blasius/MPI2: Serial-error",log,value)
+
+    log = "./mpi2Log/blasius.log.4"
+    value = [['gmres: ',0,125,6]]
+    Run("Example blasius/MPI2: Parallel-iter",log,value)
+
+    log = "./mpi2Log/blasius.err.4"
+    value = [['delta',1.26104E+00,1e-05,5]]
+    Run("Example blasius/MPI2: Parallel-error",log,value)
+
+#SRL
+log = "./srl2Log/blasius.log.1"
+value = [['total solver time',0.1,30,2],
+         ['gmres: ',0,125,6]]
+Run("Example blasius/SRL2: Serial-time/iter",log,value)
+
+log = "./srl2Log/blasius.err.1"
+value = [['delta',1.26104E+00,1e-05,5]]
+Run("Example blasius/SRL2: Serial-error",log,value)
 
 
 
@@ -476,6 +543,7 @@ Run("Example conj_ht/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\ncone016 Example")  
 #MPI
 if ifmpi:
@@ -496,6 +564,7 @@ Run("Example cone016/SRL: Serial-time",log,value)
 log = "./srlLog/cone016.err.1"
 value = [['Tmax',8.5065E-01,1e-06,2]]
 Run("Example cone016/SRL: Serial-error",log,value)
+
 
 
 
@@ -522,6 +591,7 @@ Run("Example cone064/SRL: Serial-error",log,value)
 
 
 
+
 print("\n\ncone256 Example")  
 #MPI
 if ifmpi:
@@ -542,6 +612,7 @@ Run("Example cone256/SRL: Serial-time",log,value)
 log = "./srlLog/cone256.err.1"
 value = [['Tmax',7.4924E-01,1e-06,2]]
 Run("Example cone256/SRL: Serial-error",log,value)
+
 
 
 
@@ -781,6 +852,7 @@ Run("Example restart-pb/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\neddy Example")  
 #MPI
 if ifmpi:
@@ -839,6 +911,7 @@ Run("Example eddy/SRL2: Serial-time/iter",log,value)
 log = "./srl2Log/eddy_uv.err.1"
 value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example eddy/SRL2: Serial-error",log,value)
+
 
 
 
@@ -902,6 +975,7 @@ value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/SRL2: Serial-error",log,value)
 
 
+
  
 print("\n\neddy_neknek Example")  
 #MPI
@@ -929,6 +1003,7 @@ if ifmpi:
     value = [['X err   global' ,3.925388E-03,1e-06,7],
              ['Y err   global',6.299443E-03,1e-06,7]]
     Run("Example eddy_neknek/MPI2: 4--error",log,value)
+
 
 
 
@@ -993,6 +1068,7 @@ Run("Example ext_cyl/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nfs_2-st1 Example")  
 #MPI 
 if ifmpi:
@@ -1038,6 +1114,7 @@ Run("Example st1/SRL2: Serial-time/iter",log,value)
 log = "./srl2Log/st1.err.1"
 value = [['amp',6.382536E-01,1e-06,2]]
 Run("Example st1/SRL2: Serial-error",log,value)
+
 
 
 
@@ -1089,6 +1166,7 @@ Run("Example st2/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nfs_2-std_wv Example")  
 #MPI 
 if ifmpi:
@@ -1137,6 +1215,7 @@ Run("Example std_wv/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nfs_hydro Example")  
 #MPI
 if ifmpi:
@@ -1182,6 +1261,7 @@ Run("Example fs_hydro/SRL2: Serial-time/iter",log,value)
 log = "./srl2Log/fs_hydro.err.1"
 value = [['AMP',-6.4616452E-05,2e-03,2]]
 Run("Example fs_hydro/SRL2: Serial-error",log,value)
+
 
 
 
@@ -1246,6 +1326,7 @@ Run("Example kov/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nlowMach_test Example")  
 #MPI
 if ifmpi:
@@ -1291,6 +1372,7 @@ if ifmpi:
 log = "./srl2Log/lowMach_test.log.1"
 value = "ABORT: For lowMach,"
 FindPhrase("Example lowMach_test/SRL2: Serial",log,value)
+
 
 
 
@@ -1342,6 +1424,7 @@ Run("Example MHD-gpf/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nmhd-gpf_m Example")  
 #MPI
 if ifmpi:
@@ -1381,6 +1464,7 @@ Run("Example MHD-gpf_m/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nmhd-gpf_b Example")  
 #MPI
 if ifmpi:
@@ -1413,6 +1497,7 @@ if ifmpi:
 log = "./srl2Log/gpf_b.err.1"
 value = [['rtavg_gr_Em', 2.56712250E-01,.02,4]]
 Run("Example MHD-gpf_b/SRL2: Serial-error",log,value)
+
 
 
 
@@ -1496,6 +1581,7 @@ Run("Example MHD-gpf_b/SRL2: Serial-error",log,value)
 #log = "./srl2Log/moab_conjht.log.1"
 #value = "ABORT: "
 #FindPhrase("Example moab_conjht/SRL2: Serial-time/iter",log,value)
+
 
 
 
@@ -1597,6 +1683,7 @@ Run("Example peris/SRL2: Serial-time/iter",log,value)
 
 
 
+
 print("\n\npipe-helix Example")  
 #MPI 
 if ifmpi:
@@ -1658,6 +1745,7 @@ Run("Example helix/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\npipe-stenosis Example")  
 #MPI 
 if ifmpi:
@@ -1692,6 +1780,7 @@ log = "./srl2Log/stenosis.log.1"
 value = [['total solver time',0.1,40,2],
          ['gmres: ',0,51,6]]
 Run("Example stenosis/SRL2: Serial-time/iter",log,value)
+
 
 
 
@@ -1756,6 +1845,7 @@ Run("Example ray1/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nrayleigh-ray2 Example")  
 #MPI
 if ifmpi:
@@ -1814,6 +1904,7 @@ Run("Example ray2/SRL2: Serial-time/iter",log,value)
 log = "./srl2Log/ray2.err.1"
 value = [['umax',6.091663E-03,1e-05,3]]
 Run("Example ray2/SRL2: Serial-error",log,value)
+
 
 
 
@@ -1878,6 +1969,7 @@ Run("Example shear4/thick/SRL2: Serial-error",log,value)
 
 
 
+
 print("\n\nshear4-thin Example")  
 #MPI
 if ifmpi:
@@ -1938,6 +2030,8 @@ value = [['peak vorticity',9.991556E+01,1e-06,3]]
 Run("Example shear4/thin/SRL2: Serial-error",log,value)
 
 
+
+
 print("\n\nSolid Example")  
 #MPI
 if ifmpi:
@@ -1970,6 +2064,70 @@ if ifmpi:
 log = "./srl2Log/solid.err.1"
 value = [['error',7.821228E-05,1e-06,2]]
 Run("Example solid/SRL2: Serial-error",log,value)
+
+
+
+
+print("\n\nStrat Example")  
+#MPI
+if ifmpi:
+
+    log = "./mpiLog/re10f1000p0001.log.1"
+    value = [['gmres: ',0,60,7]]
+    Run("Example strat-01/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/re10f1000p0001.log.4"
+    value = [['gmres: ',0,60,7]]
+    Run("Example strat-01/MPI: PARALLEL-iter",log,value)
+
+    log = "./mpiLog/re10f1000p1000.log.1"
+    value = [['gmres: ',0,60,7]]
+    Run("Example strat-1000/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/re10f1000p1000.log.4"
+    value = [['gmres: ',0,60,7]]
+    Run("Example strat-1000/MPI: PARALLEL-iter",log,value)
+
+#SRL
+log = "./srlLog/re10f1000p0001.log.1"
+value = [['total solver time',0.1,140,2],
+         ['gmres: ',0,60,7]]
+Run("Example strat-01/SRL: Serial-time/iter",log,value)
+
+log = "./srlLog/re10f1000p1000.log.1"
+value = [['total solver time',0.1,140,2],
+         ['gmres: ',0,60,7]]
+Run("Example strat-1000/SRL: Serial-time/iter",log,value)
+
+#MPI2
+if ifmpi:
+
+    log = "./mpi2Log/re10f1000p0001.log.1"
+    value = [['U-PRES ',0,27,6]]
+    Run("Example strat-01/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/re10f1000p0001.log.4"
+    value = [['U-PRES ',0,27,6]]
+    Run("Example strat-01/MPI2: PARALLEL-iter",log,value)
+
+    log = "./mpi2Log/re10f1000p1000.log.1"
+    value = [['U-PRES ',0,27,6]]
+    Run("Example strat-1000/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/re10f1000p1000.log.4"
+    value = [['U-PRES ',0,27,6]]
+    Run("Example strat-1000/MPI2: PARALLEL-iter",log,value)
+
+#SRL2
+log = "./srl2Log/re10f1000p0001.log.1"
+value = [['total solver time',0.1,80,2],
+         ['U-PRES ',0,27,6]]
+Run("Example strat-01/SRL: Serial-time/iter",log,value)
+
+log = "./srl2Log/re10f1000p1000.log.1"
+value = [['total solver time',0.1,80,2],
+         ['U-PRES ',0,27,6]]
+Run("Example strat-1000/SRL: Serial-time/iter",log,value)
 
 
 
@@ -2113,6 +2271,7 @@ log = "./srl2Log/var_vis.log.1"
 value = [['total solver time',0.1,30,2],
          ['gmres: ',0,19,6]]
 Run("Example var_vis/SRL2: Serial-time/iter",log,value)
+
 
 
 

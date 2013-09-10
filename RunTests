@@ -67,8 +67,6 @@ echo ${MOAB_LIB}
 echo ${MOAB_DIR_SRL}
 echo ${MOAB_DIR_PAR}
 
-echo "### COMMUNICATION TESTS? "
-echo ${COMM_TEST}
 
 # Local directory
 HERE=`pwd`
@@ -139,12 +137,6 @@ then
 # parallel logs
     mkdir -v mpiLog
     mkdir -v mpi2Log
-fi
-
-if [ "${COMM_TEST}" == "on" ]
-then
-    mkdir -v commLog
-    mkdir -v comm2Log
 fi
 
 # Path for tools directory
@@ -258,6 +250,7 @@ then
 	cd ../../trunk/nek
     fi
 
+#Remove old map files and Start Parallel Tests!
     rm -rf ../../examples/*/*.map
     source ../../tests/ExTestmpi
 
@@ -298,6 +291,7 @@ then
     cd ../../trunk/nek
 fi
 
+#Start Tests
 source ../../tests/ExTest
 moveLog ../../tests/srlLog
 
@@ -306,20 +300,6 @@ for i in $PERFORMED_TESTS
 do
     PERFORMED_TESTS_L=${PERFORMED_TESTS_L}' srl'$i
 done
-
-####Communication setup tests######
-if [ "${COMM_TEST}" == "on" ]
-then
-    source ../../tests/CommTest 1
-    mv ../../examples/*/*comm* ../../tests/commLog
-
-    source ../../tests/CommTest 2
-    mv ../../examples/*/*comm* ../../tests/commLog
-
-    source ../../tests/CommTest 3
-    mv ../../examples/*/*comm* ../../tests/commLog
-    
-fi
 
 ##############################################################
 ##############################################################
@@ -387,6 +367,7 @@ then
 	cd ../../trunk/nek
     fi
 
+#Remove old map files and start testing
     rm -rf ../../examples/*/*.map
     source ../../tests/ExTestmpi
 
@@ -427,6 +408,7 @@ then
     cd ../../trunk/nek
 fi
 
+#Start testing
 source ../../tests/ExTest
 moveLog ../../tests/srl2Log
 
@@ -437,19 +419,6 @@ do
 done
 
 PERFORMED_TESTS=$PERFORMED_TESTS_L
-
-####Communication setup tests######
-if [ "${COMM_TEST}" == "on" ]
-then
-    source ../../tests/CommTest 1
-    mv ../../examples/*/*comm* ../../tests/comm2Log
-
-    source ../../tests/CommTest 2
-    mv ../../examples/*/*comm* ../../tests/comm2Log
-
-    source ../../tests/CommTest 3
-    mv ../../examples/*/*comm* ../../tests/comm2Log
-fi
 
 ####Return to test directory#######
 cd $HERE
