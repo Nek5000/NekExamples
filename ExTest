@@ -199,6 +199,7 @@ fi
 echo "####################################################################"
 echo "### blasius; blasius"
 echo "####################################################################"
+cd ..
 tester blasius nek10s blasius delta 1
 
 echo "####################################################################"
@@ -353,38 +354,49 @@ then
     grep nek5000 compiler.out | tail -1 >> amg_eddy.err.1
 # clean directory
     clean_dir nekbb amg_eddy amg_eddy
-    rm cpn
 fi
 
-#echo "####################################################################"
-#echo "### eddy; eddy hpts test"
-#echo "####################################################################"
+echo "####################################################################"
+echo "### eddy; eddy hpts test"
+echo "####################################################################"
 
-#sed -i "s:lhis=[0-9][0-9]*:lhis=7:" SIZE
-#sed -i "205 a\
-#\      call hpts" eddy_uv.usr
-#
-#if [ ! -f ./hpts.in ]
-#then
-#echo 10 > hpts.in
-#echo "   0.0000000000000000E+000   5.500000000000000 " >>hpts.in
-#echo "   0.0000000000000000E+000   6.280000000000000 " >>hpts.in
-#echo "     0.780000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     1.570000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     2.360000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     3.140000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     3.930000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     4.710000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     5.500000000000000       0.0000000000000000E+000 " >>hpts.in
-#echo "     6.280000000000000       0.0000000000000000E+000 " >>hpts.in
-#fi
+./cpn eddy_uv hpts_ed
+sed -i "s:lhis=[0-9][0-9]*:lhis=100:" SIZE
+grep -qi hpts hpts_ed.usr
+if [ $? -eq 0 ]
+then
+  sed -i "s:! call hpts:  call hpts:" ./hpts_ed.usr
+else
+  sed -i "205 a\
+\       call hpts" ./hpts_ed.usr
+fi
 
-#if [ -f ./hpts.out ]
-#then
-#rm -rf hpts.out
-#fi
-#
-#tester eddy nekbb eddy_uv err 2
+if [ ! -f ./hpts.in ]
+then
+echo 10 > hpts.in
+echo "   0.0000000000000000E+000   5.500000000000000 " >>hpts.in
+echo "   0.0000000000000000E+000   6.280000000000000 " >>hpts.in
+echo "     0.780000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     1.570000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     2.360000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     3.140000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     3.930000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     4.710000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     5.500000000000000       0.0000000000000000E+000 " >>hpts.in
+echo "     6.280000000000000       0.0000000000000000E+000 " >>hpts.in
+fi
+
+if [ -f ./hpts.out ]
+then
+rm -rf hpts.out
+fi
+
+cd ../
+tester eddy nekbb hpts_ed err 2
+tail -10 hpts.out>hpts.err.0
+
+sed -i "s:call hpts:! call hpts:" ./hpts_ed.usr
+rm cpn
 
 
 echo "####################################################################"

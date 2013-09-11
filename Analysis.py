@@ -188,12 +188,12 @@ print("\n\n2d_eig Example")
 log = "./srlLog/eig1.err"
 value = [[' 2   ',0,21,6],
          [' 3   ',0,39,6],
-         [' 6   ',0,126,6],
+         [' 6  ' ,0,126,6],
          [' 10  ',0,402,6]]
 Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 value = [[' 2   ',1.6329577E-01,1e-01,2],
          [' 3   ',1.4437432E-01,1e-01,2],
-         [' 6   ',1.1637760E-02,1e-02,2],
+         [' 6  ' ,1.1637760E-02,1e-02,2],
          [' 10  ',6.8264260E-06,1e-06,2]]
 Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 
@@ -201,13 +201,13 @@ Run("Example 2d_eig/SRL: Serial-iter/err",log,value)
 log = "./srl2Log/eig1.err"
 value = [[' 2   ',0,21,6],
          [' 3   ',0,39,6],
-         [' 6   ',0,126,6],
+         [' 6  ' ,0,126,6],
          [' 10  ',0,402,6]]
 Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
 
 value = [[' 2   ',1.6329577E-01,1e-01,2],
          [' 3   ',1.4437432E-01,1e-01,2],
-         [' 6   ',1.1637760E-02,1e-02,2],
+         [' 6  ' ,1.1637760E-02,1e-02,2],
          [' 10  ',6.8264260E-06,1e-06,2]]
 Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
 
@@ -973,6 +973,85 @@ Run("Example AMG_eddy/SRL2: Serial-time/iter",log,value)
 log = "./srl2Log/amg_eddy.err.1"
 value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
 Run("Example AMG_eddy/SRL2: Serial-error",log,value)
+
+
+
+ 
+print("\n\nhpts_ed Example")  
+#MPI
+if ifmpi:
+
+    log = "./mpiLog/hpts_ed.log.1"
+    value = [['gmres: ',0,34,7]]
+    Run("Example hpts_ed/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/hpts_ed.err.1"
+    value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+    Run("Example hpts_ed/MPI: Serial-error",log,value)
+
+    log = "./mpiLog/hpts_ed.log.4"
+    value = [['gmres: ',0,34,7]]
+    Run("Example hpts_ed/MPI: Parallel-iter",log,value)
+
+    log = "./mpiLog/hpts_ed.err.4"
+    value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+    Run("Example hpts_ed/MPI: Parallel-error",log,value)
+
+    log = "./mpiLog/hpts.err.0"
+    value = [['  1.0000000E-01  ',-4.3963170E-01,1e-05,1]]
+    Run("Example hpts_ed/MPI: Parallel-HPTS",log,value)
+
+#SRL
+log = "./srlLog/hpts_ed.log.1"
+value = [['total solver time',0.1,80,2],
+         ['gmres: ',0,34,7]]
+Run("Example hpts_ed/SRL: Serial-time/iter",log,value)
+
+log = "./srlLog/hpts_ed.err.1"
+value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
+Run("Example hpts_ed/SRL: Serial-error",log,value)
+
+log = "./srlLog/hpts.err.0"
+value = [['  1.0000000E-01  ',-4.3963170E-01,1e-05,1]]
+Run("Example hpts_ed/SRL: Parallel-HPTS",log,value)
+
+
+#MPI2
+if ifmpi:
+
+    log = "./mpi2Log/hpts_ed.log.1"
+    value = [['gmres: ',0,22,6]]
+    Run("Example hpts_ed/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/hpts_ed.err.1"
+    value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+    Run("Example hpts_ed/MPI2: Serial-error",log,value)
+
+    log = "./mpi2Log/hpts_ed.log.4"
+    value = [['gmres: ',0,22,6]]
+    Run("Example hpts_ed/MPI2: Parallel-iter",log,value)
+
+    log = "./mpi2Log/hpts_ed.err.4"
+    value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+    Run("Example hpts_ed/MPI2: Parallel-error",log,value)
+
+    log = "./mpi2Log/hpts.err.0"
+    value = [['  1.0000000E-01  ',-4.3953660E-01,1e-06,1]]
+    Run("Example hpts_ed/MPI2: Parallel-HPTS",log,value)
+
+#SRL2
+log = "./srl2Log/hpts_ed.log.1"
+value = [['total solver time',0.1,80,2],
+         ['gmres: ',0,22,6]]
+Run("Example hpts_ed/SRL2: Serial-time/iter",log,value)
+
+log = "./srl2Log/hpts_ed.err.1"
+value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
+Run("Example hpts_ed/SRL2: Serial-error",log,value)
+
+log = "./srl2Log/hpts.err.0"
+value = [['  1.0000000E-01  ',-4.3953660E-01,1e-06,1]]
+Run("Example hpts_ed/SRL2: Parallel-HPTS",log,value)
 
 
 
