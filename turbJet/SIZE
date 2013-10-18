@@ -3,8 +3,8 @@ C
 C     HCUBE array dimensions
 C
       parameter (ldim=3)
-      parameter (lx1=8,ly1=lx1,lz1=lx1,lelt=1175,lelv=lelt)
-      parameter (lxd=12,lyd=lxd,lzd=lxd)
+      parameter (lx1=6,ly1=lx1,lz1=lx1,lelt=1175,lelv=lelt)
+      parameter (lxd=9,lyd=lxd,lzd=lxd)
       parameter (lelx=1,lely=1,lelz=1)
  
       parameter (lzl=3 + 2*(ldim-3))
@@ -97,3 +97,9 @@ c automatically added by makenek
 c automatically added by makenek
       integer ax1,ay1,az1,ax2,ay2,az2
       parameter (ax1=lx1,ay1=ly1,az1=lz1,ax2=lx2,ay2=ly2,az2=lz2) ! running averages
+
+c automatically added by makenek
+      parameter (lxs=1,lys=lxs,lzs=(lxs-1)*(ldim-2)+1) !New Pressure Preconditioner
+
+c automatically added by makenek
+      parameter (lfdm=0)  ! == 1 for fast diagonalization method
