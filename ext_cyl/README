@@ -27,6 +27,13 @@ rerun genbox, and then merge box.rea with import.rea.
 This case has a relatively fine spectral element mesh and should give
 reasonable results for lx1=6 (polynomial order N=5).
 
+The "mkmesh" script shows how to build the box and combine it with
+the existing circle mesh.   Just type 
+
+mkmesh
+
+to execute the script.
+
 ========
 OUTPUTS:
 ========
