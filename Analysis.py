@@ -442,7 +442,7 @@ if ifmpi:
 
 #SRL
 log = "./srlLog/blasius.log.1"
-value = [['total solver time',0.1,7,2],
+value = [['total solver time',0.1,30,2],
          ['gmres: ',0,162,7]]
 Run("Example blasius/SRL: Serial-time/iter",log,value)
 
@@ -998,7 +998,7 @@ if ifmpi:
     Run("Example hpts_ed/MPI: Parallel-error",log,value)
 
     log = "./mpiLog/hpts.err.0"
-    value = [['  1.0000000E-01  ',-4.3963170E-01,1e-05,1]]
+    value = [['  1.0000000E-01  ',-4.396170E-01,1e-05,1]]
     Run("Example hpts_ed/MPI: Parallel-HPTS",log,value)
 
 #SRL
@@ -1012,8 +1012,8 @@ value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
 Run("Example hpts_ed/SRL: Serial-error",log,value)
 
 log = "./srlLog/hpts.err.0"
-value = [['  1.0000000E-01  ',-4.3963170E-01,1e-05,1]]
-Run("Example hpts_ed/SRL: Parallel-HPTS",log,value)
+value = [['  1.0000000E-01  ',-4.396170E-01,1e-05,1]]
+Run("Example hpts_ed/SRL: SRL-HPTS",log,value)
 
 
 #MPI2
@@ -1051,7 +1051,7 @@ Run("Example hpts_ed/SRL2: Serial-error",log,value)
 
 log = "./srl2Log/hpts.err.0"
 value = [['  1.0000000E-01  ',-4.3953660E-01,1e-06,1]]
-Run("Example hpts_ed/SRL2: Parallel-HPTS",log,value)
+Run("Example hpts_ed/SRL2: SRL-HPTS",log,value)
 
 
 

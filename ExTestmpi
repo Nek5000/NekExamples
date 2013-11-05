@@ -383,7 +383,7 @@ rm -rf hpts.out
 fi
 
 cd ../
-tester eddy nekbb hpts_ed err 2
+tester eddy neklmpi hpts_ed err 2
 tail -10 hpts.out > hpts_edd.err.0
 
 sed -i "s:call hpts:! call hpts:" ./hpts_ed.usr
@@ -643,6 +643,7 @@ echo "### strat; strat"
 echo "####################################################################"
 cd ..
 tester strat nek200steps re10f1000p0001 error 1
+cd ..
 tester strat nek200steps re10f0000p1000 error 1
 
 echo "####################################################################"
