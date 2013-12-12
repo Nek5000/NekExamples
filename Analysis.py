@@ -982,8 +982,8 @@ print("\n\nhpts_ed Example")
 if ifmpi:
 
     log = "./mpiLog/hpts_ed.log.1"
-    value = [['gmres: ',0,34,7]]
-    Run("Example hpts_ed/MPI: Serial-iter",log,value)
+    value = "ABORT in hpts"
+    FindPhrase("Example hpts_ed/MPI: Serial",log,value)
 
     log = "./mpiLog/hpts_ed.err.1"
     value = [['X err',6.007702E-07,1e-06,6],['Y err',6.489061E-07,1e-06,6]]
@@ -1020,8 +1020,8 @@ Run("Example hpts_ed/SRL: SRL-HPTS",log,value)
 if ifmpi:
 
     log = "./mpi2Log/hpts_ed.log.1"
-    value = [['gmres: ',0,22,6]]
-    Run("Example hpts_ed/MPI2: Serial-iter",log,value)
+    value = "ABORT in hpts"
+    FindPhrase("Example hpts_ed/MPI2: Serial",log,value)
 
     log = "./mpi2Log/hpts_ed.err.1"
     value = [['X err',6.759103E-05,1e-06,6],['Y err',7.842019E-05,1e-06,6]]
