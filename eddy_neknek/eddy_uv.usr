@@ -207,6 +207,7 @@ c    Global error calculation
           write(6,11) istep,time,udx,umx,uex,u0,'  X err', session
           write(6,11) istep,time,vdx,vmx,vex,v0,'  Y err', session
       end if
+      call nekgsync
       if (nid_global.eq.0) then	  
           write(6,11) istep,time,udx_gl,umx_gl,uex_gl,u0,'  X err',
      & 'global'
