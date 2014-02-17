@@ -362,7 +362,7 @@ else
 \       call hpts" ./hpts_ed.usr
 fi
 
-if [ ! -f ./hpts.in ]
+if [ ! -f "./hpts.in" ]
 then
 echo 10 > hpts.in
 echo "   0.0000000000000000E+000   5.500000000000000 " >>hpts.in
@@ -377,14 +377,14 @@ echo "     5.500000000000000       0.0000000000000000E+000 " >>hpts.in
 echo "     6.280000000000000       0.0000000000000000E+000 " >>hpts.in
 fi
 
-if [ -f ./hpts.out ]
+if [ -f "./hpts.out" ]
 then
 rm -rf hpts.out
 fi
 
 cd ../
 tester eddy neklmpi hpts_ed err 2
-tail -10 hpts.out > hpts_edd.err.0
+tail -10 hpts.out > hpts_ed.err.0
 
 sed -i "s:call hpts:! call hpts:" ./hpts_ed.usr
 
@@ -644,7 +644,7 @@ echo "####################################################################"
 cd ..
 tester strat nek200steps re10f1000p0001 error 1
 cd ..
-tester strat nek200steps re10f0000p1000 error 1
+tester strat nek200steps re10f1000p1000 error 1
 
 echo "####################################################################"
 echo "### shear4; shear4, thin"
