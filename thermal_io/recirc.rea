@@ -2,109 +2,109 @@
     2.610000     NEKTON VERSION
             2 DIMENSIONAL RUN
           103 PARAMETERS FOLLOW
-   1.00000     p001 DENSITY
-  -1000.00     p002 VISCOS
-  0.000000E+00 p003    BETAG
-  0.000000E+00 p004    GTHETA
-  0.000000E+00 p005    PGRADX
-  0.000000E+00 p006
-   1.00000     p007 RHOCP
-   -1000.      p008 CONDUCT
-  0.000000E+00 p009
-  0.000000E+00 p010 FINTIME
-  10000.00     p011 NSTEPS
- -0.0020       p012 DT
-  0.000000E+00 p013 IOCOMM
-  0.000000E+00 p014 IOTIME
-  500.0000     p015 IOSTEP
-  0.000000E+00 p016 PSSOLVER: 0=default
-  0.000000E+00 p017
-  0.250000E-01 p018 GRID < 0 --> # cells on screen
-  -1.00000     p019 INTYPE
-   12.0000     p020 NORDER
-  1.000000E-05 p021 DIVERGENCE
-  1.000000E-07 p022 HELMHOLTZ
-  0              p23 NPSCAL
-  0.100000E-02 p024 TOLREL
-  0.100000E-02 p025 TOLABS
-  0.250000     p026 COURANT/NTAU
-   2.00000     p027 TORDER
-  0.000000E+00 p028 TORDER: mesh velocity (0: p28=p27)
-  0.000000E+00 p029 = magnetic visc if > 0, = -1/Rm if < 0
-  0.000000E+00 p030 > 0 ==> properties set in uservp()
-  0.000000E+00 p031 NPERT: #perturbation modes
-  0.000000E+00 p032 #BCs in re2 file, if > 0
-   100.000     p033    MXGEOM
-   100.000     p034    MAXNEW
-  0.100000E-03 p035
-  0.100000E-03 p036    XMAGNET
-  0.100000E-01 p037    NGRIDS
-  0.000000E+00 p038    NORDER2
-  0.000000E+00 p039    NORDER3
-  0.000000E+00 p040
-  0.000000E+00 p041 1-->multiplicative SEMG
-  0.000000E+00 p042 0=gmres/1=pcg
-   0.00000     p043 0=semg/1=schwarz
-  0.000000E+00 p044 0=E-based/1=A-based prec.
-  0.000000E+00 p045 Relaxation factor for DTFS
-  0.000000E+00 p046 reserved
-  0.000000E+00 p047 vnu: mesh matieral prop.
-  0.000000E+00 p048    PGEOM
-  0.000000E+00 p049    MIXLFAC
-  0.000000E+00 p050    MAXCGFS
-  0.000000E+00 p051
-  0.000000E+00 p052 IOHIS
-  0.000000E+00 p053
-  0.000000E+00 p054 fixed flow rate dir: |p54|=1,2,3=x,y,z
-  0.000000E+00 p055 vol.flow rate (p54>0) or Ubar (p54<0)
-  0.000000E+00 p056
-  0.000000E+00 p057
-  0.000000E+00 p058
-  0.000000E+00 p059 !=0 --> full Jac. eval. for each el.
-  0.000000E+00 p060 !=0 --> init. velocity to small nonzero
-  0.000000E+00 p061
-  0.000000E+00 p062 >0 --> force byte_swap for output
-  0.000000E+00 p063 =8 --> force 8-byte output
-  0.000000E+00 p064 =1 --> perturbation restart
-   1.00000     p065 #iofiles (eg, 0 or 64); <0 --> sep. dirs
-  4.000000E+00 p066 output : <0=ascii, else binary
-  4.000000E+00 p067 restart: <0=ascii, else binary
-  0.000000E+00 p068 iastep: freq for avg_all (0=iostep)
-   50000.0     p069    frequency of srf dump
-  0.000000E+00 p070
-  0.000000E+00 p071
-  0.000000E+00 p072
-  0.000000E+00 p073
-  0.000000E+00 p074 verbose Helmholtz
-  0.000000E+00 p075
-  0.000000E+00 p076    p77 = Oscillation frequency (omega)
-  0.000000E+00 p077
-  0.000000E+00 p078
-  0.000000E+00 p079
-  0.000000E+00 p080
-  0.000000E+00 p081
-  0.000000E+00 p082
-  0.000000E+00 p083
-  0.000000E+00 p084 !=0 --> sets initial timestep if p12>0
-  0.000000E+00 p085 dt ratio if p84 !=0, for timesteps>0
-  0.000000E+00 p086 reserved
-  0.000000E+00 p087
-  0.000000E+00 p088
-  0.000000E+00 p089      coarse grid weighting (default=10.0
-  0.000000E+00 p090
-  0.000000E+00 p091
-  0.000000E+00 p092
-  20  0000E+00 p093 Number of previous pressure solns saved
-  50  0000E+00 p094 start projecting velocity after p94 step
-  50  0000E+00 p095 start projecting pressure after p95 step
-  0.000000E+00 p096      which saving algorithm 1 = discard,
-  0.000000E+00 p097      0 == > no iterative refinement
-  0.000000E+00 p098
-   3.00000     p099 dealiasing: <0--> off/3--> old/4--> new
-  0.000000E+00 p100
-  2.000000E+00 p101 Number of additional modes to filter
-   1.00000     p102 Dump out divergence at each time step
-  0.500000E-01 p103 weight of stabilizing filter (.01)
+       1.000000         p01 DENSITY
+      -1000.000         p02 VISCOS
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      -1000.000         p08 CONDUCT
+      0.0000000E+00
+      0.0000000E+00     p10 FINTIME
+       10000.00         p11 NSTEPS
+     -2.0000001E-03     p12 DT
+      0.0000000E+00     p13 IOCOMM
+      0.0000000E+00     p14 IOTIME
+       500.0000         p15 IOSTEP
+      0.0000000E+00     p16 PSSOLVER
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      9.9999997E-06     p21 DIVERGENCE
+      1.0000000E-07     p22 HELMHOLTZ
+      0.0000000E+00     p23 NPSCAL
+      1.0000000E-03     p24 TOLREL
+      1.0000000E-03     p25 TOLABS
+      0.2500000         p26 COURANT/NTAU
+       2.000000         p27 TORDER
+      0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)
+      0.0000000E+00     p29 magnetic visc if > 0, = -1/Rm if < 0
+      0.0000000E+00     p30 > 0 ==> properties set in uservp()
+      0.0000000E+00     p31 NPERT: #perturbation modes
+      0.0000000E+00     p32 #BCs in re2 file, if > 0
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p42 0=gmres/1=pcg
+      0.0000000E+00     p43 0=semg/1=schwarz
+      0.0000000E+00     p44 0=E-based/1=A-based prec.
+      0.0000000E+00     p45 Relaxation factor for DTFS
+      0.0000000E+00      p46 if >0, dont call SETICS
+      0.0000000E+00     p47 vnu: mesh matieral prop
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p52 IOHIS
+      0.0000000E+00
+      0.0000000E+00     p54 1,2,3-->fixed flow rate dir=x,y,z
+      0.0000000E+00     p55 vol.flow rate(p54>0) or Ubar(p54<0)
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p59 !=0 --> use std axhelm for all elem
+      0.0000000E+00     p60 !=0--> init velocity to small nonzero
+      0.0000000E+00
+      0.0000000E+00     p62 >0 --> force byte_swap for output
+      0.0000000E+00     p63 =8 --> force 8-byte output
+      0.0000000E+00     p64 =1 --> perturbation restart
+       1.000000         p65 #iofile(eg,0 or 64); <0 --> sep. dirs
+       6.000000         p66 write fmt:ONLY postx uses rea value
+       6.000000         p67 read fmt: same modes as p66
+      0.0000000E+00     p68 iastep: freq for avg_all
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p74 verbose Helmholtz
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p84 !=0 -->sets initial timestep if p12>0
+      0.0000000E+00     p85 dt ratio if p84 !=0, for timesteps>0
+      0.0000000E+00     p86 reserved
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p89 reserved
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+       20.00000         p93 Numbr of prev pressure solns saved
+       50.00000         p94 start projecting vel. after p94 step
+       50.00000         p95 start projecting pr after p95 step
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+       3.000000         p99    dealiasing:if <0 disable
+      0.0000000E+00     p100 reserved
+       2.000000         p101   No. of additional filter modes
+      0.0000000E+00
+      5.0000001E-02     p103   weight of stabilizing filter (.01)
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000
@@ -129,52 +129,52 @@
           16  2          16           NEL,NDIM,NELV
       ELEMENT          1 [    1a]    GROUP     0
   0.0000000E+00  0.5000000      0.5000000      0.0000000E+00
- -0.2000000     -0.5000000     -0.4000000     -0.1000000    
+ -0.2000000     -0.5000000     -0.4000000     -0.1000000
       ELEMENT          2 [    1b]    GROUP     0
-  0.5000000       1.000000       1.000000      0.5000000    
- -0.5000000     -0.2000000     -0.1000000     -0.4000000    
+  0.5000000       1.000000       1.000000      0.5000000
+ -0.5000000     -0.2000000     -0.1000000     -0.4000000
       ELEMENT          3 [    1c]    GROUP     0
-   1.000000       1.500000       1.500000       1.000000    
- -0.2000000     -0.5000000     -0.4000000     -0.1000000    
+   1.000000       1.500000       1.500000       1.000000
+ -0.2000000     -0.5000000     -0.4000000     -0.1000000
       ELEMENT          4 [    1d]    GROUP     0
-   1.500000       2.000000       2.000000       1.500000    
- -0.5000000     -0.2000000     -0.1000000     -0.4000000    
+   1.500000       2.000000       2.000000       1.500000
+ -0.5000000     -0.2000000     -0.1000000     -0.4000000
       ELEMENT          5 [    1e]    GROUP     0
   0.0000000E+00  0.5000000      0.5000000      0.0000000E+00
  -0.1000000     -0.4000000      0.0000000E+00  0.0000000E+00
       ELEMENT          6 [    1f]    GROUP     0
-  0.5000000       1.000000       1.000000      0.5000000    
+  0.5000000       1.000000       1.000000      0.5000000
  -0.4000000     -0.1000000      0.0000000E+00  0.0000000E+00
       ELEMENT          7 [    1g]    GROUP     0
-   1.000000       1.500000       1.500000       1.000000    
+   1.000000       1.500000       1.500000       1.000000
  -0.1000000     -0.4000000      0.0000000E+00  0.0000000E+00
       ELEMENT          8 [    1h]    GROUP     0
-   1.500000       2.000000       2.000000       1.500000    
+   1.500000       2.000000       2.000000       1.500000
  -0.4000000     -0.1000000      0.0000000E+00  0.0000000E+00
       ELEMENT          9 [    1i]    GROUP     0
   0.0000000E+00  0.5000000      0.5000000      0.0000000E+00
-  0.0000000E+00  0.0000000E+00  0.4000000      0.1000000    
+  0.0000000E+00  0.0000000E+00  0.4000000      0.1000000
       ELEMENT         10 [    1j]    GROUP     0
-  0.5000000       1.000000       1.000000      0.5000000    
-  0.0000000E+00  0.0000000E+00  0.1000000      0.4000000    
+  0.5000000       1.000000       1.000000      0.5000000
+  0.0000000E+00  0.0000000E+00  0.1000000      0.4000000
       ELEMENT         11 [    1k]    GROUP     0
-   1.000000       1.500000       1.500000       1.000000    
-  0.0000000E+00  0.0000000E+00  0.4000000      0.1000000    
+   1.000000       1.500000       1.500000       1.000000
+  0.0000000E+00  0.0000000E+00  0.4000000      0.1000000
       ELEMENT         12 [    1l]    GROUP     0
-   1.500000       2.000000       2.000000       1.500000    
-  0.0000000E+00  0.0000000E+00  0.1000000      0.4000000    
+   1.500000       2.000000       2.000000       1.500000
+  0.0000000E+00  0.0000000E+00  0.1000000      0.4000000
       ELEMENT         13 [    1m]    GROUP     0
   0.0000000E+00  0.5000000      0.5000000      0.0000000E+00
-  0.1000000      0.4000000      0.5000000      0.2000000    
+  0.1000000      0.4000000      0.5000000      0.2000000
       ELEMENT         14 [    1n]    GROUP     0
-  0.5000000       1.000000       1.000000      0.5000000    
-  0.4000000      0.1000000      0.2000000      0.5000000    
+  0.5000000       1.000000       1.000000      0.5000000
+  0.4000000      0.1000000      0.2000000      0.5000000
       ELEMENT         15 [    1o]    GROUP     0
-   1.000000       1.500000       1.500000       1.000000    
-  0.1000000      0.4000000      0.5000000      0.2000000    
+   1.000000       1.500000       1.500000       1.000000
+  0.1000000      0.4000000      0.5000000      0.2000000
       ELEMENT         16 [    1p]    GROUP     0
-   1.500000       2.000000       2.000000       1.500000    
-  0.4000000      0.1000000      0.2000000      0.5000000    
+   1.500000       2.000000       2.000000       1.500000
+  0.4000000      0.1000000      0.2000000      0.5000000
   ***** CURVED SIDE DATA *****
          0 Curved sides follow IEDGE,IEL,CURVE(I),I=1,5, CCURVE
   ***** BOUNDARY CONDITIONS *****
@@ -310,23 +310,23 @@
  E   16  4   15.0000       2.00000      0.000000E+00  0.000000E+00  0.000000E+00
             0 PRESOLVE/RESTART OPTIONS  *****
             7         INITIAL CONDITIONS *****
-C Default                                                                       
-C Default                                                                       
-C Default                                                                       
-C Default                                                                       
-C Default                                                                       
-C Default                                                                       
-C Default                                                                       
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
   ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
             4                 Lines of Drive force data follow
-C                                                                               
-C                                                                               
-C                                                                               
-C                                                                               
+C
+C
+C
+C
   ***** Variable Property Data ***** Overrrides Parameter data.
             1 Lines follow.
             0 PACKETS OF DATA FOLLOW
-  ***** HISTORY AND INTEGRAL DATA ***** 
+  ***** HISTORY AND INTEGRAL DATA *****
             0   POINTS.  Hcode, I,J,H,IEL
   ***** OUTPUT FIELD SPECIFICATION *****
             6 SPECIFICATIONS FOLLOW
@@ -336,10 +336,10 @@ C
   T      TEMPERATURE
   F      TEMPERATURE GRADIENT
             2      PASSIVE SCALARS
- T PS 1 
- T PS 2 
+ T PS 1
+ T PS 2
   ***** OBJECT SPECIFICATION *****
-       0 Surface Objects 
-       0 Volume  Objects 
-       0 Edge    Objects 
-       0 Point   Objects 
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects

@@ -2,109 +2,109 @@
     2.610000     NEKTON VERSION
             2 DIMENSIONAL RUN
           103 PARAMETERS FOLLOW
-   1.00000         DENSITY
-  -100.            VISCOS   !  < 0 ==> mu = 1/|param(2)|
-  0.000000E+00     BETAG
-  0.000000E+00     GTHETA
-  0.000000E+00     PGRADX
-  0.000000E+00     FLOWRATE
-   1.00000         RHOCP
-  1.0              CONDUCT
-  0.000000E+00     QVOL
-  0.000000E+00     FINTIME
-   2000.00         NSTEPS
- -0.005            DT
-  0.000000E+00     IOCOMM
-  0.000000E+00     IOTIME
-  00.00000E+00     IOSTEP
-  0.000000E+00     EQTYPE
-  0.000000E+00     AXIS
-  0.250000E-01     GRID
-  -1.00000         INTYPE
-   12.0000         NORDER
-  1.000000E-06     DIVERGENCE
-  1.000000E-08     HELMHOLTZ
-  0.000000E+00     NPSCAL
-  0.100000E-09     TOLREL
-  0.100000E-09     TOLABS
-  0.250000         COURANT
-   2.00000         TORDER
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00     HISTEP
-  0.000000E+00     HISTIME
-  0.000000E+00
-  0.000000E+00     P55
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00     p66 write form (0), unform(1), universal(2)
-  0.000000E+00     p67 read form (0), unform (1), universal(2)
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00       coarse grid weighting (default=10.0)
-  0.000000E+00
-  0.000000E+00
-  0.000000E+00
-0  20.0000          Number of pressure sol'ns saved
-   0.00000          start saving velocity soln's after this
-0  5.00000          start saving pressure soln's after this
-  0.000000E+00       which saving algorithm 1 = discard, 2=
-  0.000000E+00       0 == > no iterative refinement
-  0.000000E+00       0 = Bnorm, 1=1norm, 2=B^2 norm,
-   3.00000           p99=3 ==> dealiasing turned on
-  0.000000E+00       p100
-  0.000000E+00       p101 # add'l filter modes
-   1.00000           p102
-  0.500000E-01       p103 filter weight
+       1.000000         p01 DENSITY
+      -100.0000         p02 VISCOS
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+       1.000000         p08 CONDUCT
+      0.0000000E+00
+      0.0000000E+00     p10 FINTIME
+       2000.000         p11 NSTEPS
+     -4.9999999E-03     p12 DT
+      0.0000000E+00     p13 IOCOMM
+      0.0000000E+00     p14 IOTIME
+      0.0000000E+00     p15 IOSTEP
+      0.0000000E+00     p16 PSSOLVER
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      1.0000000E-06     p21 DIVERGENCE
+      9.9999999E-09     p22 HELMHOLTZ
+      0.0000000E+00     p23 NPSCAL
+      1.0000000E-10     p24 TOLREL
+      1.0000000E-10     p25 TOLABS
+      0.2500000         p26 COURANT/NTAU
+       2.000000         p27 TORDER
+      0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)
+      0.0000000E+00     p29 magnetic visc if > 0, = -1/Rm if < 0
+      0.0000000E+00     p30 > 0 ==> properties set in uservp()
+      0.0000000E+00     p31 NPERT: #perturbation modes
+      0.0000000E+00     p32 #BCs in re2 file, if > 0
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p42 0=gmres/1=pcg
+      0.0000000E+00     p43 0=semg/1=schwarz
+      0.0000000E+00     p44 0=E-based/1=A-based prec.
+      0.0000000E+00     p45 Relaxation factor for DTFS
+      0.0000000E+00      p46 if >0, dont call SETICS
+      0.0000000E+00     p47 vnu: mesh matieral prop
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p52 IOHIS
+      0.0000000E+00
+      0.0000000E+00     p54 1,2,3-->fixed flow rate dir=x,y,z
+      0.0000000E+00     p55 vol.flow rate(p54>0) or Ubar(p54<0)
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p59 !=0 --> use std axhelm for all elem
+      0.0000000E+00     p60 !=0--> init velocity to small nonzero
+      0.0000000E+00
+      0.0000000E+00     p62 >0 --> force byte_swap for output
+      0.0000000E+00     p63 =8 --> force 8-byte output
+      0.0000000E+00     p64 =1 --> perturbation restart
+      0.0000000E+00     p65 #iofile(eg,0 or 64); <0 --> sep. dirs
+       6.000000         p66 write fmt:ONLY postx uses rea value
+       6.000000         p67 read fmt: same modes as p66
+      0.0000000E+00     p68 iastep: freq for avg_all
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p74 verbose Helmholtz
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p84 !=0 -->sets initial timestep if p12>0
+      0.0000000E+00     p85 dt ratio if p84 !=0, for timesteps>0
+      0.0000000E+00     p86 reserved
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p89 reserved
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00     p93 Numbr of prev pressure solns saved
+      0.0000000E+00     p94 start projecting vel. after p94 step
+      0.0000000E+00     p95 start projecting pr after p95 step
+      0.0000000E+00
+      0.0000000E+00
+      0.0000000E+00
+       3.000000         p99    dealiasing:if <0 disable
+      0.0000000E+00     p100 reserved
+      0.0000000E+00     p101   No. of additional filter modes
+      0.0000000E+00
+      5.0000001E-02     p103   weight of stabilizing filter (.01)
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000
