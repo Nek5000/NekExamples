@@ -600,7 +600,7 @@ echo "####################################################################"
 cd ..
 tester strat nek200s re10f1000p0001 error 1
 cd ..
-tester strat nek200s re10f1000p0001 error 1
+tester strat nek200s re10f1000p1000 error 1
 
 echo "####################################################################"
 echo "### solid; solid"
