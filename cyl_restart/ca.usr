@@ -115,8 +115,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-c     param(66) = 4.   ! These give the std nek binary i/o and are 
-c     param(67) = 4.   ! good default values
+      param(66) = 4.   ! binary fld
+      param(67) = 4.   ! restart file
 
       call set_obj     ! define objects for surface integrals
 
