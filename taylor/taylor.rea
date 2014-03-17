@@ -25,8 +25,8 @@
       0.0000000E+00     p21 DIVERGENCE
       0.0000000E+00     p22 HELMHOLTZ
       0.0000000E+00     p23 NPSCAL
-      9.9999997E-06     p24 TOLREL
-      9.9999997E-06     p25 TOLABS
+      1.0000000E-05     p24 TOLREL
+      1.0000000E-05     p25 TOLABS
        2.010000         p26 COURANT/NTAU
        3.000000         p27 TORDER
       0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)
@@ -124,7 +124,7 @@
       8.0632000E+00     p120
       1.8879000E-02     p121
       1.0095000E-02     p122
-      9.9999997E-05     p123
+      1.0000000E-04     p123
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000

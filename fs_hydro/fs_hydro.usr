@@ -262,8 +262,8 @@ c     Set surface tension on free surface
 
       call gen_pert_ic
 
-      param(66) = 4  ! std i/o
-      param(67) = 4
+c     param(66) = 4  ! std i/o
+c     param(67) = 4
 
       return
       end

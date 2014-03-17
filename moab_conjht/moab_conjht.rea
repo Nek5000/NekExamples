@@ -23,10 +23,10 @@
       0.0000000E+00
       0.0000000E+00
       1.0000000E-06     p21 DIVERGENCE
-      9.9999999E-09     p22 HELMHOLTZ
+      1.0000000E-08     p22 HELMHOLTZ
       0.0000000E+00     p23 NPSCAL
-      9.9999997E-06     p24 TOLREL
-      9.9999997E-10     p25 TOLABS
+      1.0000000E-05     p24 TOLREL
+      1.0000000E-09     p25 TOLABS
       0.5000000         p26 COURANT/NTAU
        2.000000         p27 TORDER
       0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)
@@ -104,7 +104,7 @@
       0.0000000E+00     p100 reserved
       0.0000000E+00     p101   No. of additional filter modes
       0.0000000E+00
-      9.9999998E-03     p103   weight of stabilizing filter (.01)
+      1.0000000E-02     p103   weight of stabilizing filter (.01)
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000

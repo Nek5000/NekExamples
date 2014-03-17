@@ -9,7 +9,7 @@
       0.0000000E+00
       0.0000000E+00
       0.0000000E+00
-      9.9999998E-03     p08 CONDUCT
+      1.0000000E-02     p08 CONDUCT
       0.0000000E+00
       0.0000000E+00     p10 FINTIME
        5000.000         p11 NSTEPS
@@ -25,8 +25,8 @@
       1.0000000E-10     p21 DIVERGENCE
       1.0000000E-12     p22 HELMHOLTZ
       0.0000000E+00     p23 NPSCAL
-      9.9999998E-03     p24 TOLREL
-      9.9999998E-03     p25 TOLABS
+      1.0000000E-02     p24 TOLREL
+      1.0000000E-02     p25 TOLABS
       0.5000000         p26 COURANT/NTAU
        3.000000         p27 TORDER
       0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)
@@ -76,7 +76,7 @@
       0.0000000E+00
       0.0000000E+00
       0.0000000E+00     p74 verbose Helmholtz
-      0.0000000E+00
+        0.0001          p75 perturbation amplitude (in .usr)
       0.0000000E+00
       0.0000000E+00
       0.0000000E+00

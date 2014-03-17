@@ -26,7 +26,7 @@
       0.0000000E+00     p22 HELMHOLTZ
       0.0000000E+00     p23 NPSCAL
       1.0000000E-07     p24 TOLREL
-      9.9999997E-06     p25 TOLABS
+      1.0000000E-05     p25 TOLABS
        2.010000         p26 COURANT/NTAU
        3.000000         p27 TORDER
       0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)
@@ -76,8 +76,8 @@
       0.0000000E+00
       0.0000000E+00
       0.0000000E+00     p74 verbose Helmholtz
-      0.0000000E+00
-      0.0000000E+00
+        2.2214          p75 k_c critical wave number (in .usr)
+        660.            p76 Rayleigh number (in .usr)
       0.0000000E+00
       0.0000000E+00
       0.0000000E+00

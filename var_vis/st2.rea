@@ -3,7 +3,7 @@
             2 DIMENSIONAL RUN
           103 PARAMETERS FOLLOW
        1.000000         p01 DENSITY
-      9.9999998E-03     p02 VISCOS
+      1.0000000E-02     p02 VISCOS
       0.0000000E+00
       0.0000000E+00
       0.0000000E+00

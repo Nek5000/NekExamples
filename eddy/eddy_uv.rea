@@ -13,7 +13,7 @@
       0.0000000E+00
       0.0000000E+00     p10 FINTIME
        1000.000         p11 NSTEPS
-     -9.9999997E-05     p12 DT
+     -1.0000000E-04     p12 DT
       0.0000000E+00     p13 IOCOMM
       0.0000000E+00     p14 IOTIME
        100.0000         p15 IOSTEP
@@ -97,8 +97,8 @@
        20.00000         p93 Numbr of prev pressure solns saved
        5.000000         p94 start projecting vel. after p94 step
        5.000000         p95 start projecting pr after p95 step
-      0.0000000E+00
-      0.0000000E+00
+       1.00000          p96 u0 translational velocity (in .usr)
+        0.30000          p97 v0 translational velocity (in .usr)
       0.0000000E+00
        3.000000         p99    dealiasing:if <0 disable
       0.0000000E+00     p100 reserved

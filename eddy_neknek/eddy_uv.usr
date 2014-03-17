@@ -318,8 +318,8 @@ c     nfld = 4 - u,v,w velocitites + temperature
 
       nfld=3
 
-      param(66) = 4
-      param(67) = 4
+c     param(66) = 4
+c     param(67) = 4
 
       return
       end

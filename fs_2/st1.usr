@@ -147,8 +147,8 @@ c-----------------------------------------------------------------------
       nelx = 6
       nely = 6
 
-      param(66) = 4    ! std nek5000 output
-      param(67) = 4
+c     param(66) = 4    ! std nek5000 output
+c     param(67) = 4
 
       Re         = 3.e4             ! hard-code Reynolds number
       visc       = 1/Re

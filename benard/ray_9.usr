@@ -208,8 +208,8 @@ c-----------------------------------------------------------------------
       call rayleigh_const
 
 
-      param(66) = 4
-      param(67) = 4
+c     param(66) = 4
+c     param(67) = 4
 
       ntot = nx1*ny1*nz1*nelv	! nelv as in rescale_x
       xmin = glmin(xm1,ntot)

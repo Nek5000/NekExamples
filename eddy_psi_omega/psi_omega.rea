@@ -23,7 +23,7 @@
       0.0000000E+00
       0.0000000E+00
       1.0000000E-10     p21 DIVERGENCE
-      9.9999997E-10     p22 HELMHOLTZ
+      1.0000000E-09     p22 HELMHOLTZ
       0.0000000E+00     p23 NPSCAL
       1.0000000E-10     p24 TOLREL
       1.0000000E-10     p25 TOLABS
@@ -97,8 +97,8 @@
       0.0000000E+00     p93 Numbr of prev pressure solns saved
       0.0000000E+00     p94 start projecting vel. after p94 step
       0.0000000E+00     p95 start projecting pr after p95 step
-      0.0000000E+00
-      0.0000000E+00
+    0 16.0000E+00       p96 = u0 ! translational velocity for eddy.usr
+    0 5.00000E+00       p97 = v0 ! translational velocity for eddy.usr
       0.0000000E+00
        3.000000         p99    dealiasing:if <0 disable
       0.0000000E+00     p100 reserved

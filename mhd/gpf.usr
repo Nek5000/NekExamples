@@ -265,9 +265,6 @@ c
       call rescale_x(zm1,0.,zleng)
  
 
-      param(66) = 4		! .fld -- comment out for .f
-      param(67) = 4		! .fld -- comment out for .f
- 
       return
       end
 c-----------------------------------------------------------------------

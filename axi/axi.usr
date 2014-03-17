@@ -99,8 +99,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      param(66) = 4.
-      param(67) = 4.
+c     param(66) = 4.
+c     param(67) = 4.
 
       return
       end

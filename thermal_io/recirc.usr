@@ -143,8 +143,6 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      param(66) = 4.   ! These give the std nek binary i/o and are 
-      param(67) = 4.   ! good default values
 
       return
       end

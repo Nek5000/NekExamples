@@ -25,8 +25,8 @@
       0.0000000E+00     p21 DIVERGENCE
       0.0000000E+00     p22 HELMHOLTZ
       0.0000000E+00     p23 NPSCAL
-      9.9999997E-05     p24 TOLREL
-      9.9999997E-05     p25 TOLABS
+      1.0000000E-04     p24 TOLREL
+      1.0000000E-04     p25 TOLABS
        2.000000         p26 COURANT/NTAU
        3.000000         p27 TORDER
       0.0000000E+00     p28 TORDER: mesh velocity (0: p28=p27)

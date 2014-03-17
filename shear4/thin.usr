@@ -201,8 +201,6 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      param(66) = 4   ! std nek io
-      param(67) = 4
 
 !
 !     Checking for fast tensor product pressure solver:
