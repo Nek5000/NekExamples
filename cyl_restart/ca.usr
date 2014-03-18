@@ -115,8 +115,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      param(66) = 4.   ! binary fld
-      param(67) = 4.   ! restart file
+c     param(66) = 4.   ! binary fld
+c     param(67) = 4.   ! restart file
 
       call set_obj     ! define objects for surface integrals
 
