@@ -67,8 +67,8 @@
       0.0000000E+00     p63 =8 --> force 8-byte output
       0.0000000E+00     p64 =1 --> perturbation restart
       0.0000000E+00     p65 #iofile(eg,0 or 64); <0 --> sep. dirs
-       6.000000         p66 write fmt:ONLY postx uses rea value
-       6.000000         p67 read fmt: same modes as p66
+       4.000000         p66 write fmt:ONLY postx uses rea value
+       4.000000         p67 read fmt: same modes as p66
       0.0000000E+00     p68 iastep: freq for avg_all
       0.0000000E+00
       0.0000000E+00

@@ -200,9 +200,6 @@ c     Formulas here are eqn. 3-22 and 3-28 in White.
 
       param(59) = 1.   ! All elements deformed
 
-      param(66) = 4.   ! These give the std nek binary i/o and are 
-      param(67) = 4.   ! good default values
-
 c     Rescale geometry onto a box that is on [0:2pi] x [0,1]
 
       zero = 0.

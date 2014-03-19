@@ -129,8 +129,6 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      param(66) = 0 ! 4    ! Std nek file output format (binary)
-      param(67) = 0 ! 4
 
       xmin = 0
       xmax = 1

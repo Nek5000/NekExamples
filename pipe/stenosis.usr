@@ -118,9 +118,6 @@ c-----------------------------------------------------------------------
       save    ifstenosis
 
 
-      param(66) = 0.
-      param(67) = 0.
-
       x0 = -.5
       x1 =  .5
       call rescale_x (xm1,x0,x1)  ! Rescale x & y so pipe diameter is 1.
