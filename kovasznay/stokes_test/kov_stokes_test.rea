@@ -67,8 +67,8 @@
   0.000000E+00 P063: =8 --> force 8-byte output
   0.000000E+00 P064: =1 --> perturbation restart
    1.00000     P065: #iofiles (eg, 0 or 64); <0 --> sep. dirs
- 0 4.00000     P066: output : <0=ascii, else binary
- 0 4.00000     P067: restart: <0=ascii, else binary
+  6.00000     P066: output : <0=ascii, else binary
+ 6 4.00000     P067: restart: <0=ascii, else binary
   0.000000E+00 P068: iastep: freq for avg_all (0=iostep)
   0.000000E+00 P069: 
   0.000000E+00 P070: 
