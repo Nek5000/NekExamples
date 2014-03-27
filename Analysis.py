@@ -1016,7 +1016,7 @@ Run("Example hpts_ed/SRL: SRL-HPTS",log,value)
 if ifmpi:
 
     log = "./mpi2Log/hpts_ed.log.1"
-    value = "ABORT in hpts"
+    value = "ABORT: Too many pts to read in hpts"
     FindPhrase("Example hpts_ed/MPI2: Serial",log,value)
 
     log = "./mpi2Log/hpts_ed.log.4"
