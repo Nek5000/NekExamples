@@ -257,41 +257,43 @@ c     Compute perturbation energy
 
       ! write statistics to file
       iostep_avg = param(68)
-      if(nid.eq.0 .and. istep.gt.0 .and. 
+      if (nid.eq.0 .and. istep.gt.0 .and. 
      &   mod(istep,iostep_avg).eq.0) then
-            write(6,*) 'Dumping statistics ...'
-            open(unit=56,file='reystresses.dat')
-            write(56,'(A,1pe14.7)') '#time = ', time
-            write(56,'(A)')
-     &      '#  y     y+     R_uu     R_vv     R_ww     R_uv'
-            open(unit=57,file='means.dat')
-            write(57,'(A,1pe14.7)') '#time = ', time
-            write(57,'(A)')
-     &      '#  y     y+    Umean'
+         write(6,*) 'Dumping statistics ...'
+         open(unit=56,file='reystresses.dat')
+         write(56,'(A,1pe14.7)') '#time = ', time
+         write(56,'(A)')
+     &   '#  y     y+     R_uu     R_vv     R_ww     R_uv'
+         open(unit=57,file='means.dat')
+         write(57,'(A,1pe14.7)') '#time = ', time
+         write(57,'(A)')
+     &   '#  y     y+    Umean'
 
-            m = ny1*nely/2
-            do i=1,m
-                write(56,3) yy(i)+1
-     &                     ,(yy(i)+1)*Re_tau 
-     &                     , (urms_pl(i)-(uavg_pl(i))**2)/u_tau**2
-     &                     , vrms_pl(i)/u_tau**2
-     &                     , wrms_pl(i)/u_tau**2
-     &                     , uvms_pl(i)/u_tau**2
-                write(57,3)  yy(i) + 1.
-     &                     , (yy(i)+1.)*Re_tau 
-     &                     , uavg_pl(i)/u_tau
-    3           format(1p15e17.9)
-            enddo
+         m = ny1*nely/2
+         do i=1,m
+            write(56,3) yy(i)+1
+     &                ,(yy(i)+1)*Re_tau 
+     &                , (urms_pl(i)-(uavg_pl(i))**2)/u_tau**2
+     &                , vrms_pl(i)/u_tau**2
+     &                , wrms_pl(i)/u_tau**2
+     &                , uvms_pl(i)/u_tau**2
+            write(57,3)  yy(i) + 1.
+     &                , (yy(i)+1.)*Re_tau 
+     &                , uavg_pl(i)/u_tau
+    3       format(1p15e17.9)
+        enddo
 
-            close(56)
-            close(57)
+        close(56)
+        close(57)
+
+        timel = time
+
       endif
 
       return
       end
 c-----------------------------------------------------------------------
       subroutine userbc (ix,iy,iz,iside,ieg)
-c     NOTE ::: This subroutine MAY NOT be called by every process
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
