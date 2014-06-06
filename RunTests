@@ -1,3 +1,4 @@
+#!/bin/bash
 ####################################################################
 ### FUNCTIONS
 ####################################################################
@@ -319,7 +320,14 @@ sed -i "s:ly2=.*:ly2=ly1-2):"  examples/*/SIZE
 sed -i "s:ly2=.*:ly2=ly1-2):"  examples/cone/*/SIZE
 
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/vortex/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/3dbox/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/expansion/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/hemi/SIZE
 sed -i "s:lz2=.*:lz2=lz1-2):"  examples/mhd/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/peris/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/pipe/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/solid/SIZE
+sed -i "s:lz2=.*:lz2=lz1-2):"  examples/turbChannel/SIZE
 #MOAB
 if [ "${IF_MOAB}" == "on" ]
 then
@@ -327,10 +335,6 @@ then
     sed -i "s:lz2=.*:lz2=lz1-2):"  examples/moab_conjht/SIZE
 fi
 
-sed -i "s:lz2=.*:lz2=lz1-2):"  examples/peris/SIZE
-sed -i "s:lz2=.*:lz2=lz1-2):"  examples/pipe/SIZE
-sed -i "s:lz2=.*:lz2=lz1-2):"  examples/solid/SIZE
-sed -i "s:lz2=.*:lz2=lz1-2):"  examples/turbChannel/SIZE
 
 # we run tests from trunk/nek
 cd ./trunk/nek

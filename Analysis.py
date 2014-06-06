@@ -214,6 +214,41 @@ Run("Example 2d_eig/SRL2: Serial-iter/err",log,value)
 
 
 
+print("\n\n3Dbox Example")  
+#MPI
+if ifmpi:
+
+    log = "./mpiLog/b3d.log.1"
+    value = "end of time-step loop"
+    FindPhrase("Example 3dbox/MPI: Serial",log,value)
+
+    log = "./mpiLog/b3d.log.4"
+    value = "end of time-step loop"
+    FindPhrase("Example 3dbox/MPI: Parallel",log,value)
+
+#SRL
+log = "./srlLog/b3d.log.1"
+value = "end of time-step loop"
+FindPhrase("Example 3dbox/SRL: Serial",log,value)
+
+#MPI2
+if ifmpi:
+    log = "./mpi2Log/b3d.log.1"
+    value = "end of time-step loop"
+    FindPhrase("Example 3dbox/MPI2: Serial",log,value)
+
+    log = "./mpi2Log/b3d.log.4"
+    value = "end of time-step loop"
+    FindPhrase("Example 3dbox/MPI2: Parallel",log,value)
+
+#SRL2
+log = "./srl2Log/b3d.log.1"
+value = "end of time-step loop"
+FindPhrase("Example 3dbox/SRL2: Serial",log,value)
+
+
+
+
 print("\n\naxi Example")  
 #MPI
 if ifmpi:
@@ -1047,7 +1082,7 @@ Run("Example hpts_ed/SRL2: SRL-HPTS",log,value)
 
 
 
- 
+
 print("\n\neddy_neknek Example")  
 #MPI
 if ifmpi:
@@ -1074,6 +1109,112 @@ if ifmpi:
     value = [['X err   global' ,3.925388E-03,1e-06,7],
              ['Y err   global',6.299443E-03,1e-06,7]]
     Run("Example eddy_neknek/MPI2: 4--error",log,value)
+
+
+
+
+print("\n\neddy_psi_omega Example")  
+#MPI
+if ifmpi:
+
+    log = "./mpiLog/psi_omega.err.1"
+    value = [['X err' ,1.180811E-10,1e-06,7]]
+    Run("Example Eddy psi_omega/MPI: 2--error",log,value)
+
+    log = "./mpiLog/psi_omega.err.4"
+    value = [['X err' ,1.180811E-10,1e-06,7]]
+    Run("Example Eddy psi_omega/MPI: 4--error",log,value)
+
+#SRL
+log = "./srlLog/psi_omega.log.1"
+value = [['total solver time',0.1,17,2]]
+Run("Example Eddy psi_omega/SRL: Serial-time",log,value)
+
+log = "./srlLog/hpts_ed.err.1"
+value = [['X err',1.180811E-10,1e-06,6]]
+Run("Example Eddy psi_omega/SRL: Serial-error",log,value)
+
+#MPI2
+if ifmpi:
+
+    log = "./mpi2Log/psi_omega.err.1"
+    value = [['X err' ,1.180811E-10,1e-06,7]]
+    Run("Example Eddy psi_omega/MPI2: 1--error",log,value)
+
+    log = "./mpi2Log/psi_omega.err.4"
+    value = [['X err' ,1.180811E-10,1e-06,7]]
+    Run("Example Eddy psi_omega/MPI2: 4--error",log,value)
+ 
+#SRL2
+log = "./srl2Log/psi_omega.log.1"
+value = [['total solver time',0.1,17,2]]
+Run("Example Eddy psi_omega/SRL2: Serial-time",log,value)
+
+log = "./srl2Log/hpts_ed.err.1"
+value = [['X err',1.180811E-10,1e-06,6]]
+Run("Example Eddy psi_omega/SRL2: Serial-error",log,value)
+
+
+
+
+print("\n\nexpansion Example")  
+#MPI 
+if ifmpi:
+
+    log = "./mpiLog/expansion.log.1"
+    value = [['gmres: ',0,71,7]]
+    Run("Example expansion/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/expansion.err.1"
+    value = [['ubar',2.0087E+00,1e-06,2]]
+    Run("Example expansion/MPI: Serial-error",log,value)
+
+    log = "./mpiLog/expansion.log.4"
+    value = [['gmres: ',0,71,7]]
+    Run("Example expansion/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/expansion.err.4"
+    value = [['ubar',2.0087E+00,1e-06,2]]
+    Run("Example expansion/MPI: Serial-error",log,value)
+
+#SRL
+log = "./srlLog/expansion.log.1"
+value = [['total solver time',0.1,250,2],
+         ['gmres: ',0,71,7]]
+Run("Example expansion/SRL: Serial-time/iter",log,value)
+
+log = "./srlLog/expansion.err.1"
+value = [['ubar',2.0087E+00,1e-06,2]]
+Run("Example ext_cyl/SRL: Serial-error",log,value)
+
+#MPI2 
+if ifmpi:
+
+    log = "./mpi2Log/expansion.log.1"
+    value = [['gmres: ',0,65,7]]
+    Run("Example expansion/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/expansion.err.1"
+    value = [['ubar',2.0000E+00,1e-06,2]]
+    Run("Example expansion/MPI2: Serial-error",log,value)
+
+    log = "./mpi2Log/expansion.log.4"
+    value = [['gmres: ',0,65,7]]
+    Run("Example expansion/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/expansion.err.4"
+    value = [['ubar',2.0000E+00,1e-06,2]]
+    Run("Example expansion/MPI2: Serial-error",log,value)
+
+#SRL
+log = "./srl2Log/expansion.log.1"
+value = [['total solver time',0.1,150,2],
+         ['gmres: ',0,65,7]]
+Run("Example expansion/SRL2: Serial-time/iter",log,value)
+
+log = "./srl2Log/expansion.err.1"
+value = [['ubar',2.0000E+00,1e-06,2]]
+Run("Example ext_cyl/SRL2: Serial-error",log,value)
 
 
 
@@ -1336,6 +1477,68 @@ Run("Example fs_hydro/SRL2: Serial-error",log,value)
 
 
 
+print("\n\nhemi Example")  
+#MPI
+if ifmpi:
+
+    log = "./mpiLog/hemi.log.1"
+    value = [['gmres: ',0,39,7]]
+    Run("Example hemi/MPI: Serial-iter",log,value)
+
+    log = "./mpiLog/hemi.err.1"
+    value = [['wmax',4.9173E-01,1e-06,2]]
+    Run("Example hemi/MPI: Serial-error",log,value)
+
+    log = "./mpiLog/hemi.log.4"
+    value = [['gmres: ',0,39,7]]
+    Run("Example hemi/MPI: Parallel-iter",log,value)
+
+    log = "./mpiLog/hemi.err.4"
+    value = [['wmax',4.9173E-01,1e-06,2]]
+    Run("Example hemi/MPI: Parallel-error",log,value)
+
+#SRL
+log = "./srlLog/hemi.log.1"
+value = [['total solver time',0.1,100,2],
+         ['gmres: ',0,39,7]]
+Run("Example hemi/SRL: Serial-time/iter",log,value)
+
+log = "./srlLog/hemi.err.1"
+value = [['wmax',4.9173E-01,1e-06,2]]
+Run("Example hemi/SRL: Serial-error",log,value)
+
+#MPI2
+if ifmpi:
+
+    log = "./mpi2Log/hemi.log.1"
+    value = [['gmres: ',0,34,6]]
+    Run("Example hemi/MPI2: Serial-iter",log,value)
+
+    log = "./mpi2Log/hemi.err.1"
+    value = [['wmax',4.7915E-01,1e-06,2]]
+    Run("Example hemi/MPI2: Serial-error",log,value)
+
+    log = "./mpi2Log/hemi.log.4"
+    value = [['gmres: ',0,34,6]]
+    Run("Example hemi/MPI2: Parallel-iter",log,value)
+
+    log = "./mpi2Log/hemi.err.4"
+    value = [['wmax',4.7915E-01,1e-06,2]]
+    Run("Example hemi/MPI2: Parallel-error",log,value)
+
+#SRL
+log = "./srl2Log/hemi.log.1"
+value = [['total solver time',0.1,60,2],
+         ['gmres: ',0,34,6]]
+Run("Example hemi/SRL2: Serial-time/iter",log,value)
+
+log = "./srl2Log/hemi.err.1"
+value = [['wmax',4.7915E-01,1e-06,2]]
+Run("Example hemi/SRL2: Serial-error",log,value)
+
+
+
+
 print("\n\nkovasznay Example")  
 #MPI
 if ifmpi:
@@ -1393,6 +1596,30 @@ Run("Example kov/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/kov.err.1"
 value = [['err',5.90551E-13,1e-06,3]]
+Run("Example kov/SRL2: Serial-error",log,value)
+
+
+
+
+print("\n\nkov_st_state Example")  
+#MPI2
+if ifmpi:
+
+    log = "./mpi2Log/kov_st_stokes.err.1"
+    value = [['err',8.55641E-10,1e-06,3]]
+    Run("Example kov_st_state/MPI2: Serial-error",log,value)
+
+    log = "./mpi2Log/kov_st_stokes.err.4"
+    value = [['err',8.55641E-10,1e-06,3]]
+    Run("Example kov_st_state/MPI2: Parallel-error",log,value)
+ 
+#SRL2
+log = "./srl2Log/kov_st_stokes.log.1"
+value = [['total solver time',0.1,5,2]]
+Run("Example kov_st_state/SRL2: Serial-time",log,value)
+
+log = "./srl2Log/kov_st_stokes.err.1"
+value = [['err',8.55641E-10,1e-06,3]]
 Run("Example kov/SRL2: Serial-error",log,value)
 
 

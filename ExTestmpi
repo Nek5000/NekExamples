@@ -1,6 +1,10 @@
+#!/bin/bash
 #Create variable to store source path
 cd ../nek
 HERE_S=`pwd`
+cd ../../test/tools
+HERE_T=`pwd`
+cd $HERE_S
 
 ##############################################################
 function tester()
@@ -69,6 +73,20 @@ echo "####################################################################"
 echo "### turbChannel; turbChannel"
 echo "####################################################################"
 tester turbChannel nek10steps turbChannel err2 1 
+
+echo "####################################################################"
+echo "### 3dbox; b3d"
+echo "####################################################################"
+cd ..
+cd 3dbox
+cp ../../trunk/tools/scripts/mvn .
+../../tests/tools/genbox << EOF
+b3d.box
+EOF
+./mvn box b3d
+cd ../
+tester 3dbox nek10steps b3d gridpt 1
+
 
 echo "####################################################################"
 echo "### axi; axi"
@@ -422,6 +440,24 @@ grep global inside.log | tail -2 > eddy_neknek.err.4
 clean_dir neknek eddy_uv inside outside
 
 echo "####################################################################"
+echo "### eddy_psi_omega; psi_eddy"
+echo "####################################################################"
+cd ..
+tester eddy_psi_omega nek10steps psi_omega err 1
+
+echo "####################################################################"
+echo "### expansion; expansion"
+echo "####################################################################"
+cd ..
+tester expansion nek10steps expansion ubar 1
+
+echo "####################################################################"
+echo "### hemi; hemi"
+echo "####################################################################"
+cd ..
+tester hemi nek10steps hemi wmax 1
+
+echo "####################################################################"
 echo "### ext_cyl; ext_cyl"
 echo "####################################################################"
 cd ..
@@ -449,6 +485,12 @@ echo "### kovasznay; kov"
 echo "####################################################################"
 cd ..
 tester kovasznay neklmpi kov err 1 
+
+echo "####################################################################"
+echo "### kov_st_state; kov_st_stokes"
+echo "####################################################################"
+cd ..
+tester kov_st_state neklmpi kov_st_stokes err 1 
 
 echo "####################################################################"
 echo "### lowMach_test; lowMach_test"
