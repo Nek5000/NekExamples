@@ -1,0 +1,62 @@
+
+
+              OSCILLATING CYLINDER EXAMPLE
+              ============================
+
+
+This case illustrates the Nek5000 ALE formulation for
+flow past an oscillating cylinder in 2D.
+
+(Note: The case "ocyl" is the first of two examples to be posted.  
+An improved version with faster computation of mesh velocity will
+be posted soon.)
+
+
+
+Frequency and amplitude of cylinder motion are set in the
+.rea file:
+
+  0.200000     p033  user: frequency of oscillation
+  0.500000     p034  user: amplitude of oscillation
+
+Note that the amplitude cannot be too large or the
+mesh will become entangled and the simulation will stop.
+
+
+The ALE formulation in this case solves an elasticity
+problem at every timestep in order compute the mesh 
+velocity.  While robust, this approach is slow and not
+recommended for production runs.   A better approach is
+to compute the mesh velocity for a single periodic cycle
+and to then use a short Fourier exapansion based on a 
+small set of time points over the full cycle to reconstruct
+the desired mesh velocity at any future time point.
+Such an approach would avoid repetitious computation of
+the mesh velocity, which for this example is far more expensive
+than computing the velocity/pressure for the fluid.  There
+would be no loss in accuracy because the ALE formulation
+allows for arbitrary mesh velocities, provided that they
+meet the kinematic condition that the normal mesh velocity
+component coincides with the normal fluid
+velocity component on the boundary.
+
+
+Prescribed boundary conditions are given in Cartesian coordinates.  
+The prescribed surface motion is indicated by the "mv " bc on your 
+moving surface (i.e., the cylinder surface). 
+
+To use mesh motion, you must also have
+
+T ifstrs
+T ifmvbd 
+
+in the .rea file and SIZE must have the following settings:
+
+      parameter (lx2=lx1-2)
+      parameter (ly2=ly1-2)
+      parameter (lz2=lz1  )
+      parameter (lx1m=lx1,ly1m=ly1,lz1m=lz1)
+
+
+An example of the result is shown in ocyl.gif.
+
