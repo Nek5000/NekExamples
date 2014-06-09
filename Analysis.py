@@ -1118,11 +1118,11 @@ print("\n\neddy_psi_omega Example")
 if ifmpi:
 
     log = "./mpiLog/psi_omega.err.1"
-    value = [['X err' ,1.180811E-10,1e-06,7]]
+    value = [['X err' ,1.177007E-10,1e-06,6]]
     Run("Example Eddy psi_omega/MPI: 2--error",log,value)
 
     log = "./mpiLog/psi_omega.err.4"
-    value = [['X err' ,1.180811E-10,1e-06,7]]
+    value = [['X err' ,1.177007E-10,1e-06,6]]
     Run("Example Eddy psi_omega/MPI: 4--error",log,value)
 
 #SRL
@@ -1130,19 +1130,19 @@ log = "./srlLog/psi_omega.log.1"
 value = [['total solver time',0.1,17,2]]
 Run("Example Eddy psi_omega/SRL: Serial-time",log,value)
 
-log = "./srlLog/hpts_ed.err.1"
-value = [['X err',1.180811E-10,1e-06,6]]
+log = "./srlLog/psi_omega.err.1"
+value = [['X err',1.177007E-10,1e-06,6]]
 Run("Example Eddy psi_omega/SRL: Serial-error",log,value)
 
 #MPI2
 if ifmpi:
 
     log = "./mpi2Log/psi_omega.err.1"
-    value = [['X err' ,1.180811E-10,1e-06,7]]
+    value = [['X err' ,1.177007E-10,1e-06,6]]
     Run("Example Eddy psi_omega/MPI2: 1--error",log,value)
 
     log = "./mpi2Log/psi_omega.err.4"
-    value = [['X err' ,1.180811E-10,1e-06,7]]
+    value = [['X err' ,1.177007E-10,1e-06,6]]
     Run("Example Eddy psi_omega/MPI2: 4--error",log,value)
  
 #SRL2
@@ -1150,8 +1150,8 @@ log = "./srl2Log/psi_omega.log.1"
 value = [['total solver time',0.1,17,2]]
 Run("Example Eddy psi_omega/SRL2: Serial-time",log,value)
 
-log = "./srl2Log/hpts_ed.err.1"
-value = [['X err',1.180811E-10,1e-06,6]]
+log = "./srl2Log/psi_omego.err.1"
+value = [['X err',1.177007E-10,1e-06,6]]
 Run("Example Eddy psi_omega/SRL2: Serial-error",log,value)
 
 
@@ -1162,7 +1162,7 @@ print("\n\nexpansion Example")
 if ifmpi:
 
     log = "./mpiLog/expansion.log.1"
-    value = [['gmres: ',0,71,7]]
+    value = [['gmres: ',0,77,7]]
     Run("Example expansion/MPI: Serial-iter",log,value)
 
     log = "./mpiLog/expansion.err.1"
@@ -1170,7 +1170,7 @@ if ifmpi:
     Run("Example expansion/MPI: Serial-error",log,value)
 
     log = "./mpiLog/expansion.log.4"
-    value = [['gmres: ',0,71,7]]
+    value = [['gmres: ',0,77,7]]
     Run("Example expansion/MPI: Serial-iter",log,value)
 
     log = "./mpiLog/expansion.err.4"
@@ -1180,7 +1180,7 @@ if ifmpi:
 #SRL
 log = "./srlLog/expansion.log.1"
 value = [['total solver time',0.1,250,2],
-         ['gmres: ',0,71,7]]
+         ['gmres: ',0,77,7]]
 Run("Example expansion/SRL: Serial-time/iter",log,value)
 
 log = "./srlLog/expansion.err.1"
@@ -1191,7 +1191,7 @@ Run("Example ext_cyl/SRL: Serial-error",log,value)
 if ifmpi:
 
     log = "./mpi2Log/expansion.log.1"
-    value = [['gmres: ',0,65,7]]
+    value = [['gmres: ',0,70,6]]
     Run("Example expansion/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/expansion.err.1"
@@ -1199,7 +1199,7 @@ if ifmpi:
     Run("Example expansion/MPI2: Serial-error",log,value)
 
     log = "./mpi2Log/expansion.log.4"
-    value = [['gmres: ',0,65,7]]
+    value = [['gmres: ',0,70,6]]
     Run("Example expansion/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/expansion.err.4"
@@ -1209,7 +1209,7 @@ if ifmpi:
 #SRL
 log = "./srl2Log/expansion.log.1"
 value = [['total solver time',0.1,150,2],
-         ['gmres: ',0,65,7]]
+         ['gmres: ',0,70,6]]
 Run("Example expansion/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/expansion.err.1"
