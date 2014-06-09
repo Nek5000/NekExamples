@@ -182,7 +182,7 @@ c
 
       call sub3   (ud,ue,vx,n)
       call sub3   (vd,ve,vy,n)
-      if (istep.eq.nsteps) call outpost(ud,vd,vx,pr,t,'   ')
+      if (istep.eq.nsteps) call outpost(ud,vd,vx,pr,t,'err')
 
       umx = glamax(vx,n)
       vmx = glamax(vy,n)
