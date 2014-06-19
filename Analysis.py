@@ -1150,7 +1150,7 @@ log = "./srl2Log/psi_omega.log.1"
 value = [['total solver time',0.1,17,2]]
 Run("Example Eddy psi_omega/SRL2: Serial-time",log,value)
 
-log = "./srl2Log/psi_omego.err.1"
+log = "./srl2Log/psi_omega.err.1"
 value = [['X err',1.177007E-10,1e-06,6]]
 Run("Example Eddy psi_omega/SRL2: Serial-error",log,value)
 
@@ -1892,7 +1892,7 @@ if ifmpi:
     Run("Example os7000/MPI: Serial-iter",log,value)
 
     log = "./mpiLog/u3_t020_n13.err.1"
-    value = [['egn',4.74797903E-05,1e-06,2]]
+    value = [['egn',3.61168711E-05,1e-06,2]]
     Run("Example os7000/MPI: Serial-error",log,value)
 
     log = "./mpiLog/u3_t020_n13.log.4"
@@ -1900,7 +1900,7 @@ if ifmpi:
     Run("Example os7000/MPI: Parallel-iter",log,value)
 
     log = "./mpiLog/u3_t020_n13.err.4"
-    value = [['egn',4.74797903E-05,1e-06,2]]
+    value = [['egn',3.61168711E-05,1e-06,2]]
     Run("Example os7000/MPI: Parallel-error",log,value)
 
 #SRL
@@ -1910,7 +1910,7 @@ value = [['total solver time',0.1,40,2],
 Run("Example os7000/SRL: Serial-time/iter",log,value)
 
 log = "./srlLog/u3_t020_n13.err.1"
-value = [['egn',4.74797903E-05,1e-06,2]]
+value = [['egn',3.61168711E-05,1e-06,2]]
 Run("Example os7000/SRL: Serial-error",log,value)
 
 #MPI2
@@ -2153,7 +2153,7 @@ if ifmpi:
     Run("Example ray2/MPI: Serial-iter",log,value)
 
     log = "./mpiLog/ray2.err.1"
-    value = [['umax',4.833071E-03,1e-05,3]]
+    value = [['umax',4.549071E-03,1e-05,3]]
     Run("Example ray2/MPI: Serial-error",log,value)
 
     log = "./mpiLog/ray2.log.4"
@@ -2161,7 +2161,7 @@ if ifmpi:
     Run("Example ray2/MPI: Parallel-iter",log,value)
 
     log = "./mpiLog/ray2.err.4"
-    value = [['umax',4.833071E-03,1e-05,3]]
+    value = [['umax',4.549071E-03,1e-05,3]]
     Run("Example ray2/MPI: Parallel-error",log,value)
 
 #SRL
@@ -2171,7 +2171,7 @@ value = [['total solver time',0.1,3,2],
 Run("Example ray2/SRL: Serial-time/iter",log,value)
 
 log = "./srlLog/ray2.err.1"
-value = [['umax',4.833071E-03,1e-05,3]]
+value = [['umax',4.549071E-03,1e-05,3]]
 Run("Example ray2/SRL: Serial-error",log,value)
 
 #MPI2
@@ -2182,7 +2182,7 @@ if ifmpi:
     Run("Example ray2/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/ray2.err.1"
-    value = [['umax',6.091663E-03,1e-05,3]]
+    value = [['umax',6.728787E-03,1e-05,3]]
     Run("Example ray2/MPI2: Serial-error",log,value)
 
     log = "./mpi2Log/ray2.log.4"
@@ -2190,7 +2190,7 @@ if ifmpi:
     Run("Example ray2/MPI2: Parellel-iter",log,value)
 
     log = "./mpi2Log/ray2.err.4"
-    value = [['umax',6.091663E-03,1e-05,3]]
+    value = [['umax',6.728787E-03,1e-05,3]]
     Run("Example ray2/MPI2: Parallel-error",log,value)
 
 #SRL2
@@ -2200,7 +2200,7 @@ value = [['total solver time',0.1,3,2],
 Run("Example ray2/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/ray2.err.1"
-value = [['umax',6.091663E-03,1e-05,3]]
+value = [['umax',6.728787E-03,1e-05,3]]
 Run("Example ray2/SRL2: Serial-error",log,value)
 
 
