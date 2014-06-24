@@ -1892,7 +1892,7 @@ if ifmpi:
     Run("Example os7000/MPI: Serial-iter",log,value)
 
     log = "./mpiLog/u3_t020_n13.err.1"
-    value = [['egn',3.61168711E-05,1e-06,2]]
+    value = [['egn',4.74494769e-05,1e-06,2]]
     Run("Example os7000/MPI: Serial-error",log,value)
 
     log = "./mpiLog/u3_t020_n13.log.4"
@@ -1900,7 +1900,7 @@ if ifmpi:
     Run("Example os7000/MPI: Parallel-iter",log,value)
 
     log = "./mpiLog/u3_t020_n13.err.4"
-    value = [['egn',3.61168711E-05,1e-06,2]]
+    value = [['egn',4.74494769e-05,1e-06,2]]
     Run("Example os7000/MPI: Parallel-error",log,value)
 
 #SRL
@@ -1910,7 +1910,7 @@ value = [['total solver time',0.1,40,2],
 Run("Example os7000/SRL: Serial-time/iter",log,value)
 
 log = "./srlLog/u3_t020_n13.err.1"
-value = [['egn',3.61168711E-05,1e-06,2]]
+value = [['egn',4.74494769e-05,1e-06,2]]
 Run("Example os7000/SRL: Serial-error",log,value)
 
 #MPI2
