@@ -4,14 +4,28 @@
               ============================
 
 
-This case illustrates the Nek5000 ALE formulation for
-flow past an oscillating cylinder in 2D.
+This case illustrates the Nek5000 ALE (arbitrary Lagrangian-Eulerian)
+formulation for flow past an oscillating cylinder in 2D.
 
-(Note: The case "ocyl" is the first of two examples to be posted.  
-An improved version with faster computation of mesh velocity will
-be posted soon.)
+There are two cases:
 
+   - ocyl,  which uses Nek5000's linear elasticity solver to compute
+            the mesh velocity at each step, and
 
+   - ocyl2, which uses a _user_supplied_ routine to generate an 
+            interpolating function for the ALE formulation.  
+
+The key for the ALE is that the mesh velocity match the fluid velocity
+at the domain boundaries (more precisely, that their normal component
+match) and that the mesh velocity be as smooth as possible throughout
+the domain.   Thus, determination of the mesh velocity simply requires
+finding a smooth interpolant that will blend between any two parts of 
+the domain boundary.   In ocyl2, this is done by solve a variable coefficient
+Poisson problem that forces most of the blending to take place away from
+the region of interest.  
+
+In these examples, ocyl2 will be _much_ faster because there is no solve
+for the mesh velocity on each step.
 
 Frequency and amplitude of cylinder motion are set in the
 .rea file:
