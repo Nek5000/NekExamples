@@ -166,7 +166,7 @@ c
       if(ifsplit .and. param(30).gt.0) ifexplvis = .true.
 
       ! driving force for Ubar = 1
-      call set_forcing(ffx_new,vx,1.0)
+      call set_forcing(ffx_new,vx,1)
 
       ! Compute eddy viscosity using dynamic smagorinsky model
       if(ifuservp) then
