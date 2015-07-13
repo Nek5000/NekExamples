@@ -222,12 +222,6 @@ c    Global error calculation
          call copy (vy,ve,n)      !  temporal-accuracy behavior.
       endif
 
-c     The rest of the routine deals with the information exchange between 
-c     multiple sessions
-    
-      call userchk_set_xfer
-      call bcopy
-
       return
       end
 c-----------------------------------------------------------------------
