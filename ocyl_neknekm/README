@@ -80,7 +80,8 @@ TO RUN:
 
     This example determines the average lift and drag  
     coefficients on the oscillating cylinder. The average lift 
-    coefficent given at the end of the logfile should be 
-    -1.22016E-03, and the average drag coefficient should converge 
-    to 2.11918.
+    coefficient given at the end of the logfile should be 
+    close to zero (abs value about 1.e-03 with the current parameters), 
+    and the average drag coefficient should be close to 2.1187 
+    (2.11918 with the current parameters).
 
