@@ -41,13 +41,19 @@ def Test(name, logfile,listOfValue)  :
         for line in log :                                               #we read the log file line by line  
             for set in listOfValue :                                    #for each line we loof if the value we want are there
                 if set[0] in line :                                     #set[0] is the name of the value
-                    testvalue = float(line.split()[-set[3]])                 #the value is on the set[3]th column from the right of the line 
-                    print("[%s] %s : %s"%(name,set[0],testvalue))
-                    if (abs(testvalue - set[1]) < set[2]) :             #set[1] is the target value / set[2] is the tolerance
-                       if (testvalue != 0.0) :                          #Checks that it is not 0.0(failure)
-                          success += 1
-                          num_success +=1
-                    listOfValue.remove(set)                             #The value was found so we remove it from the search
+                    # Try to parse testvalue.  If there is a parsing error in
+                    # line, assume that set wasn't found in line and continue.
+                    try:
+                        testvalue = float(line.split()[-set[3]])                 #the value is on the set[3]th column from the right of the line 
+                    except (ValueError,IndexError) :
+                        pass
+                    else:
+                        print("[%s] %s : %s"%(name,set[0],testvalue))
+                        if (abs(testvalue - set[1]) < set[2]) :             #set[1] is the target value / set[2] is the tolerance
+                           if (testvalue != 0.0) :                          #Checks that it is not 0.0(failure)
+                              success += 1
+                              num_success +=1
+                        listOfValue.remove(set)                             #The value was found so we remove it from the search
         log.close()
     if success == numTest :
         test_result = True
