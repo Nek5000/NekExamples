@@ -1,0 +1,105 @@
+#!/bin/bash
+####################################################################
+# This script requires COMPILER, F77_SRL and CC_SRL to be given. 
+# The rest of variables can be left empty. In such a case some of the 
+# tests won't be done. 
+####################################################################
+
+####################################################################
+### COMPILER-SPECIFIC PARAMETERS
+####################################################################
+
+if [ $COMPILER = "PGI" ]; then
+
+  # serial
+  F77_SRL='pgf77'
+  CC_SRL='pgcc'
+
+  # parallel
+  F77_MPI='mpif77'
+  CC_MPI='mpicc'
+
+  # moab files directory
+  # Required libraries
+  MOAB_LIB='-pgcpplibs'
+  # Paths
+  # parallel
+  MOAB_DIR_PAR='/home/fathom/libs/MOAB-4.5pre-par-mpich-pgi'
+  # serial 
+  MOAB_DIR_SRL='/home/fathom/libs/MOAB-4.5pre-ser-pgi'
+
+elif [ $COMPILER = "GNU" ]; then
+
+  # serial
+  F77_SRL='gfortran'
+  CC_SRL='gcc'
+
+  # parallel
+  F77_MPI=''
+  CC_MPI=''
+
+  # moab files directory
+  # Required libraries
+  MOAB_LIB='-lmpi_cxx -lstdc++'
+  # Paths
+  # parallel !! NO GNU PARALLEL !!
+  MOAB_DIR_PAR=''
+  # serial 
+  MOAB_DIR_SRL='/home/fathom/libs/MOAB-4.5pre-ser-intel'
+
+elif [ $COMPILER = "INTEL" ]; then
+
+  # serial
+  F77_SRL='ifort'
+  CC_SRL='icc'
+
+  # parallel
+  F77_MPI=''
+  CC_MPI=''
+
+  # moab files directory
+  # Required libraries
+  MOAB_LIB='-cxxlib'
+  # Paths
+  # parallel
+  MOAB_DIR_PAR=''
+  # serial 
+  MOAB_DIR_SRL='/home/fathom/libs/MOAB-4.5pre-ser-intel'
+
+else
+
+  echo "Specified value for \$COMPILER (${COMPILER}) is unsupported."
+  echo "Must specify one of: PGI, INT, or GNU"
+  exit 1
+
+fi
+
+####################################################################
+### COMMON PARAMETERS AND EXECUTABLES
+####################################################################
+
+# matlab execuatable
+#MATLAB='/soft/com/packages/Matlab_2010b/bin/matlab'
+MATLAB=''
+
+#Create directory for compiler
+mkdir $COMPILER
+
+PERFORMED_TESTS=""
+
+# Run tests in the current shell
+source ./RunTests | tee RunTests.log
+
+# Check results
+#./Analysis.py ${PERFORMED_TESTS} &> Analysis.log
+
+#Move files to compiler directory
+mv RunTests.log ./$COMPILER
+mv mpiLog  ./$COMPILER
+mv mpi2Log ./$COMPILER
+mv srlLog  ./$COMPILER
+mv srl2Log ./$COMPILER
+mv tools ./$COMPILER
+mv tools.out ./$COMPILER
+
+exit 0

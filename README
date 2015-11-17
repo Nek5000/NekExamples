@@ -79,3 +79,67 @@ Python script used to analyze the results of RunTests:
 	-Tests for Serial and Parallel error checks
 	-Tests Examples for iteration counts in pressure solver
 
+Jenkins:
+
+These scripts perform the same analyses as the BuildBot scripts.  Unlke the
+BuildBot scripts, they utilizes testing frameworks from the 'unittest' Python
+standard library module.  Additionally, they can produce xUnit-compatable XML
+reports by using the 'xmlrunner' module from the Python Package Index. 
+
+Unless you want xUnit XML output, the Buildbot scripts are generally easier to
+use.  
+
+***To Run Jenkins Manually On Any Platform(with at least 4 processors)****
+
+1)  Make sure you have a current set of the examples from the repo
+    in your nek5_svn/examples directoy. (And your nek5_svn/tests directory
+    is up to date as well)
+
+2) >> cd nek5_svn/tests
+
+3) >> cp Jenkins_RunTest your_RunTest
+   Edit your_RunTest with the compilers, MOAB directories, Matlab executable path
+   that you want to test.  Jenkins_RunTest is currently configured to use one
+   of three compilers, one MPI implementation, along with the MOAB and
+   AMG(matlab) tests.
+
+4) >> export COMPILER=[PGI|GNU|INT]
+   >> ./Jenkins_RunTest
+   This will execute the testing sequence for the specified compiler.  
+
+5) >> cd $COMPILER
+   >> ../Jenkins_Analysis.py [mpi] [xml] > Analysis.log 2> Analysis.stderr
+
+  The optional 'mpi' argument will analyze MPI tests.  By default, MPI tests
+  are not analyzed.
+
+  The optional 'xml' argument will output xUnit-compabtable XML reports to the
+  test-reports/ subdirectory.  This functionaly requires the 'xmlrunner' module.
+  By default, XML reports are not produced.  
+
+  The results are in the two logfiles.  
+
+
+***Overview of the Buildbot Scripts***
+
+Jenkins_RunTest:
+This executes RunTests for a single compiler (PGI, GNU, or Intel).  The
+compiler is specified by the COMPILER environment variable.  
+
+Jenkins_Analysis.py:
+This script performs the same analyses as Analysis.py.  Its stdout is almost
+identical to the output from Analysis.py and can be interpreted similarly.  For
+example, a quick way to check what tests failed is:
+
+   >> Analysis.py mpi | grep ' F ' 
+
+The script's stderr is produced by the unittest framework and contains detailed
+backtrace information for failed tests. 
+
+The console output is easier to interpret if stdout and stderr are
+redirected to separate destinations.  For example:
+
+  >> Jenkins_Analysis.py [mpi] [xml] > Analysis.log 2> Analysis.stderr
+
+which will redirect stdout and stderr to Analysis.log and Analysis.stderr
+respectively.
