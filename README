@@ -103,7 +103,7 @@ use.
    of three compilers, one MPI implementation, along with the MOAB and
    AMG(matlab) tests.
 
-4) >> export COMPILER=[PGI|GNU|INT]
+4) >> export COMPILER=[PGI|GNU|INTEL]
    >> ./Jenkins_RunTest
    This will execute the testing sequence for the specified compiler.  
 
