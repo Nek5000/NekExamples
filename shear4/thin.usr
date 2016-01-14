@@ -135,8 +135,8 @@ c-----------------------------------------------------------------------
       save    icalld
       data    icalld  /0/
 
-      real rho,delta
-      save rho,delta
+      real rhol,delta
+      save rhol,delta
 
       ux=0.0
       uy=0.0
@@ -154,34 +154,34 @@ c         Tadmor                 1997, Italy
 c
 c
       delta = 0.05
-c     rho   =  30.         ! thick shear layer case
-      rho   = 100.         ! thin shear layer case
+c     rhol   =  30.         ! thick shear layer case
+      rhol   = 100.         ! thin shear layer case
 
       if (icalld.eq.0) then
          icalld = 1
          if (nid.eq.0) write(6,*) 'Shear layer delta:',delta
-         if (nid.eq.0) write(6,*) 'Shear layer rho:  ',rho
+         if (nid.eq.0) write(6,*) 'Shear layer rho:  ',rhol
       endif
 
       if (y.le.0.5) then
-         ux =  tanh(rho*(y-0.25))
+         ux =  tanh(rhol*(y-0.25))
       else
-         ux =  tanh(rho*(0.75-y))
+         ux =  tanh(rhol*(0.75-y))
       endif
       uy =  delta*sin(2.*pi*x)
 
       if (ifield.gt.1) then          ! set up passive scalar
-         rho  = 50.*ifield
+         rhol  = 50.*ifield
          if (y.le.0.5) then
-            tmp  =  tanh(rho*(y-0.25))
+            tmp  =  tanh(rhol*(y-0.25))
          else
-            tmp  =  tanh(rho*(0.75-y))
+            tmp  =  tanh(rhol*(0.75-y))
          endif
 
          if (x.le.0.5) then
-            tmp  =  tmp  + tanh(rho*(x-0.25))
+            tmp  =  tmp  + tanh(rhol*(x-0.25))
          else
-            tmp  =  tmp  + tanh(rho*(0.75-x))
+            tmp  =  tmp  + tanh(rhol*(0.75-x))
          endif
          temp = tmp*sin(2.*pi*ifield*x)
          ps1  = tmp
@@ -237,7 +237,6 @@ c
 c     if (param(116).gt.0.and.np.gt.1) call exitti
 c    $('Fast tens. prod. solver (p116>0) currently broken for P>1$,np)
 c
-
       if (param(116).gt.0.and.np.gt.1.and.nid.eq.0) then
         write(6,*)
      $  'TURNING OFF FAST TENSOR PRODUCT SOLVER FOR PARALLEL CASE.'
