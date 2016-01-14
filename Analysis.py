@@ -2246,7 +2246,7 @@ Run("Example shear4/thick/SRL: Serial-error",log,value)
 if ifmpi:
 
     log = "./mpi2Log/shear4.log.1"
-    value = [['gmres: ',0,17,6]]
+    value = [['gmres: ',0,17,7]]
     Run("Example shear4/thick/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/shear4.err.1"
@@ -2254,7 +2254,7 @@ if ifmpi:
     Run("Example shear4/thick/MPI2: Serial-error",log,value)
 
     log = "./mpi2Log/shear4.log.4"
-    value = [['gmres: ',0,17,6]]
+    value = [['gmres: ',0,17,7]]
     Run("Example shear4/thick/MPI2: Parallel-iter",log,value)
 
     log = "./mpi2Log/shear4.err.4"
@@ -2264,7 +2264,7 @@ if ifmpi:
 #SRL2
 log = "./srl2Log/shear4.log.1"
 value = [['total solver time',0.1,10,2],
-         ['gmres: ',0,17,6]]
+         ['gmres: ',0,17,7]]
 Run("Example shear4/thick/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/shear4.err.1"
