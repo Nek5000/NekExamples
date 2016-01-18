@@ -33,7 +33,7 @@ def Test(name, logfile,listOfValue)  :
     except IOError :
         print("[%s]...Sorry, I must skip this test."%name)
         print("[%s]...The logfile is missing or doesn't have the correct name..."%name)
-        inputisgood = False
+      inputisgood = False
 
     #If we could find the log file, then we run the test    
     if inputisgood :        
@@ -2679,7 +2679,7 @@ Run("Example vortex2/SRL: Serial-error",log,value)
 if ifmpi:
 
     log = "./mpi2Log/v2d.log.1"
-    value = [['U-Press ',0,4,5]]
+    value = [['U-Press ',0,100,5]]
     Run("Example vortex2/MPI2: Serial-iter",log,value)
 
     log = "./mpi2Log/v2d.err.1"
@@ -2688,7 +2688,7 @@ if ifmpi:
     Run("Example vortex2/MPI2: Serial-error",log,value)
 
     log = "./mpi2Log/v2d.log.4"
-    value = [['U-Press ',0,4,5]]
+    value = [['U-Press ',0,100,5]]
     Run("Example vortex2/MPI2: Parallel-iter",log,value)
 
     log = "./mpi2Log/v2d.err.4"
@@ -2699,7 +2699,7 @@ if ifmpi:
 #SRL2
 log = "./srl2Log/v2d.log.1"
 value = [['total solver time',0.1,80,2],
-         ['U-Press ',0,4,5]]
+         ['U-Press ',0,100,5]]
 Run("Example vortex2/SRL2: Serial-time/iter",log,value)
 
 log = "./srl2Log/v2d.err.1"
