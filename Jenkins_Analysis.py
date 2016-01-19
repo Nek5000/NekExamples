@@ -349,10 +349,10 @@ if __name__ == '__main__':
     print("Beginning of top-down testing\n\n")
     print("    . : successful test, F : failed test\n\n")
 
-    ###########################################################################
+    ###############################################################################
     #---------------------Tools----------------------------------------------------
     #---------------------Tests----------------------------------------------------
-    print("\nBEGIN TESTING TOOLS")
+    print("\nBEGIN TESTING TOOLS")  
     #SRL Compiler
     log = "./tools.out"
     value = "Error "
@@ -361,7 +361,7 @@ if __name__ == '__main__':
     ###############################################################################
     #---------------------MPI------------------------------------------------------
     #---------------------Pn-Pn----------------------------------------------------
-    #print("\n\n2d_eig Example")
+    print("\n\n2d_eig Example")  
     #SRL
     log = "./srlLog/eig1.err"
     value = [[' 2   ',0,21,6],
@@ -392,7 +392,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\n3Dbox Example")
+    print("\n\n3Dbox Example")  
     #MPI
     if ifmpi:
 
@@ -427,7 +427,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\naxi Example")
+    print("\n\naxi Example")  
     #MPI
     if ifmpi:
 
@@ -465,7 +465,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nbenard-ray_9 Example")
+    print("\n\nbenard-ray_9 Example")  
     #MPI
     if ifmpi:
 
@@ -495,7 +495,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nbenard-ray_dd Example")
+    print("\n\nbenard-ray_dd Example")  
     #MPI
     if ifmpi:
 
@@ -541,7 +541,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nbenard-ray_dn Example")
+    print("\n\nbenard-ray_dn Example")  
     #MPI
     if ifmpi:
 
@@ -587,7 +587,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nbenard-ray_nn Example")
+    print("\n\nbenard-ray_nn Example")  
     #MPI
     if ifmpi:
 
@@ -633,7 +633,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nblasius Example")
+    print("\n\nblasius Example")  
     #MPI
     if ifmpi:
 
@@ -695,7 +695,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nconj_ht Example")
+    print("\n\nconj_ht Example")  
     #MPI
     if ifmpi:
 
@@ -757,7 +757,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\ncone016 Example")
+    print("\n\ncone016 Example")  
     #MPI
     if ifmpi:
 
@@ -781,7 +781,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\ncone064 Example")
+    print("\n\ncone064 Example")  
     #MPI
     if ifmpi:
 
@@ -805,7 +805,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\ncone256 Example")
+    print("\n\ncone256 Example")  
     #MPI
     if ifmpi:
 
@@ -829,8 +829,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\cyl_restart Example")
-    #print("\n\ca:::")
+    print("\n\cyl_restart Example")
+    print("\n\ca:::")
     #MPI
     if ifmpi:
 
@@ -888,7 +888,7 @@ if __name__ == '__main__':
     Run("Example restart-ca/SRL2: Serial-error",log,value)
 
 
-    #print("\n\cb:::")
+    print("\n\cb:::")
     #MPI
     if ifmpi:
 
@@ -947,7 +947,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\pa:::")
+    print("\n\pa:::")
     #MPI
     if ifmpi:
 
@@ -1006,7 +1006,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\pb:::")
+    print("\n\pb:::")
     #MPI
     if ifmpi:
 
@@ -1066,7 +1066,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\neddy Example")
+    print("\n\neddy Example")  
     #MPI
     if ifmpi:
 
@@ -1128,7 +1128,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nAMG_eddy Example")
+    print("\n\nAMG_eddy Example")  
     #MPI
     if ifmpi:
 
@@ -1189,8 +1189,8 @@ if __name__ == '__main__':
 
 
 
-
-    #print("\n\nhpts_ed Example")
+     
+    print("\n\nhpts_ed Example")  
     #MPI
     if ifmpi:
 
@@ -1261,7 +1261,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\neddy_neknek Example")
+    print("\n\neddy_neknek Example")  
     #MPI
     if ifmpi:
 
@@ -1291,7 +1291,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\neddy_psi_omega Example")
+    print("\n\neddy_psi_omega Example")  
     #MPI
     if ifmpi:
 
@@ -1322,7 +1322,7 @@ if __name__ == '__main__':
         log = "./mpi2Log/psi_omega.err.4"
         value = [['X err' ,1.177007E-10,1e-06,6]]
         Run("Example Eddy psi_omega/MPI2: 4--error",log,value)
-
+     
     #SRL2
     log = "./srl2Log/psi_omega.log.1"
     value = [['total solver time',0.1,17,2]]
@@ -1335,8 +1335,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nexpansion Example")
-    #MPI
+    print("\n\nexpansion Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/expansion.log.1"
@@ -1365,7 +1365,7 @@ if __name__ == '__main__':
     value = [['ubar',2.0087E+00,1e-06,2]]
     Run("Example ext_cyl/SRL: Serial-error",log,value)
 
-    #MPI2
+    #MPI2 
     if ifmpi:
 
         log = "./mpi2Log/expansion.log.1"
@@ -1397,8 +1397,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\next_cyl Example")
-    #MPI
+    print("\n\next_cyl Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/ext_cyl.log.1"
@@ -1459,8 +1459,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nfs_2-st1 Example")
-    #MPI
+    print("\n\nfs_2-st1 Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/st1.log.1"
@@ -1508,8 +1508,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nfs_2-st2 Example")
-    #MPI
+    print("\n\nfs_2-st2 Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/st2.log.1"
@@ -1557,8 +1557,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nfs_2-std_wv Example")
-    #MPI
+    print("\n\nfs_2-std_wv Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/std_wv.log.1"
@@ -1606,7 +1606,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nfs_hydro Example")
+    print("\n\nfs_hydro Example")  
     #MPI
     if ifmpi:
 
@@ -1655,7 +1655,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nhemi Example")
+    print("\n\nhemi Example")  
     #MPI
     if ifmpi:
 
@@ -1717,7 +1717,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nkovasznay Example")
+    print("\n\nkovasznay Example")  
     #MPI
     if ifmpi:
 
@@ -1779,7 +1779,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nkov_st_state Example")
+    print("\n\nkov_st_state Example")  
     #MPI2
     if ifmpi:
 
@@ -1790,7 +1790,7 @@ if __name__ == '__main__':
         log = "./mpi2Log/kov_st_stokes.err.4"
         value = [['err',8.55641E-10,1e-06,3]]
         Run("Example kov_st_state/MPI2: Parallel-error",log,value)
-
+     
     #SRL2
     log = "./srl2Log/kov_st_stokes.log.1"
     value = [['total solver time',0.1,5,2]]
@@ -1803,7 +1803,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nlowMach_test Example")
+    print("\n\nlowMach_test Example")  
     #MPI
     if ifmpi:
 
@@ -1852,7 +1852,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nmhd-gpf Example")
+    print("\n\nmhd-gpf Example")  
     #MPI
     if ifmpi:
 
@@ -1901,7 +1901,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nmhd-gpf_m Example")
+    print("\n\nmhd-gpf_m Example")  
     #MPI
     if ifmpi:
 
@@ -1941,7 +1941,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nmhd-gpf_b Example")
+    print("\n\nmhd-gpf_b Example")  
     #MPI
     if ifmpi:
 
@@ -1977,7 +1977,7 @@ if __name__ == '__main__':
 
 
 
-    ##print("\n\nmoab Example")
+    #print("\n\nmoab Example")  
     #MPI
     #if ifmpi:
     #
@@ -2005,14 +2005,14 @@ if __name__ == '__main__':
     #    log = "./mpi2Log/pipe.log.4"
     #    value = "ABORT: "
     #    FindPhrase("Example moab/MPI2: Parallel",log,value)
-    #
+    # 
     ##SRL2
     #log = "./srl2Log/pipe.log.1"
     #value = "ABORT: "
     #FindPhrase("Example moab/SRL2: Serial",log,value)
     #
     #
-    ##print("\n\nmoab_conjht Example")
+    ##print("\n\nmoab_conjht Example")  
     #MPI
     #if ifmpi:
     #
@@ -2061,7 +2061,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nos7000 Example")
+    print("\n\nos7000 Example")  
     #MPI
     if ifmpi:
 
@@ -2101,7 +2101,7 @@ if __name__ == '__main__':
         log = "./mpi2Log/u3_t020_n13.err.1"
         value = [['egn',5.93471252E-05,1e-06,2]]
         Run("Example os7000/MPI2: Serial-error",log,value)
-
+        
         log = "./mpi2Log/u3_t020_n13.log.4"
         value = [['gmres: ',0,43,6]]
         Run("Example os7000/MPI2: Parallel-iter",log,value)
@@ -2123,7 +2123,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nperis Example")
+    print("\n\nperis Example")  
     #MPI
     if ifmpi:
 
@@ -2160,8 +2160,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\npipe-helix Example")
-    #MPI
+    print("\n\npipe-helix Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/helix.log.1"
@@ -2222,8 +2222,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\npipe-stenosis Example")
-    #MPI
+    print("\n\npipe-stenosis Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/stenosis.log.1"
@@ -2260,7 +2260,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nrayleigh-ray1 Example")
+    print("\n\nrayleigh-ray1 Example")  
     #MPI
     if ifmpi:
 
@@ -2322,7 +2322,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nrayleigh-ray2 Example")
+    print("\n\nrayleigh-ray2 Example")  
     #MPI
     if ifmpi:
 
@@ -2384,8 +2384,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nshear4-shear4 Example")
-    #MPI
+    print("\n\nshear4-shear4 Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/shear4.log.1"
@@ -2446,7 +2446,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nshear4-thin Example")
+    print("\n\nshear4-thin Example")  
     #MPI
     if ifmpi:
 
@@ -2508,7 +2508,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nSolid Example")
+    print("\n\nSolid Example")  
     #MPI
     if ifmpi:
 
@@ -2544,7 +2544,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nStrat Example")
+    print("\n\nStrat Example")  
     #MPI
     if ifmpi:
 
@@ -2608,7 +2608,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nTaylor Example")
+    print("\n\nTaylor Example")  
     #MPI
     if ifmpi:
 
@@ -2676,7 +2676,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nturbChannel Example")
+    print("\n\nturbChannel Example")  
     #MPI
     if ifmpi:
 
@@ -2714,8 +2714,8 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nvar_vis Example")
-    #MPI
+    print("\n\nvar_vis Example")  
+    #MPI 
     if ifmpi:
 
         log = "./mpiLog/var_vis.log.1"
@@ -2751,7 +2751,7 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nvortex Example")
+    print("\n\nvortex Example")  
     #MPI
     if ifmpi:
 
@@ -2813,10 +2813,10 @@ if __name__ == '__main__':
 
 
 
-    #print("\n\nvortex2 Example")
+    print("\n\nvortex2 Example")  
     #MPI
     if ifmpi:
-        #first nine time steps fail in pressure
+    #first nine time steps fail in pressure
 
         log = "./mpiLog/v2d.log.1"
         value = [['PRES:  ',0,100,4]]
@@ -2851,7 +2851,7 @@ if __name__ == '__main__':
     if ifmpi:
 
         log = "./mpi2Log/v2d.log.1"
-        value = [['U-Press ',0,4,5]]
+        value = [['U-Press ',0,100,5]]
         Run("Example vortex2/MPI2: Serial-iter",log,value)
 
         log = "./mpi2Log/v2d.err.1"
@@ -2860,7 +2860,7 @@ if __name__ == '__main__':
         Run("Example vortex2/MPI2: Serial-error",log,value)
 
         log = "./mpi2Log/v2d.log.4"
-        value = [['U-Press ',0,4,5]]
+        value = [['U-Press ',0,100,5]]
         Run("Example vortex2/MPI2: Parallel-iter",log,value)
 
         log = "./mpi2Log/v2d.err.4"
@@ -2871,7 +2871,7 @@ if __name__ == '__main__':
     #SRL2
     log = "./srl2Log/v2d.log.1"
     value = [['total solver time',0.1,80,2],
-             ['U-Press ',0,4,5]]
+             ['U-Press ',0,100,5]]
     Run("Example vortex2/SRL2: Serial-time/iter",log,value)
 
     log = "./srl2Log/v2d.err.1"
