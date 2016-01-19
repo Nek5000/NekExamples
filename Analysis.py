@@ -33,7 +33,7 @@ def Test(name, logfile,listOfValue)  :
     except IOError :
         print("[%s]...Sorry, I must skip this test."%name)
         print("[%s]...The logfile is missing or doesn't have the correct name..."%name)
-      inputisgood = False
+        inputisgood = False
 
     #If we could find the log file, then we run the test    
     if inputisgood :        
