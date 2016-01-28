@@ -22,6 +22,8 @@ def Test(name, logfile,listOfValue)  :
     global num_success
     
     test_result = False
+    reported_ValueError = False
+    reported_IndexError = False
     numTest = len(listOfValue)                             #Number of tests to do
     success = 0
     num_test += numTest
@@ -45,8 +47,14 @@ def Test(name, logfile,listOfValue)  :
                     # line, assume that set wasn't found in line and continue.
                     try:
                         testvalue = float(line.split()[-set[3]])                 #the value is on the set[3]th column from the right of the line 
-                    except (ValueError,IndexError) :
-                        pass
+                    except (ValueError):
+                        if not reported_ValueError:
+                            print("Warning: Attempted to parse non-numerical value for test \"%s\".  Logfile may be malformatted"%name)
+                            reported_ValueError = True
+                    except (IndexError):
+                        if not reported_IndexError:
+                            print("Warning: Fewer columns than excpected for test \"%s\".  Logfile may be malformatted"%name)
+                            reported_IndexError = True
                     else:
                         print("[%s] %s : %s"%(name,set[0],testvalue))
                         if (abs(testvalue - set[1]) < set[2]) :             #set[1] is the target value / set[2] is the tolerance
