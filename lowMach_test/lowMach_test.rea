@@ -114,7 +114,7 @@
   T      IFFLOW    solve for fluid
   T      IFHEAT    solve for heat (temperature + scalars)
   T      IFTRAN
-  T,19*T IFNAV & IFADVC (convection in P.S. fields)
+  T,19*T IFNAV & IFADVC (convection in P.S. fields) 
   20*F   IFTMSH (IF mesh for this field is T mesh)
   F      IFAXIS
   F      IFSTRS    use stress formulation
