@@ -245,12 +245,12 @@ c     NOTE ::: This subroutine MAY NOT be called by every process
          ux = ubc(ix,iy,iz,ie,1)
          uy = ubc(ix,iy,iz,ie,2)
          uz = ubc(ix,iy,iz,ie,3)
-         if (nfld.gt.3) temp = ubc(ix,iy,iz,ie,4)
+         if (nfld_neknek.gt.3) temp = ubc(ix,iy,iz,ie,4)
       else
          ux = valint(ix,iy,iz,ie,1)
          uy = valint(ix,iy,iz,ie,2)
          uz = valint(ix,iy,iz,ie,3)
-         if (nfld.gt.3) temp = valint(ix,iy,iz,ie,4)
+         if (nfld_neknek.gt.3) temp = valint(ix,iy,iz,ie,4)
       endif
 
       end if
@@ -307,10 +307,10 @@ c     should be used for stability
 
 
 c     Set number of fields to interpolate
-c     nfld = 3 - u,v,w velocitites  
-c     nfld = 4 - u,v,w velocitites + temperature 
+c     nfld_neknek = 3 - u,v,w velocitites  
+c     nfld_neknek = 4 - u,v,w velocitites + temperature 
 
-      nfld=3
+      nfld_neknek=3
 
 c     param(66) = 4
 c     param(67) = 4
