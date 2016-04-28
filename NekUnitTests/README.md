@@ -53,10 +53,16 @@ the module.
 ### nose
 
 A third-party tool, such as "nose", allows you to run all or a subset of tests.  To run all the tests,
-`$ nosetests NekUnitTests.py`
+```
+$ nosetests NekUnitTests.py
+```
 To run all the tests for a class, use a command such as:
-`$ nosetests NekUnitTests.py:TurbChannelPnPn`
+```
+$ nosetests NekUnitTests.py:TurbChannelPnPn
+```
 To run one test for a givne class, use a command such as:
-`$ nosetests NekUnitTests.py:TurbChannelPnPn.test_GmresSerial`
+```
+$ nosetests NekUnitTests.py:TurbChannelPnPn.test_GmresSerial
+```
     
 
