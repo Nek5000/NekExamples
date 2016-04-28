@@ -6,6 +6,36 @@ import stat
 import re
 
 class NekTestCase(unittest.TestCase):
+    """ Base class for Nek unittests
+
+    This defines a setUpClass method to:
+        (a) get the relevant environment variables for compilers, directories
+        (b) add env vars to maketools, makenek
+        (b) build tools
+    All subclassed TestCases will need to do these things.
+
+    Class attributes:
+        f77 (str):            The Fortran 77 compiler to use     [default: 'gfortran']
+        cc (str):             The C compiler to use              [default: 'gcc']
+        ifmpi (bool):         Perform compilation/tests with MPI [default: False]
+        source_root (str):    Path to Nek source directory;overridden by $SOURCE_ROOT env variable
+                              [default: '$HOME/nek5_svn/trunk/nek']
+        tools_root (str):     Path to Nek tools directory; overridden by $TOOLS_ROOT env variable
+                              [default: '$HOME/nek5_svn/trunk/tools']
+        examples_root (str):  Path to Nek examples directory; overridden by $EXAMPLES_ROOT env variable
+                              [default: '$HOME/nek5_svn/examples']
+        makenek (str):        Path to makenek                    [default: source_root/makenek]
+        tools_bin (str):      Directory to place compiled tools  [default: tools_root/bin]
+
+    Subclass attributes:
+        These aren't meaningful in the base class.  They're intended for a subclass that represents
+        a particular example problem.
+        example_subdir (str): The subdirectory for the subclass' example.  Assumed that it's in example_root
+        rea_file (str):       The .rea file for the subclass' example, minus the '.rea' extension.  Assumed
+                              that it's in example_root/example_dir
+        size_file (str):      The SIZE file for the subclass' example.  Assuemed that it's in
+                              example_root/example_subdir
+    """
 
     # Default values, can be redefined in setUpClass
     f77            = "gfortran"
@@ -15,19 +45,28 @@ class NekTestCase(unittest.TestCase):
     tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
     tests_root     = "{0}/nek5_svn/tests".format(os.environ.get('HOME', ""))
     examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('HOME', ""))
-    log_root       = os.path.join(tests_root, "logs")
+    # TODO: do something productive with log_root; right now it's not used
+    #log_root       = os.path.join(tests_root, "logs")
 
     # Defined in setUpClass
     makenek        = ""
     tools_bin      = ""
 
-    # Defined in subclasses only
+    # Defined in subclasses only; included here to make syntax checker happy
     example_subdir = ""
     rea_file       = ""
     size_file      = ""
 
     @classmethod
     def build_tools(cls):
+        """ Builds the Nek tools (genmap, prenek, etc) after some tweaks to maketools and prenek/basics.inc
+
+            Sets nelem=10 0000 in prenek/basics.inc
+
+            Side-effects:
+                Replaces maketools (backs it up in maketools.bak)
+                Replaces prenek/basics.inc (backs it up in prenek/basics.inc.bak)
+        """
         print('Compiling tools in {0}... '.format(cls.tools_root))
         print('    using "{0}" as F77'.format(cls.f77))
         print('    using "{0}" as CC'.format(cls.cc))
@@ -64,6 +103,28 @@ class NekTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """ Set up for subsequent unit tests
+
+        Does the following
+            (a) get the relevant environment variables for compilers, directories
+            (b) sets the following class attributes:
+                f77
+                cc
+                ifmpi
+                source_root
+                tools_root
+                tests_root
+                examples_root
+                makenek
+                tools_bin
+            (c) add f77, cc, ifmpi and source_root to maketools, makenek
+            (d) build tools
+
+        Side-effects:
+            Replaces makenek (backs it up in makenek.bak)
+            Replaces maketools (backs it up in maketools.bak)
+            Replaces prenek/basics.inc (backs it up in prenek/basics.inc.bak)
+        """
 
         print("Getting setup options...")
 
@@ -86,7 +147,7 @@ class NekTestCase(unittest.TestCase):
         cls.tools_root    = os.environ.get('TOOLS_ROOT',    cls.tools_root)
         cls.tests_root    = os.environ.get('TESTS_ROOT',    cls.tests_root)
         cls.examples_root = os.environ.get('EXAMPLES_ROOT', cls.examples_root)
-        cls.log_root      = os.environ.get('LOG_ROOT',      cls.log_root)
+        #cls.log_root      = os.environ.get('LOG_ROOT',      cls.log_root)
         if not cls.makenek:
             cls.makenek   = os.path.join(cls.source_root, 'makenek')
         if not cls.tools_bin:
@@ -109,11 +170,11 @@ class NekTestCase(unittest.TestCase):
             os.makedirs(cls.tools_bin)
 
         # Make log_root if it doesn't exist
-        if os.path.isdir(cls.log_root):
-            print('    Using LOG_ROOT at "{0}"'.format(cls.log_root))
-        else:
-            print('    The LOG_ROOT, "{0}", does not exist.  It will be created.'.format(cls.log_root))
-            os.makedirs(cls.log_root)
+        # if os.path.isdir(cls.log_root):
+        #     print('    Using LOG_ROOT at "{0}"'.format(cls.log_root))
+        # else:
+        #     print('    The LOG_ROOT, "{0}", does not exist.  It will be created.'.format(cls.log_root))
+        #     os.makedirs(cls.log_root)
 
         print("Finished getting setup options!")
 
@@ -138,11 +199,21 @@ class NekTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """ A stub for tear-down class.  Might move logs? """
         # TODO: move logs
         pass
 
     @classmethod
     def run_genmap(cls, tolerance=".05"):
+        """ Runs genmap, using the .rea file defined by cls.rea_file
+
+            Not useful in base class.  Useful in subclass for a given example,
+            where cls.rea_file is defined
+
+        Params:
+            tolerance (str): Mesh tolerance.
+                             It's a string, not a float, since it's piped into stdin as a literal
+        """
         print("Running genmap...")
         try:
             subprocess.Popen([os.path.join(cls.tools_bin, 'genmap')],
@@ -156,6 +227,14 @@ class NekTestCase(unittest.TestCase):
 
     @classmethod
     def run_makenek(cls, target=None):
+        """ Runs makenek, using the examples subdirectory as the current working directory
+
+            Not useful in base class.  Useful in subclass for a given example.
+
+        Params:
+            target (str): target for makenek, e.g. clean, rea [default: cls.rea_file]
+        """
+        # Can't use default argument since cls is not defined
         if not target:
             target = cls.rea_file
         subprocess.check_call([cls.makenek, target, cls.source_root],
@@ -163,6 +242,13 @@ class NekTestCase(unittest.TestCase):
 
     @classmethod
     def run_nek10s(cls, log_suffix=".log.1"):
+        """ Emulates the 'nek10s' script to run nek5000.
+
+            Not useful in base class.  Useful in subclass for a given example.
+
+            Params:
+                log_suffix (str): Suffix for logfile [default: '.log.1']
+        """
 
         example_cwd = os.path.join(cls.examples_root, cls.example_subdir)
 
@@ -182,9 +268,15 @@ class NekTestCase(unittest.TestCase):
 
 
 class PnPnTestCase(NekTestCase):
+    """ Base class for Pn-Pn test cases.  Tweaks size file after doing everything in NekTestCase. """
 
     @classmethod
     def setUpClass(cls):
+        """ Tweaks SIZE file for Pn-Pn problems.
+
+            Sets lx2=lx1, ly2=ly1, and lz2=lz1 in SIZE.  Also tweaks makenek, maketools, and
+            run maketools (see NekTestCase.setUpClass).
+        """
 
         super(PnPnTestCase, cls).setUpClass()
 
@@ -200,9 +292,15 @@ class PnPnTestCase(NekTestCase):
                 print(line.rstrip())
 
 class PnPn2TestCase(NekTestCase):
+    """ Base class for Pn-Pn-2 test cases.  Tweaks size file after doing everything in NekTestCase """
 
     @classmethod
     def setUpClass(cls):
+        """ Tweaks SIZE file for Pn-Pn-2 problems.
+
+            Sets lx2=lx1-2, ly2=ly1-2, and lz2=lz1 in SIZE.  Also tweaks makenek, maketools, and
+            run maketools (see NekTestCase.setUpClass).
+        """
 
         super(PnPn2TestCase, cls).setUpClass()
 
@@ -222,6 +320,14 @@ class PnPn2TestCase(NekTestCase):
                 print(line.rstrip())
 
 class TurbChannelPnPn(PnPnTestCase):
+    """ Test case for turbChannel Pn-Pn examples
+
+        Class attributes:
+            example_subdir (str):    Subdirectory for turbChannel [default: 'turbChannel']
+            rea_file (str):          [default: 'turbChannel']
+            size_file (str):         [default: 'SIZE']
+            serial_log_suffix (str): [default '.log.serial']
+    """
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
     size_file      = 'SIZE'
@@ -231,7 +337,10 @@ class TurbChannelPnPn(PnPnTestCase):
 
     @classmethod
     def setUpClass(cls):
+        """ Runs genmap and builds/runs nek5000 for both serial and (if requested) parallel runs.
 
+            Emulates 'nek10s' script for serial runs.  Emulates 'nek10steps' script for parallel runs.
+        """
         super(TurbChannelPnPn, cls).setUpClass()
 
         cls.run_genmap()
@@ -248,14 +357,11 @@ class TurbChannelPnPn(PnPnTestCase):
 
 
     def test_GmresSerial(self):
-        """
-        Using nek10s script
-        :return:
-        """
-        label     = 'gmres:'
-        target_value = 0.
-        tolerance = 95.
-        column    = 7
+        """ Greps gmres from setUpClass to find/compare test values """
+        label     = 'gmres:'  # Greps for line with this label
+        column    = 7         # Looks in this column for test value (counted from RIGHT)
+        target_value = 0.     # Target gmres value
+        delta = 95.       # Success if test value is within target_value +/- delta
         cls = self.__class__
 
         logfile = os.path.join(cls.examples_root, cls.example_subdir,
@@ -270,14 +376,15 @@ class TurbChannelPnPn(PnPnTestCase):
                     except IndexError:
                         raise IndexError("Fewer columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(logfile))
                     else:
-                        self.assertAlmostEqual(test_value, target_value, delta=tolerance)
+                        self.assertAlmostEqual(test_value, target_value, delta=delta)
                         # TODO: Figure out how to print successes; this doesn't work with unittest.main()
                         print('SUCCESS: test_GmresSerial: {1} was within {2} +/ {3}'.format(
-                            test_value, target_value, tolerance ))
+                            test_value, target_value, delta ))
                         break
 
 
     def test_GmresParallel(self):
+        """ Greps gmres from setUpClass to find/compare test values """
         cls = self.__class__
         if not cls.ifmpi:
             self.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(self.id()))
