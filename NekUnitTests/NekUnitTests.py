@@ -42,11 +42,11 @@ class NekTestCase(unittest.TestCase):
     cc             = "gcc"
     ifmpi          = False
     source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('HOME', ""))
-    tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
     tests_root     = "{0}/nek5_svn/tests".format(os.environ.get('HOME', ""))
     examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('HOME', ""))
-    # TODO: do something productive with log_root; right now it's not used
-    #log_root       = os.path.join(tests_root, "logs")
+    # TODO: do something productive with tools_root and log_root; right now they're not used
+    # tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
+    # log_root       = os.path.join(tests_root, "logs")
 
     # Defined in setUpClass
     makenek        = ""
@@ -145,8 +145,8 @@ class NekTestCase(unittest.TestCase):
         # Get Nek5000 dirs from env, if defined
         cls.source_root   = os.environ.get('SOURCE_ROOT',   cls.source_root)
         cls.tools_root    = os.environ.get('TOOLS_ROOT',    cls.tools_root)
-        cls.tests_root    = os.environ.get('TESTS_ROOT',    cls.tests_root)
         cls.examples_root = os.environ.get('EXAMPLES_ROOT', cls.examples_root)
+        #cls.tests_root    = os.environ.get('TESTS_ROOT',    cls.tests_root)
         #cls.log_root      = os.environ.get('LOG_ROOT',      cls.log_root)
         if not cls.makenek:
             cls.makenek   = os.path.join(cls.source_root, 'makenek')
@@ -155,7 +155,7 @@ class NekTestCase(unittest.TestCase):
 
         # Raise error if source_, tools_, tests_, examples_root don't exist
         for val, name in ((cls.source_root,   'SOURCE_ROOT'),
-                          (cls.tests_root,    'TESTS_ROOT'),
+                          #(cls.tests_root,    'TESTS_ROOT'),
                           (cls.examples_root, 'EXAMPLES_ROOT'),
                           (cls.tools_root,    'TOOLS_ROOT')):
             if os.path.isdir(val):
