@@ -1,13 +1,21 @@
-Buildbot:
+NekTests
+========
 
-***To Run Buildbot Manually On Any Platform(with at least 4 processors)****
-1)  Make sure you have a current set of the examples from the repo
+The top-level directory contains the legacy test suite, described below.  The 
+`NekUnitTests` subdirectory contains the test suite refactored with Python 
+unittests; see `NekUnitTests/README.md` for details.  
+
+Legacy Buildbot Tests
+---------------------
+
+### To Run Buildbot Manually On Any Platform(with at least 4 processors)
+1.  Make sure you have a current set of the examples from the repo
     in your nek5_svn/examples directoy. (And your nek5_svn/tests directory
     is up to date as well)
 
-2) >> cd nek5_svn/tests
+2. `$ cd nek5_svn/tests`
 
-3) >> cp BB_RunTest your_RunTest
+3. `$ cp BB_RunTest your_RunTest`
    Edit your_RunTest with the compilers, MOAB directories, Matlab executable path
    that you want to test.  The current BB_RunTest is set to test 3 compilers, 
    one MPI implementation, along with the MOAB and AMG(matlab) tests.
@@ -27,11 +35,11 @@ Buildbot:
    CC_MPI=''
 
  
-4) >>your_RunTest
+4. `$ your_RunTest`
    This will execute the testing sequence.  
 
-5) To Analyze the test results run "Analysis.py ifmpi" in the directory
-   created for the compiler you are testing.  "ifmpi" is a string 
+5. To Analyze the test results run `Analysis.py ifmpi` in the directory
+   created for the compiler you are testing.  `ifmpi` is a string 
    to trigger if MPI tests are to be analyzed.  Analysis.py mpi will 
    run MPI analysis, and Analysis.py serial will run serial only 
    analysis.
@@ -46,29 +54,30 @@ or delete previous logfiles to prevent false positives in the Analysis.
 Analysis.py is the script that will actually run the analysis on the 
 tests done in RunTests.  An ' F ' is shown for tests that have failed.
 
-3) A quick way to check what tests failed is to:
-   >>Analysis.py mpi | grep ' F ' 
+A quick way to check what tests failed is to:
+   `$ Analysis.py mpi | grep ' F '`
 
 
-***Overview of the Buildbot Scripts***
+### Overview of the Buildbot Scripts
 
-RunTests:
+
+#### RunTests:
 RunTests is the main driver of the buildbot tests.  This script compiles
 the nek tools, edits SIZE and .rea files, and calls ExTest and ExTestmpi
 
 For all examples, the .map files are removed and generated from the 
 Nek5000 tool, genmap. 
 
-ExTestmpi:
+#### ExTestmpi:
 This is the script that RunTests calls that has the set of parallel
 tests for each example using the parallel compiler provided by the
 F77_MPI and CC_MPI parameters.
 
-ExTest:  
+#### ExTest:  
 This is the script RunTests calls that has the set of serial tests for
 each example using the compiler set by F77_SRL and CC_SRL parameters.
 
-Analysis.py ifmpi	
+#### Analysis.py ifmpi	
 Python script used to analyze the results of RunTests:
         -takes a string as a parameter to test mpi or not
          If the string is == "mpi" mpi analysis will be ran
@@ -79,7 +88,8 @@ Python script used to analyze the results of RunTests:
 	-Tests for Serial and Parallel error checks
 	-Tests Examples for iteration counts in pressure solver
 
-Jenkins:
+Legacy Jenkins Tests
+--------------------
 
 These scripts perform the same analyses as the BuildBot scripts.  Unlke the
 BuildBot scripts, they utilizes testing frameworks from the 'unittest' Python
@@ -89,26 +99,26 @@ reports by using the 'xmlrunner' module from the Python Package Index.
 Unless you want xUnit XML output, the Buildbot scripts are generally easier to
 use.  
 
-***To Run Jenkins Manually On Any Platform(with at least 4 processors)****
+### To Run Jenkins Manually On Any Platform(with at least 4 processors)
 
-1)  Make sure you have a current set of the examples from the repo
+1.  Make sure you have a current set of the examples from the repo
     in your nek5_svn/examples directoy. (And your nek5_svn/tests directory
     is up to date as well)
 
-2) >> cd nek5_svn/tests
+2. `$ cd nek5_svn/tests`
 
-3) >> cp Jenkins_RunTest your_RunTest
+3. `$ cp Jenkins_RunTest your_RunTest`
    Edit your_RunTest with the compilers, MOAB directories, Matlab executable path
    that you want to test.  Jenkins_RunTest is currently configured to use one
    of three compilers, one MPI implementation, along with the MOAB and
    AMG(matlab) tests.
 
-4) >> export COMPILER=[PGI|GNU|INTEL]
-   >> ./Jenkins_RunTest
+4. `$ export COMPILER=[PGI|GNU|INTEL]`
+   `$ ./Jenkins_RunTest`
    This will execute the testing sequence for the specified compiler.  
 
-5) >> cd $COMPILER
-   >> ../Jenkins_Analysis.py [mpi] [xml] > Analysis.log 2> Analysis.stderr
+5. `$ cd $COMPILER`
+   `$ ../Jenkins_Analysis.py [mpi] [xml] > Analysis.log 2> Analysis.stderr`
 
   The optional 'mpi' argument will analyze MPI tests.  By default, MPI tests
   are not analyzed.
@@ -120,18 +130,18 @@ use.
   The results are in the two logfiles.  
 
 
-***Overview of the Buildbot Scripts***
+### Overview of the Buildbot Scripts
 
-Jenkins_RunTest:
+#### Jenkins_RunTest:
 This executes RunTests for a single compiler (PGI, GNU, or Intel).  The
 compiler is specified by the COMPILER environment variable.  
 
-Jenkins_Analysis.py:
+#### Jenkins_Analysis.py:
 This script performs the same analyses as Analysis.py.  Its stdout is almost
 identical to the output from Analysis.py and can be interpreted similarly.  For
 example, a quick way to check what tests failed is:
 
-   >> Analysis.py mpi | grep ' F ' 
+   `Analysis.py mpi | grep ' F '`
 
 The script's stderr is produced by the unittest framework and contains detailed
 backtrace information for failed tests. 
@@ -139,7 +149,7 @@ backtrace information for failed tests.
 The console output is easier to interpret if stdout and stderr are
 redirected to separate destinations.  For example:
 
-  >> Jenkins_Analysis.py [mpi] [xml] > Analysis.log 2> Analysis.stderr
+  `Jenkins_Analysis.py [mpi] [xml] > Analysis.log 2> Analysis.stderr`
 
 which will redirect stdout and stderr to Analysis.log and Analysis.stderr
 respectively.
