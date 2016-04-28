@@ -42,10 +42,10 @@ class NekTestCase(unittest.TestCase):
     cc             = "gcc"
     ifmpi          = False
     source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('HOME', ""))
-    tests_root     = "{0}/nek5_svn/tests".format(os.environ.get('HOME', ""))
     examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('HOME', ""))
-    # TODO: do something productive with tools_root and log_root; right now they're not used
-    # tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
+    tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
+    # TODO: do something productive with tests_root and log_root; right now they're not used
+    # tests_root     = "{0}/nek5_svn/tests".format(os.environ.get('HOME', ""))
     # log_root       = os.path.join(tests_root, "logs")
 
     # Defined in setUpClass
@@ -113,7 +113,6 @@ class NekTestCase(unittest.TestCase):
                 ifmpi
                 source_root
                 tools_root
-                tests_root
                 examples_root
                 makenek
                 tools_bin
