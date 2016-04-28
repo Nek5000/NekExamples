@@ -202,6 +202,24 @@ class NekTestCase(unittest.TestCase):
         # TODO: move logs
         pass
 
+    def grep_logfile(self, logfile, label, column, target_value, delta):
+
+        with open(logfile, 'r') as f:
+            for line in f:
+                if label in line:
+                    try:
+                        test_value = float(line.split()[-column])
+                    except ValueError:
+                        raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(logfile))
+                    except IndexError:
+                        raise IndexError("Fewer columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(logfile))
+                    else:
+                        self.assertAlmostEqual(test_value, target_value, delta=delta)
+                        # TODO: Figure out how to print successes; this doesn't work with unittest.main()
+                        # print('SUCCESS: {1} was within {2} +/ {3}'.format( test_value, target_value, delta ))
+                        break
+
+
     @classmethod
     def run_genmap(cls, tolerance=".05"):
         """ Runs genmap, using the .rea file defined by cls.rea_file
@@ -330,9 +348,7 @@ class TurbChannelPnPn(PnPnTestCase):
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
     size_file      = 'SIZE'
-
-    serial_log_suffix  = ".log.serial"
-    #mpi_log_suffixes   = {1:"log.mpi.1", 4:"log.mpi.4"}
+    serial_log_suffix  = ".pnpn.log.serial"
 
     @classmethod
     def setUpClass(cls):
@@ -356,34 +372,21 @@ class TurbChannelPnPn(PnPnTestCase):
 
 
     def test_GmresSerial(self):
-        """ Greps gmres from setUpClass to find/compare test values """
-        label     = 'gmres:'  # Greps for line with this label
-        column    = 7         # Looks in this column for test value (counted from RIGHT)
-        target_value = 0.     # Target gmres value
-        delta = 95.       # Success if test value is within target_value +/- delta
+        """ Greps gmres from logs """
+        label = 'gmres:'   # Greps for line with this label
+        column = 7         # Looks in this column for test value (counted from RIGHT)
+        target_value = 0.  # Target gmres value
+        delta = 95.        # Success if test value is within target_value +/- delta
         cls = self.__class__
 
         logfile = os.path.join(cls.examples_root, cls.example_subdir,
                                "{0}{1}".format(cls.rea_file, cls.serial_log_suffix))
-        with open(logfile, 'r') as f:
-            for line in f:
-                if label in line:
-                    try:
-                        test_value = float(line.split()[-column])
-                    except ValueError:
-                        raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(logfile))
-                    except IndexError:
-                        raise IndexError("Fewer columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(logfile))
-                    else:
-                        self.assertAlmostEqual(test_value, target_value, delta=delta)
-                        # TODO: Figure out how to print successes; this doesn't work with unittest.main()
-                        print('SUCCESS: test_GmresSerial: {1} was within {2} +/ {3}'.format(
-                            test_value, target_value, delta ))
-                        break
+
+        self.grep_logfile(logfile=logfile, label=label, column=column, target_value=target_value, delta=delta)
 
 
     def test_GmresParallel(self):
-        """ Greps gmres from setUpClass to find/compare test values """
+        """ Greps gmres from logs """
         cls = self.__class__
         if not cls.ifmpi:
             self.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(self.id()))
@@ -391,6 +394,66 @@ class TurbChannelPnPn(PnPnTestCase):
             # TODO: implement parallel test
             pass
 
+class TurbChannelPnPn2(PnPn2TestCase):
+    example_subdir = "turbChannel"
+    rea_file       = 'turbChannel'
+    size_file      = 'SIZE'
+    serial_log_suffix  = ".pnpn2.log.serial"
+
+    @classmethod
+    def setUpClass(cls):
+        """ Tweaks SIZE file for Pn-Pn-2 problems.
+
+            Sets lx2=lx1-2, ly2=ly1-2, and lz2=lz1-2 in SIZE.  Also tweaks makenek, maketools, and
+            run maketools (see NekTestCase.setUpClass).
+        """
+
+        super(TurbChannelPnPn2, cls).setUpClass()
+
+        # Tweak SIZE file
+        size_file_path = os.path.join(cls.examples_root, cls.example_subdir, cls.size_file)
+        print('Setting parmeters in "{0}"...'.format(size_file_path))
+        with fileinput.input(size_file_path, inplace=True, backup='.bak') as f:
+            for line in f:
+                # Subst lz2=lz1-2.
+                line = re.sub(r'^ {6}parameter *\( *lz2 *= *\S+? *\)',
+                              r'      parameter (lz2=lz1-2)',
+                              line)
+                print(line.rstrip())
+
+        cls.run_genmap()
+        # TODO: turn 'makenek clean' back on
+        #cls.run_makenek('clean')
+        cls.run_makenek(cls.rea_file)
+
+        if not cls.ifmpi:
+            cls.run_nek10s(log_suffix=cls.serial_log_suffix)
+        else:
+            #cls.run_nek10steps()
+            #cls.run_nek10steps()
+            pass
+
+    def test_GmresSerial(self):
+        """ Greps gmres from logs """
+        label = 'gmres:'   # Greps for line with this label
+        column = 6         # Looks in this column for test value (counted from RIGHT)
+        target_value = 0.  # Target gmres value
+        delta = 26.        # Success if test value is within target_value +/- delta
+        cls = self.__class__
+
+        logfile = os.path.join(cls.examples_root, cls.example_subdir,
+                               "{0}{1}".format(cls.rea_file, cls.serial_log_suffix))
+
+        self.grep_logfile(logfile=logfile, label=label, column=column, target_value=target_value, delta=delta)
+
+    def test_GmresParallel(self):
+        """ Greps gmres from logs """
+        cls = self.__class__
+        if not cls.ifmpi:
+            self.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(self.id()))
+        else:
+            # TODO: implement parallel test
+            pass
 
 if __name__ == '__main__':
     unittest.main()

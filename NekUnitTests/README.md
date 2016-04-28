@@ -13,6 +13,8 @@ subitems,  respectively):
 
 * TurbChannelPnPn
   * test_GmresSerial
+* TurbChannelPnPn2
+  * test_GmresSerial
   
 Running Tests
 -------------
