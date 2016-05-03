@@ -1,9 +1,9 @@
 import unittest
-import subprocess
 import fileinput
-import os
-import stat
 import re
+
+from NekUnitTests.tools.nekBinBuild import build_tools, build_nek
+from NekUnitTests.tools.nekBinRun import *
 
 class NekTestCase(unittest.TestCase):
     """ Base class for Nek unittests
@@ -58,72 +58,7 @@ class NekTestCase(unittest.TestCase):
     size_file      = ""
 
     @classmethod
-    def build_tools(cls):
-        """ Builds the Nek tools (genmap, prenek, etc) after some tweaks to maketools and prenek/basics.inc
-
-            Sets nelem=10 0000 in prenek/basics.inc
-
-            Side-effects:
-                Replaces maketools (backs it up in maketools.bak)
-                Replaces prenek/basics.inc (backs it up in prenek/basics.inc.bak)
-        """
-        print('Compiling tools in {0}... '.format(cls.tools_root))
-        print('    using "{0}" as F77'.format(cls.f77))
-        print('    using "{0}" as CC'.format(cls.cc))
-
-        maketools          = os.path.join(cls.tools_root, 'maketools')
-        basics_inc         = os.path.join(cls.tools_root, 'prenek', 'basics.inc')
-
-        try:
-            with fileinput.input(maketools, inplace=True, backup='.bak') as f:
-                for line in f:
-                    line = re.sub(r'^F77=\"+.+?\"+',   r'F77="{0}"'.format(cls.f77), line)
-                    line = re.sub(r'^CC=\"+.+?\"+',    r'CC="{0}"'.format(cls.cc), line)
-                    line = re.sub(r'BIGMEM=\"+.+?\"+', r'BIGMEM="false"', line)
-                    print(line.rstrip())
-            os.chmod(maketools,
-                    stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH |
-                    stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH |
-                    stat.S_IWUSR )
-
-            with fileinput.input(basics_inc, inplace=True, backup='.bak') as f:
-                for line in f:
-                    line = re.sub(r'(.*nelm *= *)[ 0-9]+(.*)', r'\g<1>10 000\g<2>', line)
-                    print(line.rstrip())
-
-            # TODO: turn 'maketools clean' back on
-            #subprocess.check_call([maketools, 'clean', cls.tools_bin], cwd=cls.tools_root)
-            subprocess.check_call([maketools, 'all',   cls.tools_bin], cwd=cls.tools_root)
-
-        except:
-            print('Could not compile tools!')
-            raise
-        else:
-            print('Successfully compiled tools!')
-
-    @classmethod
-    def setUpClass(cls):
-        """ Set up for subsequent unit tests
-
-        Does the following
-            (a) get the relevant environment variables for compilers, directories
-            (b) sets the following class attributes:
-                f77
-                cc
-                ifmpi
-                source_root
-                tools_root
-                examples_root
-                makenek
-                tools_bin
-            (c) add f77, cc, ifmpi and source_root to maketools, makenek
-            (d) build tools
-
-        Side-effects:
-            Replaces makenek (backs it up in makenek.bak)
-            Replaces maketools (backs it up in maketools.bak)
-            Replaces prenek/basics.inc (backs it up in prenek/basics.inc.bak)
-        """
+    def get_opts(cls):
 
         print("Getting setup options...")
 
@@ -177,24 +112,41 @@ class NekTestCase(unittest.TestCase):
 
         print("Finished getting setup options!")
 
+    @classmethod
+    def setUpClass(cls):
+        """ Set up for subsequent unit tests
+
+        Does the following
+            (a) get the relevant environment variables for compilers, directories
+            (b) sets the following class attributes:
+                f77
+                cc
+                ifmpi
+                source_root
+                tools_root
+                examples_root
+                makenek
+                tools_bin
+            (c) add f77, cc, ifmpi and source_root to maketools, makenek
+            (d) build tools
+
+        Side-effects:
+            Replaces makenek (backs it up in makenek.bak)
+            Replaces maketools (backs it up in maketools.bak)
+            Replaces prenek/basics.inc (backs it up in prenek/basics.inc.bak)
+        """
+
+        # Get user options
+        cls.get_opts()
+
         # Build tools
-        cls.build_tools()
-
-        # Tweak makenek
-        print('Setting SOURCE_ROOT, F77, CC, IFMPI in "{0}"...'.format(cls.makenek))
-        with fileinput.input(cls.makenek, inplace=True, backup='.bak') as f:
-            for line in f:
-                line = re.sub(r'^SOURCE_ROOT=\"+.+?\"+', r'SOURCE_ROOT="{0}"'.format(cls.source_root), line)
-                line = re.sub(r'^F77=\"+.+?\"+', r'F77="{0}"'.format(cls.f77), line)
-                line = re.sub(r'^CC=\"+.+?\"+', r'CC="{0}"'.format(cls.cc), line)
-                line = re.sub(r'^#*IFMPI=\"+.+?\"+', r'IFMPI="{0}"'.format(
-                    str(cls.ifmpi).lower()), line)
-                print(line.rstrip())
-        os.chmod(cls.makenek,
-                 stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH |
-                 stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH |
-                 stat.S_IWUSR )
-
+        build_tools(
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77        = 'gfortran',
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -218,70 +170,6 @@ class NekTestCase(unittest.TestCase):
                         # TODO: Figure out how to print successes; this doesn't work with unittest.main()
                         # print('SUCCESS: {1} was within {2} +/ {3}'.format( test_value, target_value, delta ))
                         break
-
-
-    @classmethod
-    def run_genmap(cls, tolerance=".05"):
-        """ Runs genmap, using the .rea file defined by cls.rea_file
-
-            Not useful in base class.  Useful in subclass for a given example,
-            where cls.rea_file is defined
-
-        Params:
-            tolerance (str): Mesh tolerance.
-                             It's a string, not a float, since it's piped into stdin as a literal
-        """
-        print("Running genmap...")
-        try:
-            subprocess.Popen([os.path.join(cls.tools_bin, 'genmap')],
-                             stdin=subprocess.PIPE,
-                             cwd=os.path.join(cls.examples_root, cls.example_subdir)
-            ).communicate(bytes("{0}\n{1}".format(cls.rea_file, tolerance), 'ascii'))
-        except:
-            print("Could not complete genmap!")
-            raise
-        print("Succefully finished genmap!")
-
-    @classmethod
-    def run_makenek(cls, target=None):
-        """ Runs makenek, using the examples subdirectory as the current working directory
-
-            Not useful in base class.  Useful in subclass for a given example.
-
-        Params:
-            target (str): target for makenek, e.g. clean, rea [default: cls.rea_file]
-        """
-        # Can't use default argument since cls is not defined
-        if not target:
-            target = cls.rea_file
-        subprocess.check_call([cls.makenek, target, cls.source_root],
-                              cwd=os.path.join(cls.examples_root, cls.example_subdir))
-
-    @classmethod
-    def run_nek10s(cls, log_suffix=".log.1"):
-        """ Emulates the 'nek10s' script to run nek5000.
-
-            Not useful in base class.  Useful in subclass for a given example.
-
-            Params:
-                log_suffix (str): Suffix for logfile [default: '.log.1']
-        """
-
-        example_cwd = os.path.join(cls.examples_root, cls.example_subdir)
-
-        session_name =  os.path.join(example_cwd, "SESSION_NAME")
-        with open(session_name, "w") as f:
-            f.write(cls.rea_file)
-            f.write(example_cwd)
-
-        ioinfo = os.path.join(example_cwd, "ioinfo")
-        with open(ioinfo, "w") as f:
-            f.write("-10")
-
-        nek5000 = os.path.join(example_cwd, "nek5000")
-        logfile = os.path.join(example_cwd, "{0}{1}".format(cls.rea_file, log_suffix))
-        with open(logfile, 'w') as f:
-            subprocess.check_call([nek5000], cwd=example_cwd,  stdout=f)
 
 
 class PnPnTestCase(NekTestCase):
@@ -348,7 +236,6 @@ class TurbChannelPnPn(PnPnTestCase):
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
     size_file      = 'SIZE'
-    serial_log_suffix  = ".pnpn.log.serial"
 
     @classmethod
     def setUpClass(cls):
@@ -358,16 +245,33 @@ class TurbChannelPnPn(PnPnTestCase):
         """
         super(TurbChannelPnPn, cls).setUpClass()
 
-        cls.run_genmap()
-        # TODO: turn 'makenek clean' back on
-        #cls.run_makenek('clean')
-        cls.run_makenek(cls.rea_file)
+        cls.serial_logfile = os.path.join(
+            cls.examples_root, cls.example_subdir, ".pnpn.log.serial")
+
+        run_genmap(
+            tools_bin = cls.tools_bin,
+            rea_file  = cls.rea_file,
+            cwd       = os.path.join(cls.examples_root, cls.example_subdir),
+        )
 
         if not cls.ifmpi:
-            cls.run_nek10s(log_suffix=cls.serial_log_suffix)
+            build_nek(
+                source_root = cls.source_root,
+                rea_file    = cls.rea_file,
+                cwd         = os.path.join(cls.examples_root, cls.example_subdir),
+                f77         = cls.f77,
+                cc          = cls.cc,
+                ifmpi       = cls.ifmpi
+            )
+            run_nek10s(
+                rea_file = cls.rea_file,
+                cwd      = os.path.join(cls.examples_root, cls.example_subdir),
+                logfile  = cls.serial_logfile
+            )
         else:
-            #cls.run_nek10steps()
-            #cls.run_nek10steps()
+            # TODO: implement nek10s for parallel runs
+            # run_nek10steps()
+            # run_nek10steps()
             pass
 
 
@@ -379,10 +283,7 @@ class TurbChannelPnPn(PnPnTestCase):
         delta = 95.        # Success if test value is within target_value +/- delta
         cls = self.__class__
 
-        logfile = os.path.join(cls.examples_root, cls.example_subdir,
-                               "{0}{1}".format(cls.rea_file, cls.serial_log_suffix))
-
-        self.grep_logfile(logfile=logfile, label=label, column=column, target_value=target_value, delta=delta)
+        self.grep_logfile(logfile=cls.serial_logfile, label=label, column=column, target_value=target_value, delta=delta)
 
 
     def test_GmresParallel(self):
@@ -398,7 +299,6 @@ class TurbChannelPnPn2(PnPn2TestCase):
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
     size_file      = 'SIZE'
-    serial_log_suffix  = ".pnpn2.log.serial"
 
     @classmethod
     def setUpClass(cls):
@@ -421,16 +321,33 @@ class TurbChannelPnPn2(PnPn2TestCase):
                               line)
                 print(line.rstrip())
 
-        cls.run_genmap()
-        # TODO: turn 'makenek clean' back on
-        #cls.run_makenek('clean')
-        cls.run_makenek(cls.rea_file)
+        cls.serial_logfile = os.path.join(
+            cls.examples_root, cls.example_subdir, ".pnpn2.log.serial")
+
+        run_genmap(
+            tools_bin = cls.tools_bin,
+            rea_file  = cls.rea_file,
+            cwd       = os.path.join(cls.examples_root, cls.example_subdir),
+            )
 
         if not cls.ifmpi:
-            cls.run_nek10s(log_suffix=cls.serial_log_suffix)
+            build_nek(
+                source_root = cls.source_root,
+                rea_file    = cls.rea_file,
+                cwd         = os.path.join(cls.examples_root, cls.example_subdir),
+                f77         = cls.f77,
+                cc          = cls.cc,
+                ifmpi       = cls.ifmpi
+            )
+            run_nek10s(
+                rea_file = cls.rea_file,
+                cwd      = os.path.join(cls.examples_root, cls.example_subdir),
+                logfile  = cls.serial_logfile
+            )
         else:
-            #cls.run_nek10steps()
-            #cls.run_nek10steps()
+            # TODO: implement nek10s for parallel runs
+            # run_nek10steps()
+            # run_nek10steps()
             pass
 
     def test_GmresSerial(self):
@@ -441,10 +358,14 @@ class TurbChannelPnPn2(PnPn2TestCase):
         delta = 26.        # Success if test value is within target_value +/- delta
         cls = self.__class__
 
-        logfile = os.path.join(cls.examples_root, cls.example_subdir,
-                               "{0}{1}".format(cls.rea_file, cls.serial_log_suffix))
 
-        self.grep_logfile(logfile=logfile, label=label, column=column, target_value=target_value, delta=delta)
+        self.grep_logfile(
+            logfile      = cls.serial_logfile,
+            label        = label,
+            column       = column,
+            target_value = target_value,
+            delta        = delta
+        )
 
     def test_GmresParallel(self):
         """ Greps gmres from logs """
