@@ -1,9 +1,8 @@
 import unittest
-import fileinput
-import re
 
 from NekUnitTests.tools.nekBinBuild import build_tools, build_nek
 from NekUnitTests.tools.nekBinRun import *
+from NekUnitTests.tools.nekFileConfig import config_size
 
 class NekTestCase(unittest.TestCase):
     """ Base class for Nek unittests
@@ -56,6 +55,9 @@ class NekTestCase(unittest.TestCase):
     example_subdir = ""
     rea_file       = ""
     size_file      = ""
+    lx2 = None
+    ly2 = None
+    lz2 = None
 
     @classmethod
     def get_opts(cls):
@@ -139,7 +141,6 @@ class NekTestCase(unittest.TestCase):
         # Get user options
         cls.get_opts()
 
-        # Build tools
         build_tools(
             tools_root = cls.tools_root,
             tools_bin  = cls.tools_bin,
@@ -148,13 +149,31 @@ class NekTestCase(unittest.TestCase):
             bigmem     = 'false'
         )
 
-    @classmethod
-    def tearDownClass(cls):
-        """ A stub for tear-down class.  Might move logs? """
-        # TODO: move logs
-        pass
+        run_genmap(
+            tools_bin = cls.tools_bin,
+            rea_file  = cls.rea_file,
+            cwd       = os.path.join(cls.examples_root, cls.example_subdir),
+            tolerance = '.05'
+        )
 
-    def grep_logfile(self, logfile, label, column, target_value, delta):
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+
+        build_nek(
+            source_root = cls.source_root,
+            rea_file    = cls.rea_file,
+            cwd         = os.path.join(cls.examples_root, cls.example_subdir),
+            f77         = cls.f77,
+            cc          = cls.cc,
+            ifmpi       = str(cls.ifmpi).lower()
+        )
+
+    def check_value(self, logfile, label, column, target_value, delta):
 
         with open(logfile, 'r') as f:
             for line in f:
@@ -172,59 +191,7 @@ class NekTestCase(unittest.TestCase):
                         break
 
 
-class PnPnTestCase(NekTestCase):
-    """ Base class for Pn-Pn test cases.  Tweaks size file after doing everything in NekTestCase. """
-
-    @classmethod
-    def setUpClass(cls):
-        """ Tweaks SIZE file for Pn-Pn problems.
-
-            Sets lx2=lx1, ly2=ly1, and lz2=lz1 in SIZE.  Also tweaks makenek, maketools, and
-            run maketools (see NekTestCase.setUpClass).
-        """
-
-        super(PnPnTestCase, cls).setUpClass()
-
-        # Tweak SIZE file
-        size_file_path = os.path.join(cls.examples_root, cls.example_subdir, cls.size_file)
-        print('Setting parmeters in "{0}"...'.format(size_file_path))
-        with fileinput.input(size_file_path, inplace=True, backup='.bak') as f:
-            for line in f:
-                # Set lx2=lx1, ly2=ly1, and lz2=lz1
-                line = re.sub(r'^ {6}parameter *\( *l([xyz])2 *= *\S+? *\)',
-                              r'      parameter (l\g<1>2=l\g<1>1)',
-                              line)
-                print(line.rstrip())
-
-class PnPn2TestCase(NekTestCase):
-    """ Base class for Pn-Pn-2 test cases.  Tweaks size file after doing everything in NekTestCase """
-
-    @classmethod
-    def setUpClass(cls):
-        """ Tweaks SIZE file for Pn-Pn-2 problems.
-
-            Sets lx2=lx1-2, ly2=ly1-2, and lz2=lz1 in SIZE.  Also tweaks makenek, maketools, and
-            run maketools (see NekTestCase.setUpClass).
-        """
-
-        super(PnPn2TestCase, cls).setUpClass()
-
-        # Tweak SIZE file
-        size_file_path = os.path.join(cls.examples_root, cls.example_subdir, cls.size_file)
-        print('Setting parmeters in "{0}"...'.format(size_file_path))
-        with fileinput.input(size_file_path, inplace=True, backup='.bak') as f:
-            for line in f:
-                # Set lx2=lx1-2, ly2=ly1-2
-                line = re.sub(r'^ {6}parameter *\( *l([xy])2 *= *\S+? *\)',
-                              r'      parameter (l\g<1>2=l\g<1>1-2)',
-                              line)
-                # Subst lz2=lz1.  Some subclasses will set lz2=lz1-2
-                line = re.sub(r'^ {6}parameter *\( *lz2 *= *\S+? *\)',
-                              r'      parameter (lz2=lz1)',
-                              line)
-                print(line.rstrip())
-
-class TurbChannelPnPn(PnPnTestCase):
+class TurbChannelPnPn(NekTestCase):
     """ Test case for turbChannel Pn-Pn examples
 
         Class attributes:
@@ -233,9 +200,13 @@ class TurbChannelPnPn(PnPnTestCase):
             size_file (str):         [default: 'SIZE']
             serial_log_suffix (str): [default '.log.serial']
     """
+
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
-    size_file      = 'SIZE'
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
 
     @classmethod
     def setUpClass(cls):
@@ -243,30 +214,14 @@ class TurbChannelPnPn(PnPnTestCase):
 
             Emulates 'nek10s' script for serial runs.  Emulates 'nek10steps' script for parallel runs.
         """
-        super(TurbChannelPnPn, cls).setUpClass()
-
-        cls.serial_logfile = os.path.join(
-            cls.examples_root, cls.example_subdir, ".pnpn.log.serial")
-
-        run_genmap(
-            tools_bin = cls.tools_bin,
-            rea_file  = cls.rea_file,
-            cwd       = os.path.join(cls.examples_root, cls.example_subdir),
-        )
+        super(NekTestCase, cls).setUpClass()
 
         if not cls.ifmpi:
-            build_nek(
-                source_root = cls.source_root,
-                rea_file    = cls.rea_file,
-                cwd         = os.path.join(cls.examples_root, cls.example_subdir),
-                f77         = cls.f77,
-                cc          = cls.cc,
-                ifmpi       = cls.ifmpi
-            )
             run_nek10s(
                 rea_file = cls.rea_file,
                 cwd      = os.path.join(cls.examples_root, cls.example_subdir),
-                logfile  = cls.serial_logfile
+                logfile  = os.path.join(cls.examples_root, cls.example_subdir,
+                                        "{0}.pnpn.serial.log.1".format(cls.rea_file))
             )
         else:
             # TODO: implement nek10s for parallel runs
@@ -277,13 +232,15 @@ class TurbChannelPnPn(PnPnTestCase):
 
     def test_GmresSerial(self):
         """ Greps gmres from logs """
-        label = 'gmres:'   # Greps for line with this label
-        column = 7         # Looks in this column for test value (counted from RIGHT)
-        target_value = 0.  # Target gmres value
-        delta = 95.        # Success if test value is within target_value +/- delta
         cls = self.__class__
-
-        self.grep_logfile(logfile=cls.serial_logfile, label=label, column=column, target_value=target_value, delta=delta)
+        self.check_value(
+            logfile      = os.path.join(cls.examples_root, cls.example_subdir,
+                                        "{0}.pn-pn.serial.log.1".format(cls.rea_file)),
+            label        = 'gmres: ',
+            target_value = 0.,
+            delta        = 95.,
+            column       = 7
+        )
 
 
     def test_GmresParallel(self):
@@ -295,10 +252,15 @@ class TurbChannelPnPn(PnPnTestCase):
             # TODO: implement parallel test
             pass
 
-class TurbChannelPnPn2(PnPn2TestCase):
+class TurbChannelPnPn2(NekTestCase):
+
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
     size_file      = 'SIZE'
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1-2'
 
     @classmethod
     def setUpClass(cls):
@@ -307,42 +269,14 @@ class TurbChannelPnPn2(PnPn2TestCase):
             Sets lx2=lx1-2, ly2=ly1-2, and lz2=lz1-2 in SIZE.  Also tweaks makenek, maketools, and
             run maketools (see NekTestCase.setUpClass).
         """
-
         super(TurbChannelPnPn2, cls).setUpClass()
 
-        # Tweak SIZE file
-        size_file_path = os.path.join(cls.examples_root, cls.example_subdir, cls.size_file)
-        print('Setting parmeters in "{0}"...'.format(size_file_path))
-        with fileinput.input(size_file_path, inplace=True, backup='.bak') as f:
-            for line in f:
-                # Subst lz2=lz1-2.
-                line = re.sub(r'^ {6}parameter *\( *lz2 *= *\S+? *\)',
-                              r'      parameter (lz2=lz1-2)',
-                              line)
-                print(line.rstrip())
-
-        cls.serial_logfile = os.path.join(
-            cls.examples_root, cls.example_subdir, ".pnpn2.log.serial")
-
-        run_genmap(
-            tools_bin = cls.tools_bin,
-            rea_file  = cls.rea_file,
-            cwd       = os.path.join(cls.examples_root, cls.example_subdir),
-            )
-
         if not cls.ifmpi:
-            build_nek(
-                source_root = cls.source_root,
-                rea_file    = cls.rea_file,
-                cwd         = os.path.join(cls.examples_root, cls.example_subdir),
-                f77         = cls.f77,
-                cc          = cls.cc,
-                ifmpi       = cls.ifmpi
-            )
             run_nek10s(
                 rea_file = cls.rea_file,
                 cwd      = os.path.join(cls.examples_root, cls.example_subdir),
-                logfile  = cls.serial_logfile
+                logfile  = os.path.join(cls.examples_root, cls.example_subdir,
+                                        "{0}.pn-pn-2.serial.log.1".format(cls.rea_file))
             )
         else:
             # TODO: implement nek10s for parallel runs
@@ -352,19 +286,14 @@ class TurbChannelPnPn2(PnPn2TestCase):
 
     def test_GmresSerial(self):
         """ Greps gmres from logs """
-        label = 'gmres:'   # Greps for line with this label
-        column = 6         # Looks in this column for test value (counted from RIGHT)
-        target_value = 0.  # Target gmres value
-        delta = 26.        # Success if test value is within target_value +/- delta
         cls = self.__class__
-
-
-        self.grep_logfile(
-            logfile      = cls.serial_logfile,
-            label        = label,
-            column       = column,
-            target_value = target_value,
-            delta        = delta
+        self.check_value(
+            logfile      = os.path.join(cls.examples_root, cls.example_subdir,
+                                        "{0}.pn-pn-2.serial.log.1".format(cls.rea_file)),
+            label        = 'gmres: ',
+            target_value = 0.,
+            delta        = 26.,
+            column       = 6
         )
 
     def test_GmresParallel(self):

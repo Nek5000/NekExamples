@@ -14,7 +14,6 @@ def config_makenek(infile, outfile, source_root=None, f77=None, cc=None, ifmpi=N
     if cc:
         lines = [re.sub(r'^CC=\"+.+?\"+', r'CC="{0}"'.format(cc), l)
                  for l in lines]
-
     if ifmpi:
         lines = [re.sub(r'^#*IFMPI=\"+.+?\"+', r'IFMPI="{0}"'.format(ifmpi), l)
                  for l in lines]
@@ -35,11 +34,9 @@ def config_maketools(infile, outfile, f77=None, cc=None, bigmem=None):
     if f77:
         lines = [re.sub(r'^F77=\"+.+?\"+', r'F77="{0}"'.format(f77), l)
                  for l in lines]
-
     if cc:
         lines = [re.sub(r'^CC=\"+.+?\"+', r'CC="{0}"'.format(cc), l)
                  for l in lines]
-
     if bigmem:
         lines = [re.sub(r'BIGMEM=\"+.+?\"+', r'BIGMEM="{0}"'.format(bigmem), l)
                  for l in lines]
@@ -64,5 +61,23 @@ def config_basics_inc(infile, outfile, nelm):
         f.writelines(lines)
 
 
+def config_size(infile, outfile, lx2=None, ly2=None, lz2=None):
 
+    with open(infile, 'r') as f:
+        lines = f.readlines()
 
+    if lx2:
+        lines = [re.sub(r'(^ {6}parameter *\( *lx2 *= *)\S+?( *\))',
+                        r'\g<1>{0}\g<2>'.format(lx2), l)
+                 for l in lines]
+    if ly2:
+        lines = [re.sub(r'(^ {6}parameter *\( *ly2 *= *)\S+?( *\))',
+                        r'\g<1>{0}\g<2>'.format(ly2), l)
+                 for l in lines]
+    if lz2:
+        lines = [re.sub(r'(^ {6}parameter *\( *lz2 *= *)\S+?( *\))',
+                        r'\g<1>{0}\g<2>'.format(lz2), l)
+                 for l in lines]
+
+    with open(outfile, 'w') as f:
+        f.writelines(lines)
