@@ -191,6 +191,17 @@ class NekTestCase(unittest.TestCase):
                         break
 
 
+def skip_unless_mpi(F):
+    """ A decorator for use with NekTestCase methods. Skips test if MPI is disabled. """
+    def wrapper(instance, *args):
+        cls = instance.__class__
+        if not cls.ifmpi:
+            instance.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(instance.id()))
+        else:
+            F(*args)
+    return wrapper
+
+
 class TurbChannelPnPn(NekTestCase):
     """ Test case for turbChannel Pn-Pn examples
 
@@ -243,14 +254,10 @@ class TurbChannelPnPn(NekTestCase):
         )
 
 
+    @skip_unless_mpi
     def test_GmresParallel(self):
         """ Greps gmres from logs """
-        cls = self.__class__
-        if not cls.ifmpi:
-            self.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(self.id()))
-        else:
-            # TODO: implement parallel test
-            pass
+        pass
 
 class TurbChannelPnPn2(NekTestCase):
 
@@ -296,14 +303,9 @@ class TurbChannelPnPn2(NekTestCase):
             column       = 6
         )
 
+    @skip_unless_mpi
     def test_GmresParallel(self):
-        """ Greps gmres from logs """
-        cls = self.__class__
-        if not cls.ifmpi:
-            self.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(self.id()))
-        else:
-            # TODO: implement parallel test
-            pass
+        pass
 
 if __name__ == '__main__':
     unittest.main()
