@@ -1,6 +1,6 @@
 import os
 from subprocess import check_call
-from NekUnitTests.tools.nekFileConfig import config_makenek, config_maketools, config_basics_inc
+from tools.nekFileConfig import config_makenek, config_maketools, config_basics_inc
 
 def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None):
 
@@ -58,11 +58,12 @@ def build_nek(source_root, rea_file, cwd=None, f77=None, cc=None, ifmpi=None):
             outfile     = makenek_out,
             f77         = f77,
             cc          = cc,
+            source_root = source_root,
             ifmpi       = ifmpi
         )
 
         # check_call([makenek_out, 'clean', source_root], cwd=cwd)
-        check_call([makenek_out, rea_file, source_root], cwd=cwd)
+        check_call([makenek_out, rea_file], cwd=cwd)
 
     except:
         print('Could not compile nek5000!')
