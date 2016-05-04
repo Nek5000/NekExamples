@@ -1,8 +1,8 @@
 import unittest
 
-from NekUnitTests.tools.nekBinBuild import build_tools, build_nek
-from NekUnitTests.tools.nekBinRun import *
-from NekUnitTests.tools.nekFileConfig import config_size
+from tools.nekBinBuild import build_tools, build_nek
+from tools.nekBinRun import *
+from tools.nekFileConfig import config_size
 
 class NekTestCase(unittest.TestCase):
     """ Base class for Nek unittests
@@ -214,14 +214,14 @@ class TurbChannelPnPn(NekTestCase):
 
             Emulates 'nek10s' script for serial runs.  Emulates 'nek10steps' script for parallel runs.
         """
-        super(NekTestCase, cls).setUpClass()
+        super(TurbChannelPnPn, cls).setUpClass()
 
         if not cls.ifmpi:
             run_nek10s(
                 rea_file = cls.rea_file,
                 cwd      = os.path.join(cls.examples_root, cls.example_subdir),
                 logfile  = os.path.join(cls.examples_root, cls.example_subdir,
-                                        "{0}.pnpn.serial.log.1".format(cls.rea_file))
+                                        "{0}.pn-pn.serial.log.1".format(cls.rea_file))
             )
         else:
             # TODO: implement nek10s for parallel runs
