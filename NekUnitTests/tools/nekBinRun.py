@@ -35,6 +35,9 @@ def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=tuple("1")):
             if log_suffix:
                 for l in logs:
                     os.rename(l, l+log_suffix)
-        except (OSError, SubprocessError):
+        # This are expected exceptions if 'check_call' or 'os.rename' fail.
+        # We issue a warning, not error, so subsequent tests can continue
+        except (OSError, SubprocessError) as E:
             # TODO: Change to warnings.warn()
-            print('Could not complete command: "{0}"'.format(" ".join([script, rea_file, p])))
+            print('Could not complete command: "{0}"!  Caught error: "{1}"'.format(
+                " ".join([script, rea_file, p]), E))
