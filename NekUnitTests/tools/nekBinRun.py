@@ -1,5 +1,5 @@
 import os
-from subprocess import check_call, PIPE, Popen
+from subprocess import check_call, PIPE, Popen, SubprocessError
 
 def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
     """ Runs genmap, using the .rea file defined by cls.rea_file
@@ -27,23 +27,14 @@ def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
         raise
     print("Succefully finished genmap!")
 
-def run_nek10s(rea_file, cwd, logfile):
-
-    nek5000      = os.path.join(cwd, "nek5000")
-    session_name = os.path.join(cwd, "SESSION_NAME")
-    ioinfo       = os.path.join(cwd, "ioinfo")
-
-    print('Running nek10s...')
-    print('    Using executable "{0}"'.format(nek5000))
-    print('    Using working directory "{0}"'.format(cwd))
-    print('    Using logfile "{0}"'.format(logfile))
-
-    with open(session_name, "w") as f:
-        f.write(rea_file)
-        f.write(cwd)
-
-    with open(ioinfo, "w") as f:
-        f.write("-10")
-
-    with open(logfile, 'w') as f:
-        check_call([nek5000], cwd=cwd,  stdout=f)
+def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=tuple("1")):
+    for p in mpi_procs:
+        try:
+            check_call([script, rea_file, p], cwd=cwd)
+            logs = (os.path.join(cwd, "logfile"), os.path.join(cwd, rea_file+".log."+p))
+            if log_suffix:
+                for l in logs:
+                    os.rename(l, l+log_suffix)
+        except (OSError, SubprocessError):
+            # TODO: Change to warnings.warn()
+            print('Could not complete command: "{0}"'.format(" ".join([script, rea_file, p])))

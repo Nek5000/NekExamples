@@ -48,19 +48,28 @@ class NekTestCase(unittest.TestCase):
     # log_root       = os.path.join(tests_root, "logs")
 
     # Defined in setUpClass
-    makenek        = ""
-    tools_bin      = ""
+    makenek       = ""
+    tools_bin     = ""
+    serial_log    = ""
+    parallel_logs = tuple("")
 
-    # Defined in subclasses only; included here to make syntax checker happy
-    example_subdir = ""
-    rea_file       = ""
-    size_file      = ""
+    # Optionally redefined in subclasses
+    mpi_procs      = ("1", "4")
+
+    # Must be defined in subclasses only; included here to make syntax checker happy
+    example_subdir      = ""
+    rea_file            = ""
+    serial_script       = ""
+    serial_log_suffix   = ""
+    parallel_script     = ""
+    parallel_log_suffix = ""
     lx2 = None
     ly2 = None
     lz2 = None
 
     @classmethod
     def get_opts(cls):
+        # TODO: try to clean up all this mess...
 
         print("Getting setup options...")
 
@@ -111,6 +120,13 @@ class NekTestCase(unittest.TestCase):
         # else:
         #     print('    The LOG_ROOT, "{0}", does not exist.  It will be created.'.format(cls.log_root))
         #     os.makedirs(cls.log_root)
+
+        # Set log names
+        cls.serial_log = os.path.join(cls.examples_root, cls.example_subdir,
+                                      "{0}.log.1.{1}".format(cls.rea_file, cls.serial_log_suffix))
+        cls.parallel_logs = (os.path.join(cls.examples_root, cls.example_subdir,
+                                          "{0}.log.{1}.{2}".format(cls.rea_file, p, cls.parallel_log_suffix))
+                             for p in cls.mpi_procs)
 
         print("Finished getting setup options!")
 
@@ -173,6 +189,24 @@ class NekTestCase(unittest.TestCase):
             ifmpi       = str(cls.ifmpi).lower()
         )
 
+        # Serial run
+        run_nek_script(
+            script     = cls.serial_script,
+            rea_file   = cls.rea_file,
+            cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+            log_suffix = cls.serial_log_suffix
+        )
+
+        # Parallel run
+        if cls.ifmpi:
+            run_nek_script(
+                script     = cls.parallel_script,
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.parallel_log_suffix,
+                mpi_procs  = ("1", "4")
+            )
+
     def check_value(self, logfile, label, column, target_value, delta):
 
         with open(logfile, 'r') as f:
@@ -212,47 +246,29 @@ class TurbChannelPnPn(NekTestCase):
             serial_log_suffix (str): [default '.log.serial']
     """
 
-    example_subdir = "turbChannel"
+    example_subdir = 'turbChannel'
     rea_file       = 'turbChannel'
+
+    serial_script     = 'nek10s'
+    serial_log_suffix = 'pn-pn.serial'
+
+    parallel_script     = 'nek10steps'
+    parallel_log_suffix = 'pn-pn.parallel'
 
     lx2 = 'lx1'
     ly2 = 'ly1'
     lz2 = 'lz1'
 
-    @classmethod
-    def setUpClass(cls):
-        """ Runs genmap and builds/runs nek5000 for both serial and (if requested) parallel runs.
-
-            Emulates 'nek10s' script for serial runs.  Emulates 'nek10steps' script for parallel runs.
-        """
-        super(TurbChannelPnPn, cls).setUpClass()
-
-        if not cls.ifmpi:
-            run_nek10s(
-                rea_file = cls.rea_file,
-                cwd      = os.path.join(cls.examples_root, cls.example_subdir),
-                logfile  = os.path.join(cls.examples_root, cls.example_subdir,
-                                        "{0}.pn-pn.serial.log.1".format(cls.rea_file))
-            )
-        else:
-            # TODO: implement nek10s for parallel runs
-            # run_nek10steps()
-            # run_nek10steps()
-            pass
-
-
     def test_GmresSerial(self):
         """ Greps gmres from logs """
         cls = self.__class__
         self.check_value(
-            logfile      = os.path.join(cls.examples_root, cls.example_subdir,
-                                        "{0}.pn-pn.serial.log.1".format(cls.rea_file)),
+            logfile      = cls.serial_log,
             label        = 'gmres: ',
             target_value = 0.,
             delta        = 95.,
             column       = 7
         )
-
 
     @skip_unless_mpi
     def test_GmresParallel(self):
@@ -263,40 +279,22 @@ class TurbChannelPnPn2(NekTestCase):
 
     example_subdir = "turbChannel"
     rea_file       = 'turbChannel'
-    size_file      = 'SIZE'
+
+    serial_script     = 'nek10s'
+    serial_log_suffix = 'pn-pn-2.serial'
+
+    parallel_script     = 'nek10steps'
+    parallel_log_suffix = 'pn-pn-2.parallel'
 
     lx2 = 'lx1'
     ly2 = 'ly1'
     lz2 = 'lz1-2'
 
-    @classmethod
-    def setUpClass(cls):
-        """ Tweaks SIZE file for Pn-Pn-2 problems.
-
-            Sets lx2=lx1-2, ly2=ly1-2, and lz2=lz1-2 in SIZE.  Also tweaks makenek, maketools, and
-            run maketools (see NekTestCase.setUpClass).
-        """
-        super(TurbChannelPnPn2, cls).setUpClass()
-
-        if not cls.ifmpi:
-            run_nek10s(
-                rea_file = cls.rea_file,
-                cwd      = os.path.join(cls.examples_root, cls.example_subdir),
-                logfile  = os.path.join(cls.examples_root, cls.example_subdir,
-                                        "{0}.pn-pn-2.serial.log.1".format(cls.rea_file))
-            )
-        else:
-            # TODO: implement nek10s for parallel runs
-            # run_nek10steps()
-            # run_nek10steps()
-            pass
-
     def test_GmresSerial(self):
         """ Greps gmres from logs """
         cls = self.__class__
         self.check_value(
-            logfile      = os.path.join(cls.examples_root, cls.example_subdir,
-                                        "{0}.pn-pn-2.serial.log.1".format(cls.rea_file)),
+            logfile      =  cls.serial_log,
             label        = 'gmres: ',
             target_value = 0.,
             delta        = 26.,
