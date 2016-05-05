@@ -51,7 +51,7 @@ class NekTestCase(unittest.TestCase):
     makenek       = ""
     tools_bin     = ""
     serial_log    = ""
-    parallel_logs = ("",)
+    parallel_logs = {}
 
     # Optionally redefined in subclasses
     mpi_procs      = ("1", "4")
@@ -124,9 +124,9 @@ class NekTestCase(unittest.TestCase):
         # Set log names
         cls.serial_log = os.path.join(cls.examples_root, cls.example_subdir,
                                       "{0}.log.1{1}".format(cls.rea_file, cls.serial_log_suffix))
-        cls.parallel_logs = (os.path.join(cls.examples_root, cls.example_subdir,
+        cls.parallel_logs = {p: os.path.join(cls.examples_root, cls.example_subdir,
                                           "{0}.log.{1}{2}".format(cls.rea_file, p, cls.parallel_log_suffix))
-                             for p in cls.mpi_procs)
+                             for p in cls.mpi_procs}
 
         print("Finished getting setup options!")
 
@@ -191,17 +191,17 @@ class NekTestCase(unittest.TestCase):
         )
 
         # Serial run
-        run_nek_script(
-            script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
-            rea_file   = cls.rea_file,
-            cwd        = os.path.join(cls.examples_root, cls.example_subdir),
-            log_suffix = cls.serial_log_suffix
-        )
-
-        # Parallel run
-        if cls.ifmpi:
+        if not cls.ifmpi:
             run_nek_script(
-                script     = os.path.join(cls.parallel_script, 'scripts', cls.parallel_script),
+                script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.serial_log_suffix
+            )
+        # Parallel run
+        else:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.parallel_script),
                 rea_file   = cls.rea_file,
                 cwd        = os.path.join(cls.examples_root, cls.example_subdir),
                 log_suffix = cls.parallel_log_suffix,
@@ -233,7 +233,7 @@ def skip_unless_mpi(F):
         if not cls.ifmpi:
             instance.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(instance.id()))
         else:
-            F(*args)
+            F(instance, *args)
     return wrapper
 
 
@@ -263,18 +263,35 @@ class TurbChannelPnPn(NekTestCase):
     def test_GmresSerial(self):
         """ Greps gmres from logs """
         cls = self.__class__
+        if not cls.ifmpi:
+            self.check_value(
+                logfile      = cls.serial_log,
+                label        = 'gmres: ',
+                target_value = 0.,
+                delta        = 95.,
+                column       = 7
+            )
+        else:
+            self.check_value(
+                logfile      = cls.parallel_logs["1"],
+                label        = 'gmres: ',
+                target_value = 0.,
+                delta        = 95.,
+                column       = 7
+            )
+
+
+    @skip_unless_mpi
+    def test_GmresParallel(self):
+        """ Greps gmres from logs """
+        cls = self.__class__
         self.check_value(
-            logfile      = cls.serial_log,
+            logfile      = cls.parallel_logs["4"],
             label        = 'gmres: ',
             target_value = 0.,
             delta        = 95.,
             column       = 7
         )
-
-    @skip_unless_mpi
-    def test_GmresParallel(self):
-        """ Greps gmres from logs """
-        pass
 
 class TurbChannelPnPn2(NekTestCase):
 
@@ -294,17 +311,34 @@ class TurbChannelPnPn2(NekTestCase):
     def test_GmresSerial(self):
         """ Greps gmres from logs """
         cls = self.__class__
+        if not cls.ifmpi:
+            self.check_value(
+                logfile      =  cls.serial_log,
+                label        = 'gmres: ',
+                target_value = 0.,
+                delta        = 26.,
+                column       = 6
+            )
+        else:
+            self.check_value(
+                logfile      =  cls.parallel_logs["1"],
+                label        = 'gmres: ',
+                target_value = 0.,
+                delta        = 26.,
+                column       = 6
+            )
+
+
+    @skip_unless_mpi
+    def test_GmresParallel(self):
+        cls = self.__class__
         self.check_value(
-            logfile      =  cls.serial_log,
+            logfile      =  cls.parallel_logs["4"],
             label        = 'gmres: ',
             target_value = 0.,
             delta        = 26.,
             column       = 6
         )
-
-    @skip_unless_mpi
-    def test_GmresParallel(self):
-        pass
 
 if __name__ == '__main__':
     unittest.main()
