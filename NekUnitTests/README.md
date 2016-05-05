@@ -43,28 +43,28 @@ $ python3 NekUnitTests.py
 ```
 or :
 ```
-$ SOURCE_ROOT=$HOME/nek5_svn/trunk/nek TOOLS_ROOT=$HOME/nek5_svn/trunk/tools EXAMPLES_ROOT=$HOME/nek5_svn/examples python3 NekUnitTests.py
+$ SOURCE_ROOT=$HOME/nek5_svn/trunk/nek TOOLS_ROOT=$HOME/nek5_svn/trunk/tools EXAMPLES_ROOT=$HOME/nek5_svn/examples python3 nekUnitTests.py
 ```
 
 ### Standalone
 
 Running the module directly through the interpreter will run all the tests in 
 the module.  
-`$ python3 NekUnitTests.py`
+`$ python3 nekUnitTests.py`
 
 ### nose
 
 A third-party tool, such as "nose", allows you to run all or a subset of tests.  To run all the tests,
 ```
-$ nosetests NekUnitTests.py
+$ nosetests nekUnitTests.py
 ```
 To run all the tests for a class, use a command such as:
 ```
-$ nosetests NekUnitTests.py:TurbChannelPnPn
+$ nosetests nekUnitTests.py:TurbChannelPnPn
 ```
 To run one test for a givne class, use a command such as:
 ```
-$ nosetests NekUnitTests.py:TurbChannelPnPn.test_GmresSerial
+$ nosetests nekUnitTests.py:TurbChannelPnPn.test_GmresSerial
 ```
     
 
