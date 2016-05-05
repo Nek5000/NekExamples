@@ -30,7 +30,9 @@ def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
 def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=tuple("1")):
     for p in mpi_procs:
         try:
-            check_call([script, rea_file, p], cwd=cwd)
+            # Running 'script' through shell since it doesn't have a shebang at the top.
+            # Need to concatenate args into a string if shell=True
+            check_call(" ".join([script, rea_file, p]), cwd=cwd, shell=True)
             logs = (os.path.join(cwd, "logfile"), os.path.join(cwd, rea_file+".log."+p))
             if log_suffix:
                 for l in logs:

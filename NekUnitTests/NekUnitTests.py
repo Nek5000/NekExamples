@@ -123,9 +123,9 @@ class NekTestCase(unittest.TestCase):
 
         # Set log names
         cls.serial_log = os.path.join(cls.examples_root, cls.example_subdir,
-                                      "{0}.log.1.{1}".format(cls.rea_file, cls.serial_log_suffix))
+                                      "{0}.log.1{1}".format(cls.rea_file, cls.serial_log_suffix))
         cls.parallel_logs = (os.path.join(cls.examples_root, cls.example_subdir,
-                                          "{0}.log.{1}.{2}".format(cls.rea_file, p, cls.parallel_log_suffix))
+                                          "{0}.log.{1}{2}".format(cls.rea_file, p, cls.parallel_log_suffix))
                              for p in cls.mpi_procs)
 
         print("Finished getting setup options!")
@@ -191,7 +191,7 @@ class NekTestCase(unittest.TestCase):
 
         # Serial run
         run_nek_script(
-            script     = cls.serial_script,
+            script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
             rea_file   = cls.rea_file,
             cwd        = os.path.join(cls.examples_root, cls.example_subdir),
             log_suffix = cls.serial_log_suffix
@@ -200,7 +200,7 @@ class NekTestCase(unittest.TestCase):
         # Parallel run
         if cls.ifmpi:
             run_nek_script(
-                script     = cls.parallel_script,
+                script     = os.path.join(cls.parallel_script, 'scripts', cls.parallel_script),
                 rea_file   = cls.rea_file,
                 cwd        = os.path.join(cls.examples_root, cls.example_subdir),
                 log_suffix = cls.parallel_log_suffix,
@@ -250,10 +250,10 @@ class TurbChannelPnPn(NekTestCase):
     rea_file       = 'turbChannel'
 
     serial_script     = 'nek10s'
-    serial_log_suffix = 'pn-pn.serial'
+    serial_log_suffix = '.pn-pn.serial'
 
     parallel_script     = 'nek10steps'
-    parallel_log_suffix = 'pn-pn.parallel'
+    parallel_log_suffix = '.pn-pn.parallel'
 
     lx2 = 'lx1'
     ly2 = 'ly1'
@@ -281,10 +281,10 @@ class TurbChannelPnPn2(NekTestCase):
     rea_file       = 'turbChannel'
 
     serial_script     = 'nek10s'
-    serial_log_suffix = 'pn-pn-2.serial'
+    serial_log_suffix = '.pn-pn-2.serial'
 
     parallel_script     = 'nek10steps'
-    parallel_log_suffix = 'pn-pn-2.parallel'
+    parallel_log_suffix = '.pn-pn-2.parallel'
 
     lx2 = 'lx1'
     ly2 = 'ly1'
