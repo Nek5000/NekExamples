@@ -2,7 +2,8 @@ import os
 from subprocess import check_call
 from tools.nekFileConfig import config_makenek, config_maketools, config_basics_inc
 
-def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None):
+def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
+                targets=('clean', 'all')):
 
     print('Compiling tools... ')
     print('    Using source directory "{0}"'.format(tools_root))
@@ -29,8 +30,8 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None):
             nelm    = '10 000'
         )
 
-        # check_call([maketools_out, 'clean', cls.tools_bin], cwd=cls.tools_root)
-        check_call([maketools_out, 'all', tools_bin], cwd=tools_root)
+        for t in targets:
+            check_call([maketools_out, t, tools_bin], cwd=tools_root)
 
     except:
         print('Could not compile tools!')
@@ -62,7 +63,7 @@ def build_nek(source_root, rea_file, cwd=None, f77=None, cc=None, ifmpi=None):
             ifmpi       = ifmpi
         )
 
-        # check_call([makenek_out, 'clean', source_root], cwd=cwd)
+        check_call([makenek_out, 'clean'], cwd=cwd)
         check_call([makenek_out, rea_file], cwd=cwd)
 
     except:
