@@ -51,7 +51,7 @@ class NekTestCase(unittest.TestCase):
     makenek       = ""
     tools_bin     = ""
     serial_log    = ""
-    parallel_logs = tuple("")
+    parallel_logs = ("",)
 
     # Optionally redefined in subclasses
     mpi_procs      = ("1", "4")
@@ -158,6 +158,7 @@ class NekTestCase(unittest.TestCase):
         cls.get_opts()
 
         build_tools(
+            targets    = ('clean', 'genmap'),
             tools_root = cls.tools_root,
             tools_bin  = cls.tools_bin,
             f77        = 'gfortran',
