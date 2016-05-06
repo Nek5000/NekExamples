@@ -1,5 +1,5 @@
 import os
-from subprocess import check_call
+from subprocess import check_call, STDOUT
 from tools.nekFileConfig import config_makenek, config_maketools, config_basics_inc
 
 def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
@@ -13,6 +13,7 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
 
     maketools_in  = os.path.join(tools_root, 'maketools')
     maketools_out = os.path.join(tools_root, 'maketools.tests')
+    maketools_log = os.path.join(tools_root, 'maketools.out')
 
     try:
 
@@ -30,11 +31,17 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
             nelm    = '10 000'
         )
 
-        for t in targets:
-            check_call([maketools_out, t, tools_bin], cwd=tools_root)
+        with open(maketools_log, 'w') as f:
+            for t in targets:
+                check_call(
+                    [maketools_out, t, tools_bin],
+                    stderr=STDOUT,
+                    stdout=f,
+                    cwd=tools_root
+                )
 
     except:
-        print('Could not compile tools!')
+        print('Could not compile tools! Check "{0}" for details.'.format(maketools_log))
         raise
     else:
         print('Successfully compiled tools!')

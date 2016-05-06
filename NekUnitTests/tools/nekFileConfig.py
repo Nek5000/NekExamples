@@ -18,6 +18,12 @@ def config_makenek(infile, outfile, source_root=None, f77=None, cc=None, ifmpi=N
         lines = [re.sub(r'^#*IFMPI=\"+.+?\"+', r'IFMPI="{0}"'.format(ifmpi), l)
                  for l in lines]
 
+    lines = [re.sub(r'(^source\s+\$SOURCE_ROOT/makenek.inc)', r'\g<1> >compiler.out', l)
+             for l in lines]
+
+    lines = [re.sub(r'(.+)2>&1\s+\|\s*tee\s+compiler.out', r'\g<1> >>compiler.out 2>&1', l)
+             for l in lines]
+
     with open(outfile, 'w') as f:
         f.writelines(lines)
     os.chmod(outfile,
