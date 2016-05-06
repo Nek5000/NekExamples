@@ -1,5 +1,5 @@
 import os
-from subprocess import check_call, PIPE, Popen, SubprocessError
+from subprocess import check_call, PIPE, STDOUT, Popen, SubprocessError
 
 def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
     """ Runs genmap, using the .rea file defined by cls.rea_file
@@ -12,8 +12,9 @@ def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
                          It's a string, not a float, since it's piped into stdin as a literal
     """
 
-    genmap = os.path.join(tools_bin, 'genmap')
-    stdin  = bytes("{0}\n{1}".format(rea_file, tolerance), 'ascii')
+    genmap  = os.path.join(tools_bin, 'genmap')
+    logfile = os.path.join(cwd, 'genmap.out')
+    stdin   = bytes("{0}\n{1}".format(rea_file, tolerance), 'ascii')
 
     print('Running genmap...')
     print('    Using executable "{0}"'.format(genmap))
@@ -21,10 +22,12 @@ def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
     print('    Using .rea file "{0}"'.format(rea_file))
 
     try:
-        Popen([genmap], stdin=PIPE, cwd=cwd).communicate(stdin)
-    except:
-        print("Could not complete genmap!")
-        # raise
+        with open(logfile, 'w') as f:
+            Popen([genmap], stdin=PIPE, stderr=STDOUT, stdout=f, cwd=cwd).communicate(stdin)
+    except (OSError, SubprocessError) as E:
+        # TODO: Change to warnings.warn()
+        print('Could not complete genmap!  Caught error: "{0}".  Check "{1}" for details.'.format(E, logfile))
+
     print("Succefully finished genmap!")
 
 def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=("1",)):
