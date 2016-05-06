@@ -53,9 +53,7 @@ class NekTestCase(unittest.TestCase):
     source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('HOME', ""))
     examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('HOME', ""))
     tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
-    # TODO: do something productive with tests_root and log_root; right now they're not used
-    # tests_root     = "{0}/nek5_svn/tests".format(os.environ.get('HOME', ""))
-    # log_root       = os.path.join(tests_root, "logs")
+    log_root       = "{0}/nek5_svn/trunk/tests/logs".format(os.environ.get('HOME', ""))
 
     # Defined in setUpClass
     makenek       = ""
@@ -101,8 +99,7 @@ class NekTestCase(unittest.TestCase):
         cls.source_root   = os.environ.get('SOURCE_ROOT',   cls.source_root)
         cls.tools_root    = os.environ.get('TOOLS_ROOT',    cls.tools_root)
         cls.examples_root = os.environ.get('EXAMPLES_ROOT', cls.examples_root)
-        #cls.tests_root    = os.environ.get('TESTS_ROOT',    cls.tests_root)
-        #cls.log_root      = os.environ.get('LOG_ROOT',      cls.log_root)
+        cls.log_root      = os.environ.get('LOG_ROOT',      cls.log_root)
         if not cls.makenek:
             cls.makenek   = os.path.join(cls.source_root, 'makenek')
         if not cls.tools_bin:
@@ -120,16 +117,14 @@ class NekTestCase(unittest.TestCase):
                 Please set ${0} to a valid path.'.format(name, val))
 
         # Make tools_bin if it doesn't exist
-        if not os.path.isdir(cls.tools_bin):
-            print('    The directory "{0}" does not exist.  It will be created'.format(cls.tools_bin))
-            os.makedirs(cls.tools_bin)
-
-        # Make log_root if it doesn't exist
-        # if os.path.isdir(cls.log_root):
-        #     print('    Using LOG_ROOT at "{0}"'.format(cls.log_root))
-        # else:
-        #     print('    The LOG_ROOT, "{0}", does not exist.  It will be created.'.format(cls.log_root))
-        #     os.makedirs(cls.log_root)
+        for val, name in ((cls.tools_bin, 'TOOLS_BIN'),
+                          (cls.log_root,  'LOG_ROOT')):
+            if val:
+                if os.path.isdir(val):
+                    print('    Using {0} at "{1}"'.format(name, val))
+                else:
+                    print('    The {0} directory, "{1}" does not exist.  It will be created'.format(name, val))
+                    os.makedirs(val)
 
         # Set log names
         cls.serial_log = os.path.join(cls.examples_root, cls.example_subdir,
@@ -217,6 +212,21 @@ class NekTestCase(unittest.TestCase):
                 log_suffix = cls.parallel_log_suffix,
                 mpi_procs  = ("1", "4")
             )
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.log_root:
+
+            if not os.path.isdir(os.path.join(cls.log_root, cls.example_subdir)):
+                os.makedirs(os.path.join(cls.log_root, cls.example_subdir))
+
+            for f in os.listdir(os.path.join(cls.examples_root, cls.example_subdir)):
+                if f == 'compiler.out' or f == 'genmap.out' or 'log' in f:
+                    os.replace(
+                        os.path.join(cls.examples_root, cls.example_subdir, f),
+                        os.path.join(cls.log_root, cls.example_subdir, f)
+                    )
+
 
     def check_value(self, logfile, label, column, target_value, delta):
 
