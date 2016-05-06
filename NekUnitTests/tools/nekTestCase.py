@@ -233,4 +233,5 @@ class NekTestCase(unittest.TestCase):
                         self.assertAlmostEqual(test_value, target_value, delta=delta)
                         # TODO: Figure out how to print successes; this doesn't work with unittest.main()
                         # print('SUCCESS: {1} was within {2} +/ {3}'.format( test_value, target_value, delta ))
-                        break
+                        return
+        self.fail('Could not find the label, "{0}", in the logfile, "{1}".'.format(label, logfile))
