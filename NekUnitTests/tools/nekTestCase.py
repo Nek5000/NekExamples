@@ -53,9 +53,8 @@ class NekTestCase(unittest.TestCase):
     source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('HOME', ""))
     examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('HOME', ""))
     tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
-    log_root       = "{0}/nek5_svn/trunk/tests/logs".format(os.environ.get('HOME', ""))
 
-    # Defined in setUpClass
+    # Must be defined in setUpClass
     makenek       = ""
     tools_bin     = ""
     serial_log    = ""
@@ -63,6 +62,7 @@ class NekTestCase(unittest.TestCase):
 
     # Optionally redefined in subclasses
     mpi_procs      = ("1", "4")
+    log_root       = ""
 
     # Must be defined in subclasses only; included here to make syntax checker happy
     example_subdir      = ""
@@ -74,6 +74,7 @@ class NekTestCase(unittest.TestCase):
     lx2 = None
     ly2 = None
     lz2 = None
+    meshgen = None
 
     @classmethod
     def get_opts(cls):
@@ -171,11 +172,10 @@ class NekTestCase(unittest.TestCase):
             bigmem     = 'false'
         )
 
-        run_genmap(
-            tools_bin = cls.tools_bin,
-            rea_file  = cls.rea_file,
-            cwd       = os.path.join(cls.examples_root, cls.example_subdir),
-            tolerance = '.05'
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, cls.meshgen[0]),
+            stdin   = cls.meshgen[1:],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
         )
 
         config_size(
