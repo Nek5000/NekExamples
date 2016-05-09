@@ -1,34 +1,25 @@
 import os
 from subprocess import check_call, PIPE, STDOUT, Popen, SubprocessError
 
-def run_genmap(tools_bin, cwd, rea_file, tolerance=".05"):
-    """ Runs genmap, using the .rea file defined by cls.rea_file
+def run_meshgen(command, stdin, cwd):
 
-        Not useful in base class.  Useful in subclass for a given example,
-        where cls.rea_file is defined
-
-    Params:
-        tolerance (str): Mesh tolerance.
-                         It's a string, not a float, since it's piped into stdin as a literal
-    """
-
-    genmap  = os.path.join(tools_bin, 'genmap')
-    logfile = os.path.join(cwd, 'genmap.out')
-    stdin   = bytes("{0}\n{1}".format(rea_file, tolerance), 'ascii')
+    logfile = os.path.join(cwd, command+'.out')
+    stdin   = bytes("\n".join(stdin), 'ascii')
 
     print('Running genmap...')
-    print('    Using executable "{0}"'.format(genmap))
+    print('    Using command "{0}"'.format(command))
+    print('    Using input "{0}"'.format(stdin))
     print('    Using working directory "{0}"'.format(cwd))
-    print('    Using .rea file "{0}"'.format(rea_file))
 
     try:
         with open(logfile, 'w') as f:
-            Popen([genmap], stdin=PIPE, stderr=STDOUT, stdout=f, cwd=cwd).communicate(stdin)
+            Popen([command], stdin=PIPE, stderr=STDOUT, stdout=f, cwd=cwd).communicate(stdin)
     except (OSError, SubprocessError) as E:
         # TODO: Change to warnings.warn()
-        print('Could not complete genmap!  Caught error: "{0}".  Check "{1}" for details.'.format(E, logfile))
+        print('Could not complete {0}!  Caught error: "{1}".  Check "{2}" for details.'.format(command, E, logfile))
 
-    print("Succefully finished genmap!")
+    print("Succefully finished {0}!".format(command[0]))
+
 
 def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=("1",)):
     for p in mpi_procs:
