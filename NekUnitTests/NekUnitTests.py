@@ -1,68 +1,41 @@
 from tools.nekTestCase import *
-from tools.nekFileParse import *
 
 ###############################################################################
 #  turbChannel
 ###############################################################################
 
-class TurbChannelPnPn(NekTestCase):
-
-    example_subdir = 'turbChannel'
-    rea_file       = 'turbChannel'
-
-    meshgen = ['genmap', 'turbchannel', '0.5']
-
-    serial_script     = 'nek10s'
-    serial_log_suffix = '.pn-pn.serial'
-
-    parallel_script     = 'nek10steps'
-    parallel_log_suffix = '.pn-pn.parallel'
+@pn_pn_testcase
+class TurbChannelPnPn(TurbChannel):
 
     lx2 = 'lx1'
     ly2 = 'ly1'
     lz2 = 'lz1'
 
+    @serial_test
     def test_GmresSerial(self):
-        cls      = self.__class__
-        logfile  = cls.parallel_logs["1"] if cls.ifmpi else cls.serial_log
-        test_val = get_value(label='gmres: ', column=7, logfile=logfile)
+        test_val = self.get_value(label='gmres: ', column=7,)
         self.assertAlmostEqual(test_val, 0., delta=95.)
 
-    @skip_unless_mpi
+    @parallel_test
     def test_GmresParallel(self):
-        cls = self.__class__
-        logfile  = cls.parallel_logs["4"]
-        test_val = get_value(label='gmres: ', column=7, logfile=logfile)
+        test_val = self.get_value(label='gmres: ', column=7)
         self.assertAlmostEqual(test_val, 0., delta=95.)
 
-class TurbChannelPnPn2(NekTestCase):
-
-    example_subdir = "turbChannel"
-    rea_file       = 'turbChannel'
-
-    serial_script     = 'nek10s'
-    serial_log_suffix = '.pn-pn-2.serial'
-
-    parallel_script     = 'nek10steps'
-    parallel_log_suffix = '.pn-pn-2.parallel'
-
-    meshgen = ['genmap', 'turbchannel', '0.5']
+@pn_pn_2_testcase
+class TurbChannelPnPn2(TurbChannel):
 
     lx2 = 'lx1-2'
     ly2 = 'ly1-2'
     lz2 = 'lz1-2'
 
+    @serial_test
     def test_GmresSerial(self):
-        cls      = self.__class__
-        logfile  = cls.parallel_logs["1"] if cls.ifmpi else cls.serial_log
-        test_val = get_value(label='gmres: ', column=6, logfile=logfile)
+        test_val = self.get_value(label='gmres: ', column=6)
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
-    @skip_unless_mpi
+    @parallel_test
     def test_GmresParallel(self):
-        cls = self.__class__
-        logfile  = cls.parallel_logs["4"]
-        test_val = get_value(label='gmres: ', column=6, logfile=logfile)
+        test_val = self.get_value(label='gmres: ', column=6)
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
 ###############################################################################
@@ -75,7 +48,7 @@ class TurbChannelPnPn2(NekTestCase):
 #  3dbox, b3d
 ###############################################################################
 
-
+#
 # class ThreeDBoxPnPn(NekTestCase):
 #
 #     example_subdir = '3dbox'
@@ -87,39 +60,34 @@ class TurbChannelPnPn2(NekTestCase):
 #     parallel_script     = 'nek10steps'
 #     parallel_log_suffix = '.pn-pn.parallel'
 #
-#     meshgen = ['genmap', 'turbchannel', '0.5']
-#
 #     lx2 = 'lx1'
 #     ly2 = 'ly1'
 #     lz2 = 'lz1'
 #
-#     def test_GmresSerial(self):
-#         """ Greps gmres from logs """
-#         cls = self.__class__
-#         if not cls.ifmpi:
-#             logfile      = cls.serial_log
-#         else:
-#             logfile      = cls.parallel_logs["1"]
-#         self.check_value(
-#             logfile      = logfile,
-#             label        = 'gmres: ',
-#             target_value = 0.,
-#             delta        = 95.,
-#             column       = 7
-#         )
+#     def setUpClass(cls):
+#         cls.get_opts()
+#         run_meshgen('genbox', ['b3d.box'],
+#                     cwd=os.path.join(cls.examples_root, cls.example_subdir))
+#         mvn('box', 'b3d', cwd=os.path.join(cls.examples_root, cls.example_subdir))
+#         run_nek_script()
+#
+#     def test_EndOfTimeStepLoopSerial(self):
+#         cls     = self.__class__
+#         logfile = cls.parallel_logs["1"] if cls.ifmpi else cls.serial_log
+#         phrase  = get_phrase("end of time-step loop", logfile)
+#         self.assertIsNotNone(phrase)
 #
 #     @skip_unless_mpi
-#     def test_GmresParallel(self):
-#         """ Greps gmres from logs """
-#         cls = self.__class__
-#         self.check_value(
-#             logfile      = cls.parallel_logs["4"],
-#             label        = 'gmres: ',
-#             target_value = 0.,
-#             delta        = 95.,
-#             column       = 7
-#         )
+#     def test_EndOfTimeStepLoopParallel(self):
+#         cls     = self.__class__
+#         logfile = cls.parallel_logs["4"]
+#         phrase  = get_phrase("end of time-step loop", logfile)
+#         self.assertIsNotNone(phrase)
+#
+# if __name__ == '__main__':
+#     unittest.main()
+#
+# class BThreeD(NekTestCase)
+#
+#     example_subdir = '3dbox'
 
-
-if __name__ == '__main__':
-    unittest.main()
