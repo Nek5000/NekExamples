@@ -42,7 +42,7 @@ def parallel_test(method):
             self.logfile = os.path.join(
                 cls.examples_root,
                 cls.example_subdir,
-                "{0}.log.1{1}".format(cls.rea_file, cls.parallel_log_suffix)
+                "{0}.log.4{1}".format(cls.rea_file, cls.parallel_log_suffix)
             )
             method(self, *args)
     return wrapper
@@ -248,7 +248,6 @@ class TurbChannel(NekTestCase):
             cc         = 'gcc',
             bigmem     = 'false'
         )
-
         config_size(
             infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
             outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
@@ -256,7 +255,6 @@ class TurbChannel(NekTestCase):
             ly2 = cls.ly2,
             lz2 = cls.lz2
         )
-
         run_meshgen(
             command = os.path.join(cls.tools_bin, 'genmap'),
             stdin   = [cls.rea_file, '0.5'],
@@ -286,7 +284,6 @@ class ThreeDBox(NekTestCase):
             cc         = 'gcc',
             bigmem     = 'false'
         )
-
         config_size(
             infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
             outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
@@ -294,19 +291,16 @@ class ThreeDBox(NekTestCase):
             ly2 = cls.ly2,
             lz2 = cls.lz2
         )
-
         run_meshgen(
             command = os.path.join(cls.tools_bin, 'genbox'),
             stdin   = ['b3d.box'],
             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
         )
-
         mvn(
             src_prefix = 'box',
             dst_prefix = 'b3d',
             cwd = os.path.join(cls.examples_root, cls.example_subdir)
         )
-
         run_meshgen(
             command = os.path.join(cls.tools_bin, 'genmap'),
             stdin   = [cls.rea_file, '0.5'],
@@ -314,3 +308,48 @@ class ThreeDBox(NekTestCase):
         )
 
         super(ThreeDBox, cls).setUpClass()
+
+class Axi(NekTestCase):
+
+    example_subdir  = 'axi'
+    rea_file        = 'axi'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    @classmethod
+    def setUpClass(cls):
+
+        cls.get_opts()
+
+        build_tools(
+            targets    = ('clean', 'genbox', 'genmap'),
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77        = 'gfortran',
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genbox'),
+            stdin   = ['axi.box'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+            )
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genmap'),
+            stdin   = ['box', '0.2'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+            )
+        mvn(
+            src_prefix = 'box',
+            dst_prefix = 'axi',
+            cwd = os.path.join(cls.examples_root, cls.example_subdir)
+        )
+
+        super(Axi, cls).setUpClass()
