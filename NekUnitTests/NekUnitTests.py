@@ -39,13 +39,13 @@ class TurbChannelPnPn2(TurbChannel):
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
 ###############################################################################
-#  2d_eigtest; eig1
+#  2d_eigtest
 ###############################################################################
 
-# TODO: implement 2d_eigtest, eig1
+# TODO: implement 2d_eigtest
 
 ###############################################################################
-#  3dbox, b3d
+#  3dbox
 ###############################################################################
 
 @pn_pn_testcase
@@ -83,7 +83,7 @@ class ThreeDBoxPnPn2(ThreeDBox):
         self.assertIsNotNone(phrase)
 
 ###############################################################################
-#  3dbox, b3d
+#  axi
 ###############################################################################
 
 @pn_pn_testcase
@@ -130,3 +130,77 @@ class AxiPnPn2(Axi):
     def test_totalSolverTime_serial(self):
         val = self.get_value('total solver time', column=2)
         self.assertAlmostEqual(val, 0.1, delta=4)
+
+####################################################################"
+#  benard
+####################################################################"
+
+# TODO: implement benard
+
+####################################################################"
+#  blasius
+####################################################################"
+
+@pn_pn_testcase
+class BlasiusPnPn(Blasius):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_gmres_serial(self):
+        test_val = self.get_value('gmres: ', column=7,)
+        self.assertAlmostEqual(test_val, 0., delta=162.)
+
+    @parallel_test
+    def test_gmres_parallel(self):
+        test_val = self.get_value('gmres: ', column=7,)
+        self.assertAlmostEqual(test_val, 0., delta=162.)
+
+    @serial_test
+    def test_delta_serial(self):
+        test_val = self.get_value('delta', column=5,)
+        self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
+
+    @parallel_test
+    def test_delta_parallel(self):
+        test_val = self.get_value('delta', column=5,)
+        self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
+
+    @serial_test
+    def test_totalSolverTime_serial(self):
+        test_val = self.get_value('total solver time', 2)
+        self.assertAlmostEqual(test_val, 0.1, delta=30)
+
+@pn_pn_2_testcase
+class BlasiusPnPn2(Blasius):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_gmres_serial(self):
+        test_val = self.get_value('gmres: ', column=6,)
+        self.assertAlmostEqual(test_val, 0., delta=125.)
+
+    @parallel_test
+    def test_gmres_parallel(self):
+        test_val = self.get_value('gmres: ', column=6,)
+        self.assertAlmostEqual(test_val, 0., delta=125.)
+
+    @serial_test
+    def test_delta_serial(self):
+        test_val = self.get_value('delta', column=5,)
+        self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
+
+    @parallel_test
+    def test_delta_parallel(self):
+        test_val = self.get_value('delta', column=5,)
+        self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
+
+    @serial_test
+    def test_totalSolverTime_serial(self):
+        test_val = self.get_value('total solver time', 2)
+        self.assertAlmostEqual(test_val, 0.1, delta=30)
