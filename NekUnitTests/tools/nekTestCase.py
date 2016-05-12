@@ -4,15 +4,49 @@ from tools.nekBinBuild import build_tools, build_nek
 from tools.nekBinRun import *
 from tools.nekFileConfig import config_size
 
-def skip_unless_mpi(F):
-    """ A decorator for use with NekTestCase methods. Skips test if MPI is disabled. """
-    def wrapper(instance, *args):
-        cls = instance.__class__
-        if not cls.ifmpi:
-            instance.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(instance.id()))
+def pn_pn_testcase(cls, serial_log_suffix='.pn_pn.serial', parallel_log_suffix='.pn_pn.parallel'):
+    """  Decorator to set log suffixes """
+    cls.serial_log_suffix   = serial_log_suffix
+    cls.parallel_log_suffix = parallel_log_suffix
+    return cls
+
+def pn_pn_2_testcase(cls, serial_log_suffix = '.pn_pn_2.serial', parallel_log_suffix='.pn_pn_2.parallel'):
+    """  Decorator to set sets log suffixes """
+    cls.serial_log_suffix   = serial_log_suffix
+    cls.parallel_log_suffix = parallel_log_suffix
+    return cls
+
+def serial_test(method):
+    """ A decorator for use with NekTestCase methods. Sets logfiles. """
+    def wrapper(self, *args):
+        cls = self.__class__
+        if cls.ifmpi:
+            suffix = cls.parallel_log_suffix
         else:
-            F(instance, *args)
+            suffix = cls.serial_log_suffix
+        self.logfile = os.path.join(
+            cls.examples_root,
+            cls.example_subdir,
+            "{0}.log.1{1}".format(cls.rea_file, suffix)
+        )
+        method(self, *args)
     return wrapper
+
+def parallel_test(method):
+    """ A decorator for use with NekTestCase methods. Sets logfiles and skips if mpi is disabled """
+    def wrapper(self, *args):
+        cls = self.__class__
+        if not cls.ifmpi:
+            self.skipTest("Skipping \"{0}\"; MPI is not enabled.".format(self.id()))
+        else:
+            self.logfile = os.path.join(
+                cls.examples_root,
+                cls.example_subdir,
+                "{0}.log.1{1}".format(cls.rea_file, cls.parallel_log_suffix)
+            )
+            method(self, *args)
+    return wrapper
+
 
 class NekTestCase(unittest.TestCase):
     """ Base class for Nek unittests
@@ -57,11 +91,8 @@ class NekTestCase(unittest.TestCase):
     # Must be defined in setUpClass
     makenek       = ""
     tools_bin     = ""
-    serial_log    = ""
-    parallel_logs = {}
 
     # Optionally redefined in subclasses
-    mpi_procs      = ("1", "4")
     log_root       = ""
 
     # Must be defined in subclasses only; included here to make syntax checker happy
@@ -74,7 +105,6 @@ class NekTestCase(unittest.TestCase):
     lx2 = None
     ly2 = None
     lz2 = None
-    meshgen = None
 
     @classmethod
     def get_opts(cls):
@@ -127,64 +157,10 @@ class NekTestCase(unittest.TestCase):
                     print('    The {0} directory, "{1}" does not exist.  It will be created'.format(name, val))
                     os.makedirs(val)
 
-        # Set log names
-        cls.serial_log = os.path.join(cls.examples_root, cls.example_subdir,
-                                      "{0}.log.1{1}".format(cls.rea_file, cls.serial_log_suffix))
-        cls.parallel_logs = {p: os.path.join(cls.examples_root, cls.example_subdir,
-                                             "{0}.log.{1}{2}".format(cls.rea_file, p, cls.parallel_log_suffix))
-                             for p in cls.mpi_procs}
-
         print("Finished getting setup options!")
 
     @classmethod
     def setUpClass(cls):
-        """ Set up for subsequent unit tests
-
-        Does the following
-            (a) get the relevant environment variables for compilers, directories
-            (b) sets the following class attributes:
-                f77
-                cc
-                ifmpi
-                source_root
-                tools_root
-                examples_root
-                makenek
-                tools_bin
-            (c) add f77, cc, ifmpi and source_root to maketools, makenek
-            (d) build tools
-
-        Side-effects:
-            Replaces makenek (backs it up in makenek.bak)
-            Replaces maketools (backs it up in maketools.bak)
-            Replaces prenek/basics.inc (backs it up in prenek/basics.inc.bak)
-        """
-
-        # Get user options
-        cls.get_opts()
-
-        build_tools(
-            targets    = ('clean', 'genmap'),
-            tools_root = cls.tools_root,
-            tools_bin  = cls.tools_bin,
-            f77        = 'gfortran',
-            cc         = 'gcc',
-            bigmem     = 'false'
-        )
-
-        run_meshgen(
-            command = os.path.join(cls.tools_bin, cls.meshgen[0]),
-            stdin   = cls.meshgen[1:],
-            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-        )
-
-        config_size(
-            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            lx2 = cls.lx2,
-            ly2 = cls.ly2,
-            lz2 = cls.lz2
-        )
 
         build_nek(
             source_root = cls.source_root,
@@ -228,20 +204,61 @@ class NekTestCase(unittest.TestCase):
                     )
 
 
-    def check_value(self, logfile, label, column, target_value, delta):
-
-        with open(logfile, 'r') as f:
+    def get_value(self, label, column):
+        with open(self.logfile, 'r') as f:
             for line in f:
                 if label in line:
                     try:
-                        test_value = float(line.split()[-column])
+                        value = float(line.split()[-column])
                     except ValueError:
-                        raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(logfile))
+                        raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(self.logfile))
                     except IndexError:
-                        raise IndexError("Fewer columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(logfile))
+                        raise IndexError("Fewer columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(self.logfile))
                     else:
-                        self.assertAlmostEqual(test_value, target_value, delta=delta)
-                        # TODO: Figure out how to print successes; this doesn't work with unittest.main()
-                        # print('SUCCESS: {1} was within {2} +/ {3}'.format( test_value, target_value, delta ))
-                        return
-        self.fail('Could not find the label, "{0}", in the logfile, "{1}".'.format(label, logfile))
+                        return value
+        return None
+
+    def get_phrase(self, label):
+        with open(self.logfile, 'r') as f:
+            for line in f:
+                if label in line:
+                    return line
+        return None
+
+
+class TurbChannel(NekTestCase):
+
+    example_subdir  = 'turbChannel'
+    rea_file        = 'turbChannel'
+    serial_script   = 'nek10s'
+    parallel_script = 'nek10steps'
+
+    @classmethod
+    def setUpClass(cls):
+
+        cls.get_opts()
+
+        build_tools(
+            targets    = ('clean', 'genmap'),
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77        = 'gfortran',
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
+
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genmap'),
+            stdin   = [cls.rea_file, '0.5'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+        )
+
+        super(TurbChannel, cls).setUpClass()

@@ -3,12 +3,12 @@ from subprocess import check_call, PIPE, STDOUT, Popen, SubprocessError
 
 def run_meshgen(command, stdin, cwd):
 
-    logfile = os.path.join(cwd, command+'.out')
+    logfile = os.path.join(cwd, '{0}.out'.format(os.path.basename(command)))
     stdin   = bytes("\n".join(stdin), 'ascii')
 
-    print('Running genmap...')
+    print('Running "{0}"...'.format(os.path.basename(command)))
     print('    Using command "{0}"'.format(command))
-    print('    Using input "{0}"'.format(stdin))
+    print('    Using stdin "{0}"'.format(stdin))
     print('    Using working directory "{0}"'.format(cwd))
 
     try:
@@ -50,3 +50,14 @@ def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=("1",)):
             # TODO: Change to warnings.warn()
             print('Could not complete command: "{0}"!  Caught error: "{1}"'.format(
                 " ".join([script, rea_file, p]), E))
+
+def mvn(src_prefix, dst_prefix, cwd):
+    exts = ('.box', '.rea', '.usr', '.map', '.sep', '.re2')
+    for x in exts:
+        src = os.path.join(cwd, src_prefix + x)
+        dst = os.path.join(cwd, dst_prefix + x)
+        try:
+            os.rename(src, dst)
+        except OSError:
+            # TODO: Change to warnings.warn()
+            print("Could not move {0} to {1}".format(src, dst))
