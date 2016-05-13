@@ -547,3 +547,20 @@ class EddyEddyUv(NekTestCase):
                 log_suffix = cls.parallel_log_suffix,
                 mpi_procs  = ("1", "4")
             )
+
+####################################################################
+#  eddy_neknek: eddy_neknek.rea
+####################################################################
+
+# TODO: implment eddy_neknek tests
+
+####################################################################
+#  eddy_psi_omega; psi_omega.rea
+####################################################################
+
+class EddyPsiOmega(NekTestCase):
+    example_subdir  = 'eddy_psi_omega'
+    rea_file        = 'psi_omega'
+    serial_script   = 'nek10s'
+    parallel_script = 'nek10steps'
+
