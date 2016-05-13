@@ -520,3 +520,54 @@ class CylRestartPa(CylRestart):
 
 class CylRestartPb(CylRestart):
     rea_file = 'pb'
+
+####################################################################
+#  eddy; eddy_uv.rea, amg_eddy.rea, htps_ed.rea
+####################################################################
+
+# TODO: implement eddy for amg_eddy.rea, htps_ed.rea
+
+class EddyEddyUv(NekTestCase):
+
+    example_subdir  = 'eddy'
+    rea_file        = 'eddy_uv'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    @classmethod
+    def setUpClass(cls):
+        from re import sub
+
+        cls.get_opts()
+
+        build_tools(
+            targets    = ('clean', 'genmap'),
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77='gfortran',
+
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+
+        # Tweak .rea
+        rea_path = os.path.join(cls.examples_root, cls.example_subdir, cls.rea_file+'.rea')
+        with open(rea_path, 'r') as f:
+            lines = [sub(r'^.*DIVERGENCE$', '      0.10000E-08', l) for l in f]
+        with open(rea_path, 'w') as f:
+            f.writelines(lines)
+
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genmap'),
+            stdin   = [cls.rea_file, '0.5'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+            )
+
+        super(EddyEddyUv, cls).setUpClass()
