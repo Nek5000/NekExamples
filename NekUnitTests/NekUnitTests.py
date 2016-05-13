@@ -171,12 +171,12 @@ class BlasiusPnPn(Blasius):
 
     @serial_test
     def test_serialError(self):
-        test_val = self.get_value('delta', column=5,)
+        test_val = self.get_value('delta', column=5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @parallel_test
     def test_parallelError(self):
-        test_val = self.get_value('delta', column=5,)
+        test_val = self.get_value('delta', column=5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @serial_test
@@ -203,15 +203,91 @@ class BlasiusPnPn2(Blasius):
 
     @serial_test
     def test_serialError(self):
-        test_val = self.get_value('delta', column=5,)
+        test_val = self.get_value('delta', column=5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @parallel_test
     def test_parallelError(self):
-        test_val = self.get_value('delta', column=5,)
+        test_val = self.get_value('delta', column=5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @serial_test
     def test_serialTime(self):
         test_val = self.get_value('total solver time', 2)
         self.assertAlmostEqual(test_val, 0.1, delta=30)
+
+####################################################################"
+#  cone
+####################################################################"
+
+# TODO: implement cone
+
+####################################################################"
+#  conj_ht
+####################################################################"
+
+@pn_pn_testcase
+class ConjHtPnPn(ConjHt):
+
+    # TODO:
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=7,)
+        self.assertAlmostEqual(test_val, 0., delta=46.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=7,)
+        self.assertAlmostEqual(test_val, 0., delta=46.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('tmax', column=2, line=-1)
+        self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('tmax', column=2, line=-1)
+        self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=2)
+        self.assertAlmostEqual(test_val, 0.1, delta=7)
+
+@pn_pn_2_testcase
+class ConjHtPnPn2(ConjHt):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=6,)
+        self.assertAlmostEqual(test_val, 0., delta=26.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=6,)
+        self.assertAlmostEqual(test_val, 0., delta=26.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('tmax', column=2, line=-1)
+        self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('tmax', column=2, line=-1)
+        self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', 2)
+        self.assertAlmostEqual(test_val, 0.1, delta=7)
