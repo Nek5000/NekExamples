@@ -4,6 +4,10 @@ from tools.nekBinBuild import build_tools, build_nek
 from tools.nekBinRun import *
 from tools.nekFileConfig import config_size
 
+###############################################################################
+#  DECORATORS
+###############################################################################
+
 def pn_pn_testcase(cls, serial_log_suffix='.pn_pn.serial', parallel_log_suffix='.pn_pn.parallel'):
     """  Decorator to set log suffixes """
     cls.serial_log_suffix   = serial_log_suffix
@@ -47,6 +51,9 @@ def parallel_test(method):
             method(self, *args)
     return wrapper
 
+###############################################################################
+#  BASE TEST CASE
+###############################################################################
 
 class NekTestCase(unittest.TestCase):
     """ Base class for Nek unittests
@@ -229,6 +236,9 @@ class NekTestCase(unittest.TestCase):
                     return line
         return None
 
+###############################################################################
+#  turbChannel: turbChannel.rea
+###############################################################################
 
 class TurbChannel(NekTestCase):
 
@@ -264,6 +274,16 @@ class TurbChannel(NekTestCase):
         )
 
         super(TurbChannel, cls).setUpClass()
+
+###############################################################################
+#  2d_eigtest: eig1.rea
+###############################################################################
+
+# TODO: implement 2d_eigtest
+
+###############################################################################
+#  3dbox: b3d.rea
+###############################################################################
 
 class ThreeDBox(NekTestCase):
 
@@ -311,6 +331,10 @@ class ThreeDBox(NekTestCase):
 
         super(ThreeDBox, cls).setUpClass()
 
+###############################################################################
+#  axi: axi.rea
+###############################################################################
+
 class Axi(NekTestCase):
 
     example_subdir  = 'axi'
@@ -356,6 +380,15 @@ class Axi(NekTestCase):
 
         super(Axi, cls).setUpClass()
 
+####################################################################
+#  benard: ray_9.rea, ray_dd.rea, ray_dn.rea, ray_nn.rea
+####################################################################
+
+# TODO: implement benard
+
+####################################################################
+#  blasius: blasius.rea
+####################################################################
 
 class Blasius(NekTestCase):
 
@@ -393,7 +426,13 @@ class Blasius(NekTestCase):
         super(Blasius, cls).setUpClass()
 
 ####################################################################
-#  conj_ht
+#  cone: cone.rea, cone016.rea, cone064.rea, cone256.rea
+####################################################################
+
+# TODO: implement cone
+
+####################################################################
+#  conj_ht: conj_ht.rea
 ####################################################################
 
 class ConjHt(NekTestCase):
@@ -432,7 +471,7 @@ class ConjHt(NekTestCase):
         super(ConjHt, cls).setUpClass()
 
 ####################################################################
-#  cyl_restart
+#  cyl_restart: ca.rea, cb.rea, pa.rea, pb.rea
 ####################################################################
 
 class CylRestart(NekTestCase):
