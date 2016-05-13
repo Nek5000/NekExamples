@@ -214,7 +214,7 @@ class NekTestCase(unittest.TestCase):
             raise ValueError("Could not find label \"{0}\" in logfile \"{0}\".  The run may have failed.".format(
                 label, self.logfile))
         try:
-            value = float(line_list[line].split()[-column])
+            value = float(line_list[line].split()[column])
         except ValueError:
             raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(self.logfile))
         except IndexError:

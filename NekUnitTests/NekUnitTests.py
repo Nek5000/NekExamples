@@ -13,17 +13,17 @@ class TurbChannelPnPn(TurbChannel):
 
     @serial_test
     def test_serialIter(self):
-        test_val = self.get_value(label='gmres: ', column=7,)
+        test_val = self.get_value(label='gmres: ', column=-7,)
         self.assertAlmostEqual(test_val, 0., delta=95.)
 
     @parallel_test
     def test_parallelIter(self):
-        test_val = self.get_value(label='gmres: ', column=7)
+        test_val = self.get_value(label='gmres: ', column=-7)
         self.assertAlmostEqual(test_val, 0., delta=95.)
 
     @serial_test
     def test_serialTime(self):
-        test_val = self.get_value(label='total solver time', column=2)
+        test_val = self.get_value(label='total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=200.)
 
 
@@ -36,17 +36,17 @@ class TurbChannelPnPn2(TurbChannel):
 
     @serial_test
     def test_serialIter(self):
-        test_val = self.get_value(label='gmres: ', column=6)
+        test_val = self.get_value(label='gmres: ', column=-6)
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
     @parallel_test
     def test_parallelIter(self):
-        test_val = self.get_value(label='gmres: ', column=6)
+        test_val = self.get_value(label='gmres: ', column=-6)
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
     @serial_test
     def test_serialTime(self):
-        test_val = self.get_value(label='total solver time', column=2)
+        test_val = self.get_value(label='total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=140.)
 
 ###############################################################################
@@ -106,17 +106,17 @@ class AxiPnPn(Axi):
 
     @serial_test
     def test_serialIter(self):
-        val = self.get_value('PRES: ', column=4)
+        val = self.get_value('PRES: ', column=-4)
         self.assertAlmostEqual(val, 0., delta=76.)
 
     @parallel_test
     def test_parallelIter(self):
-        val = self.get_value('PRES: ', column=4)
+        val = self.get_value('PRES: ', column=-4)
         self.assertAlmostEqual(val, 0., delta=76.)
 
     @serial_test
     def test_serialTime(self):
-        val = self.get_value('total solver time', column=2)
+        val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(val, 0.1, delta=2)
 
 
@@ -129,17 +129,17 @@ class AxiPnPn2(Axi):
 
     @serial_test
     def test_serialIter(self):
-        val = self.get_value('U-Press ', column=5)
+        val = self.get_value('U-Press ', column=-5)
         self.assertAlmostEqual(val, 0., delta=104.)
 
     @parallel_test
     def test_parallelIter(self):
-        val = self.get_value('U-Press ', column=5)
+        val = self.get_value('U-Press ', column=-5)
         self.assertAlmostEqual(val, 0., delta=104.)
 
     @serial_test
     def test_serialTime(self):
-        val = self.get_value('total solver time', column=2)
+        val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(val, 0.1, delta=4)
 
 ####################################################################"
@@ -161,27 +161,27 @@ class BlasiusPnPn(Blasius):
 
     @serial_test
     def test_serialIter(self):
-        test_val = self.get_value('gmres: ', column=7,)
+        test_val = self.get_value('gmres: ', column=-7,)
         self.assertAlmostEqual(test_val, 0., delta=162.)
 
     @parallel_test
     def test_parallelIter(self):
-        test_val = self.get_value('gmres: ', column=7,)
+        test_val = self.get_value('gmres: ', column=-7,)
         self.assertAlmostEqual(test_val, 0., delta=162.)
 
     @serial_test
     def test_serialError(self):
-        test_val = self.get_value('delta', column=5, line=-1)
+        test_val = self.get_value('delta', column=-5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @parallel_test
     def test_parallelError(self):
-        test_val = self.get_value('delta', column=5, line=-1)
+        test_val = self.get_value('delta', column=-5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @serial_test
     def test_serialTime(self):
-        test_val = self.get_value('total solver time', 2)
+        test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=30)
 
 @pn_pn_2_testcase
@@ -193,27 +193,27 @@ class BlasiusPnPn2(Blasius):
 
     @serial_test
     def test_serialIter(self):
-        test_val = self.get_value('gmres: ', column=6,)
+        test_val = self.get_value('gmres: ', column=-6,)
         self.assertAlmostEqual(test_val, 0., delta=125.)
 
     @parallel_test
     def test_parallelIter(self):
-        test_val = self.get_value('gmres: ', column=6,)
+        test_val = self.get_value('gmres: ', column=-6,)
         self.assertAlmostEqual(test_val, 0., delta=125.)
 
     @serial_test
     def test_serialError(self):
-        test_val = self.get_value('delta', column=5, line=-1)
+        test_val = self.get_value('delta', column=-5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @parallel_test
     def test_parallelError(self):
-        test_val = self.get_value('delta', column=5, line=-1)
+        test_val = self.get_value('delta', column=-5, line=-1)
         self.assertAlmostEqual(test_val, 1.26104, delta=1e-05)
 
     @serial_test
     def test_serialTime(self):
-        test_val = self.get_value('total solver time', 2)
+        test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=30)
 
 ####################################################################"
@@ -237,27 +237,27 @@ class ConjHtPnPn(ConjHt):
 
     @serial_test
     def test_serialIter(self):
-        test_val = self.get_value('gmres: ', column=7,)
+        test_val = self.get_value('gmres: ', column=-7,)
         self.assertAlmostEqual(test_val, 0., delta=46.)
 
     @parallel_test
     def test_parallelIter(self):
-        test_val = self.get_value('gmres: ', column=7,)
+        test_val = self.get_value('gmres: ', column=-7,)
         self.assertAlmostEqual(test_val, 0., delta=46.)
 
     @serial_test
     def test_serialError(self):
-        test_val = self.get_value('tmax', column=2, line=-1)
+        test_val = self.get_value('tmax', column=-2, line=-1)
         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
 
     @parallel_test
     def test_parallelError(self):
-        test_val = self.get_value('tmax', column=2, line=-1)
+        test_val = self.get_value('tmax', column=-2, line=-1)
         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
 
     @serial_test
     def test_serialTime(self):
-        test_val = self.get_value('total solver time', column=2)
+        test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=7)
 
 @pn_pn_2_testcase
@@ -269,25 +269,25 @@ class ConjHtPnPn2(ConjHt):
 
     @serial_test
     def test_serialIter(self):
-        test_val = self.get_value('gmres: ', column=6,)
+        test_val = self.get_value('gmres: ', column=-6,)
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
     @parallel_test
     def test_parallelIter(self):
-        test_val = self.get_value('gmres: ', column=6,)
+        test_val = self.get_value('gmres: ', column=-6,)
         self.assertAlmostEqual(test_val, 0., delta=26.)
 
     @serial_test
     def test_serialError(self):
-        test_val = self.get_value('tmax', column=2, line=-1)
+        test_val = self.get_value('tmax', column=-2, line=-1)
         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
 
     @parallel_test
     def test_parallelError(self):
-        test_val = self.get_value('tmax', column=2, line=-1)
+        test_val = self.get_value('tmax', column=-2, line=-1)
         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
 
     @serial_test
     def test_serialTime(self):
-        test_val = self.get_value('total solver time', 2)
+        test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=7)
