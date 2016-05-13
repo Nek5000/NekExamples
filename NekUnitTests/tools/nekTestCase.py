@@ -392,6 +392,9 @@ class Blasius(NekTestCase):
 
         super(Blasius, cls).setUpClass()
 
+####################################################################
+#  conj_ht
+####################################################################
 
 class ConjHt(NekTestCase):
 
@@ -427,3 +430,54 @@ class ConjHt(NekTestCase):
             )
 
         super(ConjHt, cls).setUpClass()
+
+####################################################################
+#  cyl_restart
+####################################################################
+
+class CylRestart(NekTestCase):
+
+    # No rea_file here; defined in subclasses below
+    example_subdir  = 'cyl_restart'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    @classmethod
+    def setUpClass(cls):
+
+        cls.get_opts()
+
+        build_tools(
+            targets    = ('clean', 'genmap'),
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77        = 'gfortran',
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genmap'),
+            stdin   = [cls.rea_file, '0.5'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+            )
+
+        super(CylRestart, cls).setUpClass()
+
+class CylRestartCa(CylRestart):
+    rea_file = 'ca'
+
+class CylRestartCb(CylRestart):
+    rea_file = 'cb'
+
+class CylRestartPa(CylRestart):
+    rea_file = 'pa'
+
+class CylRestartPb(CylRestart):
+    rea_file = 'pb'

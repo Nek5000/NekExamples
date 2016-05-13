@@ -216,20 +216,18 @@ class BlasiusPnPn2(Blasius):
         test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=30)
 
-####################################################################"
+####################################################################
 #  cone
-####################################################################"
+####################################################################
 
 # TODO: implement cone
 
-####################################################################"
+####################################################################
 #  conj_ht
-####################################################################"
+####################################################################
 
 @pn_pn_testcase
 class ConjHtPnPn(ConjHt):
-
-    # TODO:
 
     lx2 = 'lx1'
     ly2 = 'ly1'
@@ -291,3 +289,223 @@ class ConjHtPnPn2(ConjHt):
     def test_serialTime(self):
         test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=7)
+
+####################################################################
+#  cyl_restart
+####################################################################
+
+@pn_pn_testcase
+class CylRestartCaPnPn(CylRestartCa):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=85.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=85.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+@pn_pn_2_testcase
+class CylRestartCaPnPn2(CylRestartCa):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=29.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=29.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+@pn_pn_testcase
+class CylRestartCbPnPn(CylRestartCb):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=77.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=77.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+@pn_pn_2_testcase
+class CylRestartCbPnPn2(CylRestartCb):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=28.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=28.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+@pn_pn_testcase
+class CylRestartPaPnPn(CylRestartPa):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=85.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=85.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+@pn_pn_2_testcase
+class CylRestartPaPnPn2(CylRestartPa):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=29.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=29.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+@pn_pn_testcase
+class CylRestartPbPnPn(CylRestartPb):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=77.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=77.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
+
+@pn_pn_2_testcase
+class CylRestartPbPnPn2(CylRestartPb):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=28.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=28.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
