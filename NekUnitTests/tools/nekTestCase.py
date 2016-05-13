@@ -171,6 +171,29 @@ class NekTestCase(unittest.TestCase):
 
         # TODO: Remove old logs
 
+        cls.get_opts()
+
+        build_tools(
+            targets    = ('clean', 'genmap'),
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77        = 'gfortran',
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genmap'),
+            stdin   = [cls.rea_file, '0.5'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+            )
+
         build_nek(
             source_root = cls.source_root,
             rea_file    = cls.rea_file,
@@ -241,39 +264,10 @@ class NekTestCase(unittest.TestCase):
 ###############################################################################
 
 class TurbChannel(NekTestCase):
-
     example_subdir  = 'turbChannel'
     rea_file        = 'turbChannel'
     serial_script   = 'nek10s'
     parallel_script = 'nek10steps'
-
-    @classmethod
-    def setUpClass(cls):
-
-        cls.get_opts()
-
-        build_tools(
-            targets    = ('clean', 'genmap'),
-            tools_root = cls.tools_root,
-            tools_bin  = cls.tools_bin,
-            f77        = 'gfortran',
-            cc         = 'gcc',
-            bigmem     = 'false'
-        )
-        config_size(
-            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            lx2 = cls.lx2,
-            ly2 = cls.ly2,
-            lz2 = cls.lz2
-        )
-        run_meshgen(
-            command = os.path.join(cls.tools_bin, 'genmap'),
-            stdin   = [cls.rea_file, '0.5'],
-            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-        )
-
-        super(TurbChannel, cls).setUpClass()
 
 ###############################################################################
 #  2d_eigtest: eig1.rea
@@ -328,8 +322,31 @@ class ThreeDBox(NekTestCase):
             stdin   = [cls.rea_file, '0.5'],
             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
         )
-
-        super(ThreeDBox, cls).setUpClass()
+        build_nek(
+            source_root = cls.source_root,
+            rea_file    = cls.rea_file,
+            cwd         = os.path.join(cls.examples_root, cls.example_subdir),
+            f77         = cls.f77,
+            cc          = cls.cc,
+            ifmpi       = str(cls.ifmpi).lower()
+        )
+        # Serial run
+        if not cls.ifmpi:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.serial_log_suffix
+            )
+        # Parallel run
+        else:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.parallel_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.parallel_log_suffix,
+                mpi_procs  = ("1", "4")
+            )
 
 ###############################################################################
 #  axi: axi.rea
@@ -377,8 +394,31 @@ class Axi(NekTestCase):
             dst_prefix = 'axi',
             cwd = os.path.join(cls.examples_root, cls.example_subdir)
         )
-
-        super(Axi, cls).setUpClass()
+        build_nek(
+            source_root = cls.source_root,
+            rea_file    = cls.rea_file,
+            cwd         = os.path.join(cls.examples_root, cls.example_subdir),
+            f77         = cls.f77,
+            cc          = cls.cc,
+            ifmpi       = str(cls.ifmpi).lower()
+        )
+        # Serial run
+        if not cls.ifmpi:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.serial_log_suffix
+            )
+        # Parallel run
+        else:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.parallel_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.parallel_log_suffix,
+                mpi_procs  = ("1", "4")
+            )
 
 ####################################################################
 #  benard: ray_9.rea, ray_dd.rea, ray_dn.rea, ray_nn.rea
@@ -391,39 +431,10 @@ class Axi(NekTestCase):
 ####################################################################
 
 class Blasius(NekTestCase):
-
     example_subdir  = 'blasius'
     rea_file        = 'blasius'
     serial_script   = 'nek10s'
     parallel_script = 'nek10steps'
-
-    @classmethod
-    def setUpClass(cls):
-
-        cls.get_opts()
-
-        build_tools(
-            targets    = ('clean', 'genmap'),
-            tools_root = cls.tools_root,
-            tools_bin  = cls.tools_bin,
-            f77        = 'gfortran',
-            cc         = 'gcc',
-            bigmem     = 'false'
-        )
-        config_size(
-            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            lx2 = cls.lx2,
-            ly2 = cls.ly2,
-            lz2 = cls.lz2
-        )
-        run_meshgen(
-            command = os.path.join(cls.tools_bin, 'genmap'),
-            stdin   = [cls.rea_file, '0.5'],
-            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-            )
-
-        super(Blasius, cls).setUpClass()
 
 ####################################################################
 #  cone: cone.rea, cone016.rea, cone064.rea, cone256.rea
@@ -436,78 +447,20 @@ class Blasius(NekTestCase):
 ####################################################################
 
 class ConjHt(NekTestCase):
-
     example_subdir  = 'conj_ht'
     rea_file        = 'conj_ht'
     serial_script   = 'nekbb'
     parallel_script = 'neklmpi'
-
-    @classmethod
-    def setUpClass(cls):
-
-        cls.get_opts()
-
-        build_tools(
-            targets    = ('clean', 'genmap'),
-            tools_root = cls.tools_root,
-            tools_bin  = cls.tools_bin,
-            f77        = 'gfortran',
-            cc         = 'gcc',
-            bigmem     = 'false'
-        )
-        config_size(
-            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            lx2 = cls.lx2,
-            ly2 = cls.ly2,
-            lz2 = cls.lz2
-        )
-        run_meshgen(
-            command = os.path.join(cls.tools_bin, 'genmap'),
-            stdin   = [cls.rea_file, '0.5'],
-            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-            )
-
-        super(ConjHt, cls).setUpClass()
 
 ####################################################################
 #  cyl_restart: ca.rea, cb.rea, pa.rea, pb.rea
 ####################################################################
 
 class CylRestart(NekTestCase):
-
     # No rea_file here; defined in subclasses below
     example_subdir  = 'cyl_restart'
     serial_script   = 'nekbb'
     parallel_script = 'neklmpi'
-
-    @classmethod
-    def setUpClass(cls):
-
-        cls.get_opts()
-
-        build_tools(
-            targets    = ('clean', 'genmap'),
-            tools_root = cls.tools_root,
-            tools_bin  = cls.tools_bin,
-            f77        = 'gfortran',
-            cc         = 'gcc',
-            bigmem     = 'false'
-        )
-        config_size(
-            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-            lx2 = cls.lx2,
-            ly2 = cls.ly2,
-            lz2 = cls.lz2
-        )
-        run_meshgen(
-            command = os.path.join(cls.tools_bin, 'genmap'),
-            stdin   = [cls.rea_file, '0.5'],
-            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-            )
-
-        super(CylRestart, cls).setUpClass()
 
 class CylRestartCa(CylRestart):
     rea_file = 'ca'
@@ -569,5 +522,28 @@ class EddyEddyUv(NekTestCase):
             stdin   = [cls.rea_file, '0.5'],
             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
             )
-
-        super(EddyEddyUv, cls).setUpClass()
+        build_nek(
+            source_root = cls.source_root,
+            rea_file    = cls.rea_file,
+            cwd         = os.path.join(cls.examples_root, cls.example_subdir),
+            f77         = cls.f77,
+            cc          = cls.cc,
+            ifmpi       = str(cls.ifmpi).lower()
+        )
+        # Serial run
+        if not cls.ifmpi:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.serial_log_suffix
+            )
+        # Parallel run
+        else:
+            run_nek_script(
+                script     = os.path.join(cls.tools_root, 'scripts', cls.parallel_script),
+                rea_file   = cls.rea_file,
+                cwd        = os.path.join(cls.examples_root, cls.example_subdir),
+                log_suffix = cls.parallel_log_suffix,
+                mpi_procs  = ("1", "4")
+            )
