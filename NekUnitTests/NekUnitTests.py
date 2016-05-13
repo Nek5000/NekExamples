@@ -600,3 +600,57 @@ class EddyEddyUvPnPn2(EddyEddyUv):
         test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=80)
 
+####################################################################
+#  eddy_neknek: eddy_neknek.rea
+####################################################################
+
+# TODO: implment eddy_neknek tests
+
+####################################################################
+#  eddy_psi_omega; psi_eddy.rea
+####################################################################
+
+@pn_pn_testcase
+class EddyPsiOmegaPnPn(EddyPsiOmega):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('X err', column=-6, line=-1)
+        self.assertAlmostEqual(test_val, 1.177007E-10, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('X err', column=-6, line=-1)
+        self.assertAlmostEqual(test_val, 1.177007E-10, delta=1E-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2)
+        self.assertAlmostEqual(test_val, 0.1, delta=17)
+
+@pn_pn_2_testcase
+class EddyPsiOmegaPnPn2(EddyPsiOmega):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('X err', column=-6, line=-1)
+        self.assertAlmostEqual(test_val, 1.177007E-10, delta=1E-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('X err', column=-6, line=-1)
+        self.assertAlmostEqual(test_val, 1.177007E-10, delta=1E-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2)
+        self.assertAlmostEqual(test_val, 0.1, delta=17)
+
