@@ -206,19 +206,21 @@ class NekTestCase(unittest.TestCase):
                     )
 
 
-    def get_value(self, label, column):
+    def get_value(self, label, column, line=0):
+        # Get all lines with label
         with open(self.logfile, 'r') as f:
-            for line in f:
-                if label in line:
-                    try:
-                        value = float(line.split()[-column])
-                    except ValueError:
-                        raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(self.logfile))
-                    except IndexError:
-                        raise IndexError("Fewer columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(self.logfile))
-                    else:
-                        return value
-        return None
+            line_list = [l for l in f if label in l]
+        if not line_list:
+            raise ValueError("Could not find label \"{0}\" in logfile \"{0}\".  The run may have failed.".format(
+                label, self.logfile))
+        try:
+            value = float(line_list[line].split()[-column])
+        except ValueError:
+            raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(self.logfile))
+        except IndexError:
+            raise IndexError("Fewer lines/columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(self.logfile))
+        else:
+            return value
 
     def get_phrase(self, label):
         with open(self.logfile, 'r') as f:
@@ -354,6 +356,7 @@ class Axi(NekTestCase):
 
         super(Axi, cls).setUpClass()
 
+
 class Blasius(NekTestCase):
 
     example_subdir  = 'blasius'
@@ -388,3 +391,39 @@ class Blasius(NekTestCase):
             )
 
         super(Blasius, cls).setUpClass()
+
+
+class ConjHt(NekTestCase):
+
+    example_subdir  = 'conj_ht'
+    rea_file        = 'conj_ht'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    @classmethod
+    def setUpClass(cls):
+
+        cls.get_opts()
+
+        build_tools(
+            targets    = ('clean', 'genmap'),
+            tools_root = cls.tools_root,
+            tools_bin  = cls.tools_bin,
+            f77        = 'gfortran',
+            cc         = 'gcc',
+            bigmem     = 'false'
+        )
+        config_size(
+            infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
+            lx2 = cls.lx2,
+            ly2 = cls.ly2,
+            lz2 = cls.lz2
+        )
+        run_meshgen(
+            command = os.path.join(cls.tools_bin, 'genmap'),
+            stdin   = [cls.rea_file, '0.5'],
+            cwd     = os.path.join(cls.examples_root, cls.example_subdir),
+            )
+
+        super(ConjHt, cls).setUpClass()
