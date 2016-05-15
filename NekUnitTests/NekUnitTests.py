@@ -654,3 +654,130 @@ class EddyPsiOmegaPnPn2(EddyPsiOmega):
         test_val = self.get_value('total solver time', column=-2)
         self.assertAlmostEqual(test_val, 0.1, delta=17)
 
+####################################################################
+#  expansion: expansion.rea
+####################################################################
+
+# TODO: implement expansion tests
+
+####################################################################
+#  ext_cyl; ext_cyl.rea
+####################################################################
+
+@pn_pn_testcase
+class ExtCylPnPn(ExtCyl):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=85.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=85.)
+
+    @serial_test
+    def test_serialXError(self):
+        test_val = self.get_value('dragx', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 1.2138790E+00, delta=1E-06)
+
+    @parallel_test
+    def test_parallelXError(self):
+        test_val = self.get_value('dragx', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 1.2138790E+00, delta=1E-06)
+
+    @serial_test
+    def test_serialYError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 1.3040301E-07, delta=1E-06)
+
+    @parallel_test
+    def test_parallelYError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 1.3040301E-07, delta=1E-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2)
+        self.assertAlmostEqual(test_val, 0.1, delta=400)
+
+@pn_pn_2_testcase
+class ExtCylPnPn2(ExtCyl):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=26.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=26.)
+
+    @serial_test
+    def test_serialXError(self):
+        test_val = self.get_value('dragx', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 1.2138878E+00, delta=1e-05)
+
+    @parallel_test
+    def test_parallelXError(self):
+        test_val = self.get_value('dragx', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 1.2138878E+00, delta=1e-05)
+
+    @serial_test
+    def test_serialYError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 3.2334222E-07, delta=1e-06)
+
+    @parallel_test
+    def test_parallelYError(self):
+        test_val = self.get_value('dragy', column=-4, line=-1)
+        self.assertAlmostEqual(test_val, 3.2334222E-07, delta=1e-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2)
+        self.assertAlmostEqual(test_val, 0.1, delta=380)
+
+####################################################################
+#  fs_2; st1.rea, st2.rea, std_wv.rea
+####################################################################
+
+@pn_pn_testcase
+class Fs2St1PnPn(Fs2St1):
+
+    # TODO: These tests fail in legacy test suite and should be fixed
+
+    lx2 = 'lx1'; ly2 = 'ly1'; lz2 = 'lz1'
+
+    @serial_test
+    def test_serial(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+    @parallel_test
+    def test_parallel(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+@pn_pn_2_testcase
+class FsSt1PnPn2(Fs2St1):
+
+    lx2 = 'lx1'; ly2 = 'ly1'; lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=38.)
+
+
+
