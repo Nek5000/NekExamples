@@ -564,3 +564,39 @@ class EddyPsiOmega(NekTestCase):
     serial_script   = 'nek10s'
     parallel_script = 'nek10steps'
 
+####################################################################
+#  expansion: expansion.rea
+####################################################################
+
+# TODO: implement expansion tests
+
+####################################################################
+#  ext_cyl; ext_cyl.rea
+####################################################################
+
+class ExtCyl(NekTestCase):
+    example_subdir  = 'ext_cyl'
+    rea_file        = 'ext_cyl'
+    serial_script   = 'nek1000s'
+    parallel_script = 'nek1000steps'
+
+####################################################################
+#  fs_2; st1.rea, st2.rea, std_wv.rea
+####################################################################
+
+class Fs2(NekTestCase):
+    # No .rea file here; it's set in subclasses below
+    example_subdir  = 'fs_2'
+    serial_script   = 'nek200s'
+    parallel_script = 'nek200steps'
+
+class Fs2St1(Fs2):
+    rea_file        = 'st1'
+
+class Fs2St2(Fs2):
+    rea_file        = 'st2'
+
+class Fs2StdWv(Fs2):
+    rea_file        = 'std_wv'
+
+
