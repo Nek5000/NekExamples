@@ -230,7 +230,7 @@ class NekTestCase(unittest.TestCase):
 
             for f in os.listdir(os.path.join(cls.examples_root, cls.example_subdir)):
                 if f == 'compiler.out' or f == 'genmap.out' or 'log' in f:
-                    os.replace(
+                    os.rename(
                         os.path.join(cls.examples_root, cls.example_subdir, f),
                         os.path.join(cls.log_root, cls.example_subdir, f)
                     )
