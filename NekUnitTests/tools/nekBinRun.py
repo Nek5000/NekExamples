@@ -1,5 +1,5 @@
 import os
-from subprocess import check_call, PIPE, STDOUT, Popen, SubprocessError
+from subprocess import check_call, PIPE, STDOUT, Popen, CalledProcessError
 
 def run_meshgen(command, stdin, cwd):
 
@@ -14,7 +14,7 @@ def run_meshgen(command, stdin, cwd):
     try:
         with open(logfile, 'w') as f:
             Popen([command], stdin=PIPE, stderr=STDOUT, stdout=f, cwd=cwd).communicate(stdin)
-    except (OSError, SubprocessError) as E:
+    except (OSError, CalledProcessError) as E:
         # TODO: Change to warnings.warn()
         print('Could not complete {0}!  Caught error: "{1}".  Check "{2}" for details.'.format(command, E, logfile))
 
@@ -46,7 +46,7 @@ def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=("1",)):
 
         # This are expected exceptions if 'check_call' or 'os.rename' fail.
         # We issue a warning, not error, so subsequent tests can continue
-        except (OSError, SubprocessError) as E:
+        except (OSError, CalledProcessError) as E:
             # TODO: Change to warnings.warn()
             print('Could not complete command: "{0}": {1}'.format(
                 " ".join([script, rea_file, p]), E))
