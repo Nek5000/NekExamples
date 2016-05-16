@@ -754,10 +754,11 @@ class ExtCylPnPn2(ExtCyl):
 
 @pn_pn_testcase
 class Fs2St1PnPn(Fs2St1):
-
     # TODO: These tests fail in legacy test suite and should be fixed
 
-    lx2 = 'lx1'; ly2 = 'ly1'; lz2 = 'lz1'
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
 
     @serial_test
     def test_serial(self):
@@ -770,14 +771,258 @@ class Fs2St1PnPn(Fs2St1):
         self.assertIsNotNone(phrase)
 
 @pn_pn_2_testcase
-class FsSt1PnPn2(Fs2St1):
+class Fs2St1PnPn2(Fs2St1):
 
-    lx2 = 'lx1'; ly2 = 'ly1'; lz2 = 'lz1'
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
 
     @serial_test
     def test_serialIter(self):
         test_val = self.get_value('gmres: ', column=-6,)
         self.assertAlmostEqual(test_val, 0., delta=38.)
 
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=38.)
 
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('amp', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 6.382414E-01, delta=1e-06)
 
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('amp', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 6.382414E-01, delta=1e-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2,)
+        self.assertAlmostEqual(test_val, 0.1, delta=18.3)
+
+@pn_pn_testcase
+class Fs2St2PnPn(Fs2St2):
+
+    # TODO: These tests fail in legacy test suite and should be fixed
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serial(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+    @parallel_test
+    def test_parallel(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+@pn_pn_2_testcase
+class Fs2St2PnPn2(Fs2St2):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=38.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=38.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('amp', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 6.376171E-01, delta=1e-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('amp', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 6.376171E-01, delta=1e-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2,)
+        self.assertAlmostEqual(test_val, 0.1, delta=23)
+
+@pn_pn_testcase
+class Fs2StdWvPnPn(Fs2StdWv):
+
+    # TODO: These tests fail in legacy test suite and should be fixed
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serial(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+    @parallel_test
+    def test_parallel(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+@pn_pn_2_testcase
+class Fs2StdWvPnPn2(Fs2StdWv):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=20.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=20.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('amp', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 1.403287E-01, delta=1e-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('amp', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 1.403287E-01, delta=1e-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2,)
+        self.assertAlmostEqual(test_val, 0.1, delta=21)
+
+####################################################################
+#  fs_hydro: fs_hydro.rea
+####################################################################
+
+@pn_pn_testcase
+class FsHydroPnPn(FsHydro):
+
+    # TODO: These tests fail in legacy test suite and should be fixed
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serial(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+    @parallel_test
+    def test_parallel(self):
+        phrase = self.get_phrase("ABORT: ")
+        self.assertIsNotNone(phrase)
+
+@pn_pn_2_testcase
+class FsHydroPnPn2(FsHydro):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=108.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=108.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('AMP', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, -6.4616452E-05, delta=2e-03)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('AMP', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, -6.4616452E-05, delta=2e-03)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2,)
+        self.assertAlmostEqual(test_val, 0.1, delta=200)
+
+####################################################################
+#  hemi; hemi
+####################################################################
+
+@pn_pn_testcase
+class HemiPnPn(Hemi):
+
+    lx2 = 'lx1'
+    ly2 = 'ly1'
+    lz2 = 'lz1'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=39.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-7,)
+        self.assertAlmostEqual(test_val, 0., delta=39.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('wmax', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 4.9173E-01, delta=1e-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('wmax', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 4.9173E-01, delta=1e-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2,)
+        self.assertAlmostEqual(test_val, 0.1, delta=100)
+
+@pn_pn_2_testcase
+class HemiPnPn2(Hemi):
+
+    lx2 = 'lx1-2'
+    ly2 = 'ly1-2'
+    lz2 = 'lz1-2'
+
+    @serial_test
+    def test_serialIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=34.)
+
+    @parallel_test
+    def test_parallelIter(self):
+        test_val = self.get_value('gmres: ', column=-6,)
+        self.assertAlmostEqual(test_val, 0., delta=34.)
+
+    @serial_test
+    def test_serialError(self):
+        test_val = self.get_value('wmax', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 4.7915E-01, delta=1e-06)
+
+    @parallel_test
+    def test_parallelError(self):
+        test_val = self.get_value('wmax', column=-2, line=-1)
+        self.assertAlmostEqual(test_val, 4.7915E-01, delta=1e-06)
+
+    @serial_test
+    def test_serialTime(self):
+        test_val = self.get_value('total solver time', column=-2,)
+        self.assertAlmostEqual(test_val, 0.1, delta=100)

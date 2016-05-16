@@ -599,4 +599,23 @@ class Fs2St2(Fs2):
 class Fs2StdWv(Fs2):
     rea_file        = 'std_wv'
 
+####################################################################
+#  fs_hydro; fs_hydro.rea
+####################################################################
+
+class FsHydro(NekTestCase):
+    example_subdir  = 'fs_hydro'
+    rea_file        = 'fs_hydro'
+    serial_script   = 'nek1000s'
+    parallel_script = 'nek1000steps'
+
+####################################################################
+#  hemi: hemi.rea
+####################################################################
+
+class Hemi(NekTestCase):
+    example_subdir  = 'hemi'
+    rea_file        = 'hemi'
+    serial_script   = 'nek10s'
+    parallel_script = 'nek10steps'
 
