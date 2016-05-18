@@ -21,35 +21,34 @@ def run_meshgen(command, stdin, cwd):
     print("Succefully finished {0}!".format(os.path.basename(command)))
 
 
-def run_nek_script(script, rea_file, cwd, log_suffix="", mpi_procs=("1",)):
-    for p in mpi_procs:
-        try:
-            logs = (os.path.join(cwd, "logfile"), os.path.join(cwd, rea_file+".log."+p))
+def run_nek_script(script, rea_file, cwd, log_suffix='', mpi_procs='1'):
+    try:
+        logs = (os.path.join(cwd, "logfile"), os.path.join(cwd, "{0}.log.{1}".format(rea_file, mpi_procs)))
 
-            # Remove old logs
+        # Remove old logs
+        for l in logs:
+            if os.path.exists(l):
+                os.remove(l)
+
+        # Running 'script' through shell since it doesn't have a shebang at the top.
+        # Need to concatenate args into a string if shell=True
+        cmd = " ".join([script, rea_file, str(mpi_procs)])
+        print("Running nek5000...")
+        print('    Using command "{0}"'.format(cmd))
+        print('    Using working directory "{0}"'.format(cwd))
+        check_call(cmd, cwd=cwd, shell=True)
+
+        # Rename logs
+        if log_suffix:
             for l in logs:
-                if os.path.exists(l):
-                    os.remove(l)
+                os.rename(l, l+log_suffix)
 
-            # Running 'script' through shell since it doesn't have a shebang at the top.
-            # Need to concatenate args into a string if shell=True
-            cmd = " ".join([script, rea_file, p])
-            print("Running nek5000...")
-            print('    Using command "{0}"'.format(cmd))
-            print('    Using working directory "{0}"'.format(cwd))
-            check_call(cmd, cwd=cwd, shell=True)
-
-            # Rename logs
-            if log_suffix:
-                for l in logs:
-                    os.rename(l, l+log_suffix)
-
-        # This are expected exceptions if 'check_call' or 'os.rename' fail.
-        # We issue a warning, not error, so subsequent tests can continue
-        except (OSError, CalledProcessError) as E:
-            # TODO: Change to warnings.warn()
-            print('Could not complete command: "{0}": {1}'.format(
-                " ".join([script, rea_file, p]), E))
+    # This are expected exceptions if 'check_call' or 'os.rename' fail.
+    # We issue a warning, not error, so subsequent tests can continue
+    except (OSError, CalledProcessError) as E:
+        # TODO: Change to warnings.warn()
+        print('Could not complete command: "{0}": {1}'.format(
+            " ".join([script, rea_file, mpi_procs]), E))
 
 def mvn(src_prefix, dst_prefix, cwd):
     exts = ('.box', '.rea', '.usr', '.map', '.sep', '.re2')
