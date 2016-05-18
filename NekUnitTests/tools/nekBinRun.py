@@ -4,7 +4,7 @@ from subprocess import check_call, PIPE, STDOUT, Popen, CalledProcessError
 def run_meshgen(command, stdin, cwd):
 
     logfile = os.path.join(cwd, '{0}.out'.format(os.path.basename(command)))
-    stdin   = bytes("\n".join(stdin), 'ascii')
+    stdin_bytes   = bytes("\n".join(stdin))
 
     print('Running "{0}"...'.format(os.path.basename(command)))
     print('    Using command "{0}"'.format(command))
@@ -13,7 +13,7 @@ def run_meshgen(command, stdin, cwd):
 
     try:
         with open(logfile, 'w') as f:
-            Popen([command], stdin=PIPE, stderr=STDOUT, stdout=f, cwd=cwd).communicate(stdin)
+            Popen([command], stdin=PIPE, stderr=STDOUT, stdout=f, cwd=cwd).communicate(stdin_bytes)
     except (OSError, CalledProcessError) as E:
         # TODO: Change to warnings.warn()
         print('Could not complete {0}!  Caught error: "{1}".  Check "{2}" for details.'.format(command, E, logfile))
