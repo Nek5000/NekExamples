@@ -1,5 +1,4 @@
 from tools.nekTestCase import *
-from tools.delayedAssert import expect, assert_expectations
 
 class NekTargetVal(object):
     def __init__(self, label, column, target_val, delta, row=0):
@@ -21,7 +20,7 @@ class TurbChannel(NekTestCase):
     parallel_script = 'nek10steps'
 
     def setUp(self):
-        self.get_opts()
+        #self.get_opts()
         self.build_tools(['clean', 'genmap'])
         self.run_genmap(tol='0.5')
 
@@ -38,9 +37,9 @@ class TurbChannel(NekTestCase):
 
         for v in target_vals:
             test_val = self.get_value(label=v.label, column=v.column, row=v.row)
-            expect(v.delta > abs(test_val - v.target_val), msg=v.label)
+            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
-        assert_expectations()
+        self.assertDelayedFailures()
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
@@ -55,9 +54,9 @@ class TurbChannel(NekTestCase):
 
         for v in target_vals:
             test_val = self.get_value(label=v.label, column=v.column, row=v.row)
-            expect(v.delta > abs(test_val - v.target_val), msg=v.label)
+            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
-        assert_expectations()
+        self.assertDelayedFailures()
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
@@ -72,9 +71,9 @@ class TurbChannel(NekTestCase):
 
         for v in target_vals:
             test_val = self.get_value(label=v.label, column=v.column, row=v.row)
-            expect(v.delta > abs(test_val - v.target_val), msg=v.label)
+            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
-        assert_expectations()
+        self.assertDelayedFailures()
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
@@ -89,9 +88,9 @@ class TurbChannel(NekTestCase):
 
         for v in target_vals:
             test_val = self.get_value(label=v.label, column=v.column, row=v.row)
-            expect(v.delta > abs(test_val - v.target_val), msg=v.label)
+            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
-        assert_expectations()
+        self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()

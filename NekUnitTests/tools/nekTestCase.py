@@ -1,4 +1,5 @@
 import unittest
+from functools import wraps
 
 from tools.nekBinBuild import build_tools, build_nek
 from tools.nekBinRun import *
@@ -10,6 +11,7 @@ from tools.nekFileConfig import config_size
 
 
 def pn_pn_serial(method):
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         self.mpi_procs = 1
         self.log_suffix = '.pn_pn'
@@ -21,6 +23,7 @@ def pn_pn_serial(method):
     return wrapper
 
 def pn_pn_2_serial(method):
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         self.mpi_procs = 1
         self.log_suffix = '.pn_pn_2'
@@ -32,6 +35,7 @@ def pn_pn_2_serial(method):
     return wrapper
 
 def pn_pn_parallel(method):
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         self.mpi_procs = 4
         if not self.ifmpi:
@@ -46,6 +50,7 @@ def pn_pn_parallel(method):
     return wrapper
 
 def pn_pn_2_parallel(method):
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         self.mpi_procs = 4
         if not self.ifmpi:
@@ -102,9 +107,8 @@ class NekTestCase(unittest.TestCase):
     serial_script       = ""
     parallel_script     = ""
 
-    def get_opts(self):
-
-        # Default values
+    def __init__(self, *args, **kwargs):
+        # Default values, can be overridden by self.get_opts
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
@@ -114,6 +118,32 @@ class NekTestCase(unittest.TestCase):
         self.log_root       = ''
         self.makenek        = ''
         self.tools_bin      = ''
+
+        # Empy list of delayed fails
+        self._delayed_failures = []
+
+        self.get_opts()
+
+        unittest.TestCase.__init__(self, *args, **kwargs)
+
+    def assertAlmostEqualDelayed(self, test_val, target_val, delta, label):
+        if abs(test_val-target_val) > delta:
+            self._delayed_failures.append(
+                '{0}: test value {1} exceeded target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+            )
+
+    def assertDelayedFailures(self):
+        if self._delayed_failures:
+            report = [
+                '\n\nFailed assertions:{0}\n'.format(len(self._delayed_failures))
+            ]
+            for i,failure in enumerate(self._delayed_failures, start=1):
+                report.append('{0}: {1}'.format(i, failure))
+            #self._delayed_failures = []
+            self.fail('\n'.join(report))
+
+    def get_opts(self):
+
 
         print("Getting setup options...")
 
@@ -248,7 +278,6 @@ class NekTestCase(unittest.TestCase):
                         os.path.join(self.examples_root, cls.example_subdir, f),
                         os.path.join(self.log_root, cls.example_subdir, f)
                     )
-
 
     def get_value(self, label, column, row=0, logfile=None):
         cls = self.__class__
