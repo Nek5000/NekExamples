@@ -1,13 +1,5 @@
 from tools.nekTestCase import *
 
-class NekTargetVal(object):
-    def __init__(self, label, column, target_val, delta, row=0):
-        self.label = label
-        self.column = column
-        self.row = row
-        self.target_val = target_val
-        self.delta = delta
-
 ###############################################################################
 #  turbChannel: turbChannel.rea
 ###############################################################################
@@ -29,14 +21,11 @@ class TurbChannel(NekTestCase):
         self.build_nek()
         self.run_nek()
 
-        target_vals = [
-            NekTargetVal(label='gmres: ', target_val=0., delta=95., column=-7),
-            NekTargetVal(label='total solver time', target_val=0.1, delta=200., column=-2)
-        ]
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres: ')
 
-        for v in target_vals:
-            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
-            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200., label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -46,14 +35,11 @@ class TurbChannel(NekTestCase):
         self.build_nek()
         self.run_nek()
 
-        target_vals = [
-            NekTargetVal(label='gmres: ', target_val=0., delta=95., column=-7),
-            NekTargetVal(label='total solver time', target_val=0.1, delta=200., column=-2)
-        ]
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres: ')
 
-        for v in target_vals:
-            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
-            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200., label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -63,14 +49,11 @@ class TurbChannel(NekTestCase):
         self.build_nek()
         self.run_nek()
 
-        target_vals = [
-            NekTargetVal(label='gmres: ', target_val=0., delta=26., column=-6),
-            NekTargetVal(label='total solver time', target_val=0.1, delta=140., column=-2)
-        ]
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres: ')
 
-        for v in target_vals:
-            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
-            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140., label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -80,14 +63,11 @@ class TurbChannel(NekTestCase):
         self.build_nek()
         self.run_nek()
 
-        target_vals = [
-            NekTargetVal(label='gmres: ', target_val=0., delta=26., column=-6),
-            NekTargetVal(label='total solver time', target_val=0.1, delta=140., column=-2)
-        ]
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres: ')
 
-        for v in target_vals:
-            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
-            self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140., label='total solver time')
 
         self.assertDelayedFailures()
 
