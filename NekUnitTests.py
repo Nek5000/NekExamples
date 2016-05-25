@@ -20,7 +20,6 @@ class TurbChannel(NekTestCase):
     parallel_script = 'nek10steps'
 
     def setUp(self):
-        #self.get_opts()
         self.build_tools(['clean', 'genmap'])
         self.run_genmap(tol='0.5')
 
@@ -36,7 +35,7 @@ class TurbChannel(NekTestCase):
         ]
 
         for v in target_vals:
-            test_val = self.get_value(label=v.label, column=v.column, row=v.row)
+            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
             self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
         self.assertDelayedFailures()
@@ -53,7 +52,7 @@ class TurbChannel(NekTestCase):
         ]
 
         for v in target_vals:
-            test_val = self.get_value(label=v.label, column=v.column, row=v.row)
+            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
             self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
         self.assertDelayedFailures()
@@ -70,7 +69,7 @@ class TurbChannel(NekTestCase):
         ]
 
         for v in target_vals:
-            test_val = self.get_value(label=v.label, column=v.column, row=v.row)
+            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
             self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
         self.assertDelayedFailures()
@@ -87,61 +86,13 @@ class TurbChannel(NekTestCase):
         ]
 
         for v in target_vals:
-            test_val = self.get_value(label=v.label, column=v.column, row=v.row)
+            test_val = self.get_value_from_log(label=v.label, column=v.column, row=v.row)
             self.assertAlmostEqualDelayed(test_val, v.target_val, delta=v.delta, label=v.label)
 
         self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
-
-
-
-
-# @pn_pn_test
-# class TurbChannelPnPn(TurbChannel):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value(label='gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=95.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value(label='gmres: ', column=-7)
-#         self.assertAlmostEqual(test_val, 0., delta=95.)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value(label='total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=200.)
-#
-#
-# @pn_pn_2_test
-# class TurbChannelPnPn2(TurbChannel):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1-2'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value(label='gmres: ', column=-6)
-#         self.assertAlmostEqual(test_val, 0., delta=26.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value(label='gmres: ', column=-6)
-#         self.assertAlmostEqual(test_val, 0., delta=26.)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value(label='total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=140.)
 
 # ###############################################################################
 # #  2d_eigtest: eig1.rea
@@ -845,57 +796,72 @@ class TurbChannel(NekTestCase):
 # ####################################################################
 # #  fs_2; st1.rea, st2.rea, std_wv.rea
 # ####################################################################
-#
-# @pn_pn_testcase
-# class Fs2St1PnPn(Fs2St1):
-#     # TODO: These tests fail in legacy test suite and should be fixed
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serial(self):
-#         phrase = self.get_phrase("ABORT: ")
-#         self.assertIsNotNone(phrase)
-#
-#     @parallel_test
-#     def test_parallel(self):
-#         phrase = self.get_phrase("ABORT: ")
-#         self.assertIsNotNone(phrase)
-#
-# @pn_pn_2_testcase
-# class Fs2St1PnPn2(Fs2St1):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=38.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=38.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('amp', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 6.382414E-01, delta=1e-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('amp', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 6.382414E-01, delta=1e-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2,)
-#         self.assertAlmostEqual(test_val, 0.1, delta=18.3)
-#
+
+# TODO: fs_2/st1.rea tests fail legacy test suite and should be fixed
+class Fs2St1(NekTestCase):
+    example_subdir  = 'fs_2'
+    rea_file        = 'st1'
+    serial_script   = 'nek200s'
+    parallel_script = 'nek200steps'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap(tol='0.5')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        phrase = self.get_phrase_from_log("ABORT: ")
+        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        phrase = self.get_phrase_from_log("ABORT: ")
+        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=18.3, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 # @pn_pn_testcase
 # class Fs2St2PnPn(Fs2St2):
 #

@@ -129,8 +129,15 @@ class NekTestCase(unittest.TestCase):
     def assertAlmostEqualDelayed(self, test_val, target_val, delta, label):
         if abs(test_val-target_val) > delta:
             self._delayed_failures.append(
-                '{0}: test value {1} exceeded target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+                '{0}: Test value {1} exceeded target value {2} +/- {3}'.format(label, test_val, target_val, delta)
             )
+
+    def assertIsNotNullDelayed(self, test_val, label):
+        if not test_val:
+            self._delayed_failures.append(
+                'Unexpectedly did not find phrase "{0}" in logfile {1}'.format(label, test_val)
+            )
+
 
     def assertDelayedFailures(self):
         if self._delayed_failures:
@@ -279,7 +286,7 @@ class NekTestCase(unittest.TestCase):
                         os.path.join(self.log_root, cls.example_subdir, f)
                     )
 
-    def get_value(self, label, column, row=0, logfile=None):
+    def get_value_from_log(self, label, column, row=0, logfile=None):
         cls = self.__class__
         if not logfile:
             logfile = os.path.join(
@@ -295,25 +302,30 @@ class NekTestCase(unittest.TestCase):
         try:
             value = float(line_list[row].split()[column])
         except ValueError:
-            raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  The logfile may be malformatted".format(logfile))
+            raise ValueError("Attempted to parse non-numerical value in logfile, \"{0}\".  Logfile may be malformatted or run may have failed".format(logfile))
         except IndexError:
-            raise IndexError("Fewer lines/columns than expected in logfile, \"{0}\".  Logfile may be malformmated.".format(logfile))
+            raise IndexError("Fewer rows and/or columns than expected in logfile, \"{0}\".  Logfile may be malformmated or run may have failed.".format(logfile))
         else:
             return value
 
-    def get_phrase(self, label, logfile=None):
+    def get_phrase_from_log(self, label, logfile=None, row=0):
         cls = self.__class__
         if not logfile:
             logfile = os.path.join(
                 self.examples_root,
                 cls.example_subdir,
-                '{0}.log.{1}'.format(cls.rea_file, self.mpi_procs)
+                '{0}.log.{1}{2}'.format(cls.rea_file, self.mpi_procs, self.log_suffix)
             )
+
         with open(logfile, 'r') as f:
-            for line in f:
-                if label in line:
-                    return line
-        return None
+            line_list = [l for l in f if label in l]
+
+        try:
+            line = line_list[row]
+        except IndexError:
+            return None
+        else:
+            return line
 
 ###############################################################################
 #  turbChannel: turbChannel.rea
