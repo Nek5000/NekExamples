@@ -778,7 +778,7 @@ class TurbChannel(NekTestCase):
 # ####################################################################
 
 # TODO: fs_2/st1.rea tests fail legacy test suite and should be fixed
-class Fs2St1(NekTestCase):
+class Fs2_St1(NekTestCase):
     example_subdir  = 'fs_2'
     rea_file        = 'st1'
     serial_script   = 'nek200s'

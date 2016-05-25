@@ -38,7 +38,7 @@ def run_nek_script(script, rea_file, cwd, log_suffix='', mpi_procs='1'):
         print('    Using working directory "{0}"'.format(cwd))
         try:
             # TODO: This doesn't work as intended.  If the nek executable fails, the nek script doesn't return the error.
-            # Don't know how to fix this without changing nek script.
+            # Check doxygen to see what exit values there are (some succesful exit values there are!)
             check_call(cmd, cwd=cwd, shell=True)
         except Exception as E:
             # TODO: Change to warnings.warn()
