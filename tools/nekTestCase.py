@@ -127,16 +127,20 @@ class NekTestCase(unittest.TestCase):
         unittest.TestCase.__init__(self, *args, **kwargs)
 
     def assertAlmostEqualDelayed(self, test_val, target_val, delta, label):
-        if abs(test_val-target_val) > delta:
-            self._delayed_failures.append(
-                '{0}: Test value {1} exceeded target value {2} +/- {3}'.format(label, test_val, target_val, delta)
-            )
+        if abs(test_val-target_val) <= delta:
+            msg = '    SUCCESS: {0}: Test value {1} equals target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+        else:
+            msg = '    FAILURE: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+            self._delayed_failures.append(msg)
+        print(msg)
 
     def assertIsNotNullDelayed(self, test_val, label):
         if not test_val:
-            self._delayed_failures.append(
-                'Unexpectedly did not find phrase "{0}" in logfile {1}'.format(label, test_val)
-            )
+            msg = 'SUCCESS: Found phrase "{0}" in logfile.'.format(label)
+        else:
+            msg = 'FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
+            self._delayed_failures.append(msg)
+        print(msg)
 
 
     def assertDelayedFailures(self):
@@ -298,7 +302,7 @@ class NekTestCase(unittest.TestCase):
         with open(logfile, 'r') as f:
             line_list = [l for l in f if label in l]
         if not line_list:
-            raise ValueError("Could not find label \"{0}\" in logfile \"{0}\".  The run may have failed.".format(label, logfile))
+            raise ValueError("Could not find label \"{0}\" in logfile \"{1}\".  The run may have failed.".format(label, logfile))
         try:
             value = float(line_list[row].split()[column])
         except ValueError:
