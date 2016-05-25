@@ -17,8 +17,8 @@ def run_meshgen(command, stdin, cwd):
     except (OSError, CalledProcessError) as E:
         # TODO: Change to warnings.warn()
         print('Could not complete {0}!  Caught error: "{1}".  Check "{2}" for details.'.format(command, E, logfile))
-
-    print("Succefully finished {0}!".format(os.path.basename(command)))
+    else:
+        print("Succefully finished {0}!".format(os.path.basename(command)))
 
 
 def run_nek_script(script, rea_file, cwd, log_suffix='', mpi_procs='1'):
@@ -36,7 +36,16 @@ def run_nek_script(script, rea_file, cwd, log_suffix='', mpi_procs='1'):
         print("Running nek5000...")
         print('    Using command "{0}"'.format(cmd))
         print('    Using working directory "{0}"'.format(cwd))
-        check_call(cmd, cwd=cwd, shell=True)
+        try:
+            # TODO: This doesn't work as intended.  If the nek executable fails, the nek script doesn't return the error.
+            # Don't know how to fix this without changing nek script.
+            check_call(cmd, cwd=cwd, shell=True)
+        except Exception as E:
+            # TODO: Change to warnings.warn()
+            print('Could not successfully run nek5000! Caught error: {0}'.format(E))
+        else:
+            #print('Successfully ran nek5000!')
+            print('Finished running nek5000!')
 
         # Rename logs
         if log_suffix:
