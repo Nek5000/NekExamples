@@ -83,40 +83,63 @@ class TurbChannel(NekTestCase):
 # ###############################################################################
 # #  3dbox: b3d.rea
 # ###############################################################################
-#
-# @pn_pn_testcase
-# class ThreeDBoxPnPn(ThreeDBox):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serial(self):
-#         phrase = self.get_phrase("end of time-step loop")
-#         self.assertIsNotNone(phrase)
-#
-#     @parallel_test
-#     def test_parallel(self):
-#         phrase = self.get_phrase("end of time-step loop")
-#         self.assertIsNotNone(phrase)
-#
-# @pn_pn_2_testcase
-# class ThreeDBoxPnPn2(ThreeDBox):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1-2'
-#
-#     @serial_test
-#     def test_serial(self):
-#         phrase = self.get_phrase("end of time-step loop")
-#         self.assertIsNotNone(phrase)
-#
-#     @parallel_test
-#     def test_parallel(self):
-#         phrase = self.get_phrase("end of time-step loop")
-#         self.assertIsNotNone(phrase)
+
+class ThreeDBox(NekTestCase):
+    example_subdir  = '3dbox'
+    rea_file        = 'b3d'
+    box_file        = 'b3d'
+    serial_script   = 'nek10s'
+    parallel_script = 'nek10steps'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genbox', 'genmap'])
+        self.run_genbox()
+        self.mvn('box', self.__class__.rea_file)
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.build_nek()
+        self.run_nek()
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.build_nek()
+        self.run_nek()
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
 #
 # ###############################################################################
 # #  axi: axi.rea
