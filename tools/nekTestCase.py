@@ -1,9 +1,6 @@
 import unittest
+import os
 from functools import wraps
-
-from tools.nekBinBuild import build_tools, build_nek
-from tools.nekBinRun import *
-from tools.nekFileConfig import config_size
 
 ###############################################################################
 #  DECORATORS
@@ -100,7 +97,6 @@ class NekTestCase(unittest.TestCase):
         size_file (str):      The SIZE file for the subclass' example.  Assuemed that it's in
                               example_root/example_subdir
     """
-
     # Must be defined in subclasses only; included here to make syntax checker happy
     example_subdir      = ""
     rea_file            = ""
@@ -135,13 +131,12 @@ class NekTestCase(unittest.TestCase):
         print(msg)
 
     def assertIsNotNullDelayed(self, test_val, label):
-        if not test_val:
+        if test_val:
             msg = 'SUCCESS: Found phrase "{0}" in logfile.'.format(label)
         else:
             msg = 'FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
             self._delayed_failures.append(msg)
         print(msg)
-
 
     def assertDelayedFailures(self):
         if self._delayed_failures:
@@ -206,7 +201,7 @@ class NekTestCase(unittest.TestCase):
         print("Finished getting setup options!")
 
     def build_tools(self, targets=None, tools_root=None, tools_bin=None, f77=None, cc=None, bigmem=None):
-
+        from tools.nekBinBuild import build_tools
         build_tools(
             targets    = targets    if targets    else ('clean', 'genmap'),
             tools_root = tools_root if tools_root else self.tools_root,
@@ -217,6 +212,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def config_size(self, infile=None, outfile=None, lx=None, ly=None, lz=None):
+        from tools.nekFileConfig import config_size
         cls = self.__class__
 
         if not infile:
@@ -233,16 +229,34 @@ class NekTestCase(unittest.TestCase):
         )
 
     def run_genmap(self, tol='0.5'):
+        from tools.nekBinRun import run_meshgen
         cls = self.__class__
-
         run_meshgen(
             command = os.path.join(self.tools_bin, 'genmap'),
             stdin   = [cls.rea_file, tol],
             cwd     = os.path.join(self.examples_root, cls.example_subdir),
         )
 
+    def run_genbox(self, box_file=None):
+        from tools.nekBinRun import run_meshgen
+        assert(box_file or self.__class__.box_file)
+
+        if not box_file:
+            box_file = self.__class__.box_file
+
+        # Fix extension, in case user doesn't provide it
+        root, ext = os.path.splitext(box_file)
+        if ext != '.box':
+            box_file = root + ext + '.box'
+
+        run_meshgen(
+            command = os.path.join(self.tools_bin, 'genbox'),
+            stdin   = [box_file],
+            cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
+        )
 
     def build_nek(self):
+        from tools.nekBinBuild import build_nek
         cls = self.__class__
 
         build_nek(
@@ -255,6 +269,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def run_nek(self, mpi_procs=None):
+        from tools.nekBinRun import run_nek_script
         cls = self.__class__
 
         # Serial run
@@ -289,6 +304,14 @@ class NekTestCase(unittest.TestCase):
                         os.path.join(self.examples_root, cls.example_subdir, f),
                         os.path.join(self.log_root, cls.example_subdir, f)
                     )
+
+    def mvn(self, src_prefix, dest_prefix):
+        from tools.nekBinRun import mvn
+        cls = self.__class__
+        mvn(src_prefix, dest_prefix,
+            cwd = os.path.join(self.examples_root, cls.example_subdir)
+        )
+
 
     def get_value_from_log(self, label, column, row=0, logfile=None):
         cls = self.__class__
@@ -330,18 +353,6 @@ class NekTestCase(unittest.TestCase):
             return None
         else:
             return line
-
-###############################################################################
-#  turbChannel: turbChannel.rea
-###############################################################################
-
-
-# ###############################################################################
-# #  2d_eigtest: eig1.rea
-# ###############################################################################
-#
-# # TODO: implement 2d_eigtest
-#
 # ###############################################################################
 # #  3dbox: b3d.rea
 # ###############################################################################
