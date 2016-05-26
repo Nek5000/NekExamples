@@ -140,55 +140,79 @@ class ThreeDBox(NekTestCase):
         self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
 
         self.assertDelayedFailures()
-#
-# ###############################################################################
-# #  axi: axi.rea
-# ###############################################################################
-#
-# @pn_pn_testcase
-# class AxiPnPn(Axi):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         val = self.get_value('PRES: ', column=-4)
-#         self.assertAlmostEqual(val, 0., delta=76.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         val = self.get_value('PRES: ', column=-4)
-#         self.assertAlmostEqual(val, 0., delta=76.)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(val, 0.1, delta=2)
-#
-#
-# @pn_pn_2_testcase
-# class AxiPnPn2(Axi):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         val = self.get_value('U-Press ', column=-5)
-#         self.assertAlmostEqual(val, 0., delta=104.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         val = self.get_value('U-Press ', column=-5)
-#         self.assertAlmostEqual(val, 0., delta=104.)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(val, 0.1, delta=4)
+
+    def tearDown(self):
+        self.move_logs()
+
+###############################################################################
+#  axi: axi.rea
+###############################################################################
+
+class Axi(NekTestCase):
+    example_subdir  = 'axi'
+    rea_file        = 'axi'
+    box_file        = 'axi'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genbox', 'genmap'])
+        self.run_genbox()
+        self.mvn('box', self.__class__.rea_file)
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        pres = self.get_value_from_log('PRES: ', column=-4)
+        self.assertAlmostEqualDelayed(pres, target_val=0., delta=76., label='PRES')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=2, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        pres = self.get_value_from_log('PRES: ', column=-4)
+        self.assertAlmostEqualDelayed(pres, target_val=0., delta=76., label='PRES')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        u_press = self.get_value_from_log('U-Press ', column=-5)
+        self.assertAlmostEqualDelayed(u_press, target_val=0., delta=104., label='U-Press')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=4, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        u_press = self.get_value_from_log('U-Press ', column=-5)
+        self.assertAlmostEqualDelayed(u_press, target_val=0., delta=104., label='U-Press')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 #
 # ####################################################################
 # #  benard: ray_9.rea, ray_dd.rea, ray_dn.rea, ray_nn.rea

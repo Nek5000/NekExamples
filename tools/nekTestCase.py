@@ -6,7 +6,6 @@ from functools import wraps
 #  DECORATORS
 ###############################################################################
 
-
 def pn_pn_serial(method):
     @wraps(method)
     def wrapper(self, *args, **kwargs):
@@ -97,14 +96,16 @@ class NekTestCase(unittest.TestCase):
         size_file (str):      The SIZE file for the subclass' example.  Assuemed that it's in
                               example_root/example_subdir
     """
-    # Must be defined in subclasses only; included here to make syntax checker happy
+    # Defined in subclasses only; declared here to make syntax checker happy
     example_subdir      = ""
     rea_file            = ""
+    box_file            = ""
     serial_script       = ""
     parallel_script     = ""
 
+
     def __init__(self, *args, **kwargs):
-        # Default values, can be overridden by self.get_opts
+        # These can be overridden by self.get_opts
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
@@ -114,6 +115,11 @@ class NekTestCase(unittest.TestCase):
         self.log_root       = ''
         self.makenek        = ''
         self.tools_bin      = ''
+
+        # These can be overridden by method decorators (pn_pn_serial, pn_pn_parallel,
+        # pn_pn_2_serial, and pn_pn_2_parallel)
+        self.log_suffix = ""
+        self.mpi_procs  = 1
 
         # Empy list of delayed fails
         self._delayed_failures = []
@@ -353,151 +359,7 @@ class NekTestCase(unittest.TestCase):
             return None
         else:
             return line
-# ###############################################################################
-# #  3dbox: b3d.rea
-# ###############################################################################
-#
-# class ThreeDBox(NekTestCase):
-#
-#     example_subdir  = '3dbox'
-#     rea_file        = 'b3d'
-#     box_file        = 'b3d'
-#     serial_script   = 'nek10s'
-#     parallel_script = 'nek10steps'
-#
-#     @classmethod
-#     def setUpClass(cls):
-#
-#         cls.get_opts()
-#
-#         build_tools(
-#             targets    = ('clean', 'genbox', 'genmap'),
-#             tools_root = cls.tools_root,
-#             tools_bin  = cls.tools_bin,
-#             f77        = 'gfortran',
-#             cc         = 'gcc',
-#             bigmem     = 'false'
-#         )
-#         config_size(
-#             infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-#             outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-#             lx2 = cls.lx2,
-#             ly2 = cls.ly2,
-#             lz2 = cls.lz2
-#         )
-#         run_meshgen(
-#             command = os.path.join(cls.tools_bin, 'genbox'),
-#             stdin   = ['b3d.box'],
-#             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-#         )
-#         mvn(
-#             src_prefix = 'box',
-#             dst_prefix = 'b3d',
-#             cwd = os.path.join(cls.examples_root, cls.example_subdir)
-#         )
-#         run_meshgen(
-#             command = os.path.join(cls.tools_bin, 'genmap'),
-#             stdin   = [cls.rea_file, '0.5'],
-#             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-#         )
-#         build_nek(
-#             source_root = cls.source_root,
-#             rea_file    = cls.rea_file,
-#             cwd         = os.path.join(cls.examples_root, cls.example_subdir),
-#             f77         = cls.f77,
-#             cc          = cls.cc,
-#             ifmpi       = str(cls.ifmpi).lower()
-#         )
-#         # Serial run
-#         if not cls.ifmpi:
-#             run_nek_script(
-#                 script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
-#                 rea_file   = cls.rea_file,
-#                 cwd        = os.path.join(cls.examples_root, cls.example_subdir),
-#                 log_suffix = cls.serial_log_suffix
-#             )
-#         # Parallel run
-#         else:
-#             run_nek_script(
-#                 script     = os.path.join(cls.tools_root, 'scripts', cls.parallel_script),
-#                 rea_file   = cls.rea_file,
-#                 cwd        = os.path.join(cls.examples_root, cls.example_subdir),
-#                 log_suffix = cls.parallel_log_suffix,
-#                 mpi_procs  = ("1", "4")
-#             )
-#
-# ###############################################################################
-# #  axi: axi.rea
-# ###############################################################################
-#
-# class Axi(NekTestCase):
-#
-#     example_subdir  = 'axi'
-#     rea_file        = 'axi'
-#     serial_script   = 'nekbb'
-#     parallel_script = 'neklmpi'
-#
-#     @classmethod
-#     def setUpClass(cls):
-#
-#         cls.get_opts()
-#
-#         build_tools(
-#             targets    = ('clean', 'genbox', 'genmap'),
-#             tools_root = cls.tools_root,
-#             tools_bin  = cls.tools_bin,
-#             f77        = 'gfortran',
-#             cc         = 'gcc',
-#             bigmem     = 'false'
-#         )
-#         config_size(
-#             infile  = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-#             outfile = os.path.join(cls.examples_root, cls.example_subdir, 'SIZE'),
-#             lx2 = cls.lx2,
-#             ly2 = cls.ly2,
-#             lz2 = cls.lz2
-#         )
-#         run_meshgen(
-#             command = os.path.join(cls.tools_bin, 'genbox'),
-#             stdin   = ['axi.box'],
-#             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-#             )
-#         run_meshgen(
-#             command = os.path.join(cls.tools_bin, 'genmap'),
-#             stdin   = ['box', '0.2'],
-#             cwd     = os.path.join(cls.examples_root, cls.example_subdir),
-#             )
-#         mvn(
-#             src_prefix = 'box',
-#             dst_prefix = 'axi',
-#             cwd = os.path.join(cls.examples_root, cls.example_subdir)
-#         )
-#         build_nek(
-#             source_root = cls.source_root,
-#             rea_file    = cls.rea_file,
-#             cwd         = os.path.join(cls.examples_root, cls.example_subdir),
-#             f77         = cls.f77,
-#             cc          = cls.cc,
-#             ifmpi       = str(cls.ifmpi).lower()
-#         )
-#         # Serial run
-#         if not cls.ifmpi:
-#             run_nek_script(
-#                 script     = os.path.join(cls.tools_root, 'scripts', cls.serial_script),
-#                 rea_file   = cls.rea_file,
-#                 cwd        = os.path.join(cls.examples_root, cls.example_subdir),
-#                 log_suffix = cls.serial_log_suffix
-#             )
-#         # Parallel run
-#         else:
-#             run_nek_script(
-#                 script     = os.path.join(cls.tools_root, 'scripts', cls.parallel_script),
-#                 rea_file   = cls.rea_file,
-#                 cwd        = os.path.join(cls.examples_root, cls.example_subdir),
-#                 log_suffix = cls.parallel_log_suffix,
-#                 mpi_procs  = ("1", "4")
-#             )
-#
+
 # ####################################################################
 # #  benard: ray_9.rea, ray_dd.rea, ray_dn.rea, ray_nn.rea
 # ####################################################################
