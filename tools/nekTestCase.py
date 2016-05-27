@@ -109,10 +109,10 @@ class NekTestCase(unittest.TestCase):
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
-        self.source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('HOME', ""))
-        self.examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('HOME', ""))
-        self.tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('HOME', ""))
-        self.log_root       = ''
+        self.source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('PWD', ""))
+        self.examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('PWD', ""))
+        self.tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('PWD', ""))
+        self.log_root       = "{0}/nek5_svn/examples/TestLogs".format(os.environ.get('PWD', ""))
         self.makenek        = ''
         self.tools_bin      = ''
 
