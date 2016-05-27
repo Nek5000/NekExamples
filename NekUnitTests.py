@@ -131,7 +131,7 @@ class ThreeDBox(NekTestCase):
         self.assertDelayedFailures()
 
     @pn_pn_2_parallel
-    def test_PnPn2_Serial(self):
+    def test_PnPn2_Parallel(self):
         self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
         self.build_nek()
         self.run_nek()
