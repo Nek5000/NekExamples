@@ -383,16 +383,6 @@ class NekTestCase(unittest.TestCase):
 # # TODO: implement cone
 #
 # ####################################################################
-# #  conj_ht: conj_ht.rea
-# ####################################################################
-#
-# class ConjHt(NekTestCase):
-#     example_subdir  = 'conj_ht'
-#     rea_file        = 'conj_ht'
-#     serial_script   = 'nekbb'
-#     parallel_script = 'neklmpi'
-#
-# ####################################################################
 # #  cyl_restart: ca.rea, cb.rea, pa.rea, pb.rea
 # ####################################################################
 #
