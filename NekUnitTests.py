@@ -380,226 +380,289 @@ class ConjHt(NekTestCase):
 
         self.assertDelayedFailures()
 
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  cyl_restart: ca.rea, cb.rea, pa.rea, pb.rea
 # ####################################################################
-#
-# @pn_pn_testcase
-# class CylRestartCaPnPn(CylRestartCa):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=85.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=85.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-# @pn_pn_2_testcase
-# class CylRestartCaPnPn2(CylRestartCa):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=29.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=29.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-# @pn_pn_testcase
-# class CylRestartCbPnPn(CylRestartCb):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=77.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=77.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-# @pn_pn_2_testcase
-# class CylRestartCbPnPn2(CylRestartCb):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=28.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=28.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-# @pn_pn_testcase
-# class CylRestartPaPnPn(CylRestartPa):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=85.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=85.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-# @pn_pn_2_testcase
-# class CylRestartPaPnPn2(CylRestartPa):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=29.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=29.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-# @pn_pn_testcase
-# class CylRestartPbPnPn(CylRestartPb):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=77.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=77.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.37986119139E-03, delta=1E-06)
-#
-# @pn_pn_2_testcase
-# class CylRestartPbPnPn2(CylRestartPb):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=28.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=28.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 5.09547531705E-02, delta=1E-06)
-#
+
+class CylRestart_Ca(NekTestCase):
+    example_subdir  = 'cyl_restart'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+    rea_file        = 'ca'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class CylRestart_Cb(NekTestCase):
+    example_subdir  = 'cyl_restart'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+    rea_file        = 'cb'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class CylRestart_Pa(NekTestCase):
+    example_subdir  = 'cyl_restart'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+    rea_file        = 'pa'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class CylRestart_Pb(NekTestCase):
+    example_subdir  = 'cyl_restart'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+    rea_file        = 'pb'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
+
+        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  eddy; eddy_uv.rea, amg_eddy.rea, htps_ed.rea
 # ####################################################################
