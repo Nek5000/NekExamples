@@ -1151,3 +1151,213 @@ class Fs2_StdWv(NekTestCase):
 #     def test_serialTime(self):
 #         test_val = self.get_value('total solver time', column=-2,)
 #         self.assertAlmostEqual(test_val, 0.1, delta=100)
+####################################################################
+#  kovasznay; kov.rea
+####################################################################
+
+####################################################################
+#  kov_st_state; kov_st_stokes.rea
+####################################################################
+
+####################################################################
+#  lowMach_test; lowMach_test.rea
+####################################################################
+
+####################################################################
+#  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
+####################################################################
+
+####################################################################
+#  os7000; u3_t020_n13.rea
+####################################################################
+
+####################################################################
+#  peris; peris.rea
+####################################################################
+
+####################################################################
+#  pipe; helix.rea, stenosis.rea
+####################################################################
+
+####################################################################
+#  rayleigh; ray1.rea, ray2.rea
+####################################################################
+
+class Rayleigh_Ray1(NekTestCase):
+    example_subdir  = 'rayleigh'
+    rea_file        = 'ray1'
+    serial_script   = 'nek200s'
+    parallel_script = 'nek200steps'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap(rea_file='ray1')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray1')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=32., label='gmres')
+
+        umax = self.get_value_from_log(label='umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=2.792052E-03, delta=1e-03, label='umax')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+
+        self.assertDelayedFailures()
+
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray1')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=32., label='gmres')
+
+        umax = self.get_value_from_log(label='umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=2.792052E-03, delta=1e-03, label='umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray1')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=11., label='gmres')
+
+        umax = self.get_value_from_log(label='umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=4.831113E-03, delta=1e-05, label='umax')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray1')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=11., label='gmres')
+
+        umax = self.get_value_from_log(label='umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=4.831113E-03, delta=1e-05, label='umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class Rayleigh_Ray2(NekTestCase):
+    example_subdir  = 'rayleigh'
+    rea_file        = 'ray2'
+    box_file        = 'ray2'
+    serial_script   = 'nek200s'
+    parallel_script = 'nek200steps'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap', 'genbox'])
+        self.run_genbox(box_file='ray2')
+        self.run_genmap(rea_file='box')
+        self.mvn('box', 'ray2')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray2')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=31, label='gmres')
+
+        umax = self.get_value_from_log('umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=4.549071E-03, delta=1e-05, label='umax')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray2')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=31, label='gmres')
+
+        umax = self.get_value_from_log('umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=4.549071E-03, delta=1e-05, label='umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray2')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=11, label='gmres')
+
+        umax = self.get_value_from_log('umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=6.728787E-03, delta=1e-05, label='umax')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek(rea_file='ray0')
+        self.run_nek(rea_file='ray2')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=11, label='gmres')
+
+        umax = self.get_value_from_log('umax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(umax, target_val=6.728787E-03, delta=1e-05, label='umax')
+
+        self.assertDelayedFailures()
+
+
+
+
+
+####################################################################
+#  strat; re10f1000p1000.rea, re10f1000p0001.rea
+####################################################################
+
+####################################################################
+#  solid; solid.rea
+####################################################################
+
+####################################################################
+#  shear4; shear4.rea, thin.rea
+####################################################################
+
+####################################################################
+#  var_vis; var_vis.rea
+####################################################################
+
+####################################################################
+#  vortex; r1854a.rea
+####################################################################
+
+####################################################################
+#  vortex2; v2d
+####################################################################

@@ -234,12 +234,16 @@ class NekTestCase(unittest.TestCase):
             lz2 = lz
         )
 
-    def run_genmap(self, tol='0.5'):
+    def run_genmap(self, rea_file=None, tol='0.5'):
         from tools.nekBinRun import run_meshgen
         cls = self.__class__
+
+        if not rea_file:
+            rea_file = cls.rea_file
+
         run_meshgen(
             command = os.path.join(self.tools_bin, 'genmap'),
-            stdin   = [cls.rea_file, tol],
+            stdin   = [rea_file, tol],
             cwd     = os.path.join(self.examples_root, cls.example_subdir),
         )
 
@@ -261,28 +265,34 @@ class NekTestCase(unittest.TestCase):
             cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
         )
 
-    def build_nek(self):
+    def build_nek(self, rea_file=None):
         from tools.nekBinBuild import build_nek
         cls = self.__class__
 
+        if not rea_file:
+            rea_file = cls.rea_file
+
         build_nek(
             source_root = self.source_root,
-            rea_file    = cls.rea_file,
+            rea_file    = rea_file,
             cwd         = os.path.join(self.examples_root, cls.example_subdir),
             f77         = self.f77,
             cc          = self.cc,
             ifmpi       = str(self.ifmpi).lower()
         )
 
-    def run_nek(self, mpi_procs=None):
+    def run_nek(self, rea_file=None, mpi_procs=None):
         from tools.nekBinRun import run_nek_script
         cls = self.__class__
+
+        if not rea_file:
+            rea_file = cls.rea_file
 
         # Serial run
         if not self.ifmpi:
             run_nek_script(
                 script     = os.path.join(self.tools_root, 'scripts', cls.serial_script),
-                rea_file   = cls.rea_file,
+                rea_file   = rea_file,
                 cwd        = os.path.join(self.examples_root, cls.example_subdir),
                 log_suffix = self.log_suffix,
                 mpi_procs  = self.mpi_procs if not mpi_procs else mpi_procs
