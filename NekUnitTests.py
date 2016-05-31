@@ -307,71 +307,79 @@ class Blasius(NekTestCase):
 # ####################################################################
 # #  conj_ht: conj_ht.rea
 # ####################################################################
-#
-# @pn_pn_testcase
-# class ConjHtPnPn(ConjHt):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=46.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=46.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('tmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('tmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=7)
-#
-# @pn_pn_2_testcase
-# class ConjHtPnPn2(ConjHt):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=26.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=26.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('tmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('tmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 1.31190E+01, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=7)
-#
+
+class ConjHt(NekTestCase):
+    example_subdir  = 'conj_ht'
+    rea_file        = 'conj_ht'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
+
+        tmax = self.get_value_from_log('tmax', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=7, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
+
+        tmax = self.get_value_from_log('tmax', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        tmax = self.get_value_from_log('tmax', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=7, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        tmax = self.get_value_from_log('tmax', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
+
+        self.assertDelayedFailures()
+
 # ####################################################################
 # #  cyl_restart: ca.rea, cb.rea, pa.rea, pb.rea
 # ####################################################################
