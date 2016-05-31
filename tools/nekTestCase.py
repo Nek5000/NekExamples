@@ -367,16 +367,6 @@ class NekTestCase(unittest.TestCase):
 # # TODO: implement benard
 #
 # ####################################################################
-# #  blasius: blasius.rea
-# ####################################################################
-#
-# class Blasius(NekTestCase):
-#     example_subdir  = 'blasius'
-#     rea_file        = 'blasius'
-#     serial_script   = 'nek10s'
-#     parallel_script = 'nek10steps'
-#
-# ####################################################################
 # #  cone: cone.rea, cone016.rea, cone064.rea, cone256.rea
 # ####################################################################
 #
