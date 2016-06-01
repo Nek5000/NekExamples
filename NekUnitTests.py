@@ -1,4 +1,4 @@
-from tools.nekTestCase import *
+from lib.nekTestCase import *
 
 ###############################################################################
 #  turbChannel: turbChannel.rea
