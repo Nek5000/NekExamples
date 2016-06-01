@@ -1,6 +1,6 @@
 import os
 from subprocess import check_call, STDOUT
-from tools.nekFileConfig import config_makenek, config_maketools, config_basics_inc
+from lib.nekFileConfig import config_makenek, config_maketools, config_basics_inc
 
 def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
                 targets=('clean', 'all')):

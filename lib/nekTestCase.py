@@ -207,7 +207,7 @@ class NekTestCase(unittest.TestCase):
         print("Finished getting setup options!")
 
     def build_tools(self, targets=None, tools_root=None, tools_bin=None, f77=None, cc=None, bigmem=None):
-        from tools.nekBinBuild import build_tools
+        from lib.nekBinBuild import build_tools
         build_tools(
             targets    = targets    if targets    else ('clean', 'genmap'),
             tools_root = tools_root if tools_root else self.tools_root,
@@ -218,7 +218,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def config_size(self, infile=None, outfile=None, lx=None, ly=None, lz=None):
-        from tools.nekFileConfig import config_size
+        from lib.nekFileConfig import config_size
         cls = self.__class__
 
         if not infile:
@@ -235,7 +235,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def run_genmap(self, rea_file=None, tol='0.5'):
-        from tools.nekBinRun import run_meshgen
+        from lib.nekBinRun import run_meshgen
         cls = self.__class__
 
         if not rea_file:
@@ -248,7 +248,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def run_genbox(self, box_file=None):
-        from tools.nekBinRun import run_meshgen
+        from lib.nekBinRun import run_meshgen
         assert(box_file or self.__class__.box_file)
 
         if not box_file:
@@ -266,7 +266,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def build_nek(self, rea_file=None):
-        from tools.nekBinBuild import build_nek
+        from lib.nekBinBuild import build_nek
         cls = self.__class__
 
         if not rea_file:
@@ -282,7 +282,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def run_nek(self, rea_file=None, mpi_procs=None):
-        from tools.nekBinRun import run_nek_script
+        from lib.nekBinRun import run_nek_script
         cls = self.__class__
 
         if not rea_file:
@@ -322,7 +322,7 @@ class NekTestCase(unittest.TestCase):
                     )
 
     def mvn(self, src_prefix, dest_prefix):
-        from tools.nekBinRun import mvn
+        from lib.nekBinRun import mvn
         cls = self.__class__
         mvn(src_prefix, dest_prefix,
             cwd = os.path.join(self.examples_root, cls.example_subdir)
