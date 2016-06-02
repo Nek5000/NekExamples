@@ -1,4 +1,5 @@
 import unittest
+import inspect
 import os
 from functools import wraps
 
@@ -109,10 +110,11 @@ class NekTestCase(unittest.TestCase):
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
-        self.source_root    = "{0}/nek5_svn/trunk/nek".format(os.environ.get('PWD', ""))
-        self.examples_root  = "{0}/nek5_svn/examples".format(os.environ.get('PWD', ""))
-        self.tools_root     = "{0}/nek5_svn/trunk/tools".format(os.environ.get('PWD', ""))
-        self.log_root       = "{0}/nek5_svn/examples/TestLogs".format(os.environ.get('PWD', ""))
+        self.source_root    = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..")
+        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tests", "examples")
+        self.tools_root     = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tools")
+        self.scripts_root   = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "scripts")
+        self.log_root       = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tests", "examples", "TestLogs")
         self.makenek        = ''
         self.tools_bin      = ''
 
@@ -176,16 +178,18 @@ class NekTestCase(unittest.TestCase):
         # Get Nek5000 dirs from env, if defined
         self.source_root   = os.environ.get('SOURCE_ROOT',   self.source_root)
         self.tools_root    = os.environ.get('TOOLS_ROOT',    self.tools_root)
+        self.scripts_root  = os.environ.get('SCRIPTS_ROOT',  self.scripts_root)
         self.examples_root = os.environ.get('EXAMPLES_ROOT', self.examples_root)
         self.log_root      = os.environ.get('LOG_ROOT',      self.log_root)
         if not self.makenek:
-            self.makenek   = os.path.join(self.source_root, 'makenek')
+            self.makenek   = os.path.join(self.source_root, 'core', 'makenek')
         if not self.tools_bin:
             self.tools_bin = os.path.join(self.tools_root, 'bin')
 
         # Raise error if source_, tools_, tests_, examples_root don't exist
         for val, name in ((self.source_root,   'SOURCE_ROOT'),
                           #(cls.tests_root,    'TESTS_ROOT'),
+                          (self.scripts_root,  'SCRIPTS_ROOT'),
                           (self.examples_root, 'EXAMPLES_ROOT'),
                           (self.tools_root,    'TOOLS_ROOT')):
             if os.path.isdir(val):
@@ -291,7 +295,7 @@ class NekTestCase(unittest.TestCase):
         # Serial run
         if not self.ifmpi:
             run_nek_script(
-                script     = os.path.join(self.tools_root, 'scripts', cls.serial_script),
+                script     = os.path.join(self.scripts_root, cls.serial_script),
                 rea_file   = rea_file,
                 cwd        = os.path.join(self.examples_root, cls.example_subdir),
                 log_suffix = self.log_suffix,
@@ -300,7 +304,7 @@ class NekTestCase(unittest.TestCase):
         # Parallel run
         else:
             run_nek_script(
-                script     = os.path.join(self.tools_root, 'scripts', cls.parallel_script),
+                script     = os.path.join(self.scripts_root, cls.parallel_script),
                 rea_file   = cls.rea_file,
                 cwd        = os.path.join(self.examples_root, cls.example_subdir),
                 log_suffix = self.log_suffix,
