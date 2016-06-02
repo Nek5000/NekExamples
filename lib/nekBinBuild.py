@@ -56,8 +56,8 @@ def build_nek(source_root, rea_file, cwd=None, f77=None, cc=None, ifmpi=None):
     print('    Using CC "{0}"'.format(cc))
     print('    Using IFMPI "{0}"'.format(ifmpi))
 
-    makenek_in  = os.path.join(source_root, 'makenek')
-    makenek_out = os.path.join(source_root, 'makenek.tests')
+    makenek_in  = os.path.join(source_root, 'core', 'makenek')
+    makenek_out = os.path.join(source_root, 'core', 'makenek.tests')
 
     try:
 
