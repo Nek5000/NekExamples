@@ -176,11 +176,11 @@ class NekTestCase(unittest.TestCase):
             print('    Using {0}="{1}"'.format(name, val))
 
         # Get Nek5000 dirs from env, if defined
-        self.source_root   = os.environ.get('SOURCE_ROOT',   self.source_root)
-        self.tools_root    = os.environ.get('TOOLS_ROOT',    self.tools_root)
-        self.scripts_root  = os.environ.get('SCRIPTS_ROOT',  self.scripts_root)
-        self.examples_root = os.environ.get('EXAMPLES_ROOT', self.examples_root)
-        self.log_root      = os.environ.get('LOG_ROOT',      self.log_root)
+        self.source_root   = os.path.abspath(os.environ.get('SOURCE_ROOT',   self.source_root))
+        self.tools_root    = os.path.abspath(os.environ.get('TOOLS_ROOT',    self.tools_root))
+        self.scripts_root  = os.path.abspath(os.environ.get('SCRIPTS_ROOT',  self.scripts_root))
+        self.examples_root = os.path.abspath(os.environ.get('EXAMPLES_ROOT', self.examples_root))
+        self.log_root      = os.path.abspath(os.environ.get('LOG_ROOT',      self.log_root))
         if not self.makenek:
             self.makenek   = os.path.join(self.source_root, 'core', 'makenek')
         if not self.tools_bin:
