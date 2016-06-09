@@ -375,16 +375,6 @@ class NekTestCase(unittest.TestCase):
             return line
 
 # ####################################################################
-# #  eddy_psi_omega; psi_omega.rea
-# ####################################################################
-#
-# class EddyPsiOmega(NekTestCase):
-#     example_subdir  = 'eddy_psi_omega'
-#     rea_file        = 'psi_omega'
-#     serial_script   = 'nek10s'
-#     parallel_script = 'nek10steps'
-#
-# ####################################################################
 # #  expansion: expansion.rea
 # ####################################################################
 #
