@@ -832,91 +832,89 @@ class Eddy_PsiOmega(NekTestCase):
 # ####################################################################
 # #  ext_cyl; ext_cyl.rea
 # ####################################################################
-#
-# @pn_pn_testcase
-# class ExtCylPnPn(ExtCyl):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=85.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=85.)
-#
-#     @serial_test
-#     def test_serialXError(self):
-#         test_val = self.get_value('dragx', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 1.2138790E+00, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelXError(self):
-#         test_val = self.get_value('dragx', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 1.2138790E+00, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialYError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 1.3040301E-07, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelYError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 1.3040301E-07, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=400)
-#
-# @pn_pn_2_testcase
-# class ExtCylPnPn2(ExtCyl):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=26.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=26.)
-#
-#     @serial_test
-#     def test_serialXError(self):
-#         test_val = self.get_value('dragx', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 1.2138878E+00, delta=1e-05)
-#
-#     @parallel_test
-#     def test_parallelXError(self):
-#         test_val = self.get_value('dragx', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 1.2138878E+00, delta=1e-05)
-#
-#     @serial_test
-#     def test_serialYError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 3.2334222E-07, delta=1e-06)
-#
-#     @parallel_test
-#     def test_parallelYError(self):
-#         test_val = self.get_value('dragy', column=-4, line=-1)
-#         self.assertAlmostEqual(test_val, 3.2334222E-07, delta=1e-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=380)
-#
+
+class ExtCyl(NekTestCase):
+    example_subdir  = 'ext_cyl'
+    rea_file        = 'ext_cyl'
+    serial_script   = 'nek1000s'
+    parallel_script = 'nek1000steps'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
+
+        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='dragx')
+
+        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='dragy')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=400, label='total solver time')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
+
+        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='dragx')
+
+        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='dragy')
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='dragx')
+
+        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='dragy')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time')
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='dragx')
+
+        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='dragy')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time')
+
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  fs_2; st1.rea, st2.rea, std_wv.rea
 # ####################################################################
