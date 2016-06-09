@@ -755,6 +755,9 @@ class Eddy_EddyUv(NekTestCase):
         yerr = self.get_value_from_log('Y err', column=-6, row=-1)
         self.assertAlmostEqualDelayed(yerr, target_val=7.842019E-05, delta=1E-06, label='Y err')
 
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  eddy_neknek: eddy_neknek.rea
 # ####################################################################
@@ -816,6 +819,9 @@ class Eddy_PsiOmega(NekTestCase):
 
         xerr = self.get_value_from_log('X err', column=-6, row=-1)
         self.assertAlmostEqualDelayed(xerr, target_val=1.177007E-10, delta=1E-06, label='X err')
+
+    def tearDown(self):
+        self.move_logs()
 
 # ####################################################################
 # #  expansion: expansion.rea
@@ -1414,6 +1420,9 @@ class Rayleigh_Ray2(NekTestCase):
         self.assertAlmostEqualDelayed(umax, target_val=6.728787E-03, delta=1e-05, label='umax')
 
         self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 
 
