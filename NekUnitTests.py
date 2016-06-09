@@ -399,6 +399,7 @@ class CylRestart_Ca(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
+
         self.config_size(lx='lx1', ly='ly1', lz='lz1')
         self.build_nek()
         self.run_nek()
@@ -666,93 +667,94 @@ class CylRestart_Pb(NekTestCase):
 # ####################################################################
 # #  eddy; eddy_uv.rea, amg_eddy.rea, htps_ed.rea
 # ####################################################################
-#
-# # TODO: implement eddy for amg_eddy.rea, htps_ed.rea
-#
-# @pn_pn_testcase
-# class EddyEddyUvPnPn(EddyEddyUv):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=34.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=34.)
-#
-#     @serial_test
-#     def test_serialXError(self):
-#         test_val = self.get_value('X err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 6.007702E-07, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelXError(self):
-#         test_val = self.get_value('X err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 6.007702E-07, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialYError(self):
-#         test_val = self.get_value('Y err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 6.489061E-07, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelYError(self):
-#         test_val = self.get_value('Y err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 6.489061E-07, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=80)
-#
-# @pn_pn_2_testcase
-# class EddyEddyUvPnPn2(EddyEddyUv):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=22.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=22.)
-#
-#     @serial_test
-#     def test_serialXError(self):
-#         test_val = self.get_value('X err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 6.759103E-05, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelXError(self):
-#         test_val = self.get_value('X err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 6.759103E-05, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialYError(self):
-#         test_val = self.get_value('Y err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 7.842019E-05, delta=1E-06)
-#
-#     @parallel_test
-#     def test_parallelYError(self):
-#         test_val = self.get_value('Y err', column=-6, line=-1)
-#         self.assertAlmostEqual(test_val, 7.842019E-05, delta=1E-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2)
-#         self.assertAlmostEqual(test_val, 0.1, delta=80)
-#
+
+# TODO: implement eddy for amg_eddy.rea, htps_ed.rea
+
+class Eddy_EddyUv(NekTestCase):
+    example_subdir  = 'eddy'
+    rea_file        = 'eddy_uv'
+    serial_script   = 'nekbb'
+    parallel_script = 'neklmpi'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+
+        # Tweak the .rea file and run genmap
+        from re import sub
+        cls = self.__class__
+        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+'.rea')
+        with open(rea_path, 'r') as f:
+            lines = [sub(r'^.*DIVERGENCE$', '      0.10000E-08', l) for l in f]
+        with open(rea_path, 'w') as f:
+            f.writelines(lines)
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=34., label='gmres')
+
+        xerr = self.get_value_from_log('X err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(xerr, target_val=6.007702E-07, delta=1E-06, label='X err')
+
+        yerr = self.get_value_from_log('Y err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(yerr, target_val=6.489061E-07, delta=1E-06, label='Y err')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=34., label='gmres')
+
+        xerr = self.get_value_from_log('X err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(xerr, target_val=6.007702E-07, delta=1E-06, label='X err')
+
+        yerr = self.get_value_from_log('Y err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(yerr, target_val=6.489061E-07, delta=1E-06, label='Y err')
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=22., label='gmres')
+
+        xerr = self.get_value_from_log('X err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(xerr, target_val=6.759103E-05, delta=1E-06, label='X err')
+
+        yerr = self.get_value_from_log('Y err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(yerr, target_val=7.842019E-05, delta=1E-06, label='Y err')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, 0.1, delta=80, label='total solver time')
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres: ', column=-6,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=22., label='gmres')
+
+        xerr = self.get_value_from_log('X err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(xerr, target_val=6.759103E-05, delta=1E-06, label='X err')
+
+        yerr = self.get_value_from_log('Y err', column=-6, row=-1)
+        self.assertAlmostEqualDelayed(yerr, target_val=7.842019E-05, delta=1E-06, label='Y err')
+
 # ####################################################################
 # #  eddy_neknek: eddy_neknek.rea
 # ####################################################################
