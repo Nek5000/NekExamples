@@ -73,7 +73,7 @@ def run_nek(cwd, rea_file, ifmpi, log_suffix='', mpi_procs=1, step_limit=None, v
         command = [nek5000]
 
     print("Running nek5000...")
-    print('    Using command "{0}"'.format(command))
+    print('    Using command "{0}"'.format(' '.join(command)))
     print('    Using working directory "{0}"'.format(cwd))
     print('    Using .rea file "{0}"'.format(rea_file))
 
