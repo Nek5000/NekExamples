@@ -175,7 +175,8 @@ class NekTestCase(unittest.TestCase):
 
         for name, val in (('F77', self.f77),
                           ('CC', self.cc),
-                          ('IFMPI', str(self.ifmpi).lower())):
+                          ('IFMPI', str(self.ifmpi).lower()),
+                          ('VERBOSE_TESTS', str(self.verbose).lower())):
             print('    Using {0}="{1}"'.format(name, val))
 
         # Get Nek5000 dirs from env, if defined
