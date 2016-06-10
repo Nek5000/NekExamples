@@ -67,20 +67,27 @@ def run_nek(cwd, rea_file, ifmpi, log_suffix='', mpi_procs=1, step_limit=None, v
     session_name = os.path.join(cwd, 'SESSION.NAME')
     ioinfo       = os.path.join(cwd, 'ioinfo')
     sch_file     = os.path.join(cwd, '{0}.sch'.format(rea_file))
-
     if ifmpi:
         command = ['mpiexec', '-np', str(mpi_procs), nek5000]
     else:
         command = [nek5000]
 
+    print("Running nek5000...")
+    print('    Using command "{0}"'.format(command))
+    print('    Using working directory "{0}"'.format(cwd))
+    print('    Using .rea file "{0}"'.format(rea_file))
+
+    # An OSError here can be expected
+    # If the examples directory is clean, there will be no .sch file and
+    # os.remove(sch_file) will be expected to fail.
     try:
-        print("Running nek5000...")
-        print('    Using command "{0}"'.format(command))
-        print('    Using working directory "{0}"'.format(cwd))
-        print('    Using .rea file "{0}"'.format(rea_file))
-
         os.remove(sch_file)
+    except OSError as E:
+        # TODO: Change to warnings.warning
+        print("    Could not remove {0}: {1}".format(sch_file, E))
 
+    # Any error here is unexepected
+    try:
         with open(session_name, 'w') as f:
             f.writelines([rea_file+"\n", cwd+'/\n'])
 
