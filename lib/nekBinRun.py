@@ -1,5 +1,6 @@
 import os
-from subprocess import check_call, PIPE, STDOUT, Popen, CalledProcessError
+import sys
+from subprocess import call, check_call, PIPE, STDOUT, Popen, CalledProcessError
 
 def run_meshgen(command, stdin, cwd):
 
@@ -58,6 +59,51 @@ def run_nek_script(script, rea_file, cwd, log_suffix='', mpi_procs='1'):
         # TODO: Change to warnings.warn()
         print('Could not complete command: "{0}": {1}'.format(
             " ".join([script, rea_file, mpi_procs]), E))
+
+def run_nek(cwd, rea_file, ifmpi, log_suffix='', mpi_procs=1, step_limit=None, verbose=False):
+    # Paths to executables, files
+    nek5000      = os.path.join(cwd, 'nek5000')
+    logfile      = os.path.join(cwd, '{0}.log.{1}{2}'.format(rea_file, mpi_procs, log_suffix))
+    session_name = os.path.join(cwd, 'SESSION.NAME')
+    ioinfo       = os.path.join(cwd, 'ioinfo')
+    sch_file     = os.path.join(cwd, '{0}.sch'.format(rea_file))
+
+    if ifmpi:
+        command = ['mpiexec', '-np', str(mpi_procs), nek5000]
+    else:
+        command = [nek5000]
+
+    try:
+        print("Running nek5000...")
+        print('    Using command "{0}"'.format(command))
+        print('    Using working directory "{0}"'.format(cwd))
+        print('    Using .rea file "{0}"'.format(rea_file))
+
+        os.remove(sch_file)
+
+        with open(session_name, 'w') as f:
+            f.writelines([rea_file+"\n", cwd+'/\n'])
+
+        if step_limit:
+            with open(ioinfo, 'w') as f:
+                f.writelines(['-{0}'.format(step_limit)])
+
+        if verbose:
+            with open(logfile, 'w') as f:
+                proc =Popen(command, cwd=cwd, stderr=STDOUT, stdout=PIPE)
+                for line in proc.stdout:
+                    sys.stdout.write(line)
+                    f.write(line)
+        else:
+            with open(logfile, 'w') as f:
+                call(command, cwd=cwd, stdout=f)
+
+    except Exception as E:
+        # TODO: Change to warnings.warn()
+        print('Could not successfully run nek5000! Caught error: {0}'.format(E))
+    else:
+        print('Finished running nek5000!')
+
 
 def mvn(src_prefix, dst_prefix, cwd):
     exts = ('.box', '.rea', '.usr', '.map', '.sep', '.re2')

@@ -101,8 +101,6 @@ class NekTestCase(unittest.TestCase):
     example_subdir      = ""
     rea_file            = ""
     box_file            = ""
-    serial_script       = ""
-    parallel_script     = ""
 
 
     def __init__(self, *args, **kwargs):
@@ -110,6 +108,7 @@ class NekTestCase(unittest.TestCase):
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
+        self.verbose        = False
         self.source_root    = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..")
         self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tests", "examples")
         self.tools_root     = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tools")
@@ -162,13 +161,17 @@ class NekTestCase(unittest.TestCase):
         print("Getting setup options...")
 
         # Get compilers from env, default to GNU
-        self.f77   = os.environ.get('F77',   self.f77)
-        self.cc    = os.environ.get('CC',    self.cc)
-        self.ifmpi = os.environ.get('IFMPI', self.ifmpi)
+        self.f77     = os.environ.get('F77',   self.f77)
+        self.cc      = os.environ.get('CC',    self.cc)
+        self.ifmpi   = os.environ.get('IFMPI', self.ifmpi)
+        self.verbose = os.environ.get('VERBOSE_TESTS', self.verbose)
 
-        # String/bool conversion
-        ifmpi_str = str(self.ifmpi).lower()
-        self.ifmpi = ifmpi_str == 'yes' or ifmpi_str == 'true'
+        # String/bool conversions
+        self.ifmpi = str(self.ifmpi).lower()
+        self.ifmpi = self.ifmpi == 'yes' or self.ifmpi == 'true'
+
+        self.verbose = str(self.verbose).lower()
+        self.verbose = self.verbose == 'yes' or self.verbose == 'true'
 
         for name, val in (('F77', self.f77),
                           ('CC', self.cc),
@@ -285,31 +288,18 @@ class NekTestCase(unittest.TestCase):
             ifmpi       = str(self.ifmpi).lower()
         )
 
-    def run_nek(self, rea_file=None, mpi_procs=None):
-        from lib.nekBinRun import run_nek_script
+    def run_nek(self, rea_file=None, step_limit=None):
+        from lib.nekBinRun import run_nek
         cls = self.__class__
-
-        if not rea_file:
-            rea_file = cls.rea_file
-
-        # Serial run
-        if not self.ifmpi:
-            run_nek_script(
-                script     = os.path.join(self.scripts_root, cls.serial_script),
-                rea_file   = rea_file,
-                cwd        = os.path.join(self.examples_root, cls.example_subdir),
-                log_suffix = self.log_suffix,
-                mpi_procs  = self.mpi_procs if not mpi_procs else mpi_procs
-            )
-        # Parallel run
-        else:
-            run_nek_script(
-                script     = os.path.join(self.scripts_root, cls.parallel_script),
-                rea_file   = cls.rea_file,
-                cwd        = os.path.join(self.examples_root, cls.example_subdir),
-                log_suffix = self.log_suffix,
-                mpi_procs  = self.mpi_procs if not mpi_procs else mpi_procs
-            )
+        run_nek(
+            cwd        = os.path.join(self.examples_root, cls.example_subdir),
+            rea_file   = cls.rea_file if not rea_file else rea_file,
+            ifmpi      = self.ifmpi,
+            log_suffix = self.log_suffix,
+            mpi_procs  = self.mpi_procs,
+            step_limit = step_limit,
+            verbose    = self.verbose
+        )
 
     def move_logs(self):
         cls = self.__class__
