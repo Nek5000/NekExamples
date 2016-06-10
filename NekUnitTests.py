@@ -687,6 +687,8 @@ class Eddy_EddyUv(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
 
+        self.assertDelayedFailures()
+
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx='lx1', ly='ly1', lz='lz1')
@@ -701,6 +703,8 @@ class Eddy_EddyUv(NekTestCase):
 
         yerr = self.get_value_from_log('Y err', column=-6, row=-1)
         self.assertAlmostEqualDelayed(yerr, target_val=6.489061E-07, delta=1E-06, label='Y err')
+
+        self.assertDelayedFailures()
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
@@ -720,6 +724,8 @@ class Eddy_EddyUv(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, 0.1, delta=80, label='total solver time')
 
+        self.assertDelayedFailures()
+
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
@@ -734,6 +740,8 @@ class Eddy_EddyUv(NekTestCase):
 
         yerr = self.get_value_from_log('Y err', column=-6, row=-1)
         self.assertAlmostEqualDelayed(yerr, target_val=7.842019E-05, delta=1E-06, label='Y err')
+
+        self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
@@ -768,6 +776,8 @@ class Eddy_PsiOmega(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=17, label='total solver time')
 
+        self.assertDelayedFailures()
+
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx='lx1', ly='ly1', lz='lz1')
@@ -776,6 +786,8 @@ class Eddy_PsiOmega(NekTestCase):
 
         xerr = self.get_value_from_log('X err', column=-6, row=-1)
         self.assertAlmostEqualDelayed(xerr, target_val=1.177007E-10, delta=1E-06, label='X err')
+
+        self.assertDelayedFailures()
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
@@ -789,6 +801,8 @@ class Eddy_PsiOmega(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, 0.1, delta=17, label='total solver time')
 
+        self.assertDelayedFailures()
+
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
@@ -797,6 +811,8 @@ class Eddy_PsiOmega(NekTestCase):
 
         xerr = self.get_value_from_log('X err', column=-6, row=-1)
         self.assertAlmostEqualDelayed(xerr, target_val=1.177007E-10, delta=1E-06, label='X err')
+
+        self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
@@ -837,6 +853,8 @@ class ExtCyl(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=400, label='total solver time')
 
+        self.assertDelayedFailures()
+
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx='lx1', ly='ly1', lz='lz1')
@@ -851,6 +869,8 @@ class ExtCyl(NekTestCase):
 
         dragy = self.get_value_from_log('dragy', column=-4, row=-1)
         self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='dragy')
+
+        self.assertDelayedFailures()
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
@@ -870,6 +890,8 @@ class ExtCyl(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time')
 
+        self.assertDelayedFailures()
+
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
@@ -887,6 +909,8 @@ class ExtCyl(NekTestCase):
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time')
+
+        self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
@@ -1087,6 +1111,28 @@ class Fs2_StdWv(NekTestCase):
 # ####################################################################
 # #  fs_hydro: fs_hydro.rea
 # ####################################################################
+#
+# class FsHydro(NekTestCase):
+#     example_subdir = 'fs_hydro'
+#     rea_file       = 'fs_hydro'
+#
+#     def setUp(self):
+#         self.build_tools(['clean', 'genmap'])
+#         self.run_genmap()
+#
+#     @pn_pn_serial
+#     def test_PnPn_Serial(self):
+#         self.config_size(lx='lx1', ly='ly1', lz='lz1')
+#         self.build_nek()
+#         self.run_nek(step_limit=1000)
+#
+#         phrase = self.get_phrase_from_log("ABORT: ")
+#         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+#         self.assertDelayedFailures()
+#
+#
+#
+
 #
 # @pn_pn_testcase
 # class FsHydroPnPn(FsHydro):
