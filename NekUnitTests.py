@@ -1264,6 +1264,40 @@ class Fs2_StdWv(NekTestCase):
 #  lowMach_test; lowMach_test.rea
 ####################################################################
 
+# class LowMachTest(NekTestCase):
+#     example_subdir = 'lowmach_test'
+#     rea_file       = 'lowmach_test'
+#
+#     def setUp(self):
+#         self.build_tools(['clean', 'genmap'])
+#
+#         # Tweak the .rea file and run genmap
+#         from re import sub
+#         cls = self.__class__
+#         rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+'.rea')
+#         with open(rea_path, 'r') as f:
+#             lines = [sub(r'^.*IFNAV.*$', '  T T IFNAV & IFADVC', l) for l in f]
+#         with open(rea_path, 'w') as f:
+#             f.writelines(lines)
+#         self.run_genmap()
+#
+#     @pn_pn_serial
+#     def test_PnPn_Serial(self):
+#         self.config_size(lx='lx1', ly='ly1', lz='lz1')
+#         self.build_nek()
+#         self.run_nek(step_limit=200)
+#
+#         solver_time = self.get_value_from_log(label='total solver time', column=-2)
+#         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40)
+#
+#         gmres = self.get_value_from_log(label='gmres', column=-7)
+#         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=100, label='gmres')
+#
+#         # TODO: Add other values here
+#
+#         self.assertDelayedFailures()
+
+
 ####################################################################
 #  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
 ####################################################################
@@ -1441,6 +1475,64 @@ class Rayleigh_Ray2(NekTestCase):
 ####################################################################
 #  strat; re10f1000p1000.rea, re10f1000p0001.rea
 ####################################################################
+
+class Strat_P1000(NekTestCase):
+    example_subdir = 'strat'
+    rea_file = 're10f1000p1000'
+
+    def setUp(self):
+        self.build_tools(['clean', 'genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140, label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
+
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+
+        self.assertDelayedFailures()
 
 ####################################################################
 #  solid; solid.rea
