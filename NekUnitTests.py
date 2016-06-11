@@ -10,7 +10,7 @@ class TurbChannel(NekTestCase):
     rea_file        = 'turbChannel'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap(tol='0.5')
 
     @pn_pn_serial
@@ -88,7 +88,7 @@ class ThreeDBox(NekTestCase):
     box_file        = 'b3d'
 
     def setUp(self):
-        self.build_tools(['clean', 'genbox', 'genmap'])
+        self.build_tools(['genbox', 'genmap'])
         self.run_genbox()
         self.mvn('box', self.__class__.rea_file)
         self.run_genmap()
@@ -150,7 +150,7 @@ class Axi(NekTestCase):
     box_file        = 'axi'
 
     def setUp(self):
-        self.build_tools(['clean', 'genbox', 'genmap'])
+        self.build_tools(['genbox', 'genmap'])
         self.run_genbox()
         self.mvn('box', self.__class__.rea_file)
         self.run_genmap()
@@ -222,7 +222,7 @@ class Blasius(NekTestCase):
     rea_file        = 'blasius'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -305,7 +305,7 @@ class ConjHt(NekTestCase):
     rea_file        = 'conj_ht'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -382,7 +382,7 @@ class CylRestart_Ca(NekTestCase):
     rea_file        = 'ca'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -450,7 +450,7 @@ class CylRestart_Cb(NekTestCase):
     rea_file        = 'cb'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -517,7 +517,7 @@ class CylRestart_Pa(NekTestCase):
     rea_file        = 'pa'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -584,7 +584,7 @@ class CylRestart_Pb(NekTestCase):
     rea_file        = 'pb'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -657,7 +657,7 @@ class Eddy_EddyUv(NekTestCase):
     rea_file        = 'eddy_uv'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
 
         # Tweak the .rea file and run genmap
         from re import sub
@@ -761,7 +761,7 @@ class Eddy_PsiOmega(NekTestCase):
     rea_file        = 'psi_omega'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -832,7 +832,7 @@ class ExtCyl(NekTestCase):
     rea_file        = 'ext_cyl'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -925,7 +925,7 @@ class Fs2_St1(NekTestCase):
     rea_file        = 'st1'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -989,7 +989,7 @@ class Fs2_St2(NekTestCase):
     rea_file        = 'st2'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -1051,7 +1051,7 @@ class Fs2_StdWv(NekTestCase):
     rea_file        = 'std_wv'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
@@ -1117,7 +1117,7 @@ class Fs2_StdWv(NekTestCase):
 #     rea_file       = 'fs_hydro'
 #
 #     def setUp(self):
-#         self.build_tools(['clean', 'genmap'])
+#         self.build_tools(['genmap'])
 #         self.run_genmap()
 #
 #     @pn_pn_serial
@@ -1269,7 +1269,7 @@ class Fs2_StdWv(NekTestCase):
 #     rea_file       = 'lowmach_test'
 #
 #     def setUp(self):
-#         self.build_tools(['clean', 'genmap'])
+#         self.build_tools(['genmap'])
 #
 #         # Tweak the .rea file and run genmap
 #         from re import sub
@@ -1323,7 +1323,7 @@ class Rayleigh_Ray1(NekTestCase):
     rea_file        = 'ray1'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap(rea_file='ray1')
 
     @pn_pn_serial
@@ -1398,7 +1398,7 @@ class Rayleigh_Ray2(NekTestCase):
     box_file        = 'ray2'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap', 'genbox'])
+        self.build_tools(['genmap', 'genbox'])
         self.run_genbox(box_file='ray2')
         self.run_genmap(rea_file='box')
         self.mvn('box', 'ray2')
@@ -1481,7 +1481,7 @@ class Strat_P1000(NekTestCase):
     rea_file = 're10f1000p1000'
 
     def setUp(self):
-        self.build_tools(['clean', 'genmap'])
+        self.build_tools(['genmap'])
         self.run_genmap()
 
     @pn_pn_serial
