@@ -366,16 +366,6 @@ class NekTestCase(unittest.TestCase):
             return line
 
 # ####################################################################
-# #  fs_hydro; fs_hydro.rea
-# ####################################################################
-#
-# class FsHydro(NekTestCase):
-#     example_subdir  = 'fs_hydro'
-#     rea_file        = 'fs_hydro'
-#     serial_script   = 'nek1000s'
-#     parallel_script = 'nek1000steps'
-#
-# ####################################################################
 # #  hemi: hemi.rea
 # ####################################################################
 #
