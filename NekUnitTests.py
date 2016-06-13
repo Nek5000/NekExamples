@@ -1252,73 +1252,84 @@ class Hemi(NekTestCase):
 
         self.assertDelayedFailures()
 
-#
-# @pn_pn_testcase
-# class HemiPnPn(Hemi):
-#
-#     lx2 = 'lx1'
-#     ly2 = 'ly1'
-#     lz2 = 'lz1'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=39.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-7,)
-#         self.assertAlmostEqual(test_val, 0., delta=39.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('wmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 4.9173E-01, delta=1e-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('wmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 4.9173E-01, delta=1e-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2,)
-#         self.assertAlmostEqual(test_val, 0.1, delta=100)
-#
-# @pn_pn_2_testcase
-# class HemiPnPn2(Hemi):
-#
-#     lx2 = 'lx1-2'
-#     ly2 = 'ly1-2'
-#     lz2 = 'lz1-2'
-#
-#     @serial_test
-#     def test_serialIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=34.)
-#
-#     @parallel_test
-#     def test_parallelIter(self):
-#         test_val = self.get_value('gmres: ', column=-6,)
-#         self.assertAlmostEqual(test_val, 0., delta=34.)
-#
-#     @serial_test
-#     def test_serialError(self):
-#         test_val = self.get_value('wmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 4.7915E-01, delta=1e-06)
-#
-#     @parallel_test
-#     def test_parallelError(self):
-#         test_val = self.get_value('wmax', column=-2, line=-1)
-#         self.assertAlmostEqual(test_val, 4.7915E-01, delta=1e-06)
-#
-#     @serial_test
-#     def test_serialTime(self):
-#         test_val = self.get_value('total solver time', column=-2,)
-#         self.assertAlmostEqual(test_val, 0.1, delta=100)
 ####################################################################
 #  kovasznay; kov.rea
 ####################################################################
+
+class Kovasznay(NekTestCase):
+    example_subdir = 'kovasznay'
+    rea_file = 'kov'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=12, label='total solver time')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=34, label='gmres')
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=5.14316E-13, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=34, label='gmres')
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=5.14316E-13, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=17, label='total solver time')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=14, label='gmres')
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=5.90551E-13, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=14, label='gmres')
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=5.90551E-13, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+
+
+
+
 
 ####################################################################
 #  kov_st_state; kov_st_stokes.rea
