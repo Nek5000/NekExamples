@@ -364,14 +364,3 @@ class NekTestCase(unittest.TestCase):
             return None
         else:
             return line
-
-# ####################################################################
-# #  hemi: hemi.rea
-# ####################################################################
-#
-# class Hemi(NekTestCase):
-#     example_subdir  = 'hemi'
-#     rea_file        = 'hemi'
-#     serial_script   = 'nek10s'
-#     parallel_script = 'nek10steps'
-
