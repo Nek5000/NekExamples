@@ -907,9 +907,6 @@ class ExtCyl(NekTestCase):
         dragy = self.get_value_from_log('dragy', column=-4, row=-1)
         self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='dragy')
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time')
-
         self.assertDelayedFailures()
 
     def tearDown(self):
