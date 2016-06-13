@@ -1326,14 +1326,44 @@ class Kovasznay(NekTestCase):
 
         self.assertDelayedFailures()
 
-
-
-
-
-
 ####################################################################
 #  kov_st_state; kov_st_stokes.rea
 ####################################################################
+
+class KovStState(NekTestCase):
+    # Note: Legacy Analysis.py script only checked Pn-Pn-2 test cases
+    example_subdir = 'kov_st_state'
+    rea_file = 'kov_st_stokes'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=5, label='total solver time')
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=8.55641E-10, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=8.55641E-10, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
 
 ####################################################################
 #  lowMach_test; lowMach_test.rea
