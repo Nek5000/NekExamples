@@ -1173,6 +1173,9 @@ class FsHydro(NekTestCase):
 
         self.assertDelayedFailures()
 
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  hemi; hemi
 # ####################################################################
@@ -1249,6 +1252,9 @@ class Hemi(NekTestCase):
 
         self.assertDelayedFailures()
 
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  kovasznay; kov.rea
 ####################################################################
@@ -1323,6 +1329,9 @@ class Kovasznay(NekTestCase):
 
         self.assertDelayedFailures()
 
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  kov_st_state; kov_st_stokes.rea
 ####################################################################
@@ -1360,6 +1369,9 @@ class KovStState(NekTestCase):
         self.assertAlmostEqualDelayed(err, target_val=8.55641E-10, delta=1e-06, label='err')
 
         self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  lowMach_test; lowMach_test.rea
@@ -1447,6 +1459,9 @@ class LowMachTest(NekTestCase):
         self.assertIsNotNullDelayed(phrase, label='ABORT: ')
         self.assertDelayedFailures()
 
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
 ####################################################################
@@ -1514,6 +1529,9 @@ class Mhd_Gpf(NekTestCase):
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
 
         self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  os7000; u3_t020_n13.rea
@@ -1681,10 +1699,6 @@ class Rayleigh_Ray2(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-
-
-
-
 ####################################################################
 #  strat; re10f1000p1000.rea, re10f1000p0001.rea
 ####################################################################
@@ -1746,6 +1760,9 @@ class Strat_P1000(NekTestCase):
         self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
 
         self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  solid; solid.rea
