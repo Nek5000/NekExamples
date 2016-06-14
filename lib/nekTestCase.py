@@ -225,7 +225,7 @@ class NekTestCase(unittest.TestCase):
             bigmem     = bigmem     if bigmem     else 'false'
         )
 
-    def config_size(self, infile=None, outfile=None, lx=None, ly=None, lz=None):
+    def config_size(self, infile=None, outfile=None, lx2=None, ly2=None, lz2=None):
         from lib.nekFileConfig import config_size
         cls = self.__class__
 
@@ -237,9 +237,9 @@ class NekTestCase(unittest.TestCase):
         config_size(
             infile  = infile,
             outfile = outfile,
-            lx2 = lx,
-            ly2 = ly,
-            lz2 = lz
+            lx2 = lx2,
+            ly2 = ly2,
+            lz2 = lz2
         )
 
     def run_genmap(self, rea_file=None, tol='0.5'):
