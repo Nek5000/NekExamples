@@ -1,3 +1,3 @@
 [submodule "examples"]
 	path = examples
-	url = git@github.com:RonRahaman/nek5000_examples.git
+	url = https://github.com/RonRahaman/nek5000_examples.git
