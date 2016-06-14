@@ -15,7 +15,7 @@ class TurbChannel(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -29,7 +29,7 @@ class TurbChannel(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -43,7 +43,7 @@ class TurbChannel(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -57,7 +57,7 @@ class TurbChannel(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -95,7 +95,7 @@ class ThreeDBox(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -106,7 +106,7 @@ class ThreeDBox(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -117,7 +117,7 @@ class ThreeDBox(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -128,7 +128,7 @@ class ThreeDBox(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -157,7 +157,7 @@ class Axi(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -171,7 +171,7 @@ class Axi(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -182,7 +182,7 @@ class Axi(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -196,7 +196,7 @@ class Axi(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -227,7 +227,7 @@ class Blasius(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -244,7 +244,7 @@ class Blasius(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -258,7 +258,7 @@ class Blasius(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -275,7 +275,7 @@ class Blasius(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -310,7 +310,7 @@ class ConjHt(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -327,7 +327,7 @@ class ConjHt(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -341,7 +341,7 @@ class ConjHt(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -358,7 +358,7 @@ class ConjHt(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -388,7 +388,7 @@ class CylRestart_Ca(NekTestCase):
     @pn_pn_serial
     def test_PnPn_Serial(self):
 
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -402,7 +402,7 @@ class CylRestart_Ca(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -416,7 +416,7 @@ class CylRestart_Ca(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -430,7 +430,7 @@ class CylRestart_Ca(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -455,7 +455,7 @@ class CylRestart_Cb(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -469,7 +469,7 @@ class CylRestart_Cb(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -483,7 +483,7 @@ class CylRestart_Cb(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -497,7 +497,7 @@ class CylRestart_Cb(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -522,7 +522,7 @@ class CylRestart_Pa(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -536,7 +536,7 @@ class CylRestart_Pa(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -550,7 +550,7 @@ class CylRestart_Pa(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -564,7 +564,7 @@ class CylRestart_Pa(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -589,7 +589,7 @@ class CylRestart_Pb(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -603,7 +603,7 @@ class CylRestart_Pb(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -617,7 +617,7 @@ class CylRestart_Pb(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -631,7 +631,7 @@ class CylRestart_Pb(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -671,7 +671,7 @@ class Eddy_EddyUv(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -691,7 +691,7 @@ class Eddy_EddyUv(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -708,7 +708,7 @@ class Eddy_EddyUv(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -728,7 +728,7 @@ class Eddy_EddyUv(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -766,7 +766,7 @@ class Eddy_PsiOmega(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -780,7 +780,7 @@ class Eddy_PsiOmega(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -791,7 +791,7 @@ class Eddy_PsiOmega(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -805,7 +805,7 @@ class Eddy_PsiOmega(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -837,7 +837,7 @@ class ExtCyl(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -857,7 +857,7 @@ class ExtCyl(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -874,7 +874,7 @@ class ExtCyl(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -894,7 +894,7 @@ class ExtCyl(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -927,7 +927,7 @@ class Fs2_St1(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -937,7 +937,7 @@ class Fs2_St1(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -947,7 +947,7 @@ class Fs2_St1(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -964,7 +964,7 @@ class Fs2_St1(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -991,7 +991,7 @@ class Fs2_St2(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1001,7 +1001,7 @@ class Fs2_St2(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1011,7 +1011,7 @@ class Fs2_St2(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1028,7 +1028,7 @@ class Fs2_St2(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1053,7 +1053,7 @@ class Fs2_StdWv(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1063,7 +1063,7 @@ class Fs2_StdWv(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1073,7 +1073,7 @@ class Fs2_StdWv(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1090,7 +1090,7 @@ class Fs2_StdWv(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1120,7 +1120,7 @@ class FsHydro(NekTestCase):
     @pn_pn_serial
     def test_PnPn_Serial(self):
         # TODO: test fails in here and in legacy tests
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -1131,7 +1131,7 @@ class FsHydro(NekTestCase):
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         # TODO: test fails in here and in legacy tests
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -1141,7 +1141,7 @@ class FsHydro(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -1158,7 +1158,7 @@ class FsHydro(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=1000)
 
@@ -1187,7 +1187,7 @@ class Hemi(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -1205,7 +1205,7 @@ class Hemi(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -1220,7 +1220,7 @@ class Hemi(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -1237,7 +1237,7 @@ class Hemi(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1-2')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
         self.run_nek(step_limit=10)
 
@@ -1263,7 +1263,7 @@ class Kovasznay(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -1280,7 +1280,7 @@ class Kovasznay(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -1294,7 +1294,7 @@ class Kovasznay(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -1311,7 +1311,7 @@ class Kovasznay(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -1338,7 +1338,7 @@ class KovStState(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -1352,7 +1352,7 @@ class KovStState(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=None)
 
@@ -1384,7 +1384,7 @@ class LowMachTest(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1407,7 +1407,7 @@ class LowMachTest(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1429,7 +1429,7 @@ class LowMachTest(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1439,7 +1439,7 @@ class LowMachTest(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1478,7 +1478,7 @@ class Rayleigh_Ray1(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
@@ -1496,7 +1496,7 @@ class Rayleigh_Ray1(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
@@ -1510,7 +1510,7 @@ class Rayleigh_Ray1(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
@@ -1527,7 +1527,7 @@ class Rayleigh_Ray1(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
@@ -1555,7 +1555,7 @@ class Rayleigh_Ray2(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
@@ -1572,7 +1572,7 @@ class Rayleigh_Ray2(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
@@ -1586,7 +1586,7 @@ class Rayleigh_Ray2(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
@@ -1603,7 +1603,7 @@ class Rayleigh_Ray2(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek(rea_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
@@ -1636,7 +1636,7 @@ class Strat_P1000(NekTestCase):
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1650,7 +1650,7 @@ class Strat_P1000(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1661,7 +1661,7 @@ class Strat_P1000(NekTestCase):
 
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
@@ -1675,7 +1675,7 @@ class Strat_P1000(NekTestCase):
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
         self.build_nek()
         self.run_nek(step_limit=200)
 
