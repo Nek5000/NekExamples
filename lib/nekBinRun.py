@@ -60,15 +60,15 @@ def run_nek_script(script, rea_file, cwd, log_suffix='', mpi_procs='1'):
         print('Could not complete command: "{0}": {1}'.format(
             " ".join([script, rea_file, mpi_procs]), E))
 
-def run_nek(cwd, rea_file, ifmpi, log_suffix='', mpi_procs=1, step_limit=None, verbose=False):
+def run_nek(cwd, rea_file, ifmpi, log_suffix='', n_procs=1, step_limit=None, verbose=False):
     # Paths to executables, files
     nek5000      = os.path.join(cwd, 'nek5000')
-    logfile      = os.path.join(cwd, '{0}.log.{1}{2}'.format(rea_file, mpi_procs, log_suffix))
+    logfile      = os.path.join(cwd, '{0}.log.{1}{2}'.format(rea_file, n_procs, log_suffix))
     session_name = os.path.join(cwd, 'SESSION.NAME')
     ioinfo       = os.path.join(cwd, 'ioinfo')
     sch_file     = os.path.join(cwd, '{0}.sch'.format(rea_file))
     if ifmpi:
-        command = ['mpiexec', '-np', str(mpi_procs), nek5000]
+        command = ['mpiexec', '-np', str(n_procs), nek5000]
     else:
         command = [nek5000]
 

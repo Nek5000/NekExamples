@@ -297,7 +297,7 @@ class NekTestCase(unittest.TestCase):
             rea_file   = cls.rea_file if not rea_file else rea_file,
             ifmpi      = self.ifmpi,
             log_suffix = self.log_suffix,
-            mpi_procs  = self.mpi_procs,
+            n_procs    = self.mpi_procs,
             step_limit = step_limit,
             verbose    = self.verbose
         )
