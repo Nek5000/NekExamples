@@ -5,7 +5,7 @@
 startFrom = #restart.fld 
 stopAt = nSteps #endTime
 endTime = 1.0
-nSteps = 5000
+numSteps = 5000
 
 dt = 1e-03
 timeStepper = bdf #char #steady
