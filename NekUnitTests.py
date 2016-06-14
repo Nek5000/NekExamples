@@ -1511,7 +1511,7 @@ class Mhd_Gpf(NekTestCase):
         gmres = self.get_value_from_log('gmres: ', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=15, label='gmres')
 
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4)
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
 
         self.assertDelayedFailures()
@@ -1525,7 +1525,7 @@ class Mhd_Gpf(NekTestCase):
         gmres = self.get_value_from_log('gmres: ', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=15, label='gmres')
 
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4)
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
 
         self.assertDelayedFailures()
@@ -1579,7 +1579,7 @@ class Mhd_GpfM(NekTestCase):
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=130, label='total solver time')
 
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4)
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
 
         self.assertDelayedFailures()
@@ -1590,10 +1590,65 @@ class Mhd_GpfM(NekTestCase):
         self.build_nek(rea_file='gpf')
         self.run_nek(rea_file='gpf_m', step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=130, label='total solver time')
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
 
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4)
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+
+class Mhd_GpfB(NekTestCase):
+    example_subdir = 'mhd'
+    rea_file = 'gpf_b'
+
+    def setUp(self):
+        # Probably a cleaner way to do this...
+        # I'm just mimicking the
+        self.build_tools(['genbox', 'genmap'])
+        self.run_genbox(box_file='gpf')
+        self.run_genmap(rea_file='box')
+        self.mvn('box', 'gpf')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek(rea_file='gpf')
+        self.run_nek(rea_file='gpf_b', step_limit=None)
+
+        phrase = self.get_phrase_from_log("ABORT: MHD")
+        self.assertIsNotNullDelayed(phrase, label='ABORT: MHD')
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek(rea_file='gpf')
+        self.run_nek(rea_file='gpf_b', step_limit=None)
+
+        phrase = self.get_phrase_from_log("ABORT: MHD")
+        self.assertIsNotNullDelayed(phrase, label='ABORT: MHD')
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek(rea_file='gpf')
+        self.run_nek(rea_file='gpf_b', step_limit=None)
+
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek(rea_file='gpf')
+        self.run_nek(rea_file='gpf_b', step_limit=None)
+
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
 
         self.assertDelayedFailures()
