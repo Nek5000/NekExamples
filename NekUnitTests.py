@@ -1361,43 +1361,91 @@ class KovStState(NekTestCase):
 
         self.assertDelayedFailures()
 
-
 ####################################################################
 #  lowMach_test; lowMach_test.rea
 ####################################################################
 
-# class LowMachTest(NekTestCase):
-#     example_subdir = 'lowmach_test'
-#     rea_file       = 'lowmach_test'
-#
-#     def setUp(self):
-#         self.build_tools(['genmap'])
-#
-#         # Tweak the .rea file and run genmap
-#         from re import sub
-#         cls = self.__class__
-#         rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+'.rea')
-#         with open(rea_path, 'r') as f:
-#             lines = [sub(r'^.*IFNAV.*$', '  T T IFNAV & IFADVC', l) for l in f]
-#         with open(rea_path, 'w') as f:
-#             f.writelines(lines)
-#         self.run_genmap()
-#
-#     @pn_pn_serial
-#     def test_PnPn_Serial(self):
-#         self.config_size(lx='lx1', ly='ly1', lz='lz1')
-#         self.build_nek()
-#         self.run_nek(step_limit=200)
-#
-#         solver_time = self.get_value_from_log(label='total solver time', column=-2)
-#         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40)
-#
-#         gmres = self.get_value_from_log(label='gmres', column=-7)
-#         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=100, label='gmres')
-#
-#         # TODO: Add other values here
-#
-#         self.assertDelayedFailures()
+class LowMachTest(NekTestCase):
+    example_subdir = 'lowmach_test'
+    rea_file       = 'lowmach_test'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+
+        # Tweak the .rea file and run genmap
+        from re import sub
+        cls = self.__class__
+        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+'.rea')
+        with open(rea_path, 'r') as f:
+            lines = [sub(r'^.*IFNAV.*$', '  T T IFNAV & IFADVC', l) for l in f]
+        with open(rea_path, 'w') as f:
+            f.writelines(lines)
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40, label='total solver time')
+
+        gmres = self.get_value_from_log(label='gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=100, label='gmres')
+
+        vx = self.get_value_from_log(label='ERROR VX', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(vx, target_val=2.4635E-09, delta=1e-06, label='VX')
+
+        t = self.get_value_from_log(label='ERROR T', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(t, target_val=4.5408E-12, delta=1e-06, label='T')
+
+        qtl = self.get_value_from_log(label='ERROR QTL', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(qtl, target_val=2.6557E-06, delta=1e-06, label='QTL')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx='lx1', ly='ly1', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        gmres = self.get_value_from_log(label='gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=100, label='gmres')
+
+        vx = self.get_value_from_log(label='ERROR VX', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(vx, target_val=2.4635E-09, delta=1e-06, label='VX')
+
+        t = self.get_value_from_log(label='ERROR T', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(t, target_val=4.5408E-12, delta=1e-06, label='T')
+
+        qtl = self.get_value_from_log(label='ERROR QTL', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(qtl, target_val=2.6557E-06, delta=1e-06, label='QTL')
+
+        # TODO: Add VX, T, QTL
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        phrase = self.get_phrase_from_log("ABORT: For lowMach,")
+        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx='lx1-2', ly='ly1-2', lz='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        phrase = self.get_phrase_from_log("ABORT: For lowMach,")
+        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        self.assertDelayedFailures()
 
 
 ####################################################################
