@@ -2290,6 +2290,152 @@ class Solid(NekTestCase):
 #  shear4; shear4.rea, thin.rea
 ####################################################################
 
+class Shear4_Shear4(NekTestCase):
+    example_subdir = 'shear4'
+    rea_file = 'shear4'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+# class Shear_Thin(NekTestCase):
+#     example_subdir = 'shear4'
+#     rea_file = 'thin'
+#
+#     def setUp(self):
+#         self.build_tools(['genmap'])
+#         self.run_genmap()
+#
+#     @pn_pn_serial
+#     def test_PnPn_Serial(self):
+#         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+#         self.build_nek()
+#         self.run_nek(step_limit=10)
+#
+#         solver_time = self.get_value_from_log('total solver time', column=-2)
+#         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
+#
+#         gmres = self.get_value_from_log('gmres: ', column=-7)
+#         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+#
+#         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+#         self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
+#
+#         self.assertDelayedFailures()
+#
+#     @pn_pn_parallel
+#     def test_PnPn_Parallel(self):
+#         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+#         self.build_nek()
+#         self.run_nek(step_limit=10)
+#
+#         gmres = self.get_value_from_log('gmres: ', column=-7)
+#         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+#
+#         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+#         self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
+#
+#         self.assertDelayedFailures()
+#
+#     @pn_pn_2_serial
+#     def test_PnPn2_Serial(self):
+#         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+#         self.build_nek()
+#         self.run_nek(step_limit=10)
+#
+#         solver_time = self.get_value_from_log('total solver time', column=-2)
+#         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
+#
+#         gmres = self.get_value_from_log('gmres: ', column=-7)
+#         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+#
+#         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+#         self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
+#
+#         self.assertDelayedFailures()
+#
+#     @pn_pn_2_parallel
+#     def test_PnPn2_Parallel(self):
+#         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+#         self.build_nek()
+#         self.run_nek(step_limit=10)
+#
+#         gmres = self.get_value_from_log('gmres: ', column=-7)
+#         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+#
+#         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+#         self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
+#
+#         self.assertDelayedFailures()
+#
+#     def tearDown(self):
+#         self.move_logs()
+
 ####################################################################
 #  var_vis; var_vis.rea
 ####################################################################
