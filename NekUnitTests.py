@@ -1662,6 +1662,82 @@ class Mhd_GpfB(NekTestCase):
 #  os7000; u3_t020_n13.rea
 ####################################################################
 
+class Os7000(NekTestCase):
+    example_subdir = 'os7000'
+    rea_file = 'u3_t020_n13'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=1000)
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40, label='total solver time')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=43, label='gmres')
+
+        # TODO: This fails here and in legacy tests
+        egn = self.get_value_from_log(label='egn', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(egn, target_val=4.74494769e-05, delta=1e-06, label='egn')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=1000)
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=43, label='gmres')
+
+        # TODO: This fails here and in legacy tests
+        egn = self.get_value_from_log(label='egn', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(egn, target_val=4.74494769e-05, delta=1e-06, label='egn')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=1000)
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40, label='total solver time')
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=43, label='gmres')
+
+        egn = self.get_value_from_log(label='egn', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(egn, target_val=5.93471252E-05, delta=1e-06, label='egn')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=1000)
+
+        gmres = self.get_value_from_log(label='gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=43, label='gmres')
+
+        egn = self.get_value_from_log(label='egn', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(egn, target_val=5.93471252E-05, delta=1e-06, label='egn')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+
 ####################################################################
 #  peris; peris.rea
 ####################################################################
