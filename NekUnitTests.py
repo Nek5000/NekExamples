@@ -2439,37 +2439,95 @@ class Shear4_Thin(NekTestCase):
 ####################################################################
 #  taylor; taylor.rea
 ####################################################################
-#
-# class Taylor(NekTestCase):
-#     example_subdir = 'taylor'
-#     rea_file = 'taylor'
-#
-#     def setUp(self):
-#         self.build_tools(['genmap'])
-#         self.run_genmap()
-#
-#     @pn_pn_serial
-#     def test_PnPn_Serial(self):
-#         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-#         self.build_nek()
-#         self.run_nek(step_limit=None)
-#
-#         solver_time = self.get_value_from_log('total solver time', column=-2)
-#         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
-#
-#         gmres = self.get_value_from_log('gmres: ', column=-7)
-#         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=23., label='gmres')
-#
-#         self.assertAlmostEqualDelayed()
-#
-#
-# value = [['total solver time',0.1,40,2],
-#          ['gmres: ',0,23,7]]
-# Run("Example taylor/SRL: Serial-time/iter",log,value)
-#
-# log = "./srlLog/taylor.err.1"
-# value = [['tq',4.13037E-06,1e-06,5],
-#          ['err',2.973648E-09,1e-06,2]]
+
+class Taylor(NekTestCase):
+    example_subdir = 'taylor'
+    rea_file = 'taylor'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=23., label='gmres')
+
+        tq = self.get_value_from_log('tq', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(tq, target_val=4.13037E-06, delta=1e-06, label='tq')
+
+        err = self.get_value_from_log('err', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=2.973648E-09, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=23., label='gmres')
+
+        tq = self.get_value_from_log('tq', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(tq, target_val=4.13037E-06, delta=1e-06, label='tq')
+
+        err = self.get_value_from_log('err', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=2.973648E-09, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=14, label='gmres')
+
+        tq = self.get_value_from_log('tq', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(tq, target_val=4.10783E-06, delta=1e-06, label='tq')
+
+        err = self.get_value_from_log('err', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=2.826284E-10, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=14, label='gmres')
+
+        tq = self.get_value_from_log('tq', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(tq, target_val=4.10783E-06, delta=1e-06, label='tq')
+
+        err = self.get_value_from_log('err', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=2.826284E-10, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 
 ####################################################################
 #  var_vis; var_vis.rea
