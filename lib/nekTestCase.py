@@ -243,6 +243,7 @@ class NekTestCase(unittest.TestCase):
         )
 
     def run_genmap(self, rea_file=None, tol='0.5'):
+
         from lib.nekBinRun import run_meshgen
         cls = self.__class__
 
@@ -270,6 +271,14 @@ class NekTestCase(unittest.TestCase):
         run_meshgen(
             command = os.path.join(self.tools_bin, 'genbox'),
             stdin   = [box_file],
+            cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
+        )
+
+    def run_n2to3(self, stdin):
+        from lib.nekBinRun import run_meshgen
+        run_meshgen(
+            command = os.path.join(self.tools_bin, 'n2to3'),
+            stdin   = stdin,
             cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
         )
 
