@@ -2235,6 +2235,57 @@ class Strat_P0001(NekTestCase):
 #  solid; solid.rea
 ####################################################################
 
+class Solid(NekTestCase):
+    example_subdir = 'solid'
+    rea_file = 'solid'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        phrase = self.get_phrase_from_log(label='ABORT: ')
+        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        phrase = self.get_phrase_from_log(label='ABORT: ')
+        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        error = self.get_value_from_log('error', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(error, target_val=7.821228E-05, delta=1e-06, label='error')
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        error = self.get_value_from_log('error', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(error, target_val=7.821228E-05, delta=1e-06, label='error')
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  shear4; shear4.rea, thin.rea
 ####################################################################
