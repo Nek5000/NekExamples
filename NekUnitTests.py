@@ -2170,6 +2170,67 @@ class Strat_P1000(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+class Strat_P0001(NekTestCase):
+    example_subdir = 'strat'
+    rea_file = 're10f1000p0001'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140, label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
+
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  solid; solid.rea
 ####################################################################
