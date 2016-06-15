@@ -1876,6 +1876,81 @@ class Pipe_Helix(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+class Pipe_Stenosis(NekTestCase):
+    example_subdir = 'pipe'
+    rea_file = 'stenosis'
+
+    def setUp(self):
+        n2to3_input = [
+            'w2dcyl020a',
+            'stenosis',
+            '0                      ascii output',
+            '20                     input number of levels: (1, 2, 3,... etc.?):',
+            '0                      input z min:',
+            '10                     input z max:',
+            '1                      input gain (0=custom,1=uniform,other=geometric spacing):',
+            'n                      This is for CEM: yes or no:',
+            'v                      Enter Z (5) boundary condition (P,v,O):',
+            'O                      Enter Z (6) boundary condition (v,O):',
+            'y                      Formatted .rea file? (y or Y):',
+        ]
+        self.build_tools(['n2to3', 'genmap'])
+        self.run_n2to3(n2to3_input)
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=196., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=196., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=51., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=51., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  rayleigh; ray1.rea, ray2.rea
 ####################################################################
