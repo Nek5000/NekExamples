@@ -2546,6 +2546,7 @@ class VarVis(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
+        # TODO: This fails here and in legacy tests
         phrase = self.get_phrase_from_log('ABORT: ')
         self.assertIsNotNullDelayed(phrase, label='ABORT')
         self.assertDelayedFailures()
@@ -2556,6 +2557,7 @@ class VarVis(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
+        # TODO: This fails here and in legacy tests
         phrase = self.get_phrase_from_log('ABORT: ')
         self.assertIsNotNullDelayed(phrase, label='ABORT')
         self.assertDelayedFailures()
@@ -2591,6 +2593,82 @@ class VarVis(NekTestCase):
 ####################################################################
 #  vortex; r1854a.rea
 ####################################################################
+
+class Vortex(NekTestCase):
+    example_subdir = 'vortex'
+    rea_file = 'r1854a'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=60., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=65., label='gmres')
+
+        vmin = self.get_value_from_log('VMIN', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(vmin, target_val=-1.910312E-03, delta=1e-05, label='VMIN')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        gmres = self.get_value_from_log('gmres: ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=65., label='gmres')
+
+        vmin = self.get_value_from_log('VMIN', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(vmin, target_val=-1.910312E-03, delta=1e-05, label='VMIN')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=50., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+
+        vmin = self.get_value_from_log('VMIN', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(vmin, target_val=-1.839120E-03, delta=1e-05, label='VMIN')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=50., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+
+        vmin = self.get_value_from_log('VMIN', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(vmin, target_val=-1.839120E-03, delta=1e-05, label='VMIN')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  vortex2; v2d
