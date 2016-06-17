@@ -5,7 +5,6 @@ from lib.nekTestCase import *
 ###############################################################################
 
 class TurbChannel(NekTestCase):
-
     example_subdir  = 'turbChannel'
     rea_file        = 'turbChannel'
 
@@ -77,6 +76,23 @@ class TurbChannel(NekTestCase):
 # ###############################################################################
 #
 # # TODO: implement 2d_eigtest
+#
+# class TwoDEigtest(NekTestCase):
+#     example_subdir  = ''
+#     rea_file        = 'turbChannel'
+#
+#     def build_nek(self, rea_file=None):
+#         import shutil
+#         shutil.copytree()
+#
+#
+#     def run_nek(self, rea_file=None, step_limit=None):
+#
+#
+#     def setUp(self):
+#         self.build_tools(['genmap'])
+#         self.run_genmap(tol='0.5')
+
 #
 # ###############################################################################
 # #  3dbox: b3d.rea
@@ -2683,9 +2699,16 @@ class Vortex2(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
+        # Tweak .rea file
+        rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.rea_file+'.rea')
+        with open(rea_file_path, 'r') as f:
+            lines = [re.sub(r'(^\s+[\d.]+\s+p11.*$)', r' 8000\g<1>', l) for l in f]
+        with open(rea_file_path, 'w') as f:
+            f.writelines(lines)
+
         # Extra tweaks to the SIZE file
-        size_file = os.path.join(self.examples_root, self.__class__.example_subdir, 'SIZE')
-        with open(size_file, 'r') as f:
+        size_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, 'SIZE')
+        with open(size_file_path, 'r') as f:
             lines = f.readlines()
 
         lines = [re.sub(
@@ -2695,7 +2718,7 @@ class Vortex2(NekTestCase):
             r'( {6}parameter *)\(lxd=15,lyd=lxd,lzd=1\)( *)',
             r'\g<1>(lxd=12,lyd=lxd,lzd=1)\g<2>', l) for l in lines]
 
-        with open(size_file, 'w') as f:
+        with open(size_file_path, 'w') as f:
             f.writelines(lines)
 
     @pn_pn_serial
@@ -2771,3 +2794,6 @@ class Vortex2(NekTestCase):
         self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='torqx')
 
         self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
