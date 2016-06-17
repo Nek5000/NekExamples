@@ -2606,7 +2606,7 @@ class Vortex(NekTestCase):
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
-        self.run_nek(step_limit=None)
+        self.run_nek(step_limit=10)
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=60., label='total solver time')
@@ -2623,7 +2623,7 @@ class Vortex(NekTestCase):
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
         self.build_nek()
-        self.run_nek(step_limit=None)
+        self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres: ', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=65., label='gmres')
@@ -2637,7 +2637,7 @@ class Vortex(NekTestCase):
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
-        self.run_nek(step_limit=None)
+        self.run_nek(step_limit=10)
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=50., label='total solver time')
@@ -2654,7 +2654,7 @@ class Vortex(NekTestCase):
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
         self.build_nek()
-        self.run_nek(step_limit=None)
+        self.run_nek(step_limit=10)
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=50., label='total solver time')
@@ -2673,3 +2673,101 @@ class Vortex(NekTestCase):
 ####################################################################
 #  vortex2; v2d
 ####################################################################
+
+class Vortex2(NekTestCase):
+    example_subdir = 'vortex2'
+    rea_file = 'v2d'
+
+    def setUp(self):
+        import re
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+        # Extra tweaks to the SIZE file
+        size_file = os.path.join(self.examples_root, self.__class__.example_subdir, 'SIZE')
+        with open(size_file, 'r') as f:
+            lines = f.readlines()
+
+        lines = [re.sub(
+            r'( {6}parameter *)\(lx1=10,ly1=lx1,lz1=1,lelt=80,lelv=lelt\)( *)',
+            r'\g<1>(lx1=8,ly1=lx1,lz1=1,lelt=80,lelv=lelt)\g<2>', l) for l in lines]
+        lines = [re.sub(
+            r'( {6}parameter *)\(lxd=15,lyd=lxd,lzd=1\)( *)',
+            r'\g<1>(lxd=12,lyd=lxd,lzd=1)\g<2>', l) for l in lines]
+
+        with open(size_file, 'w') as f:
+            f.writelines(lines)
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
+
+        pres = self.get_value_from_log('PRES: ', column=-4)
+        self.assertAlmostEqualDelayed(pres, target_val=0., delta=100., label='PRES')
+
+        umin = self.get_value_from_log('umin', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.453402E-03, delta=1e-03, label='umin')
+
+        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='torqx')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        pres = self.get_value_from_log('PRES: ', column=-4)
+        self.assertAlmostEqualDelayed(pres, target_val=0., delta=100., label='PRES')
+
+        umin = self.get_value_from_log('umin', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.453402E-03, delta=1e-03, label='umin')
+
+        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='torqx')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80., label='total solver time')
+
+        upress = self.get_value_from_log('U-Press', column=-5)
+        self.assertAlmostEqualDelayed(upress, target_val=0., delta=100, label='U-Press')
+
+        umin = self.get_value_from_log('umin', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(umin, target_val=-2.448980E-03, delta=1e-03, label='umin')
+
+        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='torqx')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        upress = self.get_value_from_log('U-Press', column=-5)
+        self.assertAlmostEqualDelayed(upress, target_val=0., delta=100, label='U-Press')
+
+        umin = self.get_value_from_log('umin', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(umin, target_val=-2.448980E-03, delta=1e-03, label='umin')
+
+        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='torqx')
+
+        self.assertDelayedFailures()
