@@ -109,13 +109,13 @@ class NekTestCase(unittest.TestCase):
         self.cc             = "gcc"
         self.ifmpi          = False
         self.verbose        = False
-        self.source_root    = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..")
-        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tests", "examples")
-        self.tools_root     = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tools")
-        self.scripts_root   = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "scripts")
-        self.log_root       = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), "..", "tests", "examples", "TestLogs")
-        self.makenek        = ''
+        self.source_root    = ''
+        #self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), 'examples')
+        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), 'examples')
+        self.tools_root     = ''
         self.tools_bin      = ''
+        self.log_root       = ''
+        self.makenek        = ''
 
         # These can be overridden by method decorators (pn_pn_serial, pn_pn_parallel,
         # pn_pn_2_serial, and pn_pn_2_parallel)
@@ -129,6 +129,7 @@ class NekTestCase(unittest.TestCase):
 
         unittest.TestCase.__init__(self, *args, **kwargs)
 
+
     def assertAlmostEqualDelayed(self, test_val, target_val, delta, label):
         if abs(test_val-target_val) <= delta:
             msg = '    SUCCESS: {0}: Test value {1} equals target value {2} +/- {3}'.format(label, test_val, target_val, delta)
@@ -137,6 +138,7 @@ class NekTestCase(unittest.TestCase):
             self._delayed_failures.append(msg)
         print(msg)
 
+
     def assertIsNotNullDelayed(self, test_val, label):
         if test_val:
             msg = 'SUCCESS: Found phrase "{0}" in logfile.'.format(label)
@@ -144,6 +146,7 @@ class NekTestCase(unittest.TestCase):
             msg = 'FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
             self._delayed_failures.append(msg)
         print(msg)
+
 
     def assertDelayedFailures(self):
         if self._delayed_failures:
@@ -155,12 +158,13 @@ class NekTestCase(unittest.TestCase):
             #self._delayed_failures = []
             self.fail('\n'.join(report))
 
-    def get_opts(self):
 
+    def get_opts(self):
 
         print("Getting setup options...")
 
         # Get compilers from env, default to GNU
+        # --------------------------------------
         self.f77     = os.environ.get('F77',   self.f77)
         self.cc      = os.environ.get('CC',    self.cc)
         self.ifmpi   = os.environ.get('IFMPI', self.ifmpi)
@@ -173,44 +177,71 @@ class NekTestCase(unittest.TestCase):
         self.verbose = str(self.verbose).lower()
         self.verbose = self.verbose == 'yes' or self.verbose == 'true'
 
-        for name, val in (('F77', self.f77),
+        for varname, varval in (('F77', self.f77),
                           ('CC', self.cc),
                           ('IFMPI', str(self.ifmpi).lower()),
                           ('VERBOSE_TESTS', str(self.verbose).lower())):
-            print('    Using {0}="{1}"'.format(name, val))
+            print('    Using {0}="{1}"'.format(varname, varval))
 
-        # Get Nek5000 dirs from env, if defined
+        # SOURCE_ROOT and EXAMPLES_ROOT must be defined.  Get from env and fail early if they don't exist
+        # -----------------------------------------------------------------------------------------------
         self.source_root   = os.path.abspath(os.environ.get('SOURCE_ROOT',   self.source_root))
-        self.tools_root    = os.path.abspath(os.environ.get('TOOLS_ROOT',    self.tools_root))
-        self.scripts_root  = os.path.abspath(os.environ.get('SCRIPTS_ROOT',  self.scripts_root))
         self.examples_root = os.path.abspath(os.environ.get('EXAMPLES_ROOT', self.examples_root))
-        self.log_root      = os.path.abspath(os.environ.get('LOG_ROOT',      self.log_root))
+
+        for (varname, varval) in (('SOURCE_ROOT', self.source_root), ('EXAMPLES_ROOT', self.examples_root)):
+            if os.path.isdir(varval):
+                print('    Using {0} at {1}'.format(varname, varval))
+            else:
+                raise ValueError(
+                    'The {0} directory "{1}" does not exist. Please provide a valid directory using the env variable {0} ROOT.'.format(varname, varval))
+
+        # TOOLS_ROOT and TOOLS_BIN have default values, if not defined.  Raise error if they don't exist
+        # ------------------------------------------------------------------------------------------------
+        self.tools_root = os.environ.get('TOOLS_ROOT', self.tools_root)
+        if self.tools_root:
+            self.tools_root = os.path.abspath(self.tools_root)
+        else:
+            self.tools_root = os.path.abspath(os.path.join(self.source_root, 'tools'))
+
+        if os.path.isdir(self.tools_root):
+            print('    Using {0} at {1}'.format('TOOLS_ROOT', self.tools_root))
+        else:
+            raise ValueError(
+                'The {0} directory "{1}" does not exist. Please provide a valid directory using the env variable {0} ROOT.'.format('TOOLS_ROOT', self.tools_root))
+
+        # TOOLS_BIN has a default value.
+        # -----------------------------
+        self.tools_bin = os.environ.get('TOOLS_BIN', self.tools_bin)
+        if self.tools_bin:
+            self.tools_bin = os.path.abspath(self.tools_bin)
+        else:
+            self.tools_bin = os.path.abspath(os.path.join(self.source_root, 'bin'))
+
+        # LOG_ROOT has no default value and can remain undefined
+        # ------------------------------------------------------
+        self.log_root = os.environ.get('LOG_ROOT', '')
+        if self.log_root:
+            self.log_root = os.path.abspath(self.log_root)
+            if os.path.isdir(self.log_root):
+                print('    Using {0} at {1}'.format('LOG_ROOT', self.log_root ))
+            else:
+                raise ValueError(
+                    'The {0} directory "{1}" does not exist. Please provide a valid directory using the env variable {0} ROOT.'.format('LOG_ROOT', self.log_root))
+
+        # If TOOLS_BIN or LOG_ROOT don't exist, make them
+        #------------------------------------------------
+        for varval, varname in ((self.tools_bin, 'TOOLS_BIN'), (self.log_root,  'LOG_ROOT')):
+            if varval:
+                if os.path.isdir(varval):
+                    print('    Using {0} at {1}'.format(varname, varval))
+                else:
+                    print('    The {0} directory, "{1}" does not exist.  It will be created'.format(varname, varval))
+                    os.makedirs(varval)
+
+        # Default destination of makenek
+        # ------------------------------
         if not self.makenek:
             self.makenek   = os.path.join(self.source_root, 'core', 'makenek')
-        if not self.tools_bin:
-            self.tools_bin = os.path.join(self.tools_root, 'bin')
-
-        # Raise error if source_, tools_, tests_, examples_root don't exist
-        for val, name in ((self.source_root,   'SOURCE_ROOT'),
-                          #(cls.tests_root,    'TESTS_ROOT'),
-                          (self.scripts_root,  'SCRIPTS_ROOT'),
-                          (self.examples_root, 'EXAMPLES_ROOT'),
-                          (self.tools_root,    'TOOLS_ROOT')):
-            if os.path.isdir(val):
-                print('    Using {0} at "{1}"'.format(name, val))
-            else:
-                raise RuntimeError('The {0} directory, "{1}", does not exist. \
-                Please set ${0} to a valid path.'.format(name, val))
-
-        # Make tools_bin if it doesn't exist
-        for val, name in ((self.tools_bin, 'TOOLS_BIN'),
-                          (self.log_root,  'LOG_ROOT')):
-            if val:
-                if os.path.isdir(val):
-                    print('    Using {0} at "{1}"'.format(name, val))
-                else:
-                    print('    The {0} directory, "{1}" does not exist.  It will be created'.format(name, val))
-                    os.makedirs(val)
 
         print("Finished getting setup options!")
 
@@ -314,16 +345,24 @@ class NekTestCase(unittest.TestCase):
     def move_logs(self):
         cls = self.__class__
         if self.log_root:
+            src_dir = os.path.join(self.examples_root, cls.example_subdir)
+            dest_dir = os.path.join(self.log_root, cls.example_subdir)
+            print("Moving logs...")
+            if not os.path.isdir(dest_dir):
+                print("    Making subdirectory {0}")
+                os.makedirs(os.path.join(dest_dir))
 
-            if not os.path.isdir(os.path.join(self.log_root, cls.example_subdir)):
-                os.makedirs(os.path.join(self.log_root, cls.example_subdir))
-
-            for f in os.listdir(os.path.join(self.examples_root, cls.example_subdir)):
+            for f in os.listdir(src_dir):
                 if f == 'compiler.out' or f == 'genmap.out' or 'log' in f:
-                    os.rename(
-                        os.path.join(self.examples_root, cls.example_subdir, f),
-                        os.path.join(self.log_root, cls.example_subdir, f)
-                    )
+                    src_file = os.path.join(src_dir, f)
+                    dest_file = os.path.join(dest_dir, f)
+                    try:
+                        os.rename(src_file, dest_file)
+                    except OSError as E:
+                        # TODO: change to warnings.warning
+                        print("    Could not move {0} to {1}: {2}".format(src_file, dest_file, E))
+                    else:
+                        print("    Moved {0} to {1}".format(src_file, dest_file))
 
     def mvn(self, src_prefix, dest_prefix):
         from lib.nekBinRun import mvn

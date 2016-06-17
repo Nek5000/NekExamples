@@ -68,20 +68,18 @@ Before running the tests, these environment variables must be defined:
 
 * `SOURCE_ROOT`: points to the Nek5000 source directory (for example, 
   `$HOME/nek5000`)
-* `TOOLS_ROOT`: points to the Nek5000 tools directory (for example,
-  `$HOME/nek5000/tools`)
-* `SCRIPTS_ROOT`: points to the Nek5000 scripts directory (for example,
-  `$HOME/nek5000/bin`)
 * `EXAMPLES_ROOT`: points to the Nek5000 examples directory (for example,
   `$HOME/nek5000_examples`)
 
 These environment variables may optionally be defined:
 * `CC`: The C compiler you wish to use
 * `F77`: The Fortran 77 compiler you wish to use
-* `IFMPI=[true|false]`: If true, run tests with MPI (default: false)
+* `IFMPI=[true|false]`: If true, run tests with MPI (default: true)
 * `TOOLS_BIN`: If defined, compile tools in this directory (default: `$TOOLS_ROOT/bin`)
 * `LOG_ROOT`: If defined, move complted logs into this directory.  If not defined,
   leave logs in the example folders.  (default: undefined)
+* `TOOLS_ROOT`: points to an alternate directory for Nek5000 tools
+* `SCRIPTS_ROOT`: points to an alternate directory Nek5000 scripts directory
 
 #### unittest
 
