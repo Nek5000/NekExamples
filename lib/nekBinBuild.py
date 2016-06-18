@@ -46,12 +46,12 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
     else:
         print('Successfully compiled tools!')
 
-def build_nek(source_root, rea_file, cwd=None, f77=None, cc=None, ifmpi=None):
+def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None):
 
     print('Compiling nek5000...')
     print('    Using source directory "{0}"'.format(source_root))
     print('    Using working directory "{0}"'.format(cwd))
-    print('    Using rea_file "{0}"'.format(rea_file))
+    print('    Using .usr file "{0}"'.format(usr_file))
     print('    Using F77 "{0}"'.format(f77))
     print('    Using CC "{0}"'.format(cc))
     print('    Using IFMPI "{0}"'.format(ifmpi))
@@ -71,7 +71,7 @@ def build_nek(source_root, rea_file, cwd=None, f77=None, cc=None, ifmpi=None):
         )
 
         check_call([makenek_out, 'clean'], cwd=cwd)
-        check_call([makenek_out, rea_file], cwd=cwd)
+        check_call([makenek_out, usr_file], cwd=cwd)
 
     except:
         print('Could not compile nek5000!')

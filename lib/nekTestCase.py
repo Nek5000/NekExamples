@@ -322,7 +322,7 @@ class NekTestCase(unittest.TestCase):
 
         build_nek(
             source_root = self.source_root,
-            rea_file    = rea_file,
+            usr_file    = rea_file,
             cwd         = os.path.join(self.examples_root, cls.example_subdir),
             f77         = self.f77,
             cc          = self.cc,
