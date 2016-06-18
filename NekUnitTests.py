@@ -5,8 +5,8 @@ from lib.nekTestCase import *
 ###############################################################################
 
 class TurbChannel(NekTestCase):
-    example_subdir  = 'turbChannel'
-    rea_file        = 'turbChannel'
+    example_subdir = 'turbChannel'
+    case_name = 'turbChannel'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -75,24 +75,71 @@ class TurbChannel(NekTestCase):
 # #  2d_eigtest: eig1.rea
 # ###############################################################################
 #
-# # TODO: implement 2d_eigtest
-#
+# TODO: implement 2d_eigtest
+
 # class TwoDEigtest(NekTestCase):
-#     example_subdir  = ''
-#     rea_file        = 'turbChannel'
-#
-#     def build_nek(self, rea_file=None):
-#         import shutil
-#         shutil.copytree()
-#
-#
-#     def run_nek(self, rea_file=None, step_limit=None):
-#
+#     example_subdir  = '2d_eigtest'
+#     rea_file        = 'eig1'
 #
 #     def setUp(self):
+#         import shutil
+#         cls = self.__class__
+#
+#         # Copy Nek5000 source and replace hmholtz.f
+#         old_source_root = self.source_root
+#         new_source_root = os.path.join(self.examples_root, cls.example_subdir, 'nek5000')
+#         shutil.copytree(old_source_root, new_source_root)
+#         shutil.copy(
+#             os.path.join(self.examples_root, cls.example_subdir, 'hmholtz_b_prec.f'),
+#             os.path.join(new_source_root, 'core', 'hmholtz.f')
+#         )
+#
+#         self.source_root = new_source_root
+#
 #         self.build_tools(['genmap'])
-#         self.run_genmap(tol='0.5')
-
+#         self.run_genmap()
+#
+#     @pn_pn_serial
+#     def test_PnPn_Serial(self):
+#         cls = self.__class__
+#
+#         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+#
+#         # Run all problems
+#         for lx0 in range(1,17):
+#             size0_path = os.path.join(self.examples_root, cls.example_subdir, 'SIZE0')
+#             with open(size0_path, 'w') as f:
+#                 f.write('{0}parameter (lx0 = {1} )'.format(' '*6, lx0))
+#             for ext in ('.log', '.fld', '.his', '.sch', '.out', '.ore', '.nre'):
+#                 fpath = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+ext)
+#                 try:
+#                     os.remove(fpath)
+#                 except OSError:
+#                     pass
+#             self.build_nek()
+#             self.run_nek(log_suffix='{0}.{1}'.format(self.log_suffix, lx0), step_limit=None)
+#
+#         # Append all logs
+#         total_log = os.path.join(
+#             self.examples_root,
+#             cls.example_subdir,
+#             '{0}.log.{1}{2}.{3}'.format(self.rea_file, self.mpi_procs, self.log_suffix, 'tot'))
+#         try:
+#             os.remove(total_log)
+#         except OSError:
+#             pass
+#         with open(total_log, 'a') as f_out:
+#             for lx0 in range(1,17):
+#                 single_log = os.path.join(
+#                     self.examples_root,
+#                     cls.example_subdir,
+#                     '{0}.log.{1}{2}.{3}'.format(self.rea_file, self.mpi_procs, self.log_suffix, lx0))
+#                 with open(single_log, 'r') as f_in:
+#                     f_out.writelines(f_in)
+#
+#         for i in (2, 3, 6, 10):
+#             test_val = self.get_value_from_log(' {0}   '.format(i), column=-6, logfile=total_log)
+#             self.assertAlmostEqual()
 #
 # ###############################################################################
 # #  3dbox: b3d.rea
@@ -100,13 +147,12 @@ class TurbChannel(NekTestCase):
 
 class ThreeDBox(NekTestCase):
     example_subdir  = '3dbox'
-    rea_file        = 'b3d'
-    box_file        = 'b3d'
+    case_name        = 'b3d'
 
     def setUp(self):
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox()
-        self.mvn('box', self.__class__.rea_file)
+        self.mvn('box', self.__class__.case_name)
         self.run_genmap()
 
     @pn_pn_serial
@@ -162,13 +208,12 @@ class ThreeDBox(NekTestCase):
 
 class Axi(NekTestCase):
     example_subdir  = 'axi'
-    rea_file        = 'axi'
-    box_file        = 'axi'
+    case_name        = 'axi'
 
     def setUp(self):
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox()
-        self.mvn('box', self.__class__.rea_file)
+        self.mvn('box', self.__class__.case_name)
         self.run_genmap()
 
     @pn_pn_serial
@@ -229,13 +274,28 @@ class Axi(NekTestCase):
 # ####################################################################
 #
 # # TODO: implement benard
+# class Benard_Ray9:
+
+class Benard_RayDD(NekTestCase):
+    example_subdir = 'benard'
+    case_name       = 'ray_dd'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn2_serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+
+
 #
 # ####################################################################
 # #  blasius: blasius.rea
 # ####################################################################
 class Blasius(NekTestCase):
     example_subdir  = 'blasius'
-    rea_file        = 'blasius'
+    case_name        = 'blasius'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -318,7 +378,7 @@ class Blasius(NekTestCase):
 
 class ConjHt(NekTestCase):
     example_subdir  = 'conj_ht'
-    rea_file        = 'conj_ht'
+    case_name        = 'conj_ht'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -395,7 +455,7 @@ class ConjHt(NekTestCase):
 
 class CylRestart_Ca(NekTestCase):
     example_subdir  = 'cyl_restart'
-    rea_file        = 'ca'
+    case_name        = 'ca'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -463,7 +523,7 @@ class CylRestart_Ca(NekTestCase):
 
 class CylRestart_Cb(NekTestCase):
     example_subdir  = 'cyl_restart'
-    rea_file        = 'cb'
+    case_name        = 'cb'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -530,7 +590,7 @@ class CylRestart_Cb(NekTestCase):
 
 class CylRestart_Pa(NekTestCase):
     example_subdir  = 'cyl_restart'
-    rea_file        = 'pa'
+    case_name        = 'pa'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -597,7 +657,7 @@ class CylRestart_Pa(NekTestCase):
 
 class CylRestart_Pb(NekTestCase):
     example_subdir  = 'cyl_restart'
-    rea_file        = 'pb'
+    case_name        = 'pb'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -670,7 +730,7 @@ class CylRestart_Pb(NekTestCase):
 
 class Eddy_EddyUv(NekTestCase):
     example_subdir  = 'eddy'
-    rea_file        = 'eddy_uv'
+    case_name        = 'eddy_uv'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -678,7 +738,7 @@ class Eddy_EddyUv(NekTestCase):
         # Tweak the .rea file and run genmap
         from re import sub
         cls = self.__class__
-        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+'.rea')
+        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.case_name + '.rea')
         with open(rea_path, 'r') as f:
             lines = [sub(r'^.*DIVERGENCE$', '      0.10000E-08', l) for l in f]
         with open(rea_path, 'w') as f:
@@ -774,7 +834,7 @@ class Eddy_EddyUv(NekTestCase):
 
 class Eddy_PsiOmega(NekTestCase):
     example_subdir  = 'eddy_psi_omega'
-    rea_file        = 'psi_omega'
+    case_name        = 'psi_omega'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -845,7 +905,7 @@ class Eddy_PsiOmega(NekTestCase):
 
 class ExtCyl(NekTestCase):
     example_subdir  = 'ext_cyl'
-    rea_file        = 'ext_cyl'
+    case_name        = 'ext_cyl'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -935,7 +995,7 @@ class ExtCyl(NekTestCase):
 # TODO: fs_2/st1.rea tests fail.  They also fail legacy tests in the same ways
 class Fs2_St1(NekTestCase):
     example_subdir  = 'fs_2'
-    rea_file        = 'st1'
+    case_name        = 'st1'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -999,7 +1059,7 @@ class Fs2_St1(NekTestCase):
 # TODO: fs_2/st2.rea tests fail.  They also fail legacy tests in the same ways
 class Fs2_St2(NekTestCase):
     example_subdir  = 'fs_2'
-    rea_file        = 'st2'
+    case_name        = 'st2'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1061,7 +1121,7 @@ class Fs2_St2(NekTestCase):
 
 class Fs2_StdWv(NekTestCase):
     example_subdir  = 'fs_2'
-    rea_file        = 'std_wv'
+    case_name        = 'std_wv'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1127,7 +1187,7 @@ class Fs2_StdWv(NekTestCase):
 
 class FsHydro(NekTestCase):
     example_subdir = 'fs_hydro'
-    rea_file       = 'fs_hydro'
+    case_name       = 'fs_hydro'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1198,7 +1258,7 @@ class FsHydro(NekTestCase):
 
 class Hemi(NekTestCase):
     example_subdir = 'hemi'
-    rea_file = 'hemi'
+    case_name = 'hemi'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1277,7 +1337,7 @@ class Hemi(NekTestCase):
 
 class Kovasznay(NekTestCase):
     example_subdir = 'kovasznay'
-    rea_file = 'kov'
+    case_name = 'kov'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1355,7 +1415,7 @@ class Kovasznay(NekTestCase):
 class KovStState(NekTestCase):
     # Note: Legacy Analysis.py script only checked Pn-Pn-2 test cases
     example_subdir = 'kov_st_state'
-    rea_file = 'kov_st_stokes'
+    case_name = 'kov_st_stokes'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1395,7 +1455,7 @@ class KovStState(NekTestCase):
 
 class LowMachTest(NekTestCase):
     example_subdir = 'lowmach_test'
-    rea_file       = 'lowmach_test'
+    case_name       = 'lowmach_test'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1403,7 +1463,7 @@ class LowMachTest(NekTestCase):
         # Tweak the .rea file and run genmap
         from re import sub
         cls = self.__class__
-        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+'.rea')
+        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.case_name + '.rea')
         with open(rea_path, 'r') as f:
             lines = [sub(r'^.*IFNAV.*$', '  T T IFNAV & IFADVC', l) for l in f]
         with open(rea_path, 'w') as f:
@@ -1484,8 +1544,7 @@ class LowMachTest(NekTestCase):
 
 class Mhd_Gpf(NekTestCase):
     example_subdir = 'mhd'
-    rea_file = 'gpf'
-    box_file = 'gpf'
+    case_name = 'gpf'
 
     def setUp(self):
         self.build_tools(['genbox', 'genmap'])
@@ -1551,7 +1610,7 @@ class Mhd_Gpf(NekTestCase):
 
 class Mhd_GpfM(NekTestCase):
     example_subdir = 'mhd'
-    rea_file = 'gpf_m'
+    case_name = 'gpf_m'
 
     def setUp(self):
         import shutil
@@ -1569,7 +1628,7 @@ class Mhd_GpfM(NekTestCase):
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_m', step_limit=None)
 
         phrase = self.get_phrase_from_log(label="ERROR: FDM")
@@ -1579,7 +1638,7 @@ class Mhd_GpfM(NekTestCase):
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_m', step_limit=None)
 
         phrase = self.get_phrase_from_log(label="ERROR: FDM")
@@ -1589,7 +1648,7 @@ class Mhd_GpfM(NekTestCase):
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_m', step_limit=None)
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
@@ -1603,7 +1662,7 @@ class Mhd_GpfM(NekTestCase):
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_m', step_limit=None)
 
         rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
@@ -1617,7 +1676,7 @@ class Mhd_GpfM(NekTestCase):
 
 class Mhd_GpfB(NekTestCase):
     example_subdir = 'mhd'
-    rea_file = 'gpf_b'
+    case_name = 'gpf_b'
 
     def setUp(self):
         # Probably a cleaner way to do this...
@@ -1630,7 +1689,7 @@ class Mhd_GpfB(NekTestCase):
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_b', step_limit=None)
 
         phrase = self.get_phrase_from_log("ABORT: MHD")
@@ -1640,7 +1699,7 @@ class Mhd_GpfB(NekTestCase):
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_b', step_limit=None)
 
         phrase = self.get_phrase_from_log("ABORT: MHD")
@@ -1650,7 +1709,7 @@ class Mhd_GpfB(NekTestCase):
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_b', step_limit=None)
 
         rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
@@ -1661,7 +1720,7 @@ class Mhd_GpfB(NekTestCase):
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
-        self.build_nek(rea_file='gpf')
+        self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_b', step_limit=None)
 
         rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
@@ -1680,7 +1739,7 @@ class Mhd_GpfB(NekTestCase):
 
 class Os7000(NekTestCase):
     example_subdir = 'os7000'
-    rea_file = 'u3_t020_n13'
+    case_name = 'u3_t020_n13'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1759,7 +1818,7 @@ class Os7000(NekTestCase):
 
 class Peris(NekTestCase):
     example_subdir = 'peris'
-    rea_file = 'peris'
+    case_name = 'peris'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1819,7 +1878,7 @@ class Peris(NekTestCase):
 
 class Pipe_Helix(NekTestCase):
     example_subdir = 'pipe'
-    rea_file = 'helix'
+    case_name = 'helix'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1894,7 +1953,7 @@ class Pipe_Helix(NekTestCase):
 
 class Pipe_Stenosis(NekTestCase):
     example_subdir = 'pipe'
-    rea_file = 'stenosis'
+    case_name = 'stenosis'
 
     def setUp(self):
         n2to3_input = [
@@ -1973,7 +2032,7 @@ class Pipe_Stenosis(NekTestCase):
 
 class Rayleigh_Ray1(NekTestCase):
     example_subdir  = 'rayleigh'
-    rea_file        = 'ray1'
+    case_name        = 'ray1'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1982,7 +2041,7 @@ class Rayleigh_Ray1(NekTestCase):
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
         gmres = self.get_value_from_log(label='gmres: ', column=-7)
@@ -2000,7 +2059,7 @@ class Rayleigh_Ray1(NekTestCase):
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
         gmres = self.get_value_from_log(label='gmres: ', column=-7)
@@ -2014,7 +2073,7 @@ class Rayleigh_Ray1(NekTestCase):
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
         gmres = self.get_value_from_log(label='gmres: ', column=-6)
@@ -2031,7 +2090,7 @@ class Rayleigh_Ray1(NekTestCase):
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray1', step_limit=200)
 
         gmres = self.get_value_from_log(label='gmres: ', column=-6)
@@ -2047,8 +2106,7 @@ class Rayleigh_Ray1(NekTestCase):
 
 class Rayleigh_Ray2(NekTestCase):
     example_subdir  = 'rayleigh'
-    rea_file        = 'ray2'
-    box_file        = 'ray2'
+    case_name        = 'ray2'
 
     def setUp(self):
         self.build_tools(['genmap', 'genbox'])
@@ -2059,7 +2117,7 @@ class Rayleigh_Ray2(NekTestCase):
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
         gmres = self.get_value_from_log('gmres: ', column=-7)
@@ -2076,7 +2134,7 @@ class Rayleigh_Ray2(NekTestCase):
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
         gmres = self.get_value_from_log('gmres: ', column=-7)
@@ -2090,7 +2148,7 @@ class Rayleigh_Ray2(NekTestCase):
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
         gmres = self.get_value_from_log('gmres: ', column=-6)
@@ -2107,7 +2165,7 @@ class Rayleigh_Ray2(NekTestCase):
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
-        self.build_nek(rea_file='ray0')
+        self.build_nek(usr_file='ray0')
         self.run_nek(rea_file='ray2', step_limit=200)
 
         gmres = self.get_value_from_log('gmres: ', column=-6)
@@ -2127,7 +2185,7 @@ class Rayleigh_Ray2(NekTestCase):
 
 class Strat_P1000(NekTestCase):
     example_subdir = 'strat'
-    rea_file = 're10f1000p1000'
+    case_name = 're10f1000p1000'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2188,7 +2246,7 @@ class Strat_P1000(NekTestCase):
 
 class Strat_P0001(NekTestCase):
     example_subdir = 'strat'
-    rea_file = 're10f1000p0001'
+    case_name = 're10f1000p0001'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2253,7 +2311,7 @@ class Strat_P0001(NekTestCase):
 
 class Solid(NekTestCase):
     example_subdir = 'solid'
-    rea_file = 'solid'
+    case_name = 'solid'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2308,7 +2366,7 @@ class Solid(NekTestCase):
 
 class Shear4_Shear4(NekTestCase):
     example_subdir = 'shear4'
-    rea_file = 'shear4'
+    case_name = 'shear4'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2381,7 +2439,7 @@ class Shear4_Shear4(NekTestCase):
 
 class Shear4_Thin(NekTestCase):
     example_subdir = 'shear4'
-    rea_file = 'thin'
+    case_name = 'thin'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2458,7 +2516,7 @@ class Shear4_Thin(NekTestCase):
 
 class Taylor(NekTestCase):
     example_subdir = 'taylor'
-    rea_file = 'taylor'
+    case_name = 'taylor'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2550,7 +2608,7 @@ class Taylor(NekTestCase):
 
 class VarVis(NekTestCase):
     example_subdir = 'var_vis'
-    rea_file = 'st2'
+    case_name = 'st2'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2612,7 +2670,7 @@ class VarVis(NekTestCase):
 
 class Vortex(NekTestCase):
     example_subdir = 'vortex'
-    rea_file = 'r1854a'
+    case_name = 'r1854a'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -2692,7 +2750,7 @@ class Vortex(NekTestCase):
 
 class Vortex2(NekTestCase):
     example_subdir = 'vortex2'
-    rea_file = 'v2d'
+    case_name = 'v2d'
 
     def setUp(self):
         import re
@@ -2700,7 +2758,7 @@ class Vortex2(NekTestCase):
         self.run_genmap()
 
         # Tweak .rea file
-        rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.rea_file+'.rea')
+        rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.case_name + '.rea')
         with open(rea_file_path, 'r') as f:
             lines = [re.sub(r'(^\s+[\d.]+\s+p11.*$)', r' 8000\g<1>', l) for l in f]
         with open(rea_file_path, 'w') as f:
