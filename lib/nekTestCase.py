@@ -99,9 +99,7 @@ class NekTestCase(unittest.TestCase):
     """
     # Defined in subclasses only; declared here to make syntax checker happy
     example_subdir      = ""
-    rea_file            = ""
-    box_file            = ""
-
+    case_name            = ""
 
     def __init__(self, *args, **kwargs):
         # These can be overridden by self.get_opts
@@ -279,7 +277,7 @@ class NekTestCase(unittest.TestCase):
         cls = self.__class__
 
         if not rea_file:
-            rea_file = cls.rea_file
+            rea_file = cls.case_name
 
         run_meshgen(
             command = os.path.join(self.tools_bin, 'genmap'),
@@ -289,10 +287,8 @@ class NekTestCase(unittest.TestCase):
 
     def run_genbox(self, box_file=None):
         from lib.nekBinRun import run_meshgen
-        assert(box_file or self.__class__.box_file)
-
         if not box_file:
-            box_file = self.__class__.box_file
+            box_file = self.__class__.case_name
 
         # Fix extension, in case user doesn't provide it
         root, ext = os.path.splitext(box_file)
@@ -313,16 +309,16 @@ class NekTestCase(unittest.TestCase):
             cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
         )
 
-    def build_nek(self, rea_file=None):
+    def build_nek(self, usr_file=None):
         from lib.nekBinBuild import build_nek
         cls = self.__class__
 
-        if not rea_file:
-            rea_file = cls.rea_file
+        if not usr_file:
+            usr_file = cls.case_name
 
         build_nek(
             source_root = self.source_root,
-            usr_file    = rea_file,
+            usr_file    = usr_file,
             cwd         = os.path.join(self.examples_root, cls.example_subdir),
             f77         = self.f77,
             cc          = self.cc,
@@ -334,7 +330,7 @@ class NekTestCase(unittest.TestCase):
         cls = self.__class__
         run_nek(
             cwd        = os.path.join(self.examples_root, cls.example_subdir),
-            rea_file   = cls.rea_file if not rea_file else rea_file,
+            rea_file   = cls.case_name if not rea_file else rea_file,
             ifmpi      = self.ifmpi,
             log_suffix = self.log_suffix,
             n_procs    = self.mpi_procs,
@@ -378,7 +374,7 @@ class NekTestCase(unittest.TestCase):
             logfile = os.path.join(
                 self.examples_root,
                 cls.example_subdir,
-                '{0}.log.{1}{2}'.format(cls.rea_file, self.mpi_procs, self.log_suffix)
+                '{0}.log.{1}{2}'.format(cls.case_name, self.mpi_procs, self.log_suffix)
             )
         # Get all lines with label
         with open(logfile, 'r') as f:
@@ -400,7 +396,7 @@ class NekTestCase(unittest.TestCase):
             logfile = os.path.join(
                 self.examples_root,
                 cls.example_subdir,
-                '{0}.log.{1}{2}'.format(cls.rea_file, self.mpi_procs, self.log_suffix)
+                '{0}.log.{1}{2}'.format(cls.case_name, self.mpi_procs, self.log_suffix)
             )
 
         with open(logfile, 'r') as f:
