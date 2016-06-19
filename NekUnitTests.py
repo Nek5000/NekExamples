@@ -1,4 +1,5 @@
 from lib.nekTestCase import *
+from unittest import skip
 
 ###############################################################################
 #  turbChannel: turbChannel.rea
@@ -278,16 +279,44 @@ class Axi(NekTestCase):
 
 class Benard_RayDD(NekTestCase):
     example_subdir = 'benard'
-    case_name       = 'ray_dd'
+    case_name = 'ray_dd'
 
     def setUp(self):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @pn_pn_serial
-    def test_PnPn2_serial(self):
-        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+    @skip("PnPn test cases are not defined for benard, ray_dd.rea")
+    def test_PnPn_Serial(self):
+        pass
 
+    @skip("PnPn test cases are not defined for benard, ray_dd.rea")
+    def test_PnPn_Parallel(self):
+        pass
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek(usr_file='ray_cr')
+        self.run_nek(step_limit=None)
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=20., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=11., label='gmres')
+
+        rayleigh = self.get_value_from_log('rayleigh', column=-7)
+        self.assertAlmostEqualDelayed(rayleigh, target_val=1707.760, delta=1., label='rayleigh')
+
+        self.assertDelayedFailures()
+
+
+    @skip("PnPn-2 test case for benard, ray_dd.rea is not run in parallel")
+    def test_PnPn2_Parallel(self):
+        pass
+
+    def tearDown(self):
+        self.move_logs()
 
 #
 # ####################################################################
