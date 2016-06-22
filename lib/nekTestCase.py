@@ -220,11 +220,6 @@ class NekTestCase(unittest.TestCase):
         self.log_root = os.environ.get('LOG_ROOT', '')
         if self.log_root:
             self.log_root = os.path.abspath(self.log_root)
-            if os.path.isdir(self.log_root):
-                print('    Using {0} at {1}'.format('LOG_ROOT', self.log_root ))
-            else:
-                raise ValueError(
-                    'The {0} directory "{1}" does not exist. Please provide a valid directory using the env variable {0} ROOT.'.format('LOG_ROOT', self.log_root))
 
         # If TOOLS_BIN or LOG_ROOT don't exist, make them
         #------------------------------------------------
