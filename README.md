@@ -1,13 +1,17 @@
-NekTests
-========
-Nek unittests
--------------
+Nek5000 Examples
+================
 
-The NekUnitTests.py module contains the Nek5000 verification tests, implmented 
+This repo contains example problems for Nek5000.  It also contains test scripts
+for verifying the examples.
+
+The test scripts
+----------------
+
+The NekTests.py module contains the Nek5000 verification tests, implmented 
 using the Python standard-library unittests framework.  The modules require 
-Python 2.7 or higher.  
+Python 2.7 or higher.
 
-### Module Contents
+### Module contents
 
 The module contains a separate class for each test problem.  The classes are:
 * Axi
@@ -55,7 +59,7 @@ parallelization modes:
 * test_PnPn2_Serial
 * test_PnPn2_Parallel
 
-### Running Tests
+### Running tests
 
 The tests may be run using the Python standard-library 'unittest' module, which
 requires no additional dependencies.  The tests may also be run with any
