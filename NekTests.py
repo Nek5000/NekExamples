@@ -1483,8 +1483,8 @@ class KovStState(NekTestCase):
 ####################################################################
 
 class LowMachTest(NekTestCase):
-    example_subdir = 'lowmach_test'
-    case_name       = 'lowmach_test'
+    example_subdir = 'lowMach_test'
+    case_name       = 'lowMach_test'
 
     def setUp(self):
         self.build_tools(['genmap'])
@@ -1539,8 +1539,6 @@ class LowMachTest(NekTestCase):
 
         qtl = self.get_value_from_log(label='ERROR QTL', column=-5, row=-1)
         self.assertAlmostEqualDelayed(qtl, target_val=2.6557E-06, delta=1e-06, label='QTL')
-
-        # TODO: Add VX, T, QTL
 
         self.assertDelayedFailures()
 
