@@ -2800,10 +2800,10 @@ class Vortex2(NekTestCase):
 
         lines = [re.sub(
             r'( {6}parameter *)\(lx1=10,ly1=lx1,lz1=1,lelt=80,lelv=lelt\)( *)',
-            r'\g<1>(lx1=8,ly1=lx1,lz1=1,lelt=80,lelv=lelt)\g<2>', l) for l in lines]
+            r'\g<1>(lx1=8,ly1=lx1,lz1=1,lelt=80,lelv=lelt)\g<2>', l, flags=re.I) for l in lines]
         lines = [re.sub(
             r'( {6}parameter *)\(lxd=15,lyd=lxd,lzd=1\)( *)',
-            r'\g<1>(lxd=12,lyd=lxd,lzd=1)\g<2>', l) for l in lines]
+            r'\g<1>(lxd=12,lyd=lxd,lzd=1)\g<2>', l, flags=re.I) for l in lines]
 
         with open(size_file_path, 'w') as f:
             f.writelines(lines)

@@ -60,7 +60,7 @@ def config_basics_inc(infile, outfile, nelm):
     with open(infile, 'r') as f:
         lines = f.readlines()
 
-    lines = [re.sub(r'(.*nelm *= *)[ 0-9]+(.*)', r'\g<1>{0}\g<2>'.format(nelm), l)
+    lines = [re.sub(r'(.*nelm *= *)[ 0-9]+(.*)', r'\g<1>{0}\g<2>'.format(nelm), l, flags=re.I)
              for l in lines]
 
     with open(outfile, 'w') as f:
@@ -74,15 +74,15 @@ def config_size(infile, outfile, lx2=None, ly2=None, lz2=None):
 
     if lx2:
         lines = [re.sub(r'(^ {6}parameter *\( *lx2 *= *)\S+?( *\))',
-                        r'\g<1>{0}\g<2>'.format(lx2), l)
+                        r'\g<1>{0}\g<2>'.format(lx2), l, flags=re.I)
                  for l in lines]
     if ly2:
         lines = [re.sub(r'(^ {6}parameter *\( *ly2 *= *)\S+?( *\))',
-                        r'\g<1>{0}\g<2>'.format(ly2), l)
+                        r'\g<1>{0}\g<2>'.format(ly2), l, flags=re.I)
                  for l in lines]
     if lz2:
         lines = [re.sub(r'(^ {6}parameter *\( *lz2 *= *)\S+?( *\))',
-                        r'\g<1>{0}\g<2>'.format(lz2), l)
+                        r'\g<1>{0}\g<2>'.format(lz2), l, flags=re.I)
                  for l in lines]
 
     with open(outfile, 'w') as f:
