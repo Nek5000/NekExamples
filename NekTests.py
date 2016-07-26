@@ -325,6 +325,8 @@ class Benard_Ray9(NekTestCase):
         gmres = self.get_value_from_log('gmres: ', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=11., label='gmres')
 
+    def tearDown(self):
+        self.move_logs()
 
 class Benard_RayDD(NekTestCase):
     example_subdir = 'benard'
@@ -334,9 +336,48 @@ class Benard_RayDD(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @skip("PnPn test cases are not defined for benard, ray_dd.rea")
+    @pn_pn_serial
     def test_PnPn_Serial(self):
-        pass
+        import lib.nekBinRun, lib.nekBinBuild, shutil
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        shutil.copy(
+            os.path.join(self.examples_root, 'benard', 'ray_dd.map'),
+            os.path.join(self.examples_root, 'benard', 'benard_split', 'ray_dd.map')
+        )
+        lib.nekBinBuild.build_nek(
+            source_root = self.source_root,
+            usr_file    = 'ray_cr',
+            cwd         = os.path.join(self.examples_root, 'benard', 'benard_split'),
+            f77         = self.f77,
+            cc          = self.cc,
+            ifmpi       = str(self.ifmpi).lower(),
+        )
+        lib.nekBinRun.run_nek(
+            cwd        = os.path.join(self.examples_root, 'benard', 'benard_split'),
+            rea_file   = 'ray_dd',
+            ifmpi      = self.ifmpi,
+            log_suffix = self.log_suffix,
+            n_procs    = self.mpi_procs,
+            verbose    = self.verbose,
+            step_limit = None,
+        )
+
+        logfile=os.path.join(
+            self.examples_root,
+            'benard',
+            'benard_split',
+            '{0}.log.{1}{2}'.format('ray_dd', self.mpi_procs, self.log_suffix)
+        )
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2, logfile=logfile)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=24., label='total solver time')
+
+        gmres = self.get_value_from_log('gmres: ', column=-6, logfile=logfile)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=11., label='gmres')
+
+        rayleigh = self.get_value_from_log('rayleigh', column=-7, logfile=logfile)
+        self.assertAlmostEqualDelayed(rayleigh, target_val=1707.760, delta=1., label='rayleigh')
+
 
     @skip("PnPn test cases are not defined for benard, ray_dd.rea")
     def test_PnPn_Parallel(self):
@@ -359,14 +400,12 @@ class Benard_RayDD(NekTestCase):
 
         self.assertDelayedFailures()
 
-
     @skip("PnPn-2 test case for benard, ray_dd.rea is not run in parallel")
     def test_PnPn2_Parallel(self):
         pass
 
     def tearDown(self):
         self.move_logs()
-
 #
 # ####################################################################
 # #  blasius: blasius.rea
