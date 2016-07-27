@@ -1,5 +1,6 @@
 import os
-from subprocess import check_call, STDOUT
+import sys
+from subprocess import call, check_call, Popen, PIPE, STDOUT
 from lib.nekFileConfig import config_makenek, config_maketools, config_basics_inc
 
 def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
@@ -46,7 +47,7 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
     else:
         print('Successfully compiled tools!')
 
-def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None):
+def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None, verbose=False):
 
     print('Compiling nek5000...')
     print('    Using source directory "{0}"'.format(source_root))
@@ -58,9 +59,8 @@ def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None):
 
     makenek_in  = os.path.join(source_root, 'core', 'makenek')
     makenek_out = os.path.join(source_root, 'core', 'makenek.tests')
-
+    logfile     = os.path.join(cwd, 'compiler.out')
     try:
-
         config_makenek(
             infile      = makenek_in,
             outfile     = makenek_out,
@@ -70,8 +70,16 @@ def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None):
             ifmpi       = ifmpi
         )
 
-        check_call([makenek_out, 'clean'], cwd=cwd)
-        check_call([makenek_out, usr_file], cwd=cwd)
+        call([makenek_out, 'clean'], cwd=cwd)
+        if verbose:
+            with open(logfile, 'w') as f:
+                proc = Popen([makenek_out, usr_file], cwd=cwd, stderr=STDOUT, stdout=PIPE)
+                for line in proc.stdout:
+                    sys.stdout.write(line)
+                    f.write(line)
+        else:
+            with open(logfile, 'w') as f:
+                call([makenek_out, usr_file], cwd=cwd, stdout=f)
 
     except:
         print('Could not compile nek5000!')

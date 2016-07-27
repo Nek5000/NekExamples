@@ -317,7 +317,8 @@ class NekTestCase(unittest.TestCase):
             cwd         = os.path.join(self.examples_root, cls.example_subdir),
             f77         = self.f77,
             cc          = self.cc,
-            ifmpi       = str(self.ifmpi).lower()
+            ifmpi       = str(self.ifmpi).lower(),
+            verbose     = self.verbose
         )
 
     def run_nek(self, rea_file=None, step_limit=None):
