@@ -80,6 +80,9 @@ These environment variables may optionally be defined:
   leave logs in the example folders.  (default: undefined)
 * `TOOLS_ROOT`: points to an alternate directory for Nek5000 tools
 * `SCRIPTS_ROOT`: points to an alternate directory Nek5000 scripts directory
+* `VERBOSE_TESTS=[true|false]`: If true, display standard output from compiler and
+   Nek5000 to terminal window.  Standard output will always be recorded in
+   logfiles, whether VERBOSE_TESTS is true or false.  (default: false).
 
 #### unittest
 
