@@ -278,6 +278,7 @@ class NekTestCase(unittest.TestCase):
             command = os.path.join(self.tools_bin, 'genmap'),
             stdin   = [rea_file, tol],
             cwd     = os.path.join(self.examples_root, cls.example_subdir),
+            verbose = self.verbose
         )
 
     def run_genbox(self, box_file=None):
@@ -294,6 +295,7 @@ class NekTestCase(unittest.TestCase):
             command = os.path.join(self.tools_bin, 'genbox'),
             stdin   = [box_file],
             cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
+            verbose = self.verbose
         )
 
     def run_n2to3(self, stdin):
