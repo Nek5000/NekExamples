@@ -64,25 +64,28 @@ TwistedTrial, and others.
 
 #### Environment
 
-Before running the tests, these environment variables must be defined:
+Before running the tests, these environment variables should be defined:
 
-* `SOURCE_ROOT`: points to the Nek5000 source directory (for example, 
-  `$HOME/nek5000`)
-* `EXAMPLES_ROOT`: points to the Nek5000 examples directory (for example,
-  `$HOME/nek5000_examples`)
+* `SOURCE_ROOT`: Points to the top-level Nek5000 repository. For example, 
+  `$HOME/Nek5000`.
+* `CC`: The C compiler you wish to use (default: gcc).
+* `F77`: The Fortran 77 compiler you wish to use (default gfortran).
+* `IFMPI=[true|false]`: If true, run tests with MPI. (default: true)
+* `PARALLEL_PROCS`: The number of processes to use when running with MPI
+  (default: 2)
 
 These environment variables may optionally be defined:
-* `CC`: The C compiler you wish to use
-* `F77`: The Fortran 77 compiler you wish to use
-* `IFMPI=[true|false]`: If true, run tests with MPI (default: true)
-* `TOOLS_BIN`: If defined, compile tools in this directory (default: `$TOOLS_ROOT/bin`)
+* `EXAMPLES_ROOT`: Points to an alternate Nek5000 examples directory.  For
+   example, `$HOME/NekExamples`. (default: this directory)
+* `TOOLS_ROOT`: Points to an alternate directory for Nek5000 tools. (default:
+   $SOURCE_ROOT/tools)
+* `SCRIPTS_ROOT`: Points to an alternate directory Nek5000 scripts directory. 
+* `TOOLS_BIN`: If defined, compile tools in this directory. (default: `$TOOLS_ROOT/bin`)
 * `LOG_ROOT`: If defined, move complted logs into this directory.  If not defined,
   leave logs in the example folders.  (default: undefined)
-* `TOOLS_ROOT`: points to an alternate directory for Nek5000 tools
-* `SCRIPTS_ROOT`: points to an alternate directory Nek5000 scripts directory
 * `VERBOSE_TESTS=[true|false]`: If true, display standard output from compiler and
    Nek5000 to terminal window.  Standard output will always be recorded in
-   logfiles, whether VERBOSE_TESTS is true or false.  (default: false).
+   logfiles, whether VERBOSE_TESTS is true or false.  (default: false)
 
 #### unittest
 
