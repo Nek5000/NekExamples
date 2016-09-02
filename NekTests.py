@@ -1273,7 +1273,6 @@ class Fs2_St1(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1284,7 +1283,6 @@ class Fs2_St1(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1295,7 +1293,6 @@ class Fs2_St1(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -1313,7 +1310,6 @@ class Fs2_St1(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -1340,7 +1336,6 @@ class Fs2_St2(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1351,7 +1346,6 @@ class Fs2_St2(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1362,7 +1356,6 @@ class Fs2_St2(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -1380,7 +1373,6 @@ class Fs2_St2(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -1406,7 +1398,6 @@ class Fs2_StdWv(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1417,7 +1408,6 @@ class Fs2_StdWv(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1428,7 +1418,6 @@ class Fs2_StdWv(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -1446,7 +1435,6 @@ class Fs2_StdWv(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -1476,7 +1464,6 @@ class FsHydro(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1487,7 +1474,6 @@ class FsHydro(NekTestCase):
         self.assertIsNotNullDelayed(phrase, 'ABORT')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1547,7 +1533,6 @@ class Hemi(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1565,7 +1550,6 @@ class Hemi(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2023,7 +2007,6 @@ class Os7000(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2041,7 +2024,6 @@ class Os7000(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2102,7 +2084,6 @@ class Peris(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2113,7 +2094,6 @@ class Peris(NekTestCase):
         self.assertIsNotNullDelayed(phrase, label='ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2164,7 +2144,6 @@ class Pipe_Helix(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2182,7 +2161,6 @@ class Pipe_Helix(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2350,7 +2328,6 @@ class Rayleigh_Ray1(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -2368,7 +2345,6 @@ class Rayleigh_Ray1(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -2396,7 +2372,6 @@ class Rayleigh_Ray2(NekTestCase):
         self.run_genmap(rea_file='box')
         self.mvn('box', 'ray2')
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2414,7 +2389,6 @@ class Rayleigh_Ray2(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2429,7 +2403,6 @@ class Rayleigh_Ray2(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_serial
     def test_PnPn2_Serial(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -2447,7 +2420,6 @@ class Rayleigh_Ray2(NekTestCase):
 
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
@@ -2603,7 +2575,6 @@ class Solid(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2614,7 +2585,6 @@ class Solid(NekTestCase):
         self.assertIsNotNullDelayed(phrase, label='ABORT: ')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2902,7 +2872,6 @@ class VarVis(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-    @unittest.expectedFailure
     @pn_pn_serial
     def test_PnPn_Serial(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -2914,7 +2883,6 @@ class VarVis(NekTestCase):
         self.assertIsNotNullDelayed(phrase, label='ABORT')
         self.assertDelayedFailures()
 
-    @unittest.expectedFailure
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
