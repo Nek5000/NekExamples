@@ -1279,8 +1279,15 @@ class Fs2_St1(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=200)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=18.3, label='total solver time')
+
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -1289,8 +1296,12 @@ class Fs2_St1(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=200)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
@@ -1327,7 +1338,6 @@ class Fs2_St1(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-
 class Fs2_St2(NekTestCase):
     example_subdir  = 'fs_2'
     case_name        = 'st2'
@@ -1342,8 +1352,15 @@ class Fs2_St2(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=200)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=6.376171E-01, delta=1e-06, label='amp')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=23, label='total solver time')
+
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -1352,8 +1369,12 @@ class Fs2_St2(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=200)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=6.376171E-01, delta=1e-06, label='amp')
+
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
@@ -1404,8 +1425,15 @@ class Fs2_StdWv(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=200)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=1.403287E-01, delta=1e-06, label='amp')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=21., label='total solver time')
+
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -1414,8 +1442,12 @@ class Fs2_StdWv(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=200)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT: ')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=1.403287E-01, delta=1e-06, label='amp')
+
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
@@ -1470,8 +1502,15 @@ class FsHydro(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=1000)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT')
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200, label='total solver time')
+
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=108., label='gmres')
+
+        amp = self.get_value_from_log('AMP', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=-6.4616452E-05, delta=2e-03, label='AMP')
+
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -1480,8 +1519,12 @@ class FsHydro(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=1000)
 
-        phrase = self.get_phrase_from_log("ABORT: ")
-        self.assertIsNotNullDelayed(phrase, 'ABORT')
+        gmres = self.get_value_from_log('gmres ', column=-7,)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=108., label='gmres')
+
+        amp = self.get_value_from_log('AMP', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(amp, target_val=-6.4616452E-05, delta=2e-03, label='AMP')
+
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
@@ -2090,8 +2133,12 @@ class Peris(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        phrase = self.get_phrase_from_log('ABORT: ')
-        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=13., label='total solver time')
+
+        gmres = self.get_value_from_log(label='gmres ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -2100,8 +2147,9 @@ class Peris(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        phrase = self.get_phrase_from_log('ABORT: ')
-        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        gmres = self.get_value_from_log(label='gmres ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
@@ -2581,8 +2629,8 @@ class Solid(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        phrase = self.get_phrase_from_log(label='ABORT: ')
-        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        error = self.get_value_from_log('error', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(error, target_val=7.821228E-05, delta=1e-06, label='error')
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -2591,8 +2639,8 @@ class Solid(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        phrase = self.get_phrase_from_log(label='ABORT: ')
-        self.assertIsNotNullDelayed(phrase, label='ABORT: ')
+        error = self.get_value_from_log('error', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(error, target_val=7.821228E-05, delta=1e-06, label='error')
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
@@ -2878,9 +2926,12 @@ class VarVis(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        # TODO: This fails here and in legacy tests
-        phrase = self.get_phrase_from_log('ABORT: ')
-        self.assertIsNotNullDelayed(phrase, label='ABORT')
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=30, label='total solver time')
+
+        gmres = self.get_value_from_log('gmres ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=19, label='gmres')
+
         self.assertDelayedFailures()
 
     @pn_pn_parallel
@@ -2889,9 +2940,9 @@ class VarVis(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        # TODO: This fails here and in legacy tests
-        phrase = self.get_phrase_from_log('ABORT: ')
-        self.assertIsNotNullDelayed(phrase, label='ABORT')
+        gmres = self.get_value_from_log('gmres ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=19, label='gmres')
+
         self.assertDelayedFailures()
 
     @pn_pn_2_serial
