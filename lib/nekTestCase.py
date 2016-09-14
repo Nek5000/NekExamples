@@ -1,6 +1,7 @@
 import unittest
 import inspect
 import os
+import re
 from functools import wraps
 
 ###############################################################################
@@ -383,7 +384,7 @@ class NekTestCase(unittest.TestCase):
             )
         # Get all lines with label
         with open(logfile, 'r') as f:
-            line_list = [l for l in f if label in l]
+            line_list = [l for l in f if re.search(r'\b{0}\b'.format(label), l)]
         if not line_list:
             raise ValueError("Could not find label \"{0}\" in logfile \"{1}\".  The run may have failed.".format(label, logfile))
         try:
@@ -405,8 +406,7 @@ class NekTestCase(unittest.TestCase):
             )
 
         with open(logfile, 'r') as f:
-            line_list = [l for l in f if label in l]
-
+            line_list = [l for l in f if re.search(r'\b{0}\b'.format(label), l)]
         try:
             line = line_list[row]
         except IndexError:
