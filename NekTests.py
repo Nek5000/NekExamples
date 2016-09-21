@@ -744,8 +744,8 @@ class CylRestart_Ca(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -758,8 +758,8 @@ class CylRestart_Ca(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -772,8 +772,8 @@ class CylRestart_Ca(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -786,8 +786,8 @@ class CylRestart_Ca(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -811,8 +811,8 @@ class CylRestart_Cb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -825,8 +825,8 @@ class CylRestart_Cb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -839,8 +839,8 @@ class CylRestart_Cb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -853,8 +853,8 @@ class CylRestart_Cb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -878,8 +878,8 @@ class CylRestart_Pa(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -892,8 +892,8 @@ class CylRestart_Pa(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -906,8 +906,8 @@ class CylRestart_Pa(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -920,8 +920,8 @@ class CylRestart_Pa(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=29., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -945,8 +945,8 @@ class CylRestart_Pb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -959,8 +959,8 @@ class CylRestart_Pb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=77., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.37986119139E-03, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -973,8 +973,8 @@ class CylRestart_Pb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -987,8 +987,8 @@ class CylRestart_Pb(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=28., label='gmres')
 
-        test_val = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='dragy')
+        test_val = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(test_val, target_val=5.09547531705E-02, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -1193,11 +1193,11 @@ class ExtCyl(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
-        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='dragx')
+        dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='1dragx')
 
-        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='dragy')
+        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='1dragy')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=400, label='total solver time')
@@ -1213,11 +1213,11 @@ class ExtCyl(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-7,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
-        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='dragx')
+        dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='1dragx')
 
-        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='dragy')
+        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -1230,11 +1230,11 @@ class ExtCyl(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
-        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='dragx')
+        dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='1dragx')
 
-        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='dragy')
+        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='1dragy')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time')
@@ -1250,11 +1250,11 @@ class ExtCyl(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
-        dragx = self.get_value_from_log('dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='dragx')
+        dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='1dragx')
 
-        dragy = self.get_value_from_log('dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='dragy')
+        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='1dragy')
 
         self.assertDelayedFailures()
 
@@ -3103,8 +3103,8 @@ class Vortex2(NekTestCase):
         umin = self.get_value_from_log('umin', column=-2, row=-1)
         self.assertAlmostEqualDelayed(umin, target_val=-1.453402E-03, delta=1e-03, label='umin')
 
-        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='torqx')
+        torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='1torqx')
 
         self.assertDelayedFailures()
 
@@ -3120,8 +3120,8 @@ class Vortex2(NekTestCase):
         umin = self.get_value_from_log('umin', column=-2, row=-1)
         self.assertAlmostEqualDelayed(umin, target_val=-1.453402E-03, delta=1e-03, label='umin')
 
-        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='torqx')
+        torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='1torqx')
 
         self.assertDelayedFailures()
 
@@ -3140,8 +3140,8 @@ class Vortex2(NekTestCase):
         umin = self.get_value_from_log('umin', column=-2, row=-1)
         self.assertAlmostEqualDelayed(umin, target_val=-2.448980E-03, delta=1e-03, label='umin')
 
-        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='torqx')
+        torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='1torqx')
 
         self.assertDelayedFailures()
 
@@ -3157,8 +3157,8 @@ class Vortex2(NekTestCase):
         umin = self.get_value_from_log('umin', column=-2, row=-1)
         self.assertAlmostEqualDelayed(umin, target_val=-2.448980E-03, delta=1e-03, label='umin')
 
-        torqx = self.get_value_from_log('torqx', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='torqx')
+        torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='1torqx')
 
         self.assertDelayedFailures()
 
