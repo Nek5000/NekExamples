@@ -107,16 +107,16 @@ class NekTestCase(unittest.TestCase):
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
-        self.verbose        = False
+        self.verbose        = True
         self.source_root    = ''
         #self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), 'examples')
-        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), 'examples')
+        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)))
         self.tools_root     = ''
         self.tools_bin      = ''
         self.log_root       = ''
         self.makenek        = ''
         self.serial_procs   = 1
-        self.parallel_procs = 2
+        self.parallel_procs = 4
 
         # These are overridden by method decorators (pn_pn_serial, pn_pn_parallel,
         # pn_pn_2_serial, and pn_pn_2_parallel)
