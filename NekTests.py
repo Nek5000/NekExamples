@@ -3164,3 +3164,29 @@ class Vortex2(NekTestCase):
 
     def tearDown(self):
         self.move_logs()
+
+####################################################################
+#  incl_def
+####################################################################
+
+class InclDef(NekTestCase):
+    example_subdir = 'incl_def'
+    case_name = 'incl_def'
+
+    def setUp(self):
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        phrase = self.get_phrase_from_log('All include files added with success')
+        self.assertIsNotNullDelayed(phrase, label='All include files added with success')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
