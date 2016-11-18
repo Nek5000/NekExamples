@@ -123,7 +123,8 @@ class NekTestCase(unittest.TestCase):
         self.log_suffix = ""
         self.mpi_procs  = None
 
-        # Empy list of delayed fails
+        # Empy list of delayed warnings and fails
+        self._delayed_warnings = []
         self._delayed_failures = []
 
         self.get_opts()
@@ -131,32 +132,46 @@ class NekTestCase(unittest.TestCase):
         unittest.TestCase.__init__(self, *args, **kwargs)
 
 
-    def assertAlmostEqualDelayed(self, test_val, target_val, delta, label):
+    def assertAlmostEqualDelayed(self, test_val, target_val, delta, label, warn=False):
         if abs(test_val-target_val) <= delta:
             msg = '    SUCCESS: {0}: Test value {1} equals target value {2} +/- {3}'.format(label, test_val, target_val, delta)
         else:
-            msg = '    FAILURE: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
-            self._delayed_failures.append(msg)
+            if warn:
+                msg = '    WARNING: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+                self._delayed_warnings.append(msg)
+            else:
+                msg = '    FAILURE: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+                self._delayed_failures.append(msg)
         print(msg)
 
 
-    def assertIsNotNullDelayed(self, test_val, label):
+    def assertIsNotNullDelayed(self, test_val, label, warn=False):
         if test_val:
-            msg = 'SUCCESS: Found phrase "{0}" in logfile.'.format(label)
+            msg = '    SUCCESS: Found phrase "{0}" in logfile.'.format(label)
         else:
-            msg = 'FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
-            self._delayed_failures.append(msg)
+            if warn:
+                msg = '    WARNING: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
+                self._delayed_warnings.append(msg)
+            else:
+                msg = '    FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
+                self._delayed_failures.append(msg)
         print(msg)
 
 
     def assertDelayedFailures(self):
+
         if self._delayed_failures:
-            report = [
-                '\n\nFailed assertions:{0}\n'.format(len(self._delayed_failures))
-            ]
+            report = []
+
+            if self._delayed_warnings:
+                report.append('\n\nWarnings: {0}\n'.format(len(self._delayed_warnings)))
+                for i, warning in enumerate(self._delayed_warnings, start=1):
+                    report.append('{0}: {1}'.format(i, warning))
+
+            report.append('\n\nFailed assertions: {0}\n'.format(len(self._delayed_failures)))
             for i,failure in enumerate(self._delayed_failures, start=1):
                 report.append('{0}: {1}'.format(i, failure))
-            #self._delayed_failures = []
+
             self.fail('\n'.join(report))
 
 
