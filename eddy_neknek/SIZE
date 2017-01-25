@@ -93,25 +93,3 @@ c Multimesh parameters
       parameter (nfldmax=4)
       parameter (lpratio=1)   !  upper limit for ratio of processors between sessions
       parameter (nmaxl=lx1*lz1*lelt, nmaxcom=nmaxl*lpratio)
-
-c automatically added by makenek
-      parameter(lxo   = lx1) ! max output grid size (lxo>=lx1)
-
-c automatically added by makenek
-      parameter(lpart = 1  ) ! max number of particles
-
-c automatically added by makenek
-      integer ax1,ay1,az1,ax2,ay2,az2
-      parameter (ax1=lx1,ay1=ly1,az1=lz1,ax2=lx2,ay2=ly2,az2=lz2) ! running averages
-
-c automatically added by makenek
-      integer cv_maxl
-      parameter(cv_maxl = 20  ) ! Size of Krylov Space
-
-c automatically added by makenek
-      real cv_delt
-      parameter(cv_delt = 0.1 ) ! linear convergence factor 
-
-c automatically added by makenek
-      real cv_sigs
-      parameter(cv_sigs = 0.01) ! Jacobian DQ perturbation scaling factor
