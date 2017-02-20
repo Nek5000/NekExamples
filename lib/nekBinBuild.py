@@ -67,8 +67,8 @@ def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None, ve
     print('    Using CC "{0}"'.format(cc))
     print('    Using IFMPI "{0}"'.format(ifmpi))
 
-    makenek_in  = os.path.join(source_root, 'core', 'makenek')
-    makenek_out = os.path.join(source_root, 'core', 'makenek.tests')
+    makenek_in  = os.path.join(source_root, 'bin', 'makenek')
+    makenek_out = os.path.join(source_root, 'bin', 'makenek.tests')
     logfile     = os.path.join(cwd, 'compiler.out')
     try:
         config_makenek(
