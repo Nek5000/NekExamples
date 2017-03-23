@@ -107,7 +107,7 @@ class Compare_Pipe_Stenosis(AccTestCase):
     example_subdir = 'pipe'
     case_name = 'stenosis'
     step_limit = 10
-    log_label = 'err2'
+    log_label = 'DIV'
 
     def setUp(self):
         n2to3_input = [
