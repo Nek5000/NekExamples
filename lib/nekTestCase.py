@@ -329,7 +329,7 @@ class NekTestCase(unittest.TestCase):
             cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
         )
 
-    def build_nek(self, usr_file=None):
+    def build_nek(self, usr_file=None, pplist=None):
         from lib.nekBinBuild import build_nek
         cls = self.__class__
 
@@ -343,7 +343,8 @@ class NekTestCase(unittest.TestCase):
             f77         = self.f77,
             cc          = self.cc,
             ifmpi       = str(self.ifmpi).lower(),
-            verbose     = self.verbose
+            verbose     = self.verbose,
+            pplist      = pplist,
         )
 
     def run_nek(self, rea_file=None, step_limit=None):
