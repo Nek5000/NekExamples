@@ -1100,6 +1100,58 @@ class Eddy_EddyUv(NekTestCase):
 # ####################################################################
 #
 # # TODO: implment eddy_neknek tests
+
+class Eddy_Neknek(NekTestCase):
+    example_subdir  = 'eddy_neknek'
+    case_name       = 'eddy_uv'
+
+    def setUp(self):
+        cls = self.__class__
+
+        self.build_tools(['genmap'])
+        self.run_genmap(os.path.join(self.examples_root, cls.example_subdir, 'inside'))
+        self.run_genmap(os.path.join(self.examples_root, cls.example_subdir, 'outside'))
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        from lib.nekBinRun import run_neknek
+
+        cls = self.__class__
+        cwd = os.path.join(self.examples_root, cls.example_subdir)
+
+        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
+        self.build_nek(pplist="NEKNEK")
+        run_neknek(
+            cwd = cwd,
+            inside = 'inside',
+            outside = 'outside',
+            np_inside = 2,
+            np_outside = 4,
+            log_suffix = self.log_suffix,
+            verbose = self.verbose,
+        )
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        from lib.nekBinRun import run_neknek
+
+        cls = self.__class__
+        cwd = os.path.join(self.examples_root, cls.example_subdir)
+
+        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1')
+        self.build_nek(pplist="NEKNEK")
+        run_neknek(
+            cwd = cwd,
+            inside = 'inside',
+            outside = 'outside',
+            np_inside = 2,
+            np_outside = 4,
+            log_suffix = self.log_suffix,
+            verbose = self.verbose,
+        )
+
+    def tearDown(self):
+        self.move_logs()
 #
 # ####################################################################
 # #  eddy_psi_omega; psi_omega.rea
