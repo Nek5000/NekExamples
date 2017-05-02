@@ -15,7 +15,8 @@ def config_makenek(infile, outfile, source_root=None, f77=None, cc=None, ifmpi=N
         lines = [re.sub(r'^CC=\"+.+?\"+', r'CC="{0}"'.format(cc), l)
                  for l in lines]
     if ifmpi:
-        lines = [re.sub(r'^#*IFMPI=\"+.+?\"+', r'IFMPI="{0}"'.format(ifmpi), l)
+        ifmpi = int(ifmpi == 'true')
+        lines = [re.sub(r'^#*MPI=\s*[01]', r'MPI={0}'.format(ifmpi), l)
                  for l in lines]
     if g:
         lines = [re.sub(r'^#*G=\"+.+?\"+', r'G="{0}"'.format(g), l)
