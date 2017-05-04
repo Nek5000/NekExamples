@@ -1284,7 +1284,7 @@ class ExtCyl(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='1dragx')
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2139227E+00, delta=1e-05, label='1dragx')
 
         dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
         self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='1dragy')
@@ -1304,7 +1304,7 @@ class ExtCyl(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='1dragx')
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2139227E+00, delta=1e-05, label='1dragx')
 
         dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
         self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='1dragy')
