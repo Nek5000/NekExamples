@@ -17,10 +17,8 @@ The module contains a separate class for each test problem.  The classes are:
 * Benard_RayNN
 * Blasius
 * ConjHt
-* CylRestart_Ca
-* CylRestart_Cb
-* CylRestart_Pa
-* CylRestart_Pb
+* CylRestart_C
+* CylRestart_P
 * Eddy_EddyUv
 * Eddy_PsiOmega
 * ExtCyl

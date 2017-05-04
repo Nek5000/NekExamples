@@ -26,9 +26,9 @@ c*********************************************************************
       character*80 s80(3)
 
       call blank(s80,3*80)
-      s80(1) ='rs8pa0.f00004'
-      s80(2) ='rs8pa0.f00005'
-      s80(3) ='rs8pa0.f00006'
+      s80(1) ='rs6pa0.f00004'
+      s80(2) ='rs6pa0.f00005'
+      s80(3) ='rs6pa0.f00006'
 
       call full_restart(s80,3)  ! Will overload 4-6 onto steps 0-2
 
