@@ -7,57 +7,6 @@ The NekTests.py module contains the Nek5000 verification tests, implemented
 using the Python standard-library unittest framework.  NekTests requires
 Python 2.7 or higher.  
 
-### Module Contents
-
-The module contains a separate class for each test problem.  The classes are:
-* Axi
-* Benard_Ray9
-* Benard_RayDD
-* Benard_RayDN
-* Benard_RayNN
-* Blasius
-* ConjHt
-* CylRestart_C
-* CylRestart_P
-* Eddy_EddyUv
-* Eddy_PsiOmega
-* ExtCyl
-* Fs2_St1
-* Fs2_St2
-* Fs2_StdWv
-* FsHydro
-* Hemi
-* Kovasznay
-* KovStState
-* LowMachTest
-* Mhd_Gpf
-* Mhd_GpfB
-* Mhd_GpfM
-* Os7000
-* Peris
-* Pipe_Helix
-* Pipe_Stenosis
-* Rayleigh_Ray1
-* Rayleigh_Ray2
-* Shear4_Shear4
-* Shear4_Thin
-* Solid
-* Strat_P0001
-* Strat_P1000
-* Taylor
-* ThreeDBox
-* TurbChannel
-* VarVis
-* Vortex
-* Vortex2
-
-Each class also contains four methods for different formulations and
-parallelization modes:
-* test_PnPn_Serial
-* test_PnPn_Parallel
-* test_PnPn2_Serial
-* test_PnPn2_Parallel
-
 ### Running Tests
 
 The tests may be run using the Python standard-library 'unittest' module, which
