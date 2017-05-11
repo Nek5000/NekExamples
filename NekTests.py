@@ -1570,7 +1570,7 @@ class Peris(NekTestCase):
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=13., label='total solver time', warn=True)
 
         gmres = self.get_value_from_log(label='gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         self.assertDelayedFailures()
 
@@ -1581,7 +1581,7 @@ class Peris(NekTestCase):
         self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log(label='gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         self.assertDelayedFailures()
 
