@@ -289,7 +289,7 @@ class NekTestCase(unittest.TestCase):
             lz2 = lz2
         )
 
-    def run_genmap(self, rea_file=None, tol='0.5'):
+    def run_genmap(self, rea_file=None, tol='0.2'):
 
         from lib.nekBinRun import run_meshgen
         cls = self.__class__
