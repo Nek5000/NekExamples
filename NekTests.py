@@ -730,13 +730,7 @@ class ExtCyl(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
         dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='1dragx')
-
-        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='1dragy')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=400, label='total solver time', warn=True)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=5E-05, label='1dragx')
 
         self.assertDelayedFailures()
 
@@ -750,10 +744,7 @@ class ExtCyl(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=85., label='gmres')
 
         dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=1E-06, label='1dragx')
-
-        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=1.3040301E-07, delta=1E-06, label='1dragy')
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2138790E+00, delta=5E-05, label='1dragx')
 
         self.assertDelayedFailures()
 
@@ -767,13 +758,7 @@ class ExtCyl(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='1dragx')
-
-        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='1dragy')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=380, label='total solver time', warn=True)
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2139229E+00, delta=5e-05, label='1dragx')
 
         self.assertDelayedFailures()
 
@@ -787,10 +772,7 @@ class ExtCyl(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         dragx = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragx, target_val=1.2138878E+00, delta=1e-05, label='1dragx')
-
-        dragy = self.get_value_from_log('1dragy', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(dragy, target_val=3.2334222E-07, delta=1e-06, label='1dragy')
+        self.assertAlmostEqualDelayed(dragx, target_val=1.2139229E+00, delta=5e-05, label='1dragx')
 
         self.assertDelayedFailures()
 
