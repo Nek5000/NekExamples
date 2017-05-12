@@ -1,1 +1,2 @@
-      parameter (lx0= 15 )
+      integer lx0
+      parameter (lx0 = 15 )
