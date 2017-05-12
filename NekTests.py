@@ -1744,7 +1744,7 @@ class Rayleigh_Ray1(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=32., label='gmres')
 
         umax = self.get_value_from_log(label='umax', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(umax, target_val=2.792052E-03, delta=2e-05, label='umax')
+        self.assertAlmostEqualDelayed(umax, target_val=0.00377251, delta=2e-05, label='umax')
 
         solver_time = self.get_value_from_log(label='total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time', warn=True)
@@ -1762,7 +1762,7 @@ class Rayleigh_Ray1(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=32., label='gmres')
 
         umax = self.get_value_from_log(label='umax', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(umax, target_val=2.792052E-03, delta=2e-05, label='umax')
+        self.assertAlmostEqualDelayed(umax, target_val=0.00377251, delta=2e-05, label='umax')
 
         self.assertDelayedFailures()
 
