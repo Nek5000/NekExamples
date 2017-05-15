@@ -1,6 +1,7 @@
 import unittest
 import inspect
 import os
+import re
 from functools import wraps
 
 ###############################################################################
@@ -106,23 +107,24 @@ class NekTestCase(unittest.TestCase):
         self.f77            = "gfortran"
         self.cc             = "gcc"
         self.ifmpi          = False
-        self.verbose        = False
+        self.verbose        = True
         self.source_root    = ''
         #self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), 'examples')
-        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)), 'examples')
+        self.examples_root  = os.path.join(os.path.dirname(inspect.getabsfile(self.__class__)))
         self.tools_root     = ''
         self.tools_bin      = ''
         self.log_root       = ''
         self.makenek        = ''
         self.serial_procs   = 1
-        self.parallel_procs = 2
+        self.parallel_procs = 4
 
         # These are overridden by method decorators (pn_pn_serial, pn_pn_parallel,
         # pn_pn_2_serial, and pn_pn_2_parallel)
         self.log_suffix = ""
         self.mpi_procs  = None
 
-        # Empy list of delayed fails
+        # Empy list of delayed warnings and fails
+        self._delayed_warnings = []
         self._delayed_failures = []
 
         self.get_opts()
@@ -130,32 +132,46 @@ class NekTestCase(unittest.TestCase):
         unittest.TestCase.__init__(self, *args, **kwargs)
 
 
-    def assertAlmostEqualDelayed(self, test_val, target_val, delta, label):
+    def assertAlmostEqualDelayed(self, test_val, target_val, delta, label, warn=False):
         if abs(test_val-target_val) <= delta:
             msg = '    SUCCESS: {0}: Test value {1} equals target value {2} +/- {3}'.format(label, test_val, target_val, delta)
         else:
-            msg = '    FAILURE: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
-            self._delayed_failures.append(msg)
+            if warn:
+                msg = '    WARNING: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+                self._delayed_warnings.append(msg)
+            else:
+                msg = '    FAILURE: {0}: Test value {1} exceeds target value {2} +/- {3}'.format(label, test_val, target_val, delta)
+                self._delayed_failures.append(msg)
         print(msg)
 
 
-    def assertIsNotNullDelayed(self, test_val, label):
+    def assertIsNotNullDelayed(self, test_val, label, warn=False):
         if test_val:
-            msg = 'SUCCESS: Found phrase "{0}" in logfile.'.format(label)
+            msg = '    SUCCESS: Found phrase "{0}" in logfile.'.format(label)
         else:
-            msg = 'FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
-            self._delayed_failures.append(msg)
+            if warn:
+                msg = '    WARNING: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
+                self._delayed_warnings.append(msg)
+            else:
+                msg = '    FAILURE: Unexpectedly did not find phrase "{0}" in logfile'.format(label)
+                self._delayed_failures.append(msg)
         print(msg)
 
 
     def assertDelayedFailures(self):
+
         if self._delayed_failures:
-            report = [
-                '\n\nFailed assertions:{0}\n'.format(len(self._delayed_failures))
-            ]
+            report = []
+
+            if self._delayed_warnings:
+                report.append('\n\nWarnings: {0}\n'.format(len(self._delayed_warnings)))
+                for i, warning in enumerate(self._delayed_warnings, start=1):
+                    report.append('{0}: {1}'.format(i, warning))
+
+            report.append('\n\nFailed assertions: {0}\n'.format(len(self._delayed_failures)))
             for i,failure in enumerate(self._delayed_failures, start=1):
                 report.append('{0}: {1}'.format(i, failure))
-            #self._delayed_failures = []
+
             self.fail('\n'.join(report))
 
 
@@ -240,7 +256,7 @@ class NekTestCase(unittest.TestCase):
         # Default destination of makenek
         # ------------------------------
         if not self.makenek:
-            self.makenek   = os.path.join(self.source_root, 'core', 'makenek')
+            self.makenek   = os.path.join(self.source_root, 'bin', 'makenek')
 
         print("Finished getting setup options!")
 
@@ -273,7 +289,7 @@ class NekTestCase(unittest.TestCase):
             lz2 = lz2
         )
 
-    def run_genmap(self, rea_file=None, tol='0.5'):
+    def run_genmap(self, rea_file=None, tol='0.2'):
 
         from lib.nekBinRun import run_meshgen
         cls = self.__class__
@@ -313,7 +329,7 @@ class NekTestCase(unittest.TestCase):
             cwd     = os.path.join(self.examples_root, self.__class__.example_subdir),
         )
 
-    def build_nek(self, usr_file=None):
+    def build_nek(self, usr_file=None, pplist=None):
         from lib.nekBinBuild import build_nek
         cls = self.__class__
 
@@ -327,7 +343,8 @@ class NekTestCase(unittest.TestCase):
             f77         = self.f77,
             cc          = self.cc,
             ifmpi       = str(self.ifmpi).lower(),
-            verbose     = self.verbose
+            verbose     = self.verbose,
+            pplist      = pplist,
         )
 
     def run_nek(self, rea_file=None, step_limit=None):
@@ -383,7 +400,7 @@ class NekTestCase(unittest.TestCase):
             )
         # Get all lines with label
         with open(logfile, 'r') as f:
-            line_list = [l for l in f if label in l]
+            line_list = [l for l in f if re.search(r'\b{0}\b'.format(label), l)]
         if not line_list:
             raise ValueError("Could not find label \"{0}\" in logfile \"{1}\".  The run may have failed.".format(label, logfile))
         try:
@@ -405,8 +422,7 @@ class NekTestCase(unittest.TestCase):
             )
 
         with open(logfile, 'r') as f:
-            line_list = [l for l in f if label in l]
-
+            line_list = [l for l in f if re.search(r'\b{0}\b'.format(label), l)]
         try:
             line = line_list[row]
         except IndexError:

@@ -19,15 +19,14 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      character*80 s80(4)
+      character*80 s80(3)
 
-      call blank(s80,4*80)
-      s80(1) ='rs8ca0.f00005'
-      s80(2) ='rs8ca0.f00006'
-      s80(3) ='rs8ca0.f00007'
-      s80(4) ='rs8ca0.f00008'
+      call blank(s80,3*80)
+      s80(1) ='rs6ca0.f00004'
+      s80(2) ='rs6ca0.f00005'
+      s80(3) ='rs6ca0.f00006'
 
-c     call full_restart(s80,4)  ! Will overload 5-8 onto steps 0-3
+c     call full_restart(s80,3)  ! Will overload 4-6 onto steps 0-2
 
 
       iosave = iostep           ! Trigger save based on iostep

@@ -1,4 +1,5 @@
 c-----------------------------------------------------------------------
+c  Description:
 c
 c  This example illustrates particle tracking being used in a "bubble wire"
 c  mode in which particles are periodicly released along a horizontal
@@ -44,6 +45,11 @@ c      SC99 Conf. on High Performance Networking and Computing, IEEE Computer So
 c      1999.
 c
 c
+c-----------------------------------------------------------------------
+c Problem dependent constants:
+
+#define lpart 4000
+
 c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,eg)
       include 'SIZE'
@@ -320,19 +326,20 @@ c-----------------------------------------------------------------------
 c
 c     evaluate velocity for list of points xyz
 c
-c     Note:  -- modify
-c     intpts to get rid off ' WARNING: point on boundary or ...'
-
       include 'SIZE'
       include 'TOTAL'
 
       real uvw(ldim,n),xyz(ldim,n)
-      logical ifjac,ifpts
 
-      parameter(nmax=lpart,nfldmax=ldim) 
-      common /rv_intp/ pts(ldim*nmax)
-      common /iv_intp/ ihandle
-      common /outtmp/ wrk(lx1*ly1*lz1*lelt,nfldmax)
+      parameter(nmax=lpart,nfldmx=ldim) 
+
+      common /rwk_intp/ 
+     $       fwrk(lx1*ly1*lz1*lelt,nfldmx),
+     $       rwk(nmax,ldim+1),
+     $       pts(ldim*nmax)
+      common /iwk_intp/ 
+     $       iwk(nmax,3)
+
 
       integer icalld,e
       save    icalld
@@ -341,10 +348,10 @@ c     intpts to get rid off ' WARNING: point on boundary or ...'
       nxyz  = nx1*ny1*nz1
       ntot  = nxyz*nelt
 
-      if (n.gt.nmax) call exitti ('ABORT: interp_v() n > nmax!$',n)
+      if (n.gt.nmax) call exitti ('n > nmax in interp_v!$',n)
       
       if (nelgt.ne.nelgv) call exitti
-     $   ('ABORT: interp_v() nelgt.ne.nelgv not yet supported!$',nelgv)
+     $   ('nelgt.ne.nelgv not yet supported in interp_v!$',nelgv)
 
       do i=1,n				! ? not moving -> save?
          pts(i)     = xyz(1,i)
@@ -352,21 +359,19 @@ c     intpts to get rid off ' WARNING: point on boundary or ...'
          if (if3d)  pts(i + n*2) = xyz(3,i)
       enddo
 
-      if (icalld.eq.0) then		! interpolation setup	!? intpts_done(ih_intp_v)?
+      if (icalld.eq.0) then		! interpolation setup
         icalld = 1
         tolin  = 1.e-8
-        call intpts_setup(tolin,ihandle)
+        call intp_setup(tolin)
       endif
 
-      nflds  = ndim ! number of fields to interpolate
-
       ! pack working array
-      call opcopy(wrk(1,1),wrk(1,2),wrk(1,3),vx,vy,vz)
+      call opcopy(fwrk(1,1),fwrk(1,2),fwrk(1,3),vx,vy,vz)
 
       ! interpolate
-      ifjac  = .true.           ! output transpose (of Jacobian)
-      ifpts  = .true.            ! find points
-      call intpts(wrk,nflds,pts,n,uvw,ifjac,ifpts,ihandle)	! copy array instead?
+      call intp_do(uvw,fwrk,ndim,
+     $             pts(1),pts(1+n),pts(2*n+1),n,
+     $             iwk,rwk,nmax,.true.)
 
       return
       end
