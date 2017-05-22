@@ -1,0 +1,10 @@
+2.0         ! DOMLEN : Domain length, TEST 4 (Collision of 2 shocks)
+0.0         ! DIAPH1 : Position of diaphragm 
+1.4         ! GAMMA  : Ratio of specific heats
+5.99924     ! DL     : Initial density  on left  section of tube
+19.5975     ! UL     : Initial velocity on left  section of tube
+460.894     ! PL     : Initial pressure on left  section of tube
+5.99242     ! DR     : Initial density  on right section of tube
+-6.19633    ! UR     : Initial velocity on right section of tube
+46.0950     ! PR     : Initial pressure on right section of tube
+0.0         ! ZEROTIME : t=0 for CMT-nek
