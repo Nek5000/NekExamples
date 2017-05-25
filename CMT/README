@@ -2,3 +2,5 @@
 This folder contains examples specific to CMT-Nek.
 
  - sod3 is 2D Sod shock tube testcase.
+ 
+ - shock2 is a 2 shock interaction testcase.
