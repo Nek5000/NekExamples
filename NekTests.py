@@ -1094,23 +1094,6 @@ class Hemi(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-#    @pn_pn_serial
-#    def test_PnPn_Serial(self):
-#        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-#        self.build_nek()
-#        self.run_nek(step_limit=10)
-#
-#        solver_time = self.get_value_from_log('total solver time', column=-2,)
-#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=100., label='total solver time', warn=True)
-#
-#        gmres = self.get_value_from_log('gmres', column=-7,)
-#        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=39., label='gmres')
-#
-#        wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(wmax, target_val=4.9173E-01, delta=1e-06, label='wmax')
-#
-#        self.assertDelayedFailures()
-
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1121,26 +1104,9 @@ class Hemi(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=39., label='gmres')
 
         wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(wmax, target_val=4.9173E-01, delta=1e-06, label='wmax')
+        self.assertAlmostEqualDelayed(wmax, target_val=4.9173E-01, delta=1e-05, label='wmax')
 
         self.assertDelayedFailures()
-
-#    @pn_pn_2_serial
-#    def test_PnPn2_Serial(self):
-#        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
-#        self.build_nek()
-#        self.run_nek(step_limit=10)
-#
-#        solver_time = self.get_value_from_log('total solver time', column=-2,)
-#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=60., label='total solver time', warn=True)
-#
-#        gmres = self.get_value_from_log('gmres', column=-6,)
-#        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=34., label='gmres')
-#
-#        wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(wmax, target_val=4.7915E-01, delta=1e-06, label='wmax')
-#
-#        self.assertDelayedFailures()
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
@@ -1152,7 +1118,7 @@ class Hemi(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=34., label='gmres')
 
         wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(wmax, target_val=4.7915E-01, delta=1e-06, label='wmax')
+        self.assertAlmostEqualDelayed(wmax, target_val=0.48305, delta=1e-05, label='wmax')
 
         self.assertDelayedFailures()
 
