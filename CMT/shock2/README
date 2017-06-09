@@ -12,6 +12,8 @@ NOTE:
 
  - The maximum Courant number for this case is set at 0.5.
 
+ - The tunable parameter in the EVM, 'c_sub_e' is set to 0.75 in usrdat2.
+
  - Run 'mkdir profiles' to store the thermodynamic, velocity and Entropy Viscosity
    profiles. 
 
