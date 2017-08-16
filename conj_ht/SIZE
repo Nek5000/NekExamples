@@ -31,7 +31,7 @@ c
       parameter (lorder=3)             ! max order in time
 
       parameter (lelt=lelg/lpmin + 4)  ! max number of local elements per MPI rank
-      parameter (lx1m=1)               ! polynomial order mesh solver
+      parameter (lx1m=lx1)             ! polynomial order mesh solver
       parameter (lbelt=1)              ! mhd
       parameter (lpelt=1)              ! linear stability
       parameter (lcvelt=1)             ! cvode
