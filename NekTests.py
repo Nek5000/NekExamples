@@ -308,7 +308,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
 
         tmax = self.get_value_from_log('tmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(tmax, target_val=1.311073E+01, delta=1E-06, label='tmax')
+        self.assertAlmostEqualDelayed(tmax, target_val=13.109, delta=1E-06, label='tmax')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=7, label='total solver time', warn=True)
@@ -325,7 +325,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
 
         tmax = self.get_value_from_log('tmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(tmax, target_val=1.31073E+01, delta=1E-06, label='tmax')
+        self.assertAlmostEqualDelayed(tmax, target_val=13.109, delta=1E-06, label='tmax')
 
         self.assertDelayedFailures()
 
