@@ -308,7 +308,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
 
         tmax = self.get_value_from_log('tmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
+        self.assertAlmostEqualDelayed(tmax, target_val=13.1073, delta=1E-06, label='tmax')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=7, label='total solver time', warn=True)
@@ -325,7 +325,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
 
         tmax = self.get_value_from_log('tmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
+        self.assertAlmostEqualDelayed(tmax, target_val=13.1073, delta=1E-06, label='tmax')
 
         self.assertDelayedFailures()
 
@@ -801,7 +801,7 @@ class Fs2_St1(NekTestCase):
 #        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 #
 #        amp = self.get_value_from_log('amp', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+#        self.assertAlmostEqualDelayed(amp, target_val=6.382379E-01, delta=1e-06, label='amp')
 #
 #        solver_time = self.get_value_from_log('total solver time', column=-2,)
 #        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=18.3, label='total solver time', warn=True)
@@ -818,7 +818,7 @@ class Fs2_St1(NekTestCase):
 #        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 #
 #        amp = self.get_value_from_log('amp', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+#        self.assertAlmostEqualDelayed(amp, target_val=6.382379E-01, delta=1e-06, label='amp')
 #
 #        self.assertDelayedFailures()
 
@@ -832,7 +832,7 @@ class Fs2_St1(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
         amp = self.get_value_from_log('amp', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+        self.assertAlmostEqualDelayed(amp, target_val=0.6382379, delta=1e-06, label='amp')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=18.3, label='total solver time', warn=True)
@@ -849,7 +849,7 @@ class Fs2_St1(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
         amp = self.get_value_from_log('amp', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=6.382414E-01, delta=1e-06, label='amp')
+        self.assertAlmostEqualDelayed(amp, target_val=0.6382379, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
 
@@ -874,7 +874,7 @@ class Fs2_St2(NekTestCase):
 #        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 #
 #        amp = self.get_value_from_log('amp', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(amp, target_val=6.376171E-01, delta=1e-06, label='amp')
+#        self.assertAlmostEqualDelayed(amp, target_val=6.376125E-01, delta=1e-06, label='amp')
 #
 #        solver_time = self.get_value_from_log('total solver time', column=-2,)
 #        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=23, label='total solver time', warn=True)
@@ -891,7 +891,7 @@ class Fs2_St2(NekTestCase):
 #        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 #
 #        amp = self.get_value_from_log('amp', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(amp, target_val=6.376171E-01, delta=1e-06, label='amp')
+#        self.assertAlmostEqualDelayed(amp, target_val=6.376125E-01, delta=1e-06, label='amp')
 #
 #        self.assertDelayedFailures()
 
@@ -905,7 +905,7 @@ class Fs2_St2(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
         amp = self.get_value_from_log('amp', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=6.376171E-01, delta=1e-06, label='amp')
+        self.assertAlmostEqualDelayed(amp, target_val=0.6376125, delta=1e-06, label='amp')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=23, label='total solver time', warn=True)
@@ -922,7 +922,7 @@ class Fs2_St2(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
         amp = self.get_value_from_log('amp', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=6.376171E-01, delta=1e-06, label='amp')
+        self.assertAlmostEqualDelayed(amp, target_val=0.6376125, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
 
@@ -947,7 +947,7 @@ class Fs2_StdWv(NekTestCase):
 #        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 #
 #        amp = self.get_value_from_log('amp', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(amp, target_val=1.403287E-01, delta=1e-06, label='amp')
+#        self.assertAlmostEqualDelayed(amp, target_val=1.403036E-01, delta=1e-06, label='amp')
 #
 #        solver_time = self.get_value_from_log('total solver time', column=-2,)
 #        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=21., label='total solver time', warn=True)
@@ -964,7 +964,7 @@ class Fs2_StdWv(NekTestCase):
 #        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 #
 #        amp = self.get_value_from_log('amp', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(amp, target_val=1.403287E-01, delta=1e-06, label='amp')
+#        self.assertAlmostEqualDelayed(amp, target_val=1.403036E-01, delta=1e-06, label='amp')
 #
 #        self.assertDelayedFailures()
 
@@ -978,7 +978,7 @@ class Fs2_StdWv(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 
         amp = self.get_value_from_log('amp', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=1.403287E-01, delta=1e-06, label='amp')
+        self.assertAlmostEqualDelayed(amp, target_val=0.1403036, delta=1e-06, label='amp')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=21., label='total solver time', warn=True)
@@ -995,7 +995,7 @@ class Fs2_StdWv(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 
         amp = self.get_value_from_log('amp', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=1.403287E-01, delta=1e-06, label='amp')
+        self.assertAlmostEqualDelayed(amp, target_val=0.1403036, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
 
@@ -1094,23 +1094,6 @@ class Hemi(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
 
-#    @pn_pn_serial
-#    def test_PnPn_Serial(self):
-#        self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-#        self.build_nek()
-#        self.run_nek(step_limit=10)
-#
-#        solver_time = self.get_value_from_log('total solver time', column=-2,)
-#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=100., label='total solver time', warn=True)
-#
-#        gmres = self.get_value_from_log('gmres', column=-7,)
-#        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=39., label='gmres')
-#
-#        wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(wmax, target_val=4.9173E-01, delta=1e-06, label='wmax')
-#
-#        self.assertDelayedFailures()
-
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
@@ -1121,26 +1104,9 @@ class Hemi(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=39., label='gmres')
 
         wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(wmax, target_val=4.9173E-01, delta=1e-06, label='wmax')
+        self.assertAlmostEqualDelayed(wmax, target_val=4.9173E-01, delta=1e-05, label='wmax')
 
         self.assertDelayedFailures()
-
-#    @pn_pn_2_serial
-#    def test_PnPn2_Serial(self):
-#        self.config_size(lx2='lx1-2', ly2='ly1-2', lz2='lz1-2')
-#        self.build_nek()
-#        self.run_nek(step_limit=10)
-#
-#        solver_time = self.get_value_from_log('total solver time', column=-2,)
-#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=60., label='total solver time', warn=True)
-#
-#        gmres = self.get_value_from_log('gmres', column=-6,)
-#        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=34., label='gmres')
-#
-#        wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-#        self.assertAlmostEqualDelayed(wmax, target_val=4.7915E-01, delta=1e-06, label='wmax')
-#
-#        self.assertDelayedFailures()
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
@@ -1152,7 +1118,7 @@ class Hemi(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=34., label='gmres')
 
         wmax = self.get_value_from_log('wmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(wmax, target_val=4.7915E-01, delta=1e-06, label='wmax')
+        self.assertAlmostEqualDelayed(wmax, target_val=0.48305, delta=1e-05, label='wmax')
 
         self.assertDelayedFailures()
 
