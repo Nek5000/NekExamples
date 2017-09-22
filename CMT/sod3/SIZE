@@ -22,7 +22,7 @@ c
       ! OPTIONAL
       parameter (lhis=1000)            ! max history points
       parameter (maxobj=4)             ! max number of objects
-      parameter (lpert=3)              ! max perturbation modes
+      parameter (lpert=1)              ! max perturbation modes
       parameter (toteq=5)              ! max number of conserved scalars in cmt
       parameter (nsessmax=2)           ! max sessions
       parameter (lxo=lx1)              ! max grid size on output (lxo>=lx1)
@@ -33,8 +33,8 @@ c
       parameter (lelt=lelg/lpmin + 4)  ! max number of local elements per MPI rank
       parameter (lx1m=lx1)             ! polynomial order mesh solver
       parameter (lbelt=lelt)           ! mhd
-      parameter (lpelt=lelt)           ! linear stability
-      parameter (lcvelt=lelt)          ! cvode
+      parameter (lpelt=1)           ! linear stability
+      parameter (lcvelt=1)          ! cvode
       parameter (lfdm=0)  ! == 1 for fast diagonalization method
 
       ! INTERNALS

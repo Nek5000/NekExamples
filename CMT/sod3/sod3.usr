@@ -142,7 +142,7 @@ c-----------------------------------------------------------------------
          do j=1,ny1
          do i=1,nx1
             l=l+1
-            s=(xm1(i,j,k,e)-diaph1)/(time_cmt+zerotime)
+            s=(xm1(i,j,k,e)-diaph1)/time_cmt
             CALL SAMPLE(PMstar, UM, S, rhohere, uhere, prshere)
             err(1)=err(1)+(u(i,j,k,1,e)-rhohere)**2*bm1(i,j,k,e)
             err(2)=err(2)+(u(i,j,k,2,e)-rhohere*uhere)**2*bm1(i,j,k,e)
@@ -355,7 +355,6 @@ c-----------------------------------------------------------------------
       read (81,*) dr
       read (81,*) ur
       read (81,*) pright
-      read (81,*) zerotime
       close(81)
 
       molmass=8314.3

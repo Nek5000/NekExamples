@@ -7,4 +7,3 @@
 0.125       ! DR     : Initial density  on right section of tube
 0.0         ! UR     : Initial velocity on right section of tube
 0.10        ! PR     : Initial pressure on right section of tube
-0.00        ! zerotime
