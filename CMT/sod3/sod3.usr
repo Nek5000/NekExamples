@@ -12,12 +12,17 @@ c README -  JH010617 - First shock second-ish PLACE WE TRY
 
       e = gllel(eg)
 
-!     mu= 0.5*rho*meshh(e)*(sqrt(ux**2+uy**2+uz**2)+asnd) ! blows up
-!     artvisc=c_sub_e*meshh(e)**2*maxres(e)/maxdiff ! done in resvisc
-                                                    ! until we have smoothing
+!-----------------------------------------------------------------------
+! c_E-> \infty. wave speed visco only
+!-----------------------------------------------------------------------
+!     mu=rho*t(ix,iy,iz,e,3)
 
-      mu=rho*min(res2(ix,iy,iz,e,1),t(ix,iy,iz,e,3))
-      nu_s=mu/rho
+!-----------------------------------------------------------------------
+! finite c_E. res2 viscosity clipped in subroutin resvisc (or evmsmooth;
+!             I still haven't decided it.
+!-----------------------------------------------------------------------
+      mu=rho*res2(ix,iy,iz,e,1) ! finite c_E;
+      nu_s=0.75*mu/rho
 
       mu=0.5*mu ! A factor of
            ! 2 lurks in agradu's evaluation of strain rate, even in EVM
@@ -125,14 +130,18 @@ c-----------------------------------------------------------------------
       open(unit=luout(4),file=zefn,form="formatted")
       write(zefn,'(a17,i5.5,a1,i1)') 'profiles/rhoeprof',istep,'p',nid
       open(unit=luout(5),file=zefn,form="formatted")
+!     write(zefn,'(a16,i5.5,a1,i1)') 'profiles/resprof',istep,'p',nid
+!     open(unit=luout(5),file=zefn,form="formatted")
       write(zefn,'(a17,i5.5,a1,i1)') 'profiles/viscprof',istep,'p',nid
       open(unit=luout(6),file=zefn,form="formatted")
 !     endif
       call rzero(err,4)
       do e=1,nelt
+         l=0
          do k=1,nz1
          do j=1,ny1
          do i=1,nx1
+            l=l+1
             s=(xm1(i,j,k,e)-diaph1)/(time_cmt+zerotime)
             CALL SAMPLE(PMstar, UM, S, rhohere, uhere, prshere)
             err(1)=err(1)+(u(i,j,k,1,e)-rhohere)**2*bm1(i,j,k,e)
@@ -142,7 +151,6 @@ c-----------------------------------------------------------------------
             err(4)=err(4)+(u(i,j,k,5,e)-energy)**2*bm1(i,j,k,e)
 ! profile writer not parallelized correctly
             if (abs(ym1(i,j,k,e)).lt.1.0e-6) then
-!              if (mod(istep,iostep).eq.0.or.istep.eq.0) then
                   write(luout(1),'(3e25.16)')
      >               xm1(i,j,k,e),u(i,j,k,1,e),rhohere
                   write(luout(2),'(3e25.16)')
@@ -153,10 +161,11 @@ c-----------------------------------------------------------------------
      >               prshere/(gmaref-1.0)/rhohere/cvgref
                   write(luout(5),'(3e25.16)')
      >               xm1(i,j,k,e),u(i,j,k,5,e),energy
-                  write(luout(6),'(4e25.16)')
-     >               xm1(i,j,k,e),vdiff(i,j,k,e,imu),vdiff(i,j,k,e,inus)
-     >              ,t(i,j,k,e,3)
-!              endif
+                  write(luout(6),'(6e25.16)') ! x,visco,diffk,wavevisc,resvisc
+!    >               xm1(i,j,k,e),vdiff(i,j,k,e,imu),vdiff(i,j,k,e,inus)
+     >               xm1(i,j,k,e),vdiff(i,j,k,e,inus)
+!    >              ,t(i,j,k,e,3),res2(i,j,k,e,1),res2(i,j,k,e,2)
+     >              ,t(i,j,k,e,3),res2(i,j,k,e,2)
             endif
 ! profile writer not parallelized correctly
          enddo
@@ -177,16 +186,35 @@ c-----------------------------------------------------------------------
          call copy(t(1,1,1,1,2),vdiff(1,1,1,1,imu),n)
          call cmult(t(1,1,1,1,2),2.0,n)
          call invcol2(t(1,1,1,1,2),vtrans(1,1,1,1,irho),n)
-!                        t(:,3)=wavevisc
+!                  t(:,:,:,:,3)=wavevisc already
          call copy(t(1,1,1,1,4),vdiff(1,1,1,1,inus),n)
-         call copy(t(1,1,1,1,5),res2,n)
-         call rzero(t(1,1,1,1,6),n)
+         call copy(t(1,1,1,1,5),res2,n) ! residual viscosity
+         call copy(t(1,1,1,1,6),res2(1,1,1,1,2),n) ! raw residual
          if(nio.eq.0) write(37,'(i5,4e25.16)'), istep,err
       endif ! ifoutfld
 
       return
       end
 c-----------------------------------------------------------------------
+
+      subroutine my_full_restart
+      include 'SIZE'
+      include 'TOTAL'
+      character*80 s80(2)
+
+      call blank(s80,2*80)
+      s80(1) ='rs6pvort0.f00001'
+      s80(2) ='rs6pvort0.f00001'
+      call full_restart(s80,2) 
+
+      iosave = iostep           ! Trigger save based on iostep
+      call full_restart_save(iosave)
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
       subroutine userbc (ix,iy,iz,iside,eg)
       include 'SIZE'
       include 'TSTEP'
@@ -277,8 +305,6 @@ c-----------------------------------------------------------------------
       cpgref     = MixtPerf_Cp_CvR(cvgref,rgasref)
       gmaref     = MixtPerf_G_CpR(cpgref,rgasref) 
 
-      res_freq = 1000000
-      flio_freq=100000
 !-----------------------------------------------------------------------
 ! JH030317
 ! adding output fields for diagnostic purposes. optional, but perhaps should
@@ -333,17 +359,13 @@ c-----------------------------------------------------------------------
       close(81)
 
       molmass=8314.3
-      muref=0.0
-      coeflambda=-2.0/3.0
-      suthcoef=1.0
-      prlam = 0.72
       rgasref    = MixtPerf_R_M(molmass,dum)
       cvgref     = rgasref/(gmaref-1.0)
       cpgref     = MixtPerf_Cp_CvR(cvgref,rgasref)
       gmaref     = MixtPerf_G_CpR(cpgref,rgasref) 
 
-      c_max=0.5  ! should be 0.5, really
-      c_sub_e=4.0
+      c_max=0.3  ! should be 0.5, really
+      c_sub_e=40.0
 
       call e1rpex(domlen,diaph1,gmaref,dl,ul,pl,dr,ur,
      >            pright,1.0)
@@ -837,429 +859,5 @@ c----------------------------------------------------------------------c
          eta=real(i)/real(nx1)
          rmult(i)=exp(-alpfilt*((eta-etac)/(1.0-etac))**sfilt)
       enddo
-      return
-      end
-
-c----------------------------------------------------------------------c
-
-      subroutine compute_entropy(s)
-! computes entropy at istep and pushes the stack down for previous
-! steps needed to compute ds/dt via finite difference (for now).
-! hardcoded for Burgers equation. More later when folded into CMT-nek
-! for Burgers, s=energy=1/2 U^2
-      include 'SIZE'
-      include 'TOTAL'  ! tlag is lurking. be careful
-      include 'CMTDATA'
-! I've always seen lorder=3, but I still need three steps
-!          s(:,               1,       1)  ! entropy at current step
-!          s(:,               2,       1)  ! entropy at step n-1
-!          s(:,               1,       2)  ! entropy at step n-2
-      real s(lx1*ly1*lz1*lelt,lorder-1,*)
-      real ntol
-      integer e
-      data icalld /0/
-      save icalld
-
-      n=nx1*ny1*nz1
-      ntot=n*nelt
-      ntol=1.0e-10
-
-      if (icalld .eq. 0) then
-         write(6,*) 'zeroing out entropy stack',istep
-         icalld=1
-         call rzero(s,ntot)
-         call rzero(s(1,1,2),ntot) ! s_{n-1}
-         call rzero(s(1,2,1),ntot) ! s_n
-      endif
-
-! compute the current entropy
-      rgam=rgasref/(gmaref-1.0)
-      do i=1,ntot
-         rho=max(vtrans(i,1,1,1,irho),ntol)
-         s(i,1,1)=rgam*rho*log(pr(i,1,1,1)/(rho**gmaref))
-      enddo
-
-      if (stage .eq. 1) then
-! push the stack
-         call copy(s(1,1,2),s(1,2,1),ntot) ! s_{n-1}=s_n
-         call copy(s(1,2,1),s(1,1,1),ntot) ! fill s_n
-      endif
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine entropy_viscosity
-      include 'SIZE'
-      include 'TOTAL'
-      include 'CMTDATA'
-      parameter (lxyz=lx1*ly1*lz1)
-      common /scrns/ scrent(lxyz,lelt)
-      integer e
-      character*132 deathmessage
-
-      pi=4.0*atan(1.0)
-
-      n=nx1*ny1*nz1
-      ntot=n*nelt
-
-! entropy at this and lorder prior steps
-      call compute_entropy(tlag)
-! compute maxval(|S-<S>|)
-      savg    =    glsc2(tlag,bm1,ntot)
-      savg    = -savg/volvm1
-      call cadd2(scrent,tlag,savg,ntot)
-      maxdiff =     glamax(scrent,ntot)
-      if (maxdiff.le.0.0) then
-         write(deathmessage,*) 'zero maxdiff usually means NAN$'
-         call exittr(deathmessage,maxdiff,istep)
-      endif
-      call entropy_residual(tlag) ! fill res2
-      call wavevisc(t(1,1,1,1,3))
-      call resvisc(res2) ! overwrite res2
-
-      return
-      end
-
-c-----------------------------------------------------------------------
-
-      subroutine entropy_residual(s)
-! COMPUTE R=ds/dt + div F(s) for entropy pair s and (hardcoded) F
-! and store its norm functional thing |R| in res2 where it will
-! provide artificial viscosity according to the code in
-! entropy_viscosity and the method of Guermond
-      include 'SIZE'
-      include 'TOTAL' ! tlag lurks
-      include 'CMTDATA'
-      integer e
-      real dsdtcoef(3) ! put this in /TIMESTEPCOEF/ someday
-      data dsdtcoef /1.0,1.0,0.5/
-      real s(lx1*ly1*lz1*lelt,lorder-1,ldimt) ! because it's really tlag
-
-      n=nx1*ny1*nz1
-      ntot=n*nelt
-
-! I set istep=kstep. why do I need to do this again?
-      if (istep .eq. 1) return
-! Guermond Pasquetti & Popov (2011) (2.26) suggest a pointwise convective
-! form for the entropy residual
-!     call copy (vx,t,ntot) ! flux jacobian for system is just U
-!     call rzero(vy,ntot) ! 1D
-!     call rzero(vz,ntot) ! 1D
-!     call conv1(phig,s)  ! do flux div this way?
-!     call copy(tlag(1,1,1,1,2,3),res2,ntot) ! diagnostic ! TEST THIS FLUX DIV?
-! ds/dt via 1-sided finite difference. 
-! stage1: w/rt previous time step
-! later stages: between tn+cdt and tn
-      rdt=1.0/(dsdtcoef(stage)*DT_cmt)
-      if (stage .eq. 1) then ! THE MOST SABOTAGEABLE PART OF THE CODE
-         call sub3(res2,s(1,1,1),s(1,1,2),ntot) ! EVALUATE s_n-s_{n-1}
-      else
-         call sub3(res2,s(1,1,1),s(1,2,1),ntot) ! EVALUATE s^{(stage)}-s_n
-      endif
-      call cmult(res2,rdt,ntot)
-! res2=ds/dt. now,
-
-!-----------------------------------------------------------------------
-! cons approach: strong-conservation form of flux divergence in entropy residual
-!-----------------------------------------------------------------------
-! get around to expanding totalh to store fluxes for whole fields and
-! properly vectorize evaluate_*_h and flux_div_integral
-      do e=1,nelt
-!! diagnostic
-!         if (mod(istep,iostep).eq.0) then ! compare ds/dt to resid
-!            do i=1,n
-!               write(nid*1000+istep,*) xm1(i,1,1,e),ym1(i,1,1,e),
-!     >                            res2(i,1,1,e,1)
-!            enddo
-!         endif
-!! diagnostic
-         call evaluate_entropy_flux(e) ! diffh. zero it before diffusion 
-         call flux_div_mini(e) ! into res2 it goes.
-      enddo
-      maxres=glamax(res2,ntot)
-! actually...
-!-----------------------------------------------------------------------
-! conv1 approach: convective form of flux divergence in entropy residual
-!-----------------------------------------------------------------------
-! Guermond Pasquetti & Popov (2011) (2.26) suggest a pointwise convective
-! form for the entropy residual. see cburg.usr for further exploration
-
-      return
-      end
-
-c-----------------------------------------------------------------------
-
-      subroutine evaluate_entropy_flux(e)
-! entropy flux function for entropy residual.
-! just vel*s for now
-      include 'SIZE'
-      include 'SOLN'
-      include 'INPUT'
-      include 'CMTDATA'
-      integer e
-
-      call rzero(totalh,3*nxd*nyd*nzd)
-      n=nx1*ny1*nz1
-
-      call col3(totalh(1,1),vx(1,1,1,e),tlag(1,1,1,e,1,1),n)
-      call col3(totalh(1,2),vy(1,1,1,e),tlag(1,1,1,e,1,1),n)
-      if (if3d) call col3(totalh(1,3),vz(1,1,1,e),tlag(1,1,1,e,1,1),n)
-
-      return
-      end
-
-c-----------------------------------------------------------------------
-
-      subroutine flux_div_mini(e)
-      include 'SIZE'
-      include 'INPUT'
-      include 'GEOM'
-      include 'DXYZ'
-      include 'SOLN'
-      include 'CMTDATA'
-      parameter (ldd=lx1*ly1*lz1)
-      parameter (ldg=lx1**3,lwkd=2*ldg)
-      common /ctmp1/ ur(ldd),us(ldd),ut(ldd),ju(ldd),ud(ldd),tu(ldd)
-      real ju
-
-      integer e
-
-      nrstd=ldd
-      nxyz=nx1*ny1*nz1
-      mdm1=nx1-1
-
-      call rzero(ur,nrstd)
-      call rzero(us,nrstd)
-      call rzero(ut,nrstd)
-      call rzero(ud,nrstd)
-      call rzero(tu,nrstd)
-
-      if (if3d) then
-         call local_grad3(ur,us,ut,totalh(1,1),mdm1,1,dxm1,dxtm1)
-         do i=1,nxyz
-            ud(i) = jacmi(i,e)*(rxm1(i,1,1,e)*ur(i)
-     $                        + sxm1(i,1,1,e)*us(i)
-     $                        + txm1(i,1,1,e)*ut(i))
-         enddo
-         call local_grad3(ur,us,ut,totalh(1,2),mdm1,1,dxm1,dxtm1)
-         do i=1,nxyz ! confirmed to have no effect in 1D
-            ud(i)=ud(i)+jacmi(i,e)*(rym1(i,1,1,e)*ur(i)
-     $                            + sym1(i,1,1,e)*us(i)
-     $                            + tym1(i,1,1,e)*ut(i))
-         enddo
-         call local_grad3(ur,us,ut,totalh(1,3),mdm1,1,dxm1,dxtm1)
-         do i=1,nxyz ! confirmed to have no effect in 1D
-            ud(i)=ud(i)+jacmi(i,e)*(rzm1(i,1,1,e)*ur(i)
-     $                            + szm1(i,1,1,e)*us(i)
-     $                            + tzm1(i,1,1,e)*ut(i))
-         enddo
-      else
-         call local_grad2(ur,us,totalh(1,1),mdm1,1,dxm1,dxtm1)
-         do i=1,nxyz
-            ud(i) = jacmi(i,e)*(rxm1(i,1,1,e)*ur(i)
-     $                        + sxm1(i,1,1,e)*us(i))
-         enddo
-         call local_grad2(ur,us,totalh(1,2),mdm1,1,dxm1,dxtm1)
-         do i=1,nxyz
-            ud(i)=ud(i)+jacmi(i,e)*(rym1(i,1,1,e)*ur(i)
-     $                            + sym1(i,1,1,e)*us(i))
-         enddo
-      endif
-      call add2(res2(1,1,1,e,1),ud,nxyz)
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine resvisc(residual)
-! max entropy visc, defined by Guermond, Popov, whoever (chapter-verse)
-! as 
-! in a given element
-      include 'SIZE'
-      include 'TOTAL'
-      include 'CMTDATA'
-      include 'DG'
-      integer lfq,heresize,hdsize
-      parameter (lfq=lx1*lz1*2*ldim*lelt,
-     >                   heresize=nqq*3*lfq,
-     >                   hdsize=toteq*3*lfq) ! might not need ldim
-      common /CMTSURFLX/ flux(heresize),graduf(hdsize)
-      real flux,graduf
-      parameter (lxyz=lx1*ly1*lz1)
-      real residual(lxyz,nelt)
-      integer e,f
-      real maxjump
-
-      nxyz =nx1*ny1*nz1
-      nxz  =nx1*nz1
-      nface=2*ndim
-      nxzf =nxz*nface
-      nfq  =nxzf*nelt
-
-! [[entropyflux]]/h is not working correctly
-!     iqm=1
-!     iqp=iqm+4*nfq
-
-!     call fillq(1,tlag,flux(iqm),flux(iqp))
-!     call fillq(2,vx,flux(iqm),flux(iqp))
-!     call fillq(3,vy,flux(iqm),flux(iqp))
-!     call fillq(4,vz,flux(iqm),flux(iqp))
-
-!     call jumpflux(flux(iqm),flux(iqp))
-
-      l=1
-      do e=1,nelt
-         maxres(e)=vlamax(residual(1,e),nxyz)
-         maxjump=vlamax(flux(l),nxzf)/meshh(e) ! |s u.n|/h
-         l=l+nxzf
-!!!!     if (maxjump .gt. maxres(e)) maxres(e)=maxjump
-         do i=1,nxyz ! overwrite residual
-!           residual(i,e)=c_sub_e*gridh(e)**2*maxres(e)
-            residual(i,e)=c_sub_e*meshh(e)**2*maxres(e)
-         enddo
-      enddo
-
-      call max_to_trilin(residual)
-
-      return
-      end
-
-      subroutine jumpflux(qminus,jump)
-      include 'SIZE'
-      include 'GEOM'
-      include 'DG'
-      include 'INPUT'
-      include 'CMTDATA'
-      real qminus(nx1*nz1,2*ndim,nelt,4),
-     >       jump(nx1*nz1,2*ndim,nelt)
-      integer e,f
-      character*3 cb
-
-      nxz =nx1*nz1
-      nface=2*ndim
-      nxzf=nface*nxz
-      nfq=nxzf*nelt
-
-! form s u.n !!!!RFFFFFFFUUUUUUUUUUU unx is fixed at 6
-!     call col3   (jump,unx,qminus(1,1,1,iux),nfq)
-!     call addcol3(jump,uny,qminus(1,1,1,iuy),nfq)
-!     if (if3d) call addcol3(jump,unz,qminus(1,1,1,iuz),nfq)
-!     call col2(jump,qminus,nfq) ! 1 assumed to be entropy
-
-! BC check. DO NOTHING FOR NOW
-      ifield=1 ! FIX THIS
-
-      do e=1,nelt
-         do f=1,2*ndim
-            cb=cbc(f,e,ifield)
-            if (cb.ne.'E  '.and.cb.ne.'P  ') then
-               call rzero(jump(1,f,e),nxz)
-            else
-               call col3   (jump(1,f,e),unx(1,1,f,e),qminus(1,f,e,iux),
-     >                      nxz)
-               call addcol3(jump(1,f,e),uny(1,1,f,e),qminus(1,f,e,iuy),
-     >                      nxz)
-               if (if3d)
-     >         call addcol3(jump(1,f,e),unz(1,1,f,e),qminus(1,f,e,iuz),
-     >                      nxz)
-               call col2(jump(1,f,e),qminus(1,f,e,1),nxz) ! 1 assumed to be entropy
-            endif
-         enddo
-      enddo
-
-      call gs_op(dg_hndl,jump,1,1,0)
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine wavevisc(numax)
-! max entropy visc, defined by Guermond, Popov, whoever (chapter-verse)
-! as 
-! numax = c_max*h*max(dH/dU)
-! in a given element
-      include 'SIZE'
-      include 'TOTAL'
-      include 'CMTDATA'
-      parameter (lxyz=lx1*ly1*lz1)
-      common /scrns/ wavespeed(lxyz)
-      real wavespeed
-      real maxeig
-      real numax(lxyz,nelt)
-      integer e
-
-      nxyz=nx1*ny1*nz1
-
-      do e=1,nelt
-         do i=1,nxyz
-            wavespeed(i)=csound(i,1,1,e)+
-     >      sqrt(vx(i,1,1,e)**2+vy(i,1,1,e)**2+vz(i,1,1,e)**2)
-         enddo
-         maxeig=vlamax(wavespeed,nxyz)
-         rhomax(e)=vlamax(vtrans(1,1,1,e,irho),nxyz)
-         do i=1,nxyz
-!           numax(i,e)=c_max*maxeig*gridh(i,e)
-            numax(i,e)=c_max*maxeig*meshh(e)
-         enddo
-      enddo
-
-      call max_to_trilin(numax)
-
-      return
-      end
-
-!-----------------------------------------------------------------------
-
-      subroutine max_to_trilin(field)
-! stupid subroutine to take a stupid uniform field and compute a trilinear
-! tent between maximum shared values at the vertices.
-      include 'SIZE'
-      include 'TOTAL'
-      real field(lx1,ly1,lz1,nelt)
-      integer e
-
-      character*32 fname ! diagnostic
-
-      nxyz=nx1*ny1*nz1
-
-! get maxima on faces
-      call dsop(field,'MAX',nx1,ny1,nz1)
-
-! trilinear interpolation. you should adapt xyzlin to your needs instead
-      do e=1,nelt
-         p000=field(1,  1,  1,  e)
-         p100=field(nx1,1,  1,  e)
-         p010=field(1,  ny1,1,  e)
-         p110=field(nx1,ny1,1,  e)
-         p001=field(1,  1,  nz1,e)
-         p101=field(nx1,1,  nz1,e)
-         p011=field(1,  ny1,nz1,e)
-         p111=field(nx1,ny1,nz1,e)
-         c1=p100-p000
-         c2=p010-p000
-         c3=p001-p000
-         c4=p110-p010-p100+p000
-         c5=p011-p001-p010+p000
-         c6=p101-p001-p100+p000
-         c7=p111-p011-p101-p110+p100+p001+p010-p000
-         rdx=1.0/(xm1(nx1,1,1,e)-xm1(1,1,1,e)) ! cubes only!!!
-         rdy=1.0/(ym1(1,ny1,1,e)-ym1(1,1,1,e))
-         rdz=0.0
-         if(if3d) rdz=1.0/(zm1(1,1,nz1,e)-zm1(1,1,1,e))
-         do i=1,nxyz
-            deltax=rdx*(xm1(i,1,1,e)-xm1(1,1,1,e)) ! cubes only!!!
-            deltay=rdy*(ym1(i,1,1,e)-ym1(1,1,1,e))
-            deltaz=0.0
-            if (if3d) deltaz=rdz*(zm1(i,1,1,e)-zm1(1,1,1,e))
-            field(i,1,1,e)=p000+c1*deltax+c2*deltay+c3*deltaz+
-     >                          c4*deltax*deltay+c5*deltay*deltaz+
-     >                       c6*deltaz*deltax+c7*deltay*deltaz*deltax
-         enddo
-      enddo
-
       return
       end
