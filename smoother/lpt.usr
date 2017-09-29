@@ -540,10 +540,8 @@ c-----------------------------------------------------------------------
       real xyz(3,3),tol
       real nx,ny,nz
       real v1(3),v2(3),nv(3),l1,l2,v1n(3),v2n(3),v2o(3),l2o,lnv
-      real dotv12,p0x,p2x,p2y,c1,c2,m1,m2,r,dp(2),v(2),lv,pi
+      real dotv12,p0x,p2x,p2y,c1,c2,m1,m2,r,dp(2),v(2),lv
       real th0,th1,th2,xx0,xy0,xx1,xy1,xx2,xy2,th3
-
-      pi = 4.*atan(1.)
 
       v1(1) = xyz(1,1)-xyz(1,2)  !v1 = p0-p1
       v1(2) = xyz(2,1)-xyz(2,2)
