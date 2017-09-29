@@ -1,0 +1,1285 @@
+c-----------------------------------------------------------------------
+C
+C  USER SPECIFIED ROUTINES:
+C
+C     - boundary conditions
+C     - initial conditions
+C     - variable properties
+C     - local acceleration for fluid (a)
+C     - forcing function for passive scalar (q)
+C     - general purpose routine for checking errors etc.
+C
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,eg)
+
+      parameter (init_trans=0)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+c      integer ieg,eg,ix,iy,iz
+cc       ieg = gllel(eg)
+c
+c      if (ifield.eq.1) then
+c
+c         utrans  = 1.0 !param(1)
+c         udiff   = 1.0/6000.0 !param(2)
+c
+c      else
+c
+c
+c        udiff   = (1.0/6000.0)*100.0
+c        utrans   = 1.0 
+c
+c      endif
+
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+
+      ffx=0.0
+      ffy=0.0  
+      ffz=0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+
+      ux=0.0
+      uy=0.0
+      uz=1.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ux=0.0
+      uy=0.0
+      uz=1.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+c
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+      include 'SIZE'
+      include 'TOTAL'
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+
+      call smoothmesh
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine smoothmesh
+      include 'SIZE'
+      include 'TOTAL'
+      real dx(lx1*ly1*lz1,lelv),dy(lx1*ly1*lz1,lelv)
+      real dz(lx1*ly1*lz1,lelv)
+      real x8(2,2,ldim-1,lelv*(2**ldim)),y8(2,2,ldim-1,lelv*(2**ldim))
+      real z8(2,2,ldim-1,lelv*(2**ldim))
+      real nodmask(2**ldim,lelv*(2**ldim)),dis((2**ldim)*lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+      integer elist(lelv),imid,nelout,elist2(lelt*(2**ldim)),funtype
+      integer e,f,i,k,n,gshl,opt,dumi,eg,nouter,nlap,nopt,noutput
+      real xv,yv,zv,dum,dum2,rs,rl,pd,wv,alpha,beta
+c     -------------------
+c     -------------------
+c     -------------------
+ccc   USER INPUT
+c     BOUNDARY CONDITIONS NEAR WHICH BOUNDARY LAYER 
+c     RESOLUTION WILL BE PRESERVED
+
+      parameter(nbc=2)         !number of boundary conditions 
+      character*3 dcbc(nbc)     
+      save        dcbc
+      data        dcbc /'W  ','P  '/  !BCs listed here
+
+ccc   PARAMETERS TO DETERMINE DISTANCE FUNCTION 
+c     Input funtype, alpha and beta (alpha is ignored if funtype is 0)
+c     0 -> 1-exp(-dis/beta) ;   1 -> 0.5(tanh(alpha*(dis-beta))+1)
+
+      funtype = 0      !distance function - 0 -> exponential, 1-> tanh
+      alpha = 15       !Input for wall distance function 
+      beta  = 0.2      !Input for wall distance function 
+
+ccc   NUMBER OF ITERATIONS OF DIFFERENT KIND OF SMOOTHERS
+
+      nouter = 30    !total loops around Laplacian and optimizer smoothing
+      nlap = 40      !number of Laplacian iterations in each loop
+      nopt = 40      !number of optimization iterations in each loop
+      noutput = 2    !output a mesh in *f0000 format after these many loops
+
+c     -------------------
+c     -------------------
+c     -------------------
+
+      if (nid.eq.0) write(6,*) 'check original mesh'
+      call fix_geom
+
+c     COPY THE ORIGINAL MESH TO dx,dy,dz vectors
+      call copy(dx,xm1,lx1*ly1*lz1*nelv)
+      call copy(dy,ym1,lx1*ly1*lz1*nelv)
+      call copy(dz,zm1,lx1*ly1*lz1*nelv)
+
+      if (lx1.ne.3) call exitti('Please set lx1 to 3.$',lx1)
+
+      ifxyo = .true.
+      call outpost(vx,vy,vz,pr,t,'   ')  !original mesh output
+
+      call xmtox8(xm1,x8)
+      call xmtox8(ym1,y8)
+      if (ldim.eq.3) call xmtox8(zm1,z8)
+
+c     CREATE MASK
+      call genmask(nodmask,mlt,gshl)
+
+c     MASK ELEMENT LAYERS
+c     e is the number of layers of elements right next to 'w' boundary condition
+c      e = 3
+c      call masklayers(nodmask,e)
+
+c     CONSTRUCT DISTANCE FUNCTION
+      call disfun(dis,funtype,alpha,beta,dcbc,nbc)
+      if (nid.eq.0) write(6,*) 'distance calculated'
+
+c     START SMOOTHING HERE
+      do j=1,nouter
+         time = j
+         if (nid.eq.0) write(6,*) ' Smoother loop',j
+         opt = 1 !if opt = 1, jacobian, 2 = l^2, 3 - scale jacobian
+         call fastlap(x8,y8,z8,nlap,nodmask,mlt,gshl,dis)
+         call opt8(x8,y8,z8,nopt,nodmask,mlt,gshl,dis,opt)
+  
+c     TRANSFER SMOOTH MESH TO XM1
+         call x8toxm(xm1,x8)
+         call x8toxm(ym1,y8)
+         if (ldim.eq.3) call x8toxm(zm1,z8)
+
+         call fixcurs
+         call fix_geom
+
+         call xmtox8(xm1,x8)
+         call xmtox8(ym1,y8)
+         if (ldim.eq.3) call xmtox8(zm1,z8)
+   
+         if (mod(j,noutput).eq.0) call outpost(vx,vy,vz,pr,t,'   ')
+  
+         if (nid.eq.0) write(6,*) 'loop complete',j
+         call geom_reset(1)
+      enddo
+
+c     RESTORE BOUNDARY LAYER
+      call restbndrlayer(dx,dy,dz,dis)  !dx,dy,dz is now actually smooth-coarse
+
+c     OUTPUT THE MESH
+      call gen_rea(2)                   !output the rea for smooth mesh
+
+      call outpost(dx,dy,dz,pr,t,'   ')
+      call exitti('Mesh smoothing completed.$',nouter)
+       
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine disfun(dis,funtype,alpha,beta,dcbc,nbc)
+      include 'SIZE'
+      include 'TOTAL'
+      real dd1(lx1*ly1*lz1*lelv),dd2(lx1*ly1*lz1*lelv)
+      real dis((2**ldim)*lelv*(2**ldim))
+      real dum((2**ldim)*lelv*(2**ldim))
+      integer i,nbc,j,funtype
+      character*3 dcbc(nbc)
+      real dscale,dmax,alpha,beta,dum2
+
+      if (nid.eq.0) write(6,*) 'distance function being calculated'
+
+      call rone (dd1,lx1*ly1*lz1*nelv)
+      call cheap_dist(dd1,1,dcbc(1))  ! Distance function scaling
+
+      if (nbc.ge.2) then
+      do i=2,nbc
+         call rone (dd2,lx1*ly1*lz1*nelv)
+         call cheap_dist(dd2,1,dcbc(i))  ! Distance function scaling
+         do j=1,lx1*ly1*lz1*nelv
+           dd1(j) = min(dd1(j),dd2(j))
+         enddo
+      enddo
+      endif
+
+      dmax   = glamax(dd1,lx1*ly1*lz1*nelv)
+      dscale = 1./dmax
+      call cmult(dd1,dscale,lx1*ly1*lz1*nelv) !normalized 0 to 1
+      call xmtox8(dd1,dis)
+ 
+      if (funtype.eq.0) then
+        do i=1,(2**ldim)*nelv*(2**ldim)
+          dis(i) = (1-EXP(-dis(i)/beta))
+       enddo
+      elseif (funtype.eq.1) then
+        do i=1,(2**ldim)*nelv*(2**ldim)
+          dis(i) = 0.5*(tanh(alpha*(dis(i)-beta))+1)
+        enddo
+      else
+          call exitti('Please set the funtype to 0 or 1$',funtype)
+      endif
+        
+    
+      if (nid.eq.0) write(6,*) dmax,'max wall distance'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine restbndrlayer(dx,dy,dz,dis)
+      include 'SIZE'
+      include 'TOTAL'
+c     dis*smoothmesh + (1-dis)*original mesh
+      real dx(lx1*ly1*lz1,lelv),dy(lx1*ly1*lz1,lelv)
+      real dz(lx1*ly1*lz1,lelv)
+      real dis((2**ldim)*lelv*(2**ldim)),dis2(lx1,ly1,lz1,lelv)
+
+      call x8toxm(dis2,dis)
+      dum2 = glamax(dis2,lx1*ly1*lz1*nelv)
+      dum2 = 1./dum2
+      call cmult(dis2,dum2,lx1*ly1*lz1*nelv)
+
+      call col2(xm1,dis2,lx1*ly1*lz1*nelv)   !w*xs
+      call col2(ym1,dis2,lx1*ly1*lz1*nelv)
+      if (ndim.eq.3) call col2(zm1,dis2,lx1*ly1*lz1*nelv)
+
+      call add2(xm1,dx,lx1*ly1*lz1*nelv)     !w*xs+xo
+      call add2(ym1,dy,lx1*ly1*lz1*nelv)
+      if (ndim.eq.3) call add2(zm1,dz,lx1*ly1*lz1*nelv)
+
+      call col2(dx,dis2,lx1*ly1*lz1*nelv)    !w*xo
+      call col2(dy,dis2,lx1*ly1*lz1*nelv)
+      if (ndim.eq.3) call col2(dz,dis2,lx1*ly1*lz1*nelv)
+
+      call sub2(xm1,dx,lx1*ly1*lz1*nelv)     !w*xs+xo-w*xo=w*xs+xo(1-w)
+      call sub2(ym1,dy,lx1*ly1*lz1*nelv)     !this is now store in xm1..zm1
+      if (ndim.eq.3) call sub2(zm1,dz,lx1*ly1*lz1*nelv)
+
+      call sub2(dx,xm1,lx1*ly1*lz1*nelv)     !dx=xo-xm1
+      call sub2(dy,ym1,lx1*ly1*lz1*nelv)
+      if (ndim.eq.3) call sub2(dz,zm1,lx1*ly1*lz1*nelv)
+
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine getwts(x8,y8,z8,gshl,mlt,wts)
+c constructs wts based on Taubin's inverse length's mean
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2**ldim,lelv*(2**ldim))
+      real y8(2**ldim,lelv*(2**ldim))
+      real z8(2**ldim,lelv*(2**ldim))
+      real wts(2**ldim,lelv*(2**ldim),ldim)
+      real twts(2**ldim,lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+      integer bzindx(24),n1,i,j,k,e,ind,gshl,flag
+      real work1(1),dum(ldim),sumv
+      DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8,
+     $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
+c     bzindx tells what node is connected to what node
+
+      n1 = nelv*(2**ldim)
+
+      do e=1,nelv*(2**ldim)
+      do i=1,2**ldim
+        ind = (i-1)*3
+        sumv = 0.
+      do j=1,ldim
+        xm = x8(i,e)-x8(bzindx(ind+j),e)
+        ym = y8(i,e)-y8(bzindx(ind+j),e)
+        zm = 0.
+      if (ldim.eq.3) zm = z8(i,e)-z8(bzindx(ind+j),e)
+        wts(i,e,j) = 1./sqrt(xm*xm+ym*ym+zm*zm)
+        sumv = sumv+wts(i,e,j)
+      enddo
+        twts(i,e) = sumv 
+      enddo
+      enddo
+
+c      call dsavg(twts,mlt,gshl)
+      call gs_op(gshl,twts,1,1,0)
+
+      call invcol2(wts(1,1,1),twts,nelv*(2**ldim)*(2**ldim))
+      call invcol2(wts(1,1,2),twts,nelv*(2**ldim)*(2**ldim))
+      if (ldim.eq.3)
+     $    call invcol2(wts(1,1,3),twts,nelv*(2**ldim)*(2**ldim))
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine wtlap(x8,y8,z8,iter,nodmask,mlt,gshl,dis)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2*2*(ldim-1),lelv*(2**ldim))
+      real y8(2*2*(ldim-1),lelv*(2**ldim))
+      real z8(2*2*(ldim-1),lelv*(2**ldim))
+      real dx(2*2*(ldim-1),lelv*(2**ldim))
+      real dy(2*2*(ldim-1),lelv*(2**ldim))
+      real dz(2*2*(ldim-1),lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+      real wts(2**ldim,lelv*(2**ldim),ldim)
+      real dis(2*2*(ldim-1)*lelv*(2**ldim))
+      real nodmask(2**ldim,lelv*(2**ldim))
+      integer iter,i,j,k,z,e,f,n1,n2,gshl,bzindx(24)
+      real xbar,ybar,zbar
+      DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8,
+     $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
+
+      call getwts(x8,y8,z8,gshl,mlt,wts)
+
+      n1 = nelv*(2**ldim)
+      n2 = n1*(2**ldim)
+      do k=1,iter
+       call rzero(dx,n2)
+       call rzero(dy,n2)
+       call rzero(dz,n2)
+        do e=1,n1
+        do i=1,2**ldim
+          ind = (i-1)*3
+        do j=1,ldim
+          dx(i,e) = dx(i,e)+wts(i,e,j)*(x8(bzindx(ind+j),e)-x8(i,e))
+          dy(i,e) = dy(i,e)+wts(i,e,j)*(y8(bzindx(ind+j),e)-y8(i,e))
+        if (ldim.eq.3) 
+     $    dz(i,e) = dz(i,e)+wts(i,e,j)*(z8(bzindx(ind+j),e)-z8(i,e)) 
+        enddo
+        enddo
+        enddo
+
+        call gs_op(gshl,dx,1,1,0)
+        call gs_op(gshl,dy,1,1,0)
+        if (ldim.eq.3) call gs_op(gshl,dz,1,1,0)
+
+        call col2(dx,nodmask,n2)
+        call col2(dy,nodmask,n2)
+        if (ldim.eq.3) call col2(dz,nodmask,n2)
+
+        call col2(dx,dis,n2)
+        call col2(dy,dis,n2)
+        if (ldim.eq.3) call col2(dz,dis,n2)
+
+        call add2(x8,dx,n2)
+        call add2(y8,dy,n2)
+        if (ldim.eq.3) call add2(z8,dz,n2)
+
+         dxm =glamax(dx,n2)
+         dym =glamax(dy,n2)
+         dzm =glamax(dz,n2)
+         if (nio.eq.0) write(6,1) k,dxm,dym,dzm
+   1     format(i5,1p3e12.3,' dxm')
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine masklayers(nodmask,nlayers)
+      include 'SIZE'
+      include 'TOTAL'
+      real nodmask(2**ldim,lelv*(2**ldim))
+      real d(lx1*ly1*lz1,lelv)
+      integer e,f,i,j,nlayers,valm,c
+
+      character*3 tcbc(5)
+      save        tcbc
+      data        tcbc /'W  ','v  ','V  ','mv ','MV ' /
+
+      call x8toxm(v1mask,nodmask)
+
+      call rone(d,nx1*ny1*nz1*nelv)
+      do e=1,nelv
+      do f=1,2*ldim
+      do c=1,5
+         if(cbc(f,e,1).eq.tcbc(c)) call facev(d,e,f,zero,nx1,ny1,nz1)
+      enddo
+      enddo
+      enddo
+      call dsop(d,'mul',nx1,ny1,nz1)
+
+      do i=1,nlayers
+        call dsop(d,'mul',nx1,ny1,nz1)
+         do e=1,nelv
+          val = glamin(d(1,e),lx1**ldim)
+          call cmult(d(1,e),val,lx1**ldim)
+         enddo
+      enddo
+
+      call dsop(d,'mul',nx1,ny1,nz1)
+      call col2(v1mask,d,lx1*ly1*lz1*nelv)
+      call xmtox8(v1mask,nodmask)
+      call outpost(v1mask,vy,vz,pr,t,'   ')
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine fixcurs
+      include 'SIZE'
+      include 'TOTAL'
+c     This routine fixes the curved edges post smoothing
+      common /ctmp0/ zg(3)
+      real w1(lx1*ly1*lz1*lelv),w2(lx1*ly1*lz1*lelt)
+      integer i,j,f,k,e,eg,nedge,n,nfaces
+      integer ke(3,12)
+      real xyz(3,3)
+      real xd(lx1*ly1*lz1),yd(lx1*ly1*lz1)
+      real zd(lx1*ly1*lz1)
+      real nx,ny,nz,nxv,nyv
+      save    ke
+      data    ke /  1, 2, 3,    3, 6, 9,    9, 8, 7,    7, 4, 1
+     $           , 19,20,21,   21,24,27,   27,26,25,   25,22,19
+     $           ,  1,10,19,    3,12,21,    9,18,27,    7,16,25 /
+       integer kin(7)
+       real tol
+
+c     START BY LOOPING OVER EACH ELEMENT AND THEN OVER EACH EDGE
+      nedge = 4 + 8*(ldim-2)
+      nfaces = 2**ldim
+
+      n      = nx1*ny1*nz1*nelv
+      call rone  (v1mask,n)
+      do e=1,nelv                ! fill mask where bc is periodic
+      do f=1,nfaces              ! so we don't translate periodic bcs (z only)
+       if (cbc(f,e,1).ne.'E  ') call facev (v1mask,e,f,0.0,nx1,ny1,nz1)
+      enddo
+      enddo
+      call dsop(v1mask,'*  ',nx1,ny1,nz1)
+
+      do e=1,nelv
+       do j=1,nedge
+        call rzero(xyz,9)
+        do i=1,3
+         xyz(1,i) = xm1(ke(i,j),1,1,e)
+         xyz(2,i) = ym1(ke(i,j),1,1,e)
+         if (ldim.eq.3) xyz(3,i) = zm1(ke(i,j),1,1,e)
+        enddo
+
+        if (v1mask(ke(2,j),1,1,e).gt.0.5) then
+c         call fixedg(xyz,nxv,nyv,nzv)
+         call fixedg2(xyz,nx,ny,nz)
+         xm1(ke(2,j),1,1,e) = nx
+         ym1(ke(2,j),1,1,e) = ny
+         if (ldim.eq.3) zm1(ke(2,j),1,1,e) = nz
+        endif
+       enddo
+
+c      fix face center and body center
+        zg(1) = -1
+        zg(2) = 0
+        zg(3) = 1
+        call copy(xd,xm1(1,1,1,e),lx1*ly1*lz1)
+        call copy(yd,ym1(1,1,1,e),lx1*ly1*lz1)
+        if (ldim.eq.3) call copy(zd,zm1(1,1,1,e),lx1*ly1*lz1)
+        call gh_face_extend(xd,zg,3,2,w1,w2)
+        call gh_face_extend(yd,zg,3,2,w1,w2)
+        if (ldim.eq.3) call gh_face_extend(zd,zg,3,2,w1,w2)
+        kin(1) = 5
+        kin(2) = 11
+        kin(3) = 13
+        kin(4) = 15
+        kin(5) = 17
+        kin(6) = 23
+        kin(7) = 14
+        do i=1,(ldim-2)*6+1
+         xm1(kin(i),1,1,e) = xd(kin(i))
+         ym1(kin(i),1,1,e) = yd(kin(i))
+         if (ldim.eq.3) zm1(kin(i),1,1,e) = zd(kin(i))
+        enddo
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine fixedg(xyz,nx,ny,nz)
+      include 'SIZE'
+      include 'TOTAL'
+      integer i,j,k,e,eg,nedge
+      real xyz(3,3),tol
+      real nx,ny,nz
+      real v1(3),v2(3),nv(3),l1,l2,v1n(3),v2n(3),v2o(3),l2o,lnv
+      real dotv12,p0x,p2x,p2y,c1,c2,m1,m2,r,dp(2),v(2),lv,pi
+      real th0,th1,th2,xx0,xy0,xx1,xy1,xx2,xy2,th3
+
+      pi = 4.*atan(1.)
+
+      v1(1) = xyz(1,1)-xyz(1,2)  !v1 = p0-p1
+      v1(2) = xyz(2,1)-xyz(2,2)
+      v1(3) = xyz(3,1)-xyz(3,2)
+
+      v2(1) = xyz(1,3)-xyz(1,2)  !v1 = p2-p1
+      v2(2) = xyz(2,3)-xyz(2,2)
+      v2(3) = xyz(3,3)-xyz(3,2)
+
+      l1 = sqrt(v1(1)**2+v1(2)**2+v1(3)**2)
+      l2 = sqrt(v2(1)**2+v2(2)**2+v2(3)**2)
+
+      v1n(1) = v1(1)/l1
+      v1n(2) = v1(2)/l1
+      v1n(3) = v1(3)/l1
+
+      v2n(1) = v2(1)/l2
+      v2n(2) = v2(2)/l2
+      v2n(3) = v2(3)/l2
+
+      nv(1) = v1n(2)*v2n(3)-v1n(3)*v2n(2)
+      nv(2) = v1n(3)*v2n(1)-v1n(1)*v2n(3)
+      nv(3) = v1n(1)*v2n(2)-v1n(2)*v2n(1)
+
+      lnv = sqrt(nv(1)**2+nv(2)**2+nv(3)**2)
+
+      nx = 0.5*(xyz(1,1)+xyz(1,3))
+      ny = 0.5*(xyz(2,1)+xyz(2,3))
+      if (ldim.eq.3) nz = 0.5*(xyz(3,1)+xyz(3,3))
+
+      tol = 1.e-4
+
+      if (lnv.gt.tol) then
+
+c in local system, v1n will stay as x axis
+c v2n will be orthogonalized against it
+
+      dotv12 = v1n(1)*v2n(1)+v1n(2)*v2n(2)+v1n(3)*v2n(3)
+c  
+      v2o(1) = v2n(1)-dotv12*v1n(1)
+      v2o(2) = v2n(2)-dotv12*v1n(2)
+      v2o(3) = v2n(3)-dotv12*v1n(3)
+
+      l2o = sqrt(v2o(1)**2+v2o(2)**2+v2o(3)**2)
+      v2o(1) = v2o(1)/l2o
+      v2o(2) = v2o(2)/l2o
+      v2o(3) = v2o(3)/l2o
+
+      p0x = l1
+      p2x = v2(1)*v1n(1)+v2(2)*v1n(2)+v2(3)*v1n(3)  !dot v2 with v1n
+      p2y = v2(1)*v2o(1)+v2(2)*v2o(2)+v2(3)*v2o(3)  !dot v2 with v2o
+
+      c1 = p0x*0.5                                   !x_c
+      c2 = (p2y**2+p2x**2-p2x*p0x)/(2*p2y)          !y_c
+
+      r = sqrt(((c1-l1)**2)+(c2**2))                !radius
+
+      xx0 = p0x-c1
+      xy0 = 0.-c2
+      th0 = atan2(xy0,xx0)
+      if (th0.lt.0.)  th0 = th0 + 2*pi
+      xx1 = 0.-c1
+      xy1 = 0.-c2
+      th1 = atan2(xy1,xx1)
+      if (th1.lt.0.)  th1 = th1 + 2*pi
+      xx2 = p2x-c1
+      xy2 = p2y-c2
+      th2 = atan2(xy2,xx2)
+      if (th2.lt.0.)  th2 = th2 + 2*pi
+
+      th3 = (th0+th2)*0.5
+
+      if (abs(th3-th1).gt.abs(th3-th0)) then
+        th3 = th3+pi
+      endif
+
+      dp(1) = c1+r*cos(th3)
+      dp(2) = c2+r*sin(th3)
+
+      nx = xyz(1,2) + dp(1)*v1n(1) + dp(2)*v2o(1)
+      ny = xyz(2,2) + dp(1)*v1n(2) + dp(2)*v2o(2)
+      nz = xyz(3,2) + dp(1)*v1n(3) + dp(2)*v2o(3)
+
+      endif
+
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine fixedg2(xyz,nx,ny,nz)
+
+      real xyz(3,0:2) ! Coordinates
+
+      real x0(3),x1(3),x2(3),v2(3),v1(3),l02,l01,n1i,u1(3),u2(3)
+      real nx,ny,nz
+      real h,tol,h2
+
+      call copy(x0,xyz(1,0),3)
+      call copy(x1,xyz(1,1),3)
+      call copy(x2,xyz(1,2),3)
+                             !                  ^ x2
+      call sub3(v1,x1,x0,3)  ! v1=x1-x0        /  \ v2     p1 = x0+v2*dot
+      call sub3(v2,x2,x0,3)  ! v2=x2-x0    x1 .<-- x0
+                             !                  v1
+      l02 = vlsc2(v2,v2,3)   ! || x2-x0 ||
+      if (l02.gt.0) then
+         l02 = sqrt(l02)
+         scl = 1./l02
+         call cmult2(u2,v2,scl,3)  ! Unit tangent
+      endif
+
+      l01 = vlsc2(v1,v1,3)   ! || x1-x0 ||
+      if (l01.gt.0) then
+         l01 = sqrt(l01)
+         scl = 1./l01
+         call cmult2(u1,v1,scl,3)  ! Unit tangent
+      endif
+
+      dot = vlsc2(v1,u2,3)
+
+      if (dot.le.0) then
+         write(6,*) 'ERROR 1 IN SHIFT - YOU SHOULD ABORT'
+         return
+      elseif (dot.gt.l02) then
+         write(6,*) 'ERROR 2 IN SHIFT - YOU SHOULD ABORT'
+         return
+      endif
+         h = 0.
+         tol = 1.e-8
+      do i=1,3
+         p1i = x0(i) + u2(i)*dot   ! Projection of x1 onto [x0,x2]
+         n1i = x1(i) - p1i         ! Normal vector
+         h = h + n1i**2
+         h2 = h2+ (x2(i)-x0(i))**2
+         xmi = 0.5*(x0(i)+x2(i))
+         x1(i) = xmi + n1i         ! X1 point shifted to be centered at midpoint
+      enddo
+         if (h.le.h2*tol) then
+            x1(1) = 0.5*(x0(1)+x2(1))
+            x1(2) = 0.5*(x0(2)+x2(2))
+            x1(3) = 0.5*(x0(3)+x2(3))
+         endif
+         
+
+      nx = x1(1)
+      ny = x1(2)
+      nz = x1(3)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine opt8(x8,y8,z8,itmax,nodmask,mlt,gshl,dis,opt)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real y8(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real z8(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+      real nodmask(2**ldim,lelv*(2**ldim))
+      real dis((2**ldim)*lelv*(2**ldim))
+      integer iter,i,j,k,n1,nxyz,z,e,f,n2,gshl,siz,eg,opt
+      real f2,lambda,num,den,scale2,scale
+      real dfdx(2**ldim,lelv*(2**ldim),ldim)
+      real dfdo(2**ldim,lelv*(2**ldim),ldim)
+      real dg(2**ldim,lelv*(2**ldim),ldim)
+      real scalek
+      real dval(2**ldim,lelv*(2**ldim))
+      real dumc1,dumc2,dumc3,hval
+
+      if (nid.eq.0) write(6,*) 'Optimization loop started'
+    
+      if (opt.eq.1) siz = 2**ldim !for jacobian
+      if (opt.eq.2) siz = 4+8*(ldim-2) !for len
+      n1 = 2**ldim 
+      n2 = nelv*(2**ldim)*n1
+
+      call get_nodscale(scalek,x8,y8,z8,gshl)
+      hval = scalek
+
+      do iter=1,itmax
+
+         call gradf(f2,dfdx,x8,y8,z8,mlt,gshl,siz,opt,hval) 
+
+         dumc1 =  glamax(dfdx(1,1,1),ldim*n2)
+
+         do e=1,nelv*(2**ldim)
+         do j=1,2**ldim
+          if (ldim.eq.2) then
+            dval(j,e) = max(abs(dfdx(j,e,1)),abs(dfdx(j,e,2)))
+          else
+            dval(j,e) = max(abs(dfdx(j,e,1)),abs(dfdx(j,e,2)),
+     $                  abs(dfdx(j,e,3)))
+          endif
+         if (dval(j,e).eq.0) then
+             dval(j,e) = (1.e+6)*(dumc1)
+         endif
+         
+         enddo
+         enddo
+
+         call invcol1(dval,n2)
+         call cmult(dval,scalek,n2)
+         one = -1.
+         call cmult(dval,one,n2)
+
+         dum1 = glamin(dval,n2)
+         dum2 = glamax(dval,n2)
+c         if (nid.eq.0) write(6,*) dum1,dum2,'dvalminmax'
+
+         call col2(dfdx(1,1,1),nodmask,n2)
+         call col2(dfdx(1,1,2),nodmask,n2)
+         if (ldim.eq.3) call col2(dfdx(1,1,3),nodmask,n2)
+
+         call col2(dfdx(1,1,1),dis,n2)
+         call col2(dfdx(1,1,2),dis,n2)
+         if (ldim.eq.3) call col2(dfdx(1,1,3),dis,n2)
+
+         call add2col2(x8,dfdx(1,1,1),dval,n2)
+         call add2col2(y8,dfdx(1,1,2),dval,n2)
+         if (ldim.eq.3) call add2col2(z8,dfdx(1,1,3),dval,n2)
+
+         if (nid.eq.0) write(6,*) iter,f2,'glob_mesh_sum'
+
+         if (mod(iter,10).eq.0) then
+          call x8toxm(xm1,x8)
+          call x8toxm(ym1,y8)
+          if (ldim.eq.3) call x8toxm(zm1,z8)
+          call fixcurs
+          call xmtox8(xm1,x8)
+          call xmtox8(ym1,y8)
+          if (ldim.eq.3) call xmtox8(zm1,z8)
+         endif
+         
+       enddo
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine gradf(f2,dfdx,x8,y8,z8,mlt,gshl,siz,opt,h)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2**ldim,lelv*(2**ldim)),y8(2**ldim,lelt*(2**ldim))
+      real z8(2**ldim,lelv*(2**ldim))
+      real xt(2**ldim),yt(2**ldim),zt(2**ldim)
+      integer siz,opt
+      real par(siz)
+      real mlt(2**ldim,lelv*(2**ldim))
+      integer vertex,gshl,e,eg,e0,f
+      real f1,fl,gl,f2,h
+      integer i,j,k
+      real dtdx(1,2**ldim,ldim)
+      real dfdx(2**ldim,lelv*(2**ldim),ldim)
+ 
+      f1 = 0
+      do e=1,nelv*(2**ldim)
+      if (opt.eq.1) 
+     $    call get_jac(fl,x8(1,e),y8(1,e),z8(1,e),siz,e,0)
+      if (opt.eq.2) call get_len(fl,x8(1,e),y8(1,e),z8(1,e),siz)  
+         f1 = f1+fl
+         call copy(xt,x8(1,e),2**ldim)
+         call copy(yt,y8(1,e),2**ldim)
+         call copy(zt,z8(1,e),2**ldim)
+         do j=1,2**ldim
+            xt(j) = x8(j,e)+h 
+      if (opt.eq.1) call get_jac(dtdx(1,j,1),xt,yt,zt,siz,e,1)
+      if (opt.eq.2) call get_len(dtdx(1,j,1),xt,yt,zt,siz)
+            xt(j) = x8(j,e) 
+
+            yt(j) = y8(j,e)+h 
+      if (opt.eq.1) call get_jac(dtdx(1,j,2),xt,yt,zt,siz,e,2)
+      if (opt.eq.2) call get_len(dtdx(1,j,2),xt,yt,zt,siz)
+            yt(j) = y8(j,e) 
+
+            if (ldim.eq.3) then
+             zt(j) = z8(j,e)+h 
+      if (opt.eq.1) call get_jac(dtdx(1,j,3),xt,yt,zt,siz,e,3)
+      if (opt.eq.2) call get_len(dtdx(1,j,3),xt,yt,zt,siz)
+             zt(j) = z8(j,e) 
+            endif
+          enddo 
+
+         do k=1,ldim
+         do j=1,2**ldim
+           gl=dtdx(1,j,k)
+           dfdx(j,e,k) = (gl-fl)/h
+         enddo
+         enddo
+      enddo 
+
+      call gs_op(gshl,dfdx(1,1,1),1,1,0)
+      call gs_op(gshl,dfdx(1,1,2),1,1,0)
+      if (ldim.eq.3) call gs_op(gshl,dfdx(1,1,3),1,1,0)
+
+      f2 = glsum(f1,1)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine get_jac(val,x,y,z,siz,el,dire)
+      include 'SIZE'
+      include 'TOTAL'
+c     This routine compiles the jacobian matrix and then does the 
+c     frobenius norm of the matrix times that of the inverse
+      integer i,j,k,siz,el,dire
+      real par(siz),det(siz),val
+      real jm(ldim,ldim),jin(ldim,ldim),frn(ldim**2)
+      real x(2**ldim),y(2**ldim),z(2**ldim)
+      real jac(2**ldim),dumc
+      real fr1,fr2,sum1
+      integer bzindx(24),czindx(24)
+      integer penalty
+      SAVE bzindx
+      DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8, 
+     $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
+c     bzindx tells which node is node connected to in r,s,t direction
+c     example: node 1 is connected to 2,3,5; 2 to 1,4,6 and so on  
+      SAVE czindx
+      DATA czindx / 1,1,1,  -1,1,1, 1,-1,1, -1,-1,1,
+     $              1,1,-1, -1,1,-1, 1,-1,-1, -1,-1,-1 / 
+c     this tells which node is to be subtracted.
+
+      if (siz.ne.2**ldim) then
+         write(6,*) 'siz value wrong input into get_jac'
+         write(6,*) siz,'sizval',2**ldim,'should be this'
+         call exitt
+      endif
+
+      do i=1,2**ldim
+        ind1 = (i-1)*3 !tells where to look in b/czindx
+        do j=1,ldim
+         ind2 = ind1+j
+            jm(1,j) = 0.5*czindx(ind2)*(x(bzindx(ind2))-x(i))
+            jm(2,j) = 0.5*czindx(ind2)*(y(bzindx(ind2))-y(i))
+            if (ldim.eq.3) 
+     $      jm(3,j) = 0.5*czindx(ind2)*(z(bzindx(ind2))-z(i))
+        enddo
+c     jacobian matrix has been calculated at this point. 
+c     now calculate determinant
+       if (ldim.eq.3) then
+           jac(i)=jm(1,1)*(jm(2,2)*jm(3,3)-jm(2,3)*jm(3,2)) + 
+     $            jm(1,3)*(jm(2,1)*jm(3,2)-jm(2,2)*jm(3,1)) +
+     $            jm(1,2)*(jm(2,3)*jm(3,1)-jm(2,1)*jm(3,3))
+        else
+           jac(i)=jm(1,1)*jm(2,2)-jm(2,1)*jm(1,2) 
+        endif
+c      calculate inverse matrix
+       if (ldim.eq.3) then
+         jin(1,1) = jm(2,2)*jm(3,3)-jm(3,2)*jm(2,3)
+         jin(2,1) = jm(2,3)*jm(3,1)-jm(3,3)*jm(2,1)
+         jin(3,1) = jm(2,1)*jm(3,2)-jm(3,1)*jm(2,2)
+
+         jin(1,2) = jm(1,3)*jm(3,2)-jm(3,3)*jm(1,2)
+         jin(2,2) = jm(1,1)*jm(3,3)-jm(3,1)*jm(1,3)
+         jin(3,2) = jm(1,2)*jm(3,1)-jm(3,2)*jm(1,1)
+       
+         jin(1,3) = jm(1,2)*jm(2,3)-jm(2,2)*jm(1,3)
+         jin(2,3) = jm(1,3)*jm(2,1)-jm(2,3)*jm(1,1)
+         jin(3,3) = jm(1,1)*jm(2,2)-jm(2,1)*jm(1,2)
+       else
+         jin(1,1) = jm(2,2)
+         jin(2,1) = -jm(2,1)
+
+         jin(1,2) = -jm(1,2)
+         jin(2,2) = jm(1,1)
+       endif
+       
+       dumc = 1/jac(i)
+       call cmult(jin,dumc,ldim**2) !scale inverse by inv det
+  
+       call rzero(frn,ldim**2)
+       call col3(frn,jm,jm,ldim**2) !square the entries
+       sum1 = vlsum(frn,ldim**2)
+       fr1 = SQRT(sum1)           !squareroot
+             
+       call rzero(frn,ldim**2)
+       call col3(frn,jin,jin,ldim**2)
+       sum1 = vlsum(frn,ldim**2)
+       fr2 = SQRT(sum1)
+
+       par(i) = fr1*fr2
+       par(i) = (par(i)/ldim)**2
+
+      enddo
+
+      val = vlsum(par,siz)
+      val = val/siz  !normalize to 1 for each element
+      val=abs(val)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine get_len(val,x,y,z,siz)
+      include 'SIZE'
+      include 'TOTAL'
+      real x(2**ldim),y(2**ldim),z(2**ldim)
+      integer siz
+      real par(siz)
+      integer azindx(24),n1,i
+      real xm,ym,zm
+      real val
+      SAVE    azindx
+      DATA    azindx  / 1,2 ,2,4, 3,4, 1,3, 2,6, 6,8,
+     $                  4,8, 5,6, 7,8, 5,7, 1,5, 3,7 /
+c     azindx tells what nodes make up each edge
+
+      do i=1,siz
+        ind = (i-1)*2
+        xm = x(azindx(ind+1))-x(azindx(ind+2))
+        ym = y(azindx(ind+1))-y(azindx(ind+2))
+        zm = z(azindx(ind+1))-z(azindx(ind+2))
+        par(i) = sqrt(xm*xm+ym*ym+zm*zm)
+        par(i) = par(i)**2
+      enddo
+
+      val = vlsum(par,siz)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine get_nodscale(scalek,x8,y8,z8,gshl)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2**ldim,lelv*(2**ldim))
+      real y8(2**ldim,lelv*(2**ldim))
+      real z8(2**ldim,lelv*(2**ldim))
+      real scale(2**ldim,lelv*(2**ldim))
+      real scalek
+      integer bzindx(24),n1,i,j,k,e,ind,gshl
+      real work1(1),dum(ldim)
+      real xm,ym,zm
+      DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8,
+     $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
+      real val
+c     bzindx tells what node is connected to what node
+
+      n1 = nelv*(2**ldim)
+
+      do e=1,nelv*(2**ldim)
+      do i=1,2**ldim
+        ind = (i-1)*3
+      do j=1,ldim
+        xm = x8(i,e)-x8(bzindx(ind+j),e)
+        ym = y8(i,e)-y8(bzindx(ind+j),e)
+        zm = 0.
+      if (ldim.eq.3) zm = z8(i,e)-z8(bzindx(ind+j),e)
+        dum(j) = sqrt(xm*xm+ym*ym+zm*zm)
+      enddo
+        scale(i,e) = minval(dum)
+      enddo
+      enddo
+      val = glamin(scale,(2**ldim)*nelv*(2**ldim))
+      if (nid.eq.0) write(6,*) val,'minval'
+      call rone(scale,(2**ldim)*nelv*(2**ldim))
+      call cmult(scale,val,(2**ldim)*nelv*(2**ldim))
+
+      dum1 = glamin(scale,(2**ldim)*nelv*(2**ldim))
+      dum2 = glamax(scale,(2**ldim)*nelv*(2**ldim))
+c
+      call gs_op(gshl,scale,1,3,0) ! 'minimum'
+      fac = 1.e-1
+      call cmult(scale,fac,(2**ldim)*nelv*(2**ldim))
+      scalek = fac*val
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine genmask(nodmask,mlt,gshl)
+      include 'SIZE'
+      include 'TOTAL'
+      integer gs_handle
+      integer vertex(1)
+      common /nekmpi/ mid,mp,nekcomm,nekgroup,nekreal
+      common /ivrtx/ vertex
+      integer*8 glo_num(lx1*ly1*lz1,lelv),ngv
+      integer*8 glo_numk2(2**ldim,lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+      real nodmask(2**ldim,lelv*(2**ldim))
+      integer gshl,e,eg,e0,f,k,j
+      integer zindx(64)
+      SAVE zindx
+      DATA zindx /  1,  2,  4,  5,  10, 11, 13, 14,
+     $              2,  3,  5,  6,  11, 12, 14, 15,
+     $              4,  5,  7,  8,  13, 14, 16, 17,
+     $              5,  6,  8,  9,  14, 15, 17, 18,
+     $              10, 11, 13, 14, 19, 20, 22, 23,
+     $              11, 12, 14, 15, 20, 21, 23, 24,
+     $              13, 14, 16, 17, 22, 23, 25, 26,
+     $              14, 15, 17, 18, 23, 24, 26, 27 /
+
+
+      call setupds_center(gs_handle,nx1,ny1,nz1,nelv,
+     $  nelgv,vertex,glo_num)
+
+c     setup the mask first so that it can be distribute as well
+      zero = 0.
+      call rone(v1mask,nx1*ny1*nz1*nelv)
+      do e=1,nelv
+      do f=1,2*ldim
+         if(cbc(f,e,1).ne.'E  ')then
+           call facev(v1mask,e,f,zero,nx1,ny1,nz1)
+         endif
+      enddo
+      enddo
+      call dsop(v1mask,'mul',nx1,ny1,nz1)
+      call xmtox8(v1mask,nodmask)
+
+      n = 0
+      do e=1,nelv     !each element
+      do j=1,2**ldim  !broken down into 4 quads/8hexes
+        n = n+1
+        ind1 = (j-1)*8
+        do k=1,2**ldim
+          glo_numk2(k,n) = glo_num(zindx(ind1+k),e)
+        enddo
+      enddo
+      enddo
+
+      n = (2**ldim)*(nelv*(2**ldim))
+
+      call gs_setup(gshl,glo_numk2,n,nekcomm,np)
+      call rone(mlt,n)
+      call gs_op(gshl,mlt,1,1,0)   ! '+'
+      xmlt = glmax(mlt,n)
+      if (nid.eq.0) write(6,*) n,xmlt,' MAX MULT'
+      call invcol1(mlt,n)
+
+      call gs_op(gshl,nodmask,1,2,0)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine setupds_center(gs_handle,nx,ny,nz,nel,melg,
+     $                        vertex,glo_num)
+      include 'SIZE'
+      include 'INPUT'
+      include 'PARALLEL'
+      include 'NONCON'
+      integer gs_handle
+      integer vertex(1)
+      integer*8 glo_num(1),ngv
+      common /nekmpi/ mid,mp,nekcomm,nekgroup,nekreal
+
+      n = nx*ny*nz*nel
+      call set_vert(glo_num,ngv,nx,nel,vertex,.true.)
+      call gs_setup(gs_handle,glo_num,n,nekcomm,mp)
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine fastlap(x8,y8,z8,iter,nodmask,mlt,gshl,dis)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real y8(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real z8(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real xa(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real ya(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real za(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real dx(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real dy(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real dz(2*2*(ldim-1),1,1,lelv*(2**ldim))
+      real dis(2*2*(ldim-1)*lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+      real nodmask(2**ldim,lelv*(2**ldim))
+      integer iter,i,j,k,n,nxyz,z,e,f,n2,gshl
+      real xbar,ybar,zbar
+
+      if (nid.eq.0) write(6,*) 'Laplacian smoothing started'
+
+      n    = 2**ldim
+      do k=1,iter
+         do e=1,nelv*(2**ldim)
+            xbar = vlsum(x8(1,1,1,e),n)/(n)
+            ybar = vlsum(y8(1,1,1,e),n)/(n)
+            if (ldim.eq.3) zbar = vlsum(z8(1,1,1,e),n)/(n)
+            do i=1,n
+               xa(i,1,1,e)= xbar + 0.99*(x8(i,1,1,e)-xbar)
+               ya(i,1,1,e)= ybar + 0.99*(y8(i,1,1,e)-ybar)
+        if (ldim.eq.3) za(i,1,1,e)=zbar + 0.99*(z8(i,1,1,e)-zbar)
+            enddo
+         enddo
+
+         n2 = nelv*(2**ldim)*(n)
+
+         call sub3(dx,xa,x8,n2)  ! dx = xa-xm1
+         call col2(dx,nodmask,n2)
+         call col2(dx,dis,n2)
+         call dsavg_general(dx,mlt,gshl)
+         call add2(x8,dx,n2)
+
+         call sub3(dy,ya,y8,n2)  ! dy = ya-ym1
+         call col2(dy,nodmask,n2)
+         call col2(dy,dis,n2)
+         call dsavg_general(dy,mlt,gshl)
+         call add2(y8,dy,n2)
+        
+         if (ldim.eq.3) then
+          call sub3(dz,za,z8,n2)  ! dz = za-zm1
+          call col2(dz,nodmask,n2)
+          call col2(dz,dis,n2)
+          call dsavg_general(dz,mlt,gshl)
+          call add2(z8,dz,n2)
+         endif
+
+         dxm =glamax(dx,n)
+         dym =glamax(dy,n)
+         dzm =glamax(dz,n)
+         if (nio.eq.0) write(6,1) k,dxm,dym,dzm
+   1     format(i5,1p3e12.3,' dxm')
+
+      enddo
+       
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine dsavg_general(u,mlt,gshl)
+      include 'SIZE'
+      include 'TOTAL'
+      integer gshl
+      real u(2**ldim,lelv*(2**ldim))
+      real mlt(2**ldim,lelv*(2**ldim))
+
+      call gs_op(gshl,u,1,1,0) ! '+'
+      call col2(u,mlt,(2**ldim)*nelv*(2**ldim))
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine xmtox8(xd,x8)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2**ldim,lelv*(2**ldim))
+      real xd(lx1*ly1*lz1,lelv)
+      integer e,k,n,j,ind1
+      integer zindx(64)
+      SAVE zindx
+      DATA zindx /  1,  2,  4,  5,  10, 11, 13, 14,
+     $              2,  3,  5,  6,  11, 12, 14, 15,
+     $              4,  5,  7,  8,  13, 14, 16, 17,
+     $              5,  6,  8,  9,  14, 15, 17, 18,
+     $              10, 11, 13, 14, 19, 20, 22, 23,
+     $              11, 12, 14, 15, 20, 21, 23, 24,
+     $              13, 14, 16, 17, 22, 23, 25, 26,
+     $              14, 15, 17, 18, 23, 24, 26, 27 /
+
+      n = 0
+      do e=1,nelv     !each element
+      do j=1,2**ldim  !broken down into 4 quads/8hexes
+        n = n+1
+        ind1 = (j-1)*8
+        do k=1,2**ldim
+          x8(k,n) = xd(zindx(ind1+k),e)
+        enddo
+      enddo
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine x8toxm(xd,x8)
+      include 'SIZE'
+      include 'TOTAL'
+      real x8(2**ldim,lelv*(2**ldim))
+      real xd(lx1*ly1*lz1,lelv)
+      integer zindx((2**3)**2)
+      integer e,k,n,j,ind1
+      DATA zindx /  1,  2,  4,  5,  10, 11, 13, 14,
+     $              2,  3,  5,  6,  11, 12, 14, 15,
+     $              4,  5,  7,  8,  13, 14, 16, 17,
+     $              5,  6,  8,  9,  14, 15, 17, 18,
+     $              10, 11, 13, 14, 19, 20, 22, 23,
+     $              11, 12, 14, 15, 20, 21, 23, 24,
+     $              13, 14, 16, 17, 22, 23, 25, 26,
+     $              14, 15, 17, 18, 23, 24, 26, 27 /
+
+
+      n = 0
+      do e=1,nelv     !each element
+      do j=1,2**ldim  !broken down into 4 quads/8hexes
+        n = n+1
+        ind1 = (j-1)*8
+        do k=1,2**ldim
+          xd(zindx(ind1+k),e) = x8(k,n)
+        enddo
+      enddo
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine out2(xd,yd,zd,num,str)
+      include 'SIZE'
+      include 'TOTAL'
+      integer num
+      real xd(2**ldim,num) 
+      real yd(2**ldim,num) 
+      real zd(2**ldim,num) 
+      integer e,i
+      character*6 str
+
+      do e=1,num
+      do i=1,2**ldim
+         if (ldim.eq.2) write(6,*) e,i,xd(i,e),yd(i,e),str   
+         if (ldim.eq.3) write(6,*) e,i,xd(i,e),yd(i,e),zd(i,e),str   
+      enddo
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine setelflag(elist,xv,yv,zv,dxv,dyv,dzv,x8,y8,z8)
+      include 'SIZE'
+      include 'TOTAL'
+      integer elist(lelv)
+      real x8(2*2*(ldim-1),lelv*(2**ldim))
+      real y8(2*2*(ldim-1),lelv*(2**ldim))
+      real z8(2*2*(ldim-1),lelv*(2**ldim))
+      real xv,yv,zv,dxv,dyv,dzv
+      real xm,ym,zm,xn,yn,zn
+      integer n,e
+
+      n = 0
+      do e=1,nelv 
+      do j=1,2**ldim
+        n = n +1
+        xm = vlmax(x8(1,n),2**ldim)
+        ym = vlmax(y8(1,n),2**ldim)
+        zm = vlmax(z8(1,n),2**ldim)
+        xn = vlmin(x8(1,n),2**ldim)
+        yn = vlmin(y8(1,n),2**ldim)
+        zn = vlmin(z8(1,n),2**ldim)
+      if (xv+dxv-xm.gt.0.and.xv-dxv-xn.lt.0.and.
+     $   yv+dyv-ym.gt.0.and.yv-dyv-yn.lt.0.and.
+     $   zv+dzv-zm.gt.0.and.zv-dzv-zn.lt.0) elist(e) = 1 
+
+      enddo
+      enddo
+ 
+      return
+      end
+c-----------------------------------------------------------------------
