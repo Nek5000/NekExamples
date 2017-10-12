@@ -117,11 +117,11 @@ def run_nek(cwd, rea_file, ifmpi, log_suffix='', n_procs=1, step_limit=None, ver
     else:
         print('Finished running nek5000!')
 
-def run_neknek(cwd, inside, np_inside, outside, np_outside, log_suffix='', verbose=False):
+def run_neknek(cwd, inside, np_inside, outside, np_outside, step_limit=None, log_suffix='', verbose=False):
 
     # Paths to executables, files
     nek5000 = os.path.join(cwd, 'nek5000')
-    logfile      = os.path.join(cwd, '{inside}{np_in}.{outside}{np_out}.log.{sfx}'.format(
+    logfile      = os.path.join(cwd, '{inside}{np_in}.{outside}{np_out}.log{sfx}'.format(
         inside = inside,
         outside = outside,
         np_in = np_inside,
@@ -168,6 +168,11 @@ def run_neknek(cwd, inside, np_inside, outside, np_outside, log_suffix='', verbo
                 "{0}\n".format(cwd),
                 "{0}\n".format(np_outside),
             ])
+
+        # Write step limit
+        if step_limit:
+            with open(ioinfo, 'w') as f:
+                f.writelines(['-{0}'.format(step_limit)])
 
         if verbose:
             with open(logfile, 'w') as f:
