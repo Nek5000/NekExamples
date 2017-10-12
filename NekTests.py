@@ -30,7 +30,7 @@ class TurbChannel(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -121,7 +121,7 @@ class TurbChannel(NekTestCase):
 #         self.source_root = new_source_root
 #
 #         self.build_tools(['genmap'])
-#         self.run_genmap()
+#         self.run_genmap(tol='0.01')
 #
 #     @pn_pn_serial
 #     def test_PnPn_Serial(self):
@@ -193,7 +193,7 @@ class ThreeDBox(NekTestCase):
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox()
         self.mvn('box', self.__class__.case_name)
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -272,7 +272,7 @@ class Blasius(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -375,7 +375,7 @@ class ConjHt(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -472,7 +472,8 @@ class CylRestart_C(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
+        self.run_genmap(rea_file='cb', tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -627,7 +628,8 @@ class CylRestart_P(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
+        self.run_genmap(rea_file='pb', tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -786,7 +788,7 @@ class Eddy_PsiOmega(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -877,7 +879,7 @@ class ExtCyl(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -968,7 +970,7 @@ class Fs2_St1(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
 #    @pn_pn_serial
 #    def test_PnPn_Serial(self):
@@ -1061,7 +1063,7 @@ class Fs2_St2(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(tol='0.2')
+        self.run_genmap(tol='0.01')
 
 #    @pn_pn_serial
 #    def test_PnPn_Serial(self):
@@ -1154,7 +1156,7 @@ class Fs2_StdWv(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
 #    @pn_pn_serial
 #    def test_PnPn_Serial(self):
@@ -1251,7 +1253,7 @@ class FsHydro(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
 #    @pn_pn_serial
 #    def test_PnPn_Serial(self):
@@ -1352,7 +1354,7 @@ class Hemi(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
@@ -1413,7 +1415,7 @@ class Kovasznay(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -1512,7 +1514,7 @@ class Mhd_Gpf(NekTestCase):
         )
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
-        self.run_genmap(rea_file='box')
+        self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'gpf')
 
     @pn_pn_serial
@@ -1602,7 +1604,7 @@ class Mhd_GpfM(NekTestCase):
         )
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
-        self.run_genmap(rea_file='box')
+        self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'gpf')
         shutil.copy(
             os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf.map'),
@@ -1687,7 +1689,7 @@ class Mhd_GpfB(NekTestCase):
         )
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
-        self.run_genmap(rea_file='box')
+        self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'gpf')
 
     @pn_pn_serial
@@ -1765,7 +1767,7 @@ class Os7000(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -1862,7 +1864,7 @@ class Peris(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -1947,7 +1949,7 @@ class Pipe_Helix(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2054,7 +2056,7 @@ class Pipe_Stenosis(NekTestCase):
         ]
         self.build_tools(['n2to3', 'genmap'])
         self.run_n2to3(n2to3_input)
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2141,7 +2143,7 @@ class Rayleigh_Ray1(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap(rea_file='ray1')
+        self.run_genmap(rea_file='ray1', tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2238,7 +2240,7 @@ class Rayleigh_Ray2(NekTestCase):
         )
         self.build_tools(['genmap', 'genbox'])
         self.run_genbox(box_file='ray2')
-        self.run_genmap(rea_file='box')
+        self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'ray2')
 
     @pn_pn_serial
@@ -2338,7 +2340,7 @@ class Strat_P1000(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2421,7 +2423,7 @@ class Strat_P0001(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2508,7 +2510,7 @@ class Solid(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2585,7 +2587,7 @@ class Shear4_Shear4(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2680,7 +2682,7 @@ class Shear4_Thin(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2779,7 +2781,7 @@ class Taylor(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2893,7 +2895,7 @@ class Vortex(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
@@ -2998,7 +3000,7 @@ class Vortex2(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
         # Tweak .rea file
         rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.case_name + '.rea')
@@ -3131,7 +3133,7 @@ class InclDef(NekTestCase):
             lcvelt    = '1',
         )
         self.build_tools(['genmap'])
-        self.run_genmap()
+        self.run_genmap(tol='0.01')
 
     @pn_pn_serial
     def test_PnPn_Serial(self):
