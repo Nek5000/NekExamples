@@ -1,0 +1,9 @@
+0.0         ! DIAPH1 : Position of diaphragm  
+1.4         ! GAMMA  : Ratio of specific heats
+1.1970      ! RHOL   : Driver initial fluid density
+0.0         ! UL     : Driver initial fluid velocity
+101000.0    ! PL     : Driver initial fluid pressure
+0.1185      ! RHOR   : Driven initial fluid density
+0.0         ! UR     : Driven initial fluid velocity
+10000.0     ! PR     : Driven initial fluid density
+0.00        ! t0     ; Zero simulation time

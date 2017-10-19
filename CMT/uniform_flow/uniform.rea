@@ -1,0 +1,162 @@
+ ****** PARAMETERS *****
+    2.610000     NEKTON VERSION
+  3  DIMENSIONAL RUN
+          103 PARAMETERS FOLLOW
+   1.20000         DENSITY (air)  param(1)
+  1.8e-5           VISCOS   (air) param(2)
+  0.000000E+00     BETAG
+  0.000000E+00     GTHETA
+  0.000000E+00     PGRADX
+  0.000000E+00     FLOWRATE
+   1.00000         RHOCP
+  0.0240000         CONDUCT (air) param(8)
+  0.000000E+00     QVOL
+  0.000000E+00     FINTIME
+  25000.0         NSTEPS
+  1.000000E-04     DT
+  0.000000E+00     IOCOMM
+  0.000000E+00     IOTIME
+  100.0E+00     IOSTEP
+  0.000000E+00     EQTYPE
+  0.000000E+00     AXIS
+  0.250000E-01     GRID
+  -1.00000         INTYPE
+   12.0000         NORDER
+  0.100000E-13     DIVERGENCE
+  0.100000E-14     HELMHOLTZ
+  0              p23 NPSCAL
+  0.100000E-09     TOLREL
+  0.100000E-09     TOLABS
+  0.40000         COURANT
+   2.00000         TORDER
+  0.000000E+00     TMESH
+  0.000000E+00     MAXCGHELM
+  0.000000E+00     PoPRESSURE
+  0.000000E+00     GAS CONS R
+  0.000000E+00     Lo Ma GRAV
+   100.000         MXGEOM
+   100.000         MAXNEW
+  0.100000E-03
+  0.100000E-03     XMAGNET
+  0.100000E-01     NGRIDS
+  0.000000E+00     NORDER2
+  0.000000E+00     NORDER3
+  0.000000E+00     NORDER4
+  0.000000E+00     NORDER5
+  0.000000E+00     SSFSLENG
+   1.00000         VHScaleFac
+  0.000000E+00     POISSONRA
+  0.000000E+00     FSDTFAC
+  0.000000E+00     IRSTART
+  0.000000E+00     CNFAC
+  0.000000E+00     PGEOM
+  0.140000         MIXLFAC
+  0.000000E+00     MAXCGFS
+  0.000000E+00
+  0.000000E+00     HISTEP
+  0.000000E+00     HISTIME
+  0.000000E+00     RAMP_STEPS
+  0.000000E+00     P55
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+   1.00000         new file each dump (1)
+  4.000000E+00     write form (0), unform(1), universal(2)
+  4.000000E+00     read form (0), unform (1), universal(2)
+  0.000000E+00
+   50000.0         frequency of srf dump
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00     p77 = Oscillation frequency (omega)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00       coarse grid weighting (default=10.0)
+  0.000000E+00
+  0.000000E+00
+  0.000000E+00
+   80.0000          Number of pressure sol'ns saved
+   3.00000          start saving pressure soln's after this
+   5.00000          start saving pressure soln's after this
+  0.000000E+00       which saving algorithm 1 = discard, 2=
+  0.000000E+00       0 == > no iterative refinement
+  0.000000E+00       0 = Bnorm, 1=1norm, 2=B^2 norm,
+   1.00000           No. of ON
+  0.000000E+00       Turn off overlapp. Schw. for splitting
+  0.000000E+00       No. of pdumps
+   1.00000           Dump out divergence at each time step
+  0.000000E-01       weight of filter
+      4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000       1.00000
+   1.00000       1.00000       1.00000       1.00000
+           13  LOGICAL SWITCHES FOLLOW
+  T     IFFLOW
+  F     IFHEAT
+  T     IFTRAN
+  T T F F F F F F F F F IFNAV & IFADVC (convection in P.S. fields)
+  F F T T T T T T T T T T IFTMSH (IF mesh for this field is T mesh)
+  F     IFAXIS
+  F     IFSTRS
+  F     IFSPLIT
+  F     IFMGRID
+  F     IFMODEL
+  F     IFKEPS
+  F     IFMVBD
+  F     IFCHAR
+   8.00000       8.00000     -0.500000      -4.00000     XFAC,YFAC,XZERO,YZERO
+ **MESH DATA** 1st line is X of corner 1,2,3,4. 2nd line is Y.
+        -125  3         125           NEL,NDIM,NELV
+            0 PRESOLVE/RESTART OPTIONS  *****
+            7         INITIAL CONDITIONS *****
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+C Default
+  ***** DRIVE FORCE DATA ***** BODY FORCE, FLOW, Q
+            4                 Lines of Drive force data follow
+C
+C
+C
+C
+  ***** Variable Property Data ***** Overrrides Parameter data.
+            1 Lines follow.
+            0 PACKETS OF DATA FOLLOW
+  ***** HISTORY AND INTEGRAL DATA *****
+            0   POINTS.  Hcode, I,J,H,IEL
+  ***** OUTPUT FIELD SPECIFICATION *****
+            6 SPECIFICATIONS FOLLOW
+  F      COORDINATES
+  T      VELOCITY
+  T      PRESSURE
+  T      TEMPERATURE
+  F      TEMPERATURE GRADIENT
+            0      PASSIVE SCALARS
+  ***** OBJECT SPECIFICATION *****
+       0 Surface Objects
+       0 Volume  Objects
+       0 Edge    Objects
+       0 Point   Objects

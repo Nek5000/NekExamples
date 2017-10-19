@@ -1,0 +1,450 @@
+      include "cmtparticles.usrp"
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'   ! this is not
+      include 'CMTDATA' ! the best idea
+      include 'NEKUSE'
+      integer e,eg
+      integer limcount
+
+      e = gllel(eg)
+
+
+      mu=rho*min(res2(ix,iy,iz,e,1),t(ix,iy,iz,e,3))
+      nu_s=mu/rho
+
+      mu=0.5*mu 
+      lambda=0.0
+      udiff=0.0
+      utrans=0.
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'CMTPART'
+      include 'CMTDATA'
+
+      integer e,eg
+
+      e = gllel(eg)
+
+      ! particle forcing
+      if (two_way .eq.1) then
+         if (istep .gt. time_delay) then
+            ffx =  ptw(ix,iy,iz,e,1)
+            ffy =  ptw(ix,iy,iz,e,2)
+            ffz =  ptw(ix,iy,iz,e,3)
+            ! warning, may have issues in Nek5000 but good for cmt-nek
+            qvol= ptw(ix,iy,iz,e,5) + rhs_fluidp(ix,iy,iz,e,4) ! partice forcing on energy
+
+
+c           ffx =  ptw(ix,iy,iz,e,1)/vtrans(ix,iy,iz,e,1) !Nek5000
+c           ffy =  ptw(ix,iy,iz,e,2)/vtrans(ix,iy,iz,e,1)
+c           ffz =  ptw(ix,iy,iz,e,3)/vtrans(ix,iy,iz,e,1)
+
+         else
+            ffx = 0.0
+            ffy = 0.0
+            ffz = 0.0
+         endif
+      else
+         ffx = 0.0
+         ffy = 0.0
+         ffz = 0.0
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      integer e,eg
+
+      qvol   = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      include 'SIZE'
+      include 'TOTAL'
+      include 'TORO'
+      include 'CMTDATA'
+
+      integer  e,f
+
+      nxyz= nx1*ny1*nz1
+      n = nxyz*nelt
+
+      ifxyo=.true.
+      if (istep.gt.1) ifxyo=.false.
+
+      if (time_cmt .eq. 0.0) then
+      if (zerotime .eq. 0.0) then
+           ! useric kludge to get the discontinuity right at the face
+         do e=1,nelt
+            iflag=1
+            do i=1,nxyz
+               if (xm1(i,1,1,e).lt.0.0) iflag=0
+            enddo
+            if (iflag .eq.1) then
+               ux=dr*ur
+               energy=pright/(gmaref-1.0)+0.5*dr*ur**2
+               do i=1,nxyz
+                  u(i,1,1,1,e)=dr
+                  u(i,1,1,2,e)=ux
+                  u(i,1,1,3,e)=0.0
+                  u(i,1,1,4,e)=0.0
+                  u(i,1,1,5,e)=energy
+               enddo
+            endif
+         enddo
+      endif
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,eg)
+      include 'SIZE'
+      include 'TSTEP'
+      include 'NEKUSE'
+      include 'INPUT'
+      include 'TORO'
+      include 'CMTDATA'
+      include 'GEOM' ! not sure if this is a good idea.
+      include 'PERFECTGAS'
+      include 'CMTPART'
+      include 'PARALLEL'
+      real nx,ny,nz  ! bite me it's fun
+      integer e,eg
+
+      e = gllel(eg)
+      molarmass=molmass
+
+
+      if (cbu .eq. 'W  ' .or. cbu .eq. 'I  ' .or. cbu .eq. 'SYM') then
+
+      flux=0.0 
+
+      elseif (cbu.eq.'O ') then
+         ! not handled here
+      endif
+
+!     force shocktube values
+      if (x .lt. diaph1) then
+         ux=ul
+         pres=pl
+         rho=dl
+      else
+         ux=ur
+         pres=pright
+         rho=dr
+      endif
+      uy=0.0
+      uz=0.0
+      phi=1.0 - ptw(ix,iy,iz,e,4)
+
+      cp=cpgref
+      cv=cvgref
+ 
+      temp=MixtPerf_T_DPR(rho,pres,rgasref)
+      asnd=MixtPerf_C_GRT(gmaref,rgasref,temp)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'TORO'
+      include 'PERFECTGAS'
+      include 'CMTDATA'
+      include 'CMTPART'
+      integer e,eg, eqnum
+
+      e=gllel(eg)
+      molarmass=molmass
+
+c     shocktube from begining
+      if (abs(zerotime).lt.1e-13) then
+      if (x.gt.diaph1) then
+         ux=ur
+         pres=pright
+         rho=dr
+      else
+         ux=ul
+         pres=pl
+         rho=dl
+      endif
+      uy = 0.
+      uz = 0.
+      else
+c!    shocktube from zerotime
+      s=(x-diaph1)/zerotime 
+c     if (x.gt.diaph1) s = 0. ! if outflow at right end
+      CALL SAMPLE(PMstar, UM, S, rho, ux, pres)
+      uy = 0.
+      uz = 0.
+      endif
+
+      phi = 1.0 - ptw(ix,iy,iz,e,4)
+
+      cp=cpgref
+      cv=cvgref
+      temp=MixtPerf_T_DPR(rho,pres,rgasref)
+      asnd=MixtPerf_C_GRT(gmaref,rgasref,temp)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTDATA'
+      include 'CMTTIMERS'
+      include 'CMTBCDATA'
+      include 'PERFECTGAS'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+      include 'TORO'
+      include 'CMTBCDATA'
+      include 'CMTDATA'
+      include 'PERFECTGAS'   
+
+      outflsub=.true.
+      IFCNTFILT=.false.
+      ifrestart=.false.
+      ifsip=.false.
+      gasmodel = 1
+
+      open(unit=81,file="riemann.inp",form="formatted")
+      read (81,*) diaph1
+      read (81,*) gmaref
+      read (81,*) dl
+      read (81,*) ul
+      read (81,*) pl
+      read (81,*) dr
+      read (81,*) ur
+      read (81,*) pright
+      read (81,*) zerotime
+      close(81)
+
+      molmass=28.97
+      muref=0.0
+      rgasref    = MixtPerf_R_M(molmass,dum)
+      cvgref     = rgasref/(gmaref-1.0)
+      cpgref     = MixtPerf_Cp_CvR(cvgref,rgasref)
+      gmaref     = MixtPerf_G_CpR(cpgref,rgasref) 
+
+      ! EVM tune
+      c_max=0.5  ! should be 0.5, really
+      c_sub_e=1.
+
+      return
+      end
+!-----------------------------------------------------------------------
+      subroutine cmt_userEOS(ix,iy,iz,eg)
+      include 'SIZE'
+      include 'NEKUSE'
+      include 'PARALLEL'
+      include 'CMTDATA'
+      include 'PERFECTGAS'
+      integer e,eg
+
+      cp=cpgref
+      cv=cvgref
+      temp=e_internal/cv
+      asnd=MixtPerf_C_GRT(gmaref,rgasref,temp)
+      pres=MixtPerf_P_DRT(rho,rgasref,temp)
+
+      return
+      end
+!-----------------------------------------------------------------------
+      subroutine usrdat3
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine my_full_restart
+      include 'SIZE'
+      include 'TOTAL'
+      character*80 s80(2)
+
+      call blank(s80,2*80)
+      s80(1) ='rs6pvort0.f00001'
+      s80(2) ='rs6pvort0.f00001'
+      call full_restart(s80,2) 
+
+      iosave = iostep           ! Trigger save based on iostep
+      call full_restart_save(iosave)
+
+      return
+      end
+c-----------------------------------------------------------------------
+*
+      SUBROUTINE SAMPLE(PMstar, UM, S, D, U, P)
+*
+C     Purpose: to sample the solution throughout the wave
+C              pattern. Pressure PM and velocity UM in the
+C              Star Region are known. Sampling is performed
+C              in terms of the 'speed' S = X/T. Sampled
+C              values are D, U, P
+*
+C     Input variables : PMstar, UM, S, /GAMMAS/, /STATES/
+C     Output variables: D, U, P
+*
+c     IMPLICIT NONE
+*
+C     Declaration of variables
+*
+      REAL    DL, UL, PL, CL, DR, UR, PRight, CR,
+     &        GAMMA, G1, G2, G3, G4, G5, G6, G7, G8,
+     &        C, CML, CMR, D, P, PMstar, PML, PMR,  S,
+     &        SHL, SHR, SL, SR, STL, STR, U, UM
+*
+      COMMON /GAMMAS/ GAMMA, G1, G2, G3, G4, G5, G6, G7, G8
+      COMMON /STATES/ DL, UL, PL, CL, DR, UR, PRight, CR
+
+      IF(S.LE.UM)THEN
+*
+C        Sampling point lies to the left of the contact
+C        discontinuity
+*
+         IF(PMstar.LE.PL)THEN
+*
+C           Left rarefaction
+*
+            SHL = UL - CL
+*
+            IF(S.LE.SHL)THEN
+*
+C              Sampled point is left data state
+*
+               D = DL
+               U = UL
+               P = PL
+            ELSE
+               CML = CL*(PMstar/PL)**G1
+               STL = UM - CML
+*
+               IF(S.GT.STL)THEN
+*
+C                 Sampled point is Star Left state
+*
+                  D = DL*(PMstar/PL)**(1.0/GAMMA)
+                  U = UM
+                  P = PMstar
+               ELSE
+*
+C                 Sampled point is inside left fan
+*
+                  U = G5*(CL + G7*UL + S)
+                  C = G5*(CL + G7*(UL - S))
+                  D = DL*(C/CL)**G4
+                  P = PL*(C/CL)**G3
+               ENDIF
+            ENDIF
+         ELSE
+*
+C           Left shock
+*
+            PML = PMstar/PL
+            SL  = UL - CL*SQRT(G2*PML + G1)
+*
+            IF(S.LE.SL)THEN
+*
+C              Sampled point is left data state
+*
+               D = DL
+               U = UL
+               P = PL
+*
+            ELSE
+*
+C              Sampled point is Star Left state
+*
+               D = DL*(PML + G6)/(PML*G6 + 1.0)
+               U = UM
+               P = PMstar
+            ENDIF
+         ENDIF
+      ELSE
+*
+C        Sampling point lies to the right of the contact
+C        discontinuity
+*
+         IF(PMstar.GT.PRight)THEN
+*
+C           Right shock
+*
+            PMR = PMstar/PRight
+            SR  = UR + CR*SQRT(G2*PMR + G1)
+*
+            IF(S.GE.SR)THEN
+*
+C              Sampled point is right data state
+*
+               D = DR
+               U = UR
+               P = PRight
+            ELSE
+*
+C              Sampled point is Star Right state
+*
+               D = DR*(PMR + G6)/(PMR*G6 + 1.0)
+               U = UM
+               P = PMstar
+            ENDIF
+         ELSE
+*
+C           Right rarefaction
+*
+            SHR = UR + CR
+*
+            IF(S.GE.SHR)THEN
+*
+C              Sampled point is right data state
+*
+               D = DR
+               U = UR
+               P = PRight
+            ELSE
+               CMR = CR*(PMstar/PRight)**G1
+               STR = UM + CMR
+*
+               IF(S.LE.STR)THEN
+*
+C                 Sampled point is Star Right state
+*
+                  D = DR*(PMstar/PRight)**(1.0/GAMMA)
+                  U = UM
+                  P = PMstar
+               ELSE
+*
+C                 Sampled point is inside left fan
+*
+                  U = G5*(-CR + G7*UR + S)
+                  C = G5*(CR - G7*(UR - S))
+                  D = DR*(C/CR)**G4
+                  P = PRight*(C/CR)**G3
+               ENDIF
+            ENDIF
+         ENDIF
+      ENDIF
+*
+      END
+*
+c----------------------------------------------------------------------c
