@@ -1,0 +1,233 @@
+      include "cmtparticles.usrp"
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'   ! this is not
+      include 'CMTDATA' ! the best idea
+      include 'NEKUSE'
+      integer e,eg
+      integer limcount
+
+      e = gllel(eg)
+
+
+      mu=rho*min(res2(ix,iy,iz,e,1),t(ix,iy,iz,e,3))
+      nu_s=mu/rho
+
+      mu=0.5*mu 
+      lambda=0.0
+      udiff=0.0
+      utrans=0.
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'CMTPART'
+      include 'CMTDATA'
+
+      integer e,eg
+
+      e = gllel(eg)
+
+      ! particle forcing
+      if (two_way .eq.1) then
+         if (istep .gt. time_delay) then
+            ffx =  ptw(ix,iy,iz,e,1)
+            ffy =  ptw(ix,iy,iz,e,2)
+            ffz =  ptw(ix,iy,iz,e,3)
+            ! warning, may have issues in Nek5000 but good for cmt-nek
+            qvol= ptw(ix,iy,iz,e,5) + rhs_fluidp(ix,iy,iz,e,4) ! partice forcing on energy
+
+
+c           ffx =  ptw(ix,iy,iz,e,1)/vtrans(ix,iy,iz,e,1) !Nek5000
+c           ffy =  ptw(ix,iy,iz,e,2)/vtrans(ix,iy,iz,e,1)
+c           ffz =  ptw(ix,iy,iz,e,3)/vtrans(ix,iy,iz,e,1)
+
+         else
+            ffx = 0.0
+            ffy = 0.0
+            ffz = 0.0
+         endif
+      else
+         ffx = 0.0
+         ffy = 0.0
+         ffz = 0.0
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      integer e,eg
+
+      qvol   = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTDATA'
+
+      integer  e,f
+
+      ifxyo=.true.
+      if (istep.gt.1) ifxyo=.false.
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,eg)
+      include 'SIZE'
+      include 'TSTEP'
+      include 'NEKUSE'
+      include 'INPUT'
+      include 'CMTDATA'
+      include 'GEOM' ! not sure if this is a good idea.
+      include 'PERFECTGAS'
+      include 'CMTPART'
+      include 'PARALLEL'
+      real nx,ny,nz  ! bite me it's fun
+      integer e,eg
+
+      e = gllel(eg)
+      molarmass=molmass
+
+      if (cbu .eq. 'W  ' .or. cbu .eq. 'I  ' .or. cbu .eq. 'SYM') then
+
+      flux=0.0 
+
+      elseif (cbu.eq.'O ') then
+         ! not handled here
+      endif
+
+!     force uniform
+      ux = 0.
+      uy = 0.
+      uz = 0.
+      phi=1.0 - ptw(ix,iy,iz,e,4)
+      pres = 101000.
+      rho = param(1)
+
+      cp=cpgref
+      cv=cvgref
+      temp=MixtPerf_T_DPR(rho,pres,rgasref)
+      asnd=MixtPerf_C_GRT(gmaref,rgasref,temp)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,eg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'PERFECTGAS'
+      include 'CMTDATA'
+      include 'CMTPART'
+      integer e,eg, eqnum
+
+! JH073114 Toro e1rpex provides SUBROUTINE SAMPLE and is crudely grafted
+!          to the end of this .usr file.
+      e=gllel(eg)
+      molarmass=molmass
+
+!     force uniform
+      ux = 0.
+      uy = 0.
+      uz = 0.
+      phi=1.0 - ptw(ix,iy,iz,e,4)
+      pres = 101000.
+      rho = param(1)
+
+      cp=cpgref
+      cv=cvgref
+      temp=MixtPerf_T_DPR(rho,pres,rgasref)
+      asnd=MixtPerf_C_GRT(gmaref,rgasref,temp)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTDATA'
+      include 'CMTTIMERS'
+      include 'CMTBCDATA'
+      include 'PERFECTGAS'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTBCDATA'
+      include 'CMTDATA'
+      include 'PERFECTGAS'   
+
+      outflsub=.true.
+      IFCNTFILT=.false.
+      ifrestart=.false.
+      ifsip=.false.
+      gasmodel = 1
+
+      molmass=28.97
+      muref=0.0
+      gmaref     = 1.4
+      rgasref    = MixtPerf_R_M(molmass,dum)
+      cvgref     = rgasref/(gmaref-1.0)
+      cpgref     = MixtPerf_Cp_CvR(cvgref,rgasref)
+      gmaref     = MixtPerf_G_CpR(cpgref,rgasref) 
+
+      ! EVM tune
+      c_max=0.5  ! should be 0.5, really
+      c_sub_e=1.
+
+      return
+      end
+!-----------------------------------------------------------------------
+      subroutine cmt_userEOS(ix,iy,iz,eg)
+      include 'SIZE'
+      include 'NEKUSE'
+      include 'PARALLEL'
+      include 'CMTDATA'
+      include 'PERFECTGAS'
+      integer e,eg
+
+      cp=cpgref
+      cv=cvgref
+      temp=e_internal/cv
+      asnd=MixtPerf_C_GRT(gmaref,rgasref,temp)
+      pres=MixtPerf_P_DRT(rho,rgasref,temp)
+
+      return
+      end
+!-----------------------------------------------------------------------
+      subroutine usrdat3
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine my_full_restart
+      include 'SIZE'
+      include 'TOTAL'
+      character*80 s80(2)
+
+      call blank(s80,2*80)
+      s80(1) ='rs6pvort0.f00001'
+      s80(2) ='rs6pvort0.f00001'
+      call full_restart(s80,2) 
+
+      iosave = iostep           ! Trigger save based on iostep
+      call full_restart_save(iosave)
+
+      return
+      end
+c-----------------------------------------------------------------------

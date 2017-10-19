@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# use the command ./partview filebase nw nf ldim
+#     where: 
+#          $1  -filebase: could be partxyz, partuvw, etc.
+#          $2  -nf:       number of files you want output
+#                             -
+#     
+
+if [ "$1" == "clean" ]; then
+   echo "Are you sure? This will delete all solution files in this directory (no/yes)"
+   read answer
+
+   if [ "$answer" == yes ]; then
+      echo "Cleaning particle files from directory"
+      rm *.f0* avgs* partdata0* partxyz0* npartxyz0*
+   fi
+
+else
+
+varnum=4
+itmax=100000
+filebase="partxyz"
+itstart=0
+
+if [ $# -ne 0 ]; then
+   itstart=$1
+fi
+#filebase=$1
+#itmax=$2
+
+
+for (( i=$itstart; i<=$itmax; i++ ));                               # loop over all files
+do
+	printf -v thisit "%05d" $i                       # this timestep (integer)
+        printf -v datfile "%s%05d" "partdata" $i         # name of datafile at this timestep (string)
+        printf -v file "%s%05d%s" $filebase $i ".3D"
+        printf -v nfile "%s%s%05d%s" "n" $filebase $i ".3D"
+
+        if [ -f $file ]; then
+           if [ -f $nfile ]; then
+#             echo "Removing $nfile"
+              rm $nfile 
+           fi 
+        else
+           echo "$file not found, exiting"
+           break;
+        fi
+
+        nw=$(sed -n '1p' $datfile)                       # get number of particles
+        nw="$(echo -e "${nw}" | tr -d '[[:space:]]')"
+
+	echo "*-*-* reading $file with $nw particles, property: $3 *-*-*"
+
+        # convert binary to asci file (\ is an escape character)
+	echo "#!/bin/bash" > sub && chmod +x sub
+	echo "hexdump -v -e '1/8 \"%15.10f \"' -e '\"\n\"' $file > testtmp" > sub
+ 	./sub && rm sub
+
+        awk -v n=4 '{ row = row $1 " "; if (NR % n == 0) { print row; row = "" } }' testtmp > tmp2
+        awk -v vnum=$varnum '{print $1, $2, $3, $vnum}' tmp2 > $nfile 
+        sed -i "1i X Y Z MYVAR" $nfile        # add header for visit
+done
+
+rm testtmp tmp2
+
+fi

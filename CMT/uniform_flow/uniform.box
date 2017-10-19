@@ -1,0 +1,18 @@
+uniform.rea
+-3            spatial dimension
+1             number of scalar fields
+#========================================================
+#
+# test case for packing paritcles 
+# 
+# Note that the parameters are chosen so that particles
+# can be found (minimum element length = 2*(Dp*0.575)
+#
+#========================================================
+#
+Box
+-5   -5   -5   nelx, nely, nelz  
+-1.0 1.0  1.0  x0  , x1  , ratio
+-1.0 1.0  1.0  y0  , y1  , ratio
+-1.0 1.0  1.0  z0  , z1  , ratio
+P  ,P  ,P  ,P  ,P  ,P        bc's  (3 chars each, including blanks!)

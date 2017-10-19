@@ -1,0 +1,17 @@
+shocktube.rea
+-3            spatial dimension
+1             number of scalar fields
+#========================================================
+#
+# shocktube test case, equal element spacing. Note that
+# the tube is really long so that the shock doesn't 
+# reflect back at bed
+#
+#========================================================
+#
+Box
+-800   -5      -5        nelx, nely, nelz  
+-.64   5.76    1.0       x0  , x1  , ratio
+0.0    0.04    1.0       y0  , y1  , ratio
+0.0    0.04    1.0       z0  , z1  , ratio
+W  ,W  ,W  ,W  ,W  ,W    bc's  (3 chars each, including blanks!)  

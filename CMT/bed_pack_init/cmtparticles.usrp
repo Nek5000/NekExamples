@@ -1,0 +1,259 @@
+c----------------------------------------------------------------------
+      subroutine place_particles
+c
+c     Place particles in this routine, also called for injection
+c
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTDATA'
+      include 'CMTPART'
+
+      real    dum
+
+      integer icalld
+      save    icalld
+      data    icalld  /-1/
+
+      real   xdrange(2,3)
+      common /domainrange/ xdrange
+      real   xerange(2,3,lelt)
+      common /elementrange/ xerange
+
+      ! begin timer
+      ptdum(3) = dnekclock()
+
+      icalld = icalld + 1
+
+      rpi    = 4.0*atan(1.) ! pi
+      mu_0   = abs(param(2))
+
+c     bounds to distribute particle between
+      rxbo(1,1) = 40.*dp(2)
+      rxbo(2,1) = xdrange(2,1) - dp(2)/2.
+      rxbo(1,2) = xdrange(1,2) + dp(2)/2.
+      rxbo(2,2) = xdrange(2,2) - dp(2)/2.
+      rxbo(1,3) = xdrange(1,3) + dp(2)/2.
+      rxbo(2,3) = xdrange(2,3) - dp(2)/2.
+
+      vol_distrib = (rxbo(2,1)-rxbo(1,1))*(rxbo(2,2)-rxbo(1,2))*
+     >              (rxbo(2,3)-rxbo(1,3))
+
+c     correct nwe if discrepancy
+      nwe         = 0
+      if (nid.eq.0) nwe = nw ! only element one initially dist. parts
+                             ! so that overlaps can be removed
+
+c     main loop to distribute particles
+      do i = 1,nwe
+         n = n + 1
+         if (n.gt.llpart)then 
+            write(6,*)'Not enough space to store more particles'
+            call exitt
+         endif
+
+         ! distribute x,y,z coordinates
+         do j=0,2
+            rval = unif_random(rxbo(1,j+1),rxbo(2,j+1))
+            rpart(jx+j,n)  = rval
+            rpart(jx1+j,n) = rval
+            rpart(jx2+j,n) = rval
+            rpart(jx3+j,n) = rval
+         enddo
+
+         ! fake here, settling velocity
+         rval = (rho_p - rpart(jrho,n))*dp(2)**2*9.8/(18.*mu_0)
+         rpart(jv0,n) = -rval
+         rpart(jv1,n) = -rval
+         rpart(jv2,n) = -rval
+         rpart(jv3,n) = -rval
+
+c        set some rpart values for later use
+         rpart(jdp,n)   = unif_random(dp(1),dp(2)) ! particle diameter
+         tau_p          = rpart(jdp,n)**2*rho_p/18.0d+0/mu_0  ! part. time scale stokes
+
+         rpart(jtaup,n) = tau_p     ! particle time scale
+         rpart(jrhop,n) = rho_p     ! material density of particle
+         rpart(jvol,n)  = rpi*rpart(jdp,n)**3/6.! particle volume
+         rpart(jspl,n)  = 1.        ! super particle loading
+         rpart(jgam,n)  = 1.        ! initial integration correction
+
+         rpart(jtemp,n)  = tp_0     ! intial temp as fluid air
+         rpart(jtempf,n) = tp_0     ! intial temp as fluid air
+         rpart(jrho,n)   = param(1) ! later overwritten by interpolation
+
+c        set global particle id (3 part tag)
+         ipart(jpid1,n) = nid 
+         ipart(jpid2,n) = i
+         ipart(jpid3,n) = icalld
+      enddo
+
+      ! super particle loading for polydisperse particles
+      if (nitspl.gt.0) then
+      if (istep.eq. 0 .or.istep .eq.1) then ! be careful if injecting
+      rdumv = 0.
+      do i=1,n
+         rdumv = rdumv + rpart(jvol,i)
+      enddo
+      rdumt = glsum(rdumv,1)
+      if (two_way.gt.1) then
+      do i=1,n
+            rpart(jspl,i) =  phi_desire*vol_distrib/(rdumt)
+      enddo
+      endif
+      endif
+      endif
+
+c     check if zstart and zlen is alright for a 2d case
+      if (.not. if3d) then
+          if (abs(zstart-1.0) .gt. 1E-16) then
+             write(6,*)'***particle zstart is not right for 2d case'
+             call exitt
+          elseif(abs(zlen) .gt. 1E-16) then
+             write(6,*)'***particle zlen is not right for 2d case'
+             call exitt
+         endif
+      endif
+
+      ! end timer
+      pttime(3) = pttime(3) + dnekclock() - ptdum(3)
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usr_particles_f_user(ii,jj)
+c
+c     extra body forces (total force, must have mass here)
+c
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTDATA'
+      include 'CMTPART'
+
+      real pmass,pmassf
+
+      pmass = rpart(jvol,ii)*rpart(jrhop,ii)
+      pmassf= rpart(jvol,ii)*rpart(jrho,ii)
+
+      if (jj.eq.0) rpart(jfusr+jj,ii) = 0.0 
+      if (jj.eq.1) rpart(jfusr+jj,ii) = 0.0
+      if (jj.eq.2) rpart(jfusr+jj,ii) = 0.0
+
+      if (jj.eq.0) then
+         rpart(jfusr+jj,ii) = -9.8*(pmass - pmassf)
+      endif
+
+      return
+      end
+c----------------------------------------------------------------------
+      subroutine pre_sim_collisions
+c
+c     time stepping routine for pre-simulation collisions/settling
+c
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CTIMER'
+      include 'CMTDATA'
+      include 'CMTPART'
+
+      nmax_step = 1000000  ! number of pre-iteration steps
+      nmax_add  = 5000     ! quit injecting particles after this step
+
+      rtime = 0.
+      ! pre simulation iteration for packed bed
+      do i=1,nmax_step
+
+         if(mod(i,iostep).eq.0) then
+            call usr_particles_io(istep)
+            if (nid.eq. 0) write(6,*) 'pre-sim_io time',i,rtime
+         endif
+
+         do stage=1,3
+
+            if (stage.eq.1) then
+               call update_particle_location
+                  if(mod(i,nmax_add).eq.0) then
+                  if (i.lt.ipart_restarto) then
+                     call place_particles
+                     call remove_overlap_parts
+                  endif
+                  endif
+               call move_particles_inproc
+            endif
+
+            call usr_particles_forcing ! at most only qs,user,col here
+
+            if (stage.eq.1) then
+               call set_dt_particles(rdt_part)
+               dt_cmt = rdt_part
+               dt     = dt_cmt
+               rtime = rtime + dt_cmt
+               call set_tstep_coef
+            endif
+
+            call rk3_integrate
+
+            if (two_way.gt.1) then
+               call particles_solver_nearest_neighbor
+               call spread_props_grid
+            endif
+
+         enddo
+
+      enddo
+
+      return
+      end
+c----------------------------------------------------------------------
+      subroutine remove_overlap_parts
+      include 'SIZE'
+      include 'TOTAL'
+      include 'CMTDATA'
+      include 'CMTPART'
+
+      real    pdsit
+      integer in_part(llpart)
+
+      ! first search local particles
+
+      nlow  = n - nwe
+      nhigh = n
+
+      do j=1,n
+         in_part(j) = 0
+      enddo
+
+c     let every particle search for itself
+      do i = nlow,nhigh
+
+c        particles in local elements
+         do j = nlow,nhigh
+            if (i .ne. j) then
+               rdeff = 0.5*(rpart(jdp,i) + rpart(jdp,j))
+               rdeff = 1.150*rdeff
+               pdist = abs(rpart(jx,i)-rpart(jx,j))**2  
+     >                          + abs(rpart(jy,i)-rpart(jy,j))**2
+     >                          + abs(rpart(jz,i)-rpart(jz,j))**2
+               pdist = sqrt(pdist)
+               if (pdist .gt. rdeff) goto 1109
+               ! remove here!
+               if (in_part(i) .eq. 0) in_part(j) = -1
+            endif
+ 1109        continue
+         enddo
+
+      enddo
+
+      ic = 0
+      do i=1,n
+         if (in_part(i).eq.0) then
+            ic = ic + 1 
+            if (i .ne. ic) then
+               call copy(rpart(1,ic),rpart(1,i),nr)
+               call icopy(ipart(1,ic),ipart(1,i),ni)
+            endif
+         endif
+      enddo
+      n = ic
+
+      return
+      end
+c----------------------------------------------------------------------
