@@ -1,0 +1,37 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+#startFrom = restart.fld 
+stopAt = numSteps #endTime
+numSteps = 1000
+
+dt = 5e-02
+timeStepper = bdf #char #steady
+tOrder = 2
+
+writeControl = timeStep #runTime
+writeInterval = 500
+
+dealiasing = yes
+filtering = no  
+filterWeight = 1e-02
+
+[PROBLEMTYPE]
+#stressFormulation = yes
+#variableProperties = yes
+
+[PRESSURE]
+residualTol = 1e-06
+residualProj = no
+
+[VELOCITY]
+residualTol = 1e-08
+residualProj = no
+density = 1
+viscosity = 0.5
+
+
+
+
+
