@@ -4,96 +4,7 @@ from unittest import skip
 
 import re
 
-###############################################################################
-#  turbChannel: turbChannel.rea
-###############################################################################
 
-class TurbChannel(NekTestCase):
-    example_subdir = 'turbChannel'
-    case_name = 'turbChannel'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1-2',
-            lelg      = '600',
-            ldimt     = '3',
-            lhis      = '100',
-            lelx      = '8',
-            lely      = '8',
-            lelz      = '8',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genmap'])
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200., label='total solver time')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200., label='total solver time')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_2_serial
-    def test_PnPn2_Serial(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140., label='total solver time')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140., label='total solver time')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
 
 # ###############################################################################
 # #  2d_eigtest: eig1.rea
@@ -165,86 +76,7 @@ class TurbChannel(NekTestCase):
 #             test_val = self.get_value_from_log(' {0}   '.format(i), column=-6, logfile=total_log)
 #             self.assertAlmostEqual()
 #
-# ###############################################################################
-# #  3dbox: b3d.rea
-# ###############################################################################
 
-class ThreeDBox(NekTestCase):
-    example_subdir  = '3dbox'
-    case_name        = 'b3d'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1-2',
-            lelg      = '520',
-            ldimt     = '1',
-            lhis      = '100',
-            lelx      = '8',
-            lely      = '8',
-            lelz      = '8',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genbox', 'genmap'])
-        self.run_genbox()
-        self.mvn('box', self.__class__.case_name)
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        phrase = self.get_phrase_from_log('end of time-step loop')
-        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        phrase = self.get_phrase_from_log('end of time-step loop')
-        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_2_serial
-    def test_PnPn2_Serial(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        phrase = self.get_phrase_from_log('end of time-step loop')
-        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        phrase = self.get_phrase_from_log('end of time-step loop')
-        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
 #
 #
 # ####################################################################
@@ -288,7 +120,7 @@ class Blasius(NekTestCase):
         self.assertAlmostEqualDelayed(delta, target_val=1.26104, delta=1e-05, label='delta')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=30., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=23.0, delta=5.75, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -321,7 +153,7 @@ class Blasius(NekTestCase):
         self.assertAlmostEqualDelayed(delta, target_val=1.26104, delta=1e-05, label='delta')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=30., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=20.0, delta=5., label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -391,7 +223,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(tmax, target_val=13.1073, delta=1E-06, label='tmax')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=7, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=9.5, delta=2.4, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -424,7 +256,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(tmax, target_val=1.31190E+01, delta=1E-06, label='tmax')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=7, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.5, delta=1.6, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -801,7 +633,7 @@ class Eddy_PsiOmega(NekTestCase):
         self.assertAlmostEqualDelayed(xerr, target_val=1.177007E-10, delta=1E-06, label='X err')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=17, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=14.0, delta=3.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -828,7 +660,7 @@ class Eddy_PsiOmega(NekTestCase):
         self.assertAlmostEqualDelayed(xerr, target_val=1.177007E-10, delta=1E-06, label='X err')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, 0.1, delta=17, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=13.5, delta=3.4, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1019,7 +851,7 @@ class Fs2_St1(NekTestCase):
         self.assertAlmostEqualDelayed(amp, target_val=0.6382379, delta=1e-06, label='amp')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=18.3, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=7.5, delta=1.9, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1112,7 +944,7 @@ class Fs2_St2(NekTestCase):
         self.assertAlmostEqualDelayed(amp, target_val=0.6376125, delta=1e-06, label='amp')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=23, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=7.5, delta=1.9, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1205,7 +1037,7 @@ class Fs2_StdWv(NekTestCase):
         self.assertAlmostEqualDelayed(amp, target_val=0.1403036, delta=1e-06, label='amp')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=21., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=7.0, delta=1.75, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1295,14 +1127,14 @@ class FsHydro(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=1000)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200, label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=108., label='gmres')
 
         amp = self.get_value_from_log('AMP', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=-6.4616452E-05, delta=2e-03, label='AMP')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=106.0, delta=26.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1313,14 +1145,14 @@ class FsHydro(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=1000)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=200, label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=108., label='gmres')
 
         amp = self.get_value_from_log('AMP', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=-6.4616452E-05, delta=2e-03, label='AMP')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2,)
+        self.assertAlmostEqualDelayed(solver_time, target_val=31.5, delta=6.3, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1390,6 +1222,52 @@ class Hemi(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  incl_def
+####################################################################
+
+class InclDef(NekTestCase):
+    example_subdir = 'incl_def'
+    case_name = 'incl_def'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1',
+            lelg      = '100',
+            ldimt     = '2',
+            lhis      = '100',
+            lpert     = '1',
+            toteq     = '1',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        phrase = self.get_phrase_from_log('All include files added with success')
+        self.assertIsNotNullDelayed(phrase, label='All include files added with success')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+
+####################################################################
 #  kovasznay; kov.rea
 ####################################################################
 
@@ -1424,14 +1302,14 @@ class Kovasznay(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=12, label='total solver time')
-
         gmres = self.get_value_from_log(label='gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=34, label='gmres')
 
         err = self.get_value_from_log(label='err', column=-3, row=-1)
         self.assertAlmostEqualDelayed(err, target_val=5.14316E-13, delta=1e-06, label='err')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=10.75, delta=2.7, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1457,14 +1335,14 @@ class Kovasznay(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=17, label='total solver time')
-
         gmres = self.get_value_from_log(label='gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=14, label='gmres')
 
         err = self.get_value_from_log(label='err', column=-3, row=-1)
         self.assertAlmostEqualDelayed(err, target_val=5.90551E-13, delta=1e-06, label='err')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=10.0, delta=2.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1548,14 +1426,14 @@ class Mhd_Gpf(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=130, label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=15, label='gmres')
 
         rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=139.5, delta=34.9, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1577,91 +1455,7 @@ class Mhd_Gpf(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-class Mhd_GpfM(NekTestCase):
-    example_subdir = 'mhd'
-    case_name = 'gpf_m'
 
-    def setUp(self):
-        import shutil
-        # Probably a cleaner way to do this...
-        # I'm just mimicking the
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '6',
-            lxd       = '1+3*lx1/2',
-            lx2       = 'lx1-2',
-            lelg      = '150',
-            ldimt     = '2',
-            lhis      = '200',
-            lelx      = '4',
-            lely      = '4',
-            lelz      = '8',
-            lx1m      = '1',
-            lbelt     = 'lelt',
-            lpelt     = '1',
-            lcvelt    = '1',
-            lfdm      = '1',
-        )
-        self.build_tools(['genbox', 'genmap'])
-        self.run_genbox(box_file='gpf')
-        self.run_genmap(rea_file='box', tol='0.01')
-        self.mvn('box', 'gpf')
-        shutil.copy(
-            os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf.map'),
-            os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf_m.map')
-        )
-
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_m', step_limit=None)
-
-        phrase = self.get_phrase_from_log(label="ERROR: FDM")
-        self.assertIsNotNullDelayed(phrase, label='ERROR: FDM')
-        self.assertDelayedFailures()
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_m', step_limit=None)
-
-        phrase = self.get_phrase_from_log(label="ERROR: FDM")
-        self.assertIsNotNullDelayed(phrase, label='ERROR: FDM')
-        self.assertDelayedFailures()
-
-    @pn_pn_2_serial
-    def test_PnPn2_Serial(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_m', step_limit=None)
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=130, label='total solver time')
-
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_m', step_limit=None)
-
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
 
 class Mhd_GpfB(NekTestCase):
     example_subdir = 'mhd'
@@ -1741,6 +1535,92 @@ class Mhd_GpfB(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+class Mhd_GpfM(NekTestCase):
+    example_subdir = 'mhd'
+    case_name = 'gpf_m'
+
+    def setUp(self):
+        import shutil
+        # Probably a cleaner way to do this...
+        # I'm just mimicking the
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '6',
+            lxd       = '1+3*lx1/2',
+            lx2       = 'lx1-2',
+            lelg      = '150',
+            ldimt     = '2',
+            lhis      = '200',
+            lelx      = '4',
+            lely      = '4',
+            lelz      = '8',
+            lx1m      = '1',
+            lbelt     = 'lelt',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '1',
+        )
+        self.build_tools(['genbox', 'genmap'])
+        self.run_genbox(box_file='gpf')
+        self.run_genmap(rea_file='box', tol='0.01')
+        self.mvn('box', 'gpf')
+        shutil.copy(
+            os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf.map'),
+            os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf_m.map')
+        )
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek(usr_file='gpf')
+        self.run_nek(rea_file='gpf_m', step_limit=None)
+
+        phrase = self.get_phrase_from_log(label="ERROR: FDM")
+        self.assertIsNotNullDelayed(phrase, label='ERROR: FDM')
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek(usr_file='gpf')
+        self.run_nek(rea_file='gpf_m', step_limit=None)
+
+        phrase = self.get_phrase_from_log(label="ERROR: FDM")
+        self.assertIsNotNullDelayed(phrase, label='ERROR: FDM')
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='gpf')
+        self.run_nek(rea_file='gpf_m', step_limit=None)
+
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=124.0, delta=31.0, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='gpf')
+        self.run_nek(rea_file='gpf_m', step_limit=None)
+
+        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  os7000; u3_t020_n13.rea
 ####################################################################
@@ -1776,14 +1656,14 @@ class Os7000(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=1000)
 
-        solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
-
         gmres = self.get_value_from_log(label='gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=43., label='gmres')
 
         egn = self.get_value_from_log(label='egn', column=-2, row=-1)
         self.assertAlmostEqualDelayed(egn, target_val=4.74494769e-05, delta=1e-06, label='egn')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=22.0, delta=5.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1809,14 +1689,14 @@ class Os7000(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=1000)
 
-        solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
-
         gmres = self.get_value_from_log(label='gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=43., label='gmres')
 
         egn = self.get_value_from_log(label='egn', column=-2, row=-1)
         self.assertAlmostEqualDelayed(egn, target_val=5.93471252E-05, delta=1e-06, label='egn')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=22.0, delta=5.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1873,11 +1753,11 @@ class Peris(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=13., label='total solver time')
-
         gmres = self.get_value_from_log(label='gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.5, delta=1.6, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1900,11 +1780,11 @@ class Peris(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=13., label='total solver time')
-
         gmres = self.get_value_from_log(label='gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
+
+        solver_time = self.get_value_from_log(label='total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=4.2, delta=1.05, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1958,14 +1838,14 @@ class Pipe_Helix(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=22., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=61., label='gmres')
 
         err2 = self.get_value_from_log('err2', column=-2, row=-1)
         self.assertAlmostEqualDelayed(err2, target_val=1.9077617E+00, delta=1e-06, label='err2')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.6, delta=1.65, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -1991,14 +1871,14 @@ class Pipe_Helix(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=22., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=123., label='gmres')
 
         err2 = self.get_value_from_log('err2', column=-2, row=-1)
         self.assertAlmostEqualDelayed(err2, target_val=1.9072258E+00, delta=1e-06, label='err2')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=11.5, delta=2.9, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2065,11 +1945,11 @@ class Pipe_Stenosis(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=196., label='gmres')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=27.5, delta=6.9, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2092,11 +1972,11 @@ class Pipe_Stenosis(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=51., label='gmres')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=23.5, delta=5.9, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2159,7 +2039,7 @@ class Rayleigh_Ray1(NekTestCase):
         self.assertAlmostEqualDelayed(umax, target_val=0.00377251, delta=2e-05, label='umax')
 
         solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=2.0, delta=0.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2193,7 +2073,7 @@ class Rayleigh_Ray1(NekTestCase):
         self.assertAlmostEqualDelayed(umax, target_val=4.831113E-03, delta=2e-05, label='umax')
 
         solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=1.5, delta=0.4, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2257,7 +2137,7 @@ class Rayleigh_Ray2(NekTestCase):
         self.assertAlmostEqualDelayed(umax, target_val=0.00551992, delta=1e-04, label='umax')
 
         solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=1.6, delta=0.4, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2290,7 +2170,7 @@ class Rayleigh_Ray2(NekTestCase):
         self.assertAlmostEqualDelayed(umax, target_val=0.006621465, delta=1e-04, label='umax')
 
         solver_time = self.get_value_from_log(label='total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=3., label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=1.4, delta=0.35, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2313,28 +2193,28 @@ class Rayleigh_Ray2(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  strat; re10f1000p1000.rea, re10f1000p0001.rea
+#  shear4; shear4.rea, thin.rea
 ####################################################################
 
-class Strat_P1000(NekTestCase):
-    example_subdir = 'strat'
-    case_name = 're10f1000p1000'
+class Shear4_Shear4(NekTestCase):
+    example_subdir = 'shear4'
+    case_name = 'shear4'
 
     def setUp(self):
         self.size_params = dict(
             ldim      = '2',
-            lx1       = '8',
-            lxd       = '12',
+            lx1       = '9',
+            lxd       = '13',
             lx2       = 'lx1-2',
-            lelg      = '400',
-            ldimt     = '1',
+            lelg      = '300',
+            ldimt     = '4',
             lhis      = '100',
             lpert     = '1',
             toteq     = '1',
-            lelx      = '1',
-            lely      = '1',
+            lelx      = '16',
+            lely      = '16',
             lelz      = '1',
-            lx1m      = 'lx1',
+            lx1m      = '1',
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
@@ -2347,13 +2227,16 @@ class Strat_P1000(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140, label='total solver time')
+        self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.5, delta=1.6, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2362,10 +2245,13 @@ class Strat_P1000(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
+        self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
 
         self.assertDelayedFailures()
 
@@ -2374,13 +2260,16 @@ class Strat_P1000(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
-
-        upres = self.get_value_from_log('U-PRES', column=-6)
-        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.5, delta=1.6, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2389,35 +2278,38 @@ class Strat_P1000(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
+        self.run_nek(step_limit=10)
 
-        upres = self.get_value_from_log('U-PRES', column=-6)
-        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
 
         self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
 
-class Strat_P0001(NekTestCase):
-    example_subdir = 'strat'
-    case_name = 're10f1000p0001'
+class Shear4_Thin(NekTestCase):
+    example_subdir = 'shear4'
+    case_name = 'thin'
 
     def setUp(self):
         self.size_params = dict(
             ldim      = '2',
-            lx1       = '8',
-            lxd       = '12',
+            lx1       = '9',
+            lxd       = '13',
             lx2       = 'lx1-2',
-            lelg      = '400',
-            ldimt     = '1',
+            lelg      = '300',
+            ldimt     = '4',
             lhis      = '100',
             lpert     = '1',
             toteq     = '1',
-            lelx      = '1',
-            lely      = '1',
+            lelx      = '16',
+            lely      = '16',
             lelz      = '1',
-            lx1m      = 'lx1',
+            lx1m      = '1',
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
@@ -2430,13 +2322,16 @@ class Strat_P0001(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=140, label='total solver time')
+        self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.0, delta=1.5, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2445,10 +2340,13 @@ class Strat_P0001(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
+        self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
 
         self.assertDelayedFailures()
 
@@ -2457,13 +2355,16 @@ class Strat_P0001(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
-
-        upres = self.get_value_from_log('U-PRES', column=-6)
-        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+        self.assertAlmostEqualDelayed(solver_time, target_val=6.2, delta=1.55, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2472,10 +2373,13 @@ class Strat_P0001(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=200)
+        self.run_nek(step_limit=10)
 
-        upres = self.get_value_from_log('U-PRES', column=-6)
-        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
 
         self.assertDelayedFailures()
 
@@ -2560,28 +2464,28 @@ class Solid(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  shear4; shear4.rea, thin.rea
+#  strat; re10f1000p1000.rea, re10f1000p0001.rea
 ####################################################################
 
-class Shear4_Shear4(NekTestCase):
-    example_subdir = 'shear4'
-    case_name = 'shear4'
+class Strat_P0001(NekTestCase):
+    example_subdir = 'strat'
+    case_name = 're10f1000p0001'
 
     def setUp(self):
         self.size_params = dict(
             ldim      = '2',
-            lx1       = '9',
-            lxd       = '13',
+            lx1       = '8',
+            lxd       = '12',
             lx2       = 'lx1-2',
-            lelg      = '300',
-            ldimt     = '4',
+            lelg      = '400',
+            ldimt     = '1',
             lhis      = '100',
             lpert     = '1',
             toteq     = '1',
-            lelx      = '16',
-            lely      = '16',
+            lelx      = '1',
+            lely      = '1',
             lelz      = '1',
-            lx1m      = '1',
+            lx1m      = 'lx1',
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
@@ -2594,16 +2498,13 @@ class Shear4_Shear4(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
+        self.run_nek(step_limit=200)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
 
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=58.5, delta=14.6, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2612,13 +2513,10 @@ class Shear4_Shear4(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
+        self.run_nek(step_limit=200)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
-
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
 
         self.assertDelayedFailures()
 
@@ -2627,16 +2525,13 @@ class Shear4_Shear4(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
+        self.run_nek(step_limit=200)
+
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
-
-        gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
-
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(solver_time, target_val=53.0, delta=13.3, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2645,38 +2540,35 @@ class Shear4_Shear4(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
+        self.run_nek(step_limit=200)
 
-        gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
-
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
 
         self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
 
-class Shear4_Thin(NekTestCase):
-    example_subdir = 'shear4'
-    case_name = 'thin'
+class Strat_P1000(NekTestCase):
+    example_subdir = 'strat'
+    case_name = 're10f1000p1000'
 
     def setUp(self):
         self.size_params = dict(
             ldim      = '2',
-            lx1       = '9',
-            lxd       = '13',
+            lx1       = '8',
+            lxd       = '12',
             lx2       = 'lx1-2',
-            lelg      = '300',
-            ldimt     = '4',
+            lelg      = '400',
+            ldimt     = '1',
             lhis      = '100',
             lpert     = '1',
             toteq     = '1',
-            lelx      = '16',
-            lely      = '16',
+            lelx      = '1',
+            lely      = '1',
             lelz      = '1',
-            lx1m      = '1',
+            lx1m      = 'lx1',
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
@@ -2689,16 +2581,13 @@ class Shear4_Thin(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
+        self.run_nek(step_limit=200)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
 
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=60.5, delta=15.1, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2707,13 +2596,10 @@ class Shear4_Thin(NekTestCase):
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
+        self.run_nek(step_limit=200)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
-
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=60, label='gmres')
 
         self.assertDelayedFailures()
 
@@ -2722,16 +2608,13 @@ class Shear4_Thin(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
+        self.run_nek(step_limit=200)
+
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=10., label='total solver time')
-
-        gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
-
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(solver_time, target_val=53.5, delta=13.4, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2740,13 +2623,10 @@ class Shear4_Thin(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=10)
+        self.run_nek(step_limit=200)
 
-        gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
-
-        vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
+        upres = self.get_value_from_log('U-PRES', column=-6)
+        self.assertAlmostEqualDelayed(upres, target_val=0, delta=27, label='U-PRES')
 
         self.assertDelayedFailures()
 
@@ -2790,9 +2670,6 @@ class Taylor(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=23., label='gmres')
 
@@ -2801,6 +2678,9 @@ class Taylor(NekTestCase):
 
         err = self.get_value_from_log('err', column=-2, row=-1)
         self.assertAlmostEqualDelayed(err, target_val=2.973648E-09, delta=1e-06, label='err')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=33.5, delta=8.4, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2829,9 +2709,6 @@ class Taylor(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=14, label='gmres')
 
@@ -2840,6 +2717,9 @@ class Taylor(NekTestCase):
 
         err = self.get_value_from_log('err', column=-2, row=-1)
         self.assertAlmostEqualDelayed(err, target_val=2.826284E-10, delta=1e-06, label='err')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=20., delta=5., label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2861,6 +2741,178 @@ class Taylor(NekTestCase):
 
         err = self.get_value_from_log('err', column=-2, row=-1)
         self.assertAlmostEqualDelayed(err, target_val=2.826284E-10, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+# ###############################################################################
+# #  3dbox: b3d.rea
+# ###############################################################################
+
+class ThreeDBox(NekTestCase):
+    example_subdir  = '3dbox'
+    case_name        = 'b3d'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lelg      = '520',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '8',
+            lely      = '8',
+            lelz      = '8',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['genbox', 'genmap'])
+        self.run_genbox()
+        self.mvn('box', self.__class__.case_name)
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        phrase = self.get_phrase_from_log('end of time-step loop')
+        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+###############################################################################
+#  turbChannel: turbChannel.rea
+###############################################################################
+
+class TurbChannel(NekTestCase):
+    example_subdir = 'turbChannel'
+    case_name = 'turbChannel'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lelg      = '600',
+            ldimt     = '3',
+            lhis      = '100',
+            lelx      = '8',
+            lely      = '8',
+            lelz      = '8',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=34.0, delta=8.5, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=12.0, delta=3.0, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=35.0, delta=8.75, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=11.0, delta=2.75, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2904,14 +2956,14 @@ class Vortex(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=60., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-7)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=65., label='gmres')
 
         vmin = self.get_value_from_log('VMIN', column=-2, row=-1)
         self.assertAlmostEqualDelayed(vmin, target_val=-1.910312E-03, delta=1e-05, label='VMIN')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=13.2, delta=3.3, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2937,14 +2989,14 @@ class Vortex(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=10)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=50., label='total solver time')
-
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
 
         vmin = self.get_value_from_log('VMIN', column=-2, row=-1)
         self.assertAlmostEqualDelayed(vmin, target_val=-1.839120E-03, delta=1e-05, label='VMIN')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=13.0, delta=3.25, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2954,9 +3006,6 @@ class Vortex(NekTestCase):
         self.config_size()
         self.build_nek()
         self.run_nek(step_limit=10)
-
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=50., label='total solver time')
 
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=18., label='gmres')
@@ -3031,9 +3080,6 @@ class Vortex2(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80, label='total solver time')
-
         pres = self.get_value_from_log('PRES', column=-4)
         self.assertAlmostEqualDelayed(pres, target_val=0., delta=100., label='PRES')
 
@@ -3042,6 +3088,9 @@ class Vortex2(NekTestCase):
 
         torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
         self.assertAlmostEqualDelayed(torqx, target_val=-1.7399905E-07, delta=1e-06, label='1torqx')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=51.0, delta=12.8, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -3070,9 +3119,6 @@ class Vortex2(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=80., label='total solver time')
-
         upress = self.get_value_from_log('U-PRES', column=-5)
         self.assertAlmostEqualDelayed(upress, target_val=0., delta=100, label='U-PRES')
 
@@ -3081,6 +3127,9 @@ class Vortex2(NekTestCase):
 
         torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
         self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='1torqx')
+
+        solver_time = self.get_value_from_log('total solver time', column=-2)
+        self.assertAlmostEqualDelayed(solver_time, target_val=56.0, delta=14, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -3099,51 +3148,6 @@ class Vortex2(NekTestCase):
 
         torqx = self.get_value_from_log('1torqx', column=-2, row=-1)
         self.assertAlmostEqualDelayed(torqx, target_val=-1.6276138E-07, delta=1e-06, label='1torqx')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
-#  incl_def
-####################################################################
-
-class InclDef(NekTestCase):
-    example_subdir = 'incl_def'
-    case_name = 'incl_def'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1',
-            lelg      = '100',
-            ldimt     = '2',
-            lhis      = '100',
-            lpert     = '1',
-            toteq     = '1',
-            lelx      = '1',
-            lely      = '1',
-            lelz      = '1',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genmap'])
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        phrase = self.get_phrase_from_log('All include files added with success')
-        self.assertIsNotNullDelayed(phrase, label='All include files added with success')
 
         self.assertDelayedFailures()
 
