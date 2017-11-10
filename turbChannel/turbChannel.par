@@ -6,7 +6,7 @@
 stopAt = endTime
 endTime = 600 
 
-dt = 1e-2 # set to 0 to match targetCFL
+dt = 2e-2
 timeStepper = bdf2
 extrapolation = OIFS
 variableDt = yes
@@ -31,7 +31,7 @@ equation = incompNS
 [PRESSURE]
 preconditioner = semg_amg
 residualTol = 1e-04
-residualProj = yes
+residualProj = no #yes
 
 [VELOCITY]
 residualTol = 1e-08

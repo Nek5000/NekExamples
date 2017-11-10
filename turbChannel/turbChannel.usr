@@ -148,6 +148,8 @@ c
      &              ,  wo2(lx1,ly1,lz1,lelv)
      &              ,  wo3(lx1,ly1,lz1,lelv)
 
+      real tplus
+
       n=nx1*ny1*nz1*nelv
 
       rho   = 1.
@@ -195,8 +197,8 @@ c
       u_tau  = sqrt(tw/rho)
       Re_tau = u_tau*DELTA/dnu
       diff   = (tw-ffx_new)/tw
-
-      if(nid.eq.0) write(6,1) istep,time,e2,tw,diff,Re_tau
+      tplus  = time * Re_tau * u_tau
+      if(nid.eq.0) write(6,1) istep,time,tplus,e2,tw,diff
  1                 format(i6,1p5e13.4,' monitor')
 
 c
