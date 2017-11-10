@@ -1,0 +1,40 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+#startFrom = restart.fld 
+stopAt = endTime
+endTime = 600 
+
+dt = 1e-2 # set to 0 to match targetCFL
+timeStepper = bdf2
+extrapolation = OIFS
+variableDt = yes
+targetCFL = 2.0
+
+writeControl = runTime
+writeInterval = 100.0
+
+userParam01 = 400    # start time for statistics 
+userParam02 = 50     # writeInterval statistics 
+
+#dealiasing = no
+
+filtering = hpfrt # set to none in case of Smagorinski 
+filterWeight = 20
+filterCutoffRatio = 0.7 
+
+[PROBLEMTYPE]
+variableProperties = no # set to yes in case of Smagorinski
+equation = incompNS
+
+[PRESSURE]
+preconditioner = semg_amg
+residualTol = 1e-04
+residualProj = yes
+
+[VELOCITY]
+residualTol = 1e-08
+density = 1
+viscosity = -10000
+#residualProj = yes
