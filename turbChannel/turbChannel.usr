@@ -47,10 +47,10 @@ c output frequency for statistics
 #define tSTATFREQ  uparam(2)
 
 c mesh dimensions
-#define PI 4.*atan(1.)
+#define PI (4.*atan(1.))
 #define DELTA 1.
-#define XLEN 2.*PI
-#define YLEN 2*DELTA
+#define XLEN (2.*PI)
+#define YLEN (2*DELTA)
 #define ZLEN PI
 #define NUMBER_ELEMENTS_X 16
 #define NUMBER_ELEMENTS_Y 12
@@ -152,16 +152,6 @@ c
 
       n=nx1*ny1*nz1*nelv
 
-      rho   = 1.
-      dnu   = param(2)
-      A_w   = XLEN * ZLEN  ! wall area
-
-      nelx = NUMBER_ELEMENTS_X
-      nely = NUMBER_ELEMENTS_Y
-      nelz = NUMBER_ELEMENTS_Z
-
-      ntot = nx1*ny1*nz1*nelv 
-
       ! do some checks
       if (istep.eq.0) then
          if(mod(nely,2).ne.0) then
@@ -189,28 +179,35 @@ c
         call copy(t,ediff,n)
       endif
 
-      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
-
       e2     = glsc3(vy,bm1,vy,n)+glsc3(vz,bm1,vz,n)
       e2     = e2/volvm1
-      tw     = (dragx(1)+dragx(2))/A_w + 1.e-50
-      u_tau  = sqrt(tw/rho)
-      Re_tau = u_tau*DELTA/dnu
-      diff   = (tw-ffx_new)/tw
-      tplus  = time * Re_tau * u_tau
-      if(nid.eq.0) write(6,1) istep,time,tplus,e2,tw,diff
- 1                 format(i6,1p5e13.4,' monitor')
+      if(nid.eq.0) write(6,2) time,e2
+   2               format(1p2e13.4,' energy')
 
 c
 c     Below is just for postprocessing ...
 c
+      if (time.lt.tSTATSTART) goto 999 ! don't start averaging
 
       if(ifoutfld) then
         if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
         if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
       endif
 
-      if (time.lt.tSTATSTART) goto 999 ! don't start averaging
+      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
+
+      nelx  = NUMBER_ELEMENTS_X
+      nely  = NUMBER_ELEMENTS_Y
+      nelz  = NUMBER_ELEMENTS_Z
+
+      rho    = 1.
+      dnu    = param(2)
+      A_w    = XLEN * ZLEN
+      tw     = (dragx(1)+dragx(2))/A_w + 1.e-50
+      u_tau  = sqrt(tw/rho)
+      Re_tau = u_tau*DELTA/dnu
+      diff   = (tw-ffx_new)/tw
+      tplus  = time * Re_tau * u_tau
 
       if(icalld.eq.0) then
         call rzero(uavg,n)
@@ -265,11 +262,7 @@ c
      &   time.gt.(ntdump+1)*tSTATFREQ) then
 
          ntdump = ntdump + 1
-         tw     = dragx_avg/A_w + 1.e-50
-         u_tau  = sqrt(tw/rho)
-         Re_tau = u_tau*DELTA/dnu
-
-         write(6,*) 'Dumping statistics ...', Re_tau
+         write(6,*) 'Dumping statistics ...', tplus, Re_tau
  
          open(unit=56,file='vel_fluc_prof.dat')
          write(56,'(A,1pe14.7)') '#time = ', time
@@ -326,13 +319,31 @@ c-----------------------------------------------------------------------
       save    idum 
       data    idum / 0 /
 
-      if (idum.eq.0) idum = 99 + nid
+      real C, k, kx, ky
+
+      Re_tau = 550 
+      C      = 5.17
+      k      = 0.41
+
+      yp = (1-y)*Re_tau
+      if (y.lt.0) yp = (1+y)*Re_tau
       
-c     blunt profile w/ random perturbations
-      eps = .05
-      ux  = 5*(1.-y**4)/4.  + eps*(ran1(idum)-.5)
-      uy  =                   eps*(ran1(idum)-.5)
-      uz  =                   eps*(ran1(idum)-.5)
+c     Reichardt function
+      ux  = 1/k*log(1+k*yp) + (C - (1/k)*log(k)) *
+     $      (1 - exp(-yp/11) - yp/11*exp(-yp/3))
+      ux  = ux * Re_tau*param(2)
+
+c     perturb
+      eps = 1e-2
+      kx  = 23
+      kz  = 13
+
+      alpha = kx * 2*PI/XLEN
+      beta  = kz * 2*PI/ZLEN 
+
+      ux  = ux  + eps*beta  * sin(alpha*x)*cos(beta*z) 
+      uy  =       eps       * sin(alpha*x)*sin(beta*z)
+      uz  =      -eps*alpha * cos(alpha*x)*sin(beta*z)
 
       temp=0
 

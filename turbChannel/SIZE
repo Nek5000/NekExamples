@@ -15,7 +15,7 @@ c
       parameter (lx2=lx1-0)            ! p-order for pressure (lx1 or lx1-2)
                                      
       parameter (lelg=1540)            ! max total number of elements
-      parameter (lpmin=8)              ! min MPI ranks
+      parameter (lpmin=1)              ! min MPI ranks
       parameter (lpmax=64)             ! max MPI ranks
       parameter (ldimt=2)              ! max auxiliary fields (temperature + scalars)
 
@@ -27,10 +27,10 @@ c
       parameter (nsessmax=1)           ! max sessions
       parameter (lxo=lx1)              ! max grid size on output (lxo>=lx1)
       parameter (lelx=16,lely=12,lelz=8) ! global tensor mesh dimensions
-      parameter (mxprev=40,lgmres=40)  ! max dim of projection & Krylov space
+      parameter (mxprev=30,lgmres=20)  ! max dim of projection & Krylov space
       parameter (lorder=2)             ! max order in time
 
-      parameter (lelt=lelg/lpmin + 4)  ! max number of local elements per MPI rank
+      parameter (lelt=lelg/lpmin + 2)  ! max number of local elements per MPI rank
       parameter (lx1m=1)               ! polynomial order mesh solver
       parameter (lbelt=1)              ! mhd
       parameter (lpelt=1)              ! linear stability
