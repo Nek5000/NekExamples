@@ -131,6 +131,9 @@ c-----------------------------------------------------------------------
 !     This should be done here to ensure the velocity is properly
 !     initialized in the lag arrays
 
+      include 'SIZE'
+      include 'TOTAL'
+  
       ifflow=.false. ! Imposing frozen velocity
 
       return
