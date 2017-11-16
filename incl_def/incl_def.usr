@@ -59,6 +59,7 @@ c     ADD ALL INCLUDE FILES THEN EXIT
       include 'ESOLV'
       include 'FDMH1'
       include 'GEOM'
+      include 'GFLDR'
 c      include 'GLOBALCOM' ! already inclued in NEKNEK
       include 'GMRES'
       include 'HSMG'
@@ -83,7 +84,6 @@ c      include 'GLOBALCOM' ! already inclued in NEKNEK
       include 'STEADY'
       include 'TOPOL'
       include 'TSTEP'
-      include 'TURBO'
       include 'VPROJ'
       include 'WZ'
       include 'WZF'
