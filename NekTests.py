@@ -1152,7 +1152,7 @@ class FsHydro(NekTestCase):
         self.assertAlmostEqualDelayed(amp, target_val=-6.4616452E-05, delta=2e-03, label='AMP')
 
         solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=31.5, delta=6.3, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=55.0, label='total solver time')
 
         self.assertDelayedFailures()
 
