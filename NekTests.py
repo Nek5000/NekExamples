@@ -1484,7 +1484,7 @@ class Mhd_GpfB(NekTestCase):
         self.build_tools(['genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
         self.run_genmap(rea_file='box', tol='0.01')
-        self.mvn('box', 'gpf')
+        self.mvn('box', 'gpf_b')
 
 #     @pn_pn_serial
 #     def test_PnPn_Serial(self):
