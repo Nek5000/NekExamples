@@ -1738,6 +1738,48 @@ class Mhd_GpfM(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  mv_cyl with CVODE
+####################################################################
+
+class MvCylCvode(NekTestCase):
+    example_subdir = 'mv_cyl'
+    case_name = 'mv_cyl'
+
+    def setUp(self):
+        self.size_params = dict (
+            ldim     = '2',
+            lx1      = '8',
+            lxd      = '12',
+            lx2      = 'lx1-0',
+            lx1m     = 'lx1',
+            lelg     = '500',
+            ldimt    = '10',
+            lcvelt   = 'lelt',
+        )
+        self.config_size()
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel_Steps1e3(self):
+        self.pplist +='CVODE'
+        self.log_suffix += '.steps_1e3'
+        self.config_parfile({'GENERAL' : {'numSteps' : '1e3', 'dt' : '1e-3'}})
+        self.build_nek()
+        self.run_nek()
+
+        err3 = self.get_value_from_log('err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err3, target_val=0.1743079E-03, delta=1e-6, label='err (column -3)')
+
+        err2 = self.get_value_from_log('err', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(err2, target_val=0.6348537E-06, delta=1e-9, label='err (column -2)')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  os7000; u3_t020_n13.rea
 ####################################################################
 
