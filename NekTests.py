@@ -79,6 +79,64 @@ import re
 
 #
 #
+
+###############################################################################
+#  axi: axi.rea
+###############################################################################
+
+class Axi(NekTestCase):
+    example_subdir  = 'axi'
+    case_name        = 'axi'
+
+    def setUp(self):
+
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '6',
+            lxd       = '9',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        pres = self.get_value_from_log('PRES ', column=-4)
+        self.assertAlmostEqualDelayed(pres, target_val=0., delta=76., label='PRES')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        u_press = self.get_value_from_log('U-PRES ', column=-5)
+        self.assertAlmostEqualDelayed(u_press, target_val=0., delta=82., label='U-PRES')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  blasius: blasius.rea
 # ####################################################################
