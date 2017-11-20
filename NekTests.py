@@ -138,6 +138,64 @@ class Axi(NekTestCase):
         self.move_logs()
 
 # ####################################################################
+# #  benard: ray_9.rea
+# ####################################################################
+
+class Benard_Ray9(NekTestCase):
+    example_subdir = 'benard'
+    case_name = 'ray_9'
+
+    def setUp(self):
+        self.size_params = dict (
+            ldim      = '2',
+            lx1       = '12',
+            lxd       = '16',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap(rea_file='ray_9')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek(usr_file='ray_9')
+        self.run_nek(rea_file='ray_9')
+
+        gmres = self.get_value_from_log('gmres ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
+
+        rac = self.get_value_from_log('converged_rac', column=-2)
+        self.assertAlmostEqualDelayed(rac, target_val=1707.79, delta=0.01, label='rac')
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='ray_9')
+        self.run_nek(rea_file='ray_9')
+
+        gmres = self.get_value_from_log('gmres ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=11., label='gmres')
+
+        rac = self.get_value_from_log('converged_rac', column=-2)
+        self.assertAlmostEqualDelayed(rac, target_val=1707.79, delta=0.01, label='rac')
+
+    def tearDown(self):
+        self.move_logs()
+
+# ####################################################################
 # #  blasius: blasius.rea
 # ####################################################################
 class Blasius(NekTestCase):
