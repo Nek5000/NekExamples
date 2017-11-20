@@ -1480,6 +1480,51 @@ class Kovasznay(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+
+####################################################################
+#  lowMach_test; lowMach_test.rea
+####################################################################
+
+class LowMachTest(NekTestCase):
+    example_subdir = 'lowMach_test'
+    case_name       = 'lowMach_test'
+
+    def setUp(self):
+        self.size_params = dict (
+            ldim      = '2',
+            lx1       = '14',
+            lxd       = '20',
+            lx2       = 'lx1-0',
+            lx1m      = 'lx1',
+            lelg      = '500',
+        )
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2'] = 'lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=200)
+
+        gmres = self.get_value_from_log(label='gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=35, label='gmres')
+
+        vx = self.get_value_from_log(label='ERROR VX', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(vx, target_val=2.6938e-09, delta=1e-10, label='VX')
+
+        errt = self.get_value_from_log(label='ERROR T', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(errt, target_val=4.5532e-12, delta=1e-13, label='T')
+
+        qtl = self.get_value_from_log(label='ERROR QTL', column=-5, row=-1)
+        self.assertAlmostEqualDelayed(qtl, target_val=2.6557E-06, delta=1e-07, label='QTL')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
 ####################################################################
