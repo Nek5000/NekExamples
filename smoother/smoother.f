@@ -229,7 +229,7 @@ c     bzindx tells what node is connected to what node
       enddo
 
 c      call dsavg(twts,mlt,gshl)
-      call gs_op(gshl,twts,1,1,0)
+      call fgslib_gs_op(gshl,twts,1,1,0)
 
       call invcol2(wts(1,1,1),twts,nelv*(2**ldim)*(2**ldim))
       call invcol2(wts(1,1,2),twts,nelv*(2**ldim)*(2**ldim))
@@ -277,9 +277,9 @@ c-----------------------------------------------------------------------
         enddo
         enddo
 
-        call gs_op(gshl,dx,1,1,0)
-        call gs_op(gshl,dy,1,1,0)
-        if (ldim.eq.3) call gs_op(gshl,dz,1,1,0)
+        call fgslib_gs_op(gshl,dx,1,1,0)
+        call fgslib_gs_op(gshl,dy,1,1,0)
+        if (ldim.eq.3) call fgslib_gs_op(gshl,dz,1,1,0)
 
         call col2(dx,nodmask,n2)
         call col2(dy,nodmask,n2)
@@ -716,9 +716,9 @@ c-----------------------------------------------------------------------
          enddo
       enddo 
 
-      call gs_op(gshl,dfdx(1,1,1),1,1,0)
-      call gs_op(gshl,dfdx(1,1,2),1,1,0)
-      if (ldim.eq.3) call gs_op(gshl,dfdx(1,1,3),1,1,0)
+      call fgslib_gs_op(gshl,dfdx(1,1,1),1,1,0)
+      call fgslib_gs_op(gshl,dfdx(1,1,2),1,1,0)
+      if (ldim.eq.3) call fgslib_gs_op(gshl,dfdx(1,1,3),1,1,0)
 
       f2 = glsum(f1,1)
 
@@ -885,7 +885,7 @@ c     bzindx tells what node is connected to what node
       dum1 = glamin(scale,(2**ldim)*nelv*(2**ldim))
       dum2 = glamax(scale,(2**ldim)*nelv*(2**ldim))
 c
-      call gs_op(gshl,scale,1,3,0) ! 'minimum'
+      call fgslib_gs_op(gshl,scale,1,3,0) ! 'minimum'
       fac = 1.e-1
       call cmult(scale,fac,(2**ldim)*nelv*(2**ldim))
       scalek = fac*val
@@ -946,14 +946,14 @@ c     setup the mask first so that it can be distribute as well
 
       n = (2**ldim)*(nelv*(2**ldim))
 
-      call gs_setup(gshl,glo_numk2,n,nekcomm,np)
+      call fgslib_gs_setup(gshl,glo_numk2,n,nekcomm,np)
       call rone(mlt,n)
-      call gs_op(gshl,mlt,1,1,0)   ! '+'
+      call fgslib_gs_op(gshl,mlt,1,1,0)   ! '+'
       xmlt = glmax(mlt,n)
       if (nid.eq.0) write(6,*) n,xmlt,' MAX MULT'
       call invcol1(mlt,n)
 
-      call gs_op(gshl,nodmask,1,2,0)
+      call fgslib_gs_op(gshl,nodmask,1,2,0)
 
       return
       end
@@ -971,7 +971,7 @@ c-----------------------------------------------------------------------
 
       n = nx*ny*nz*nel
       call set_vert(glo_num,ngv,nx,nel,vertex,.true.)
-      call gs_setup(gs_handle,glo_num,n,nekcomm,mp)
+      call fgslib_gs_setup(gs_handle,glo_num,n,nekcomm,mp)
       return
       end
 c-----------------------------------------------------------------------
@@ -1048,7 +1048,7 @@ c-----------------------------------------------------------------------
       real u(2**ldim,lelv*(2**ldim))
       real mlt(2**ldim,lelv*(2**ldim))
 
-      call gs_op(gshl,u,1,1,0) ! '+'
+      call fgslib_gs_op(gshl,u,1,1,0) ! '+'
       call col2(u,mlt,(2**ldim)*nelv*(2**ldim))
       
       return

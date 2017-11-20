@@ -2386,6 +2386,52 @@ class Shear4_Thin(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+
+####################################################################
+#  smoother; lpt.par
+####################################################################
+
+class Smooth(NekTestCase):
+    example_subdir = 'smoother'
+    case_name = 'lpt'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '3',
+            lxd       = '4',
+            lx2       = 'lx1',
+            lelg      = '10000',
+            ldimt     = '1',
+            lhis      = '100',
+            lpert     = '1',
+            toteq     = '1',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        phrase = self.get_phrase_from_log('Mesh smoothing completed.')
+        self.assertIsNotNullDelayed(phrase, label='Mesh smoothing completed.')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  solid; solid.rea
 ####################################################################
