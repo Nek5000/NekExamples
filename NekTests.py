@@ -1987,6 +1987,41 @@ class Kovasznay(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  kov_st_state; kov_st_stokes.rea
+####################################################################
+
+class KovStState(NekTestCase):
+    # Note: Legacy Analysis.py script only checked Pn-Pn-2 test cases
+    example_subdir = 'kov_st_state'
+    case_name = 'kov_st_stokes'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '14',
+            lxd       = '20',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=8.55641E-10, delta=1e-11, label='err')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  lowMach_test; lowMach_test.rea
