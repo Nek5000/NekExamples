@@ -3808,7 +3808,7 @@ class TurbChannel(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres')
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=25.0, label='total solver time')
+        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=37.0, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -3839,6 +3839,82 @@ class TurbChannel(NekTestCase):
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=25.0, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
+#  var_vis; var_vis.rea
+####################################################################
+
+class VarVis(NekTestCase):
+    example_subdir = 'var_vis'
+    case_name = 'st2'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lx1m      = 'lx1',
+            lelg      = '500',
+        )
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+#     @unittest.expectedFailure
+#     @pn_pn_serial
+#     def test_PnPn_Serial(self):
+#         self.size_params['lx2'] = 'lx1'
+#         self.config_size()
+#         self.build_nek()
+#         self.run_nek(step_limit=None)
+# 
+#         # TODO: This fails here and in legacy tests
+#         phrase = self.get_phrase_from_log('ABORT: ')
+#         self.assertIsNotNullDelayed(phrase, label='ABORT')
+#         self.assertDelayedFailures()
+
+#     @unittest.expectedFailure
+#     @pn_pn_parallel
+#     def test_PnPn_Parallel(self):
+#         self.size_params['lx2'] = 'lx1'
+#         self.config_size()
+#         self.build_nek()
+#         self.run_nek(step_limit=None)
+# 
+#         # TODO: This fails here and in legacy tests
+#         phrase = self.get_phrase_from_log('ABORT: ')
+#         self.assertIsNotNullDelayed(phrase, label='ABORT')
+#         self.assertDelayedFailures()
+
+#     @pn_pn_2_serial
+#     def test_PnPn2_Serial(self):
+#         self.size_params['lx2'] = 'lx1-2'
+#         self.config_size()
+#         self.build_nek()
+#         self.run_nek(step_limit=None)
+# 
+#         # solver_time = self.get_value_from_log('total solver time', column=-2)
+#         # self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=30, label='total solver time')
+# 
+#         gmres = self.get_value_from_log('gmres ', column=-6)
+#         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=19, label='gmres')
+# 
+#         self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        gmres = self.get_value_from_log('gmres ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=19, label='gmres')
 
         self.assertDelayedFailures()
 
