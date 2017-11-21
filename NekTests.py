@@ -1227,6 +1227,80 @@ class Eddy_Uv(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  ethier; ethier.rea
+####################################################################
+
+class Ethier(NekTestCase):
+    example_subdir = 'ethier'
+    case_name = 'ethier'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lelg      = '50',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=1000)
+
+        herr = self.get_value_from_log(label='hpts err', column=-1, row=-1)
+        self.assertAlmostEqualDelayed(herr, target_val=1.3776e-08, delta=1e-08, label='hpts err')
+
+        gmres = self.get_value_from_log('gmres ', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=7., label='gmres')
+
+        vxerr = self.get_value_from_log(label='L2 err', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(vxerr, target_val=3.635317e-05, delta=1e-07, label='VX err')
+
+        prerr = self.get_value_from_log(label='L2 err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(prerr, target_val=1.127384e-04, delta=1e-06, label='PR err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2'] = 'lx1'
+        self.config_size()
+        self.build_nek()
+
+        from re import sub
+        cls = self.__class__
+        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.case_name + '.par')
+        with open(rea_path, 'r') as f:
+            lines = [sub(r'.*preconditioner.*', 'preconditioner = semg_amg', l, flags=re.I) for l in f]
+        with open(rea_path, 'w') as f:
+            f.writelines(lines)
+
+        self.run_nek(step_limit=1000)
+
+        herr = self.get_value_from_log(label='hpts err', column=-1, row=-1)
+        self.assertAlmostEqualDelayed(herr, target_val=1.3776e-08, delta=1e-08, label='hpts err')
+
+        gmres = self.get_value_from_log('gmres ', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=14., label='gmres')
+
+        vxerr = self.get_value_from_log(label='L2 err', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(vxerr, target_val=2.407549E-006, delta=1e-08, label='VX err')
+
+        prerr = self.get_value_from_log(label='L2 err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(prerr, target_val=7.554325E-005, delta=1e-08, label='PR err')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  expansion: expansion.rea
 # ####################################################################
