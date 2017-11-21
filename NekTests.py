@@ -1646,6 +1646,75 @@ class LinCav_Adj(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
+####################################################################
+class LinChn_Dir(NekTestCase):
+    example_subdir = 'channel2D'
+    case_name = 'lin_chan_dir'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '15',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            lpert     = '1',
+            lpelt     = 'lelt',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='lin_chan')
+        self.run_nek(step_limit=None)  
+
+        omega = self.get_value_from_log('Energy', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(omega, target_val=-1.2337E-03, delta=2E-06, label='growth rate')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class LinChn_Adj(NekTestCase):
+    example_subdir = 'channel2D'
+    case_name = 'lin_chan_adj'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '15',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            lpert     = '1',
+            lpelt     = 'lelt',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='lin_chan')
+        self.run_nek(step_limit=None)  
+
+        omega = self.get_value_from_log('Energy', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(omega, target_val=-1.2337E-03, delta=2E-06, label='growth rate')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
 ####################################################################
 
