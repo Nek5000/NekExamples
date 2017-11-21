@@ -297,6 +297,59 @@ class Blasius(NekTestCase):
 #
 # # TODO: implement cone
 #
+
+# ####################################################################
+# #  CMT/inviscid_vortex: pvort.rea
+# ####################################################################
+
+class CmtInviscidVortex(NekTestCase):
+    example_subdir = os.path.join('CMT', 'inviscid_vortex')
+    case_name = 'pvort'
+
+    def diff_l2norms(self):
+        def get_line(filename, line_num=0):
+            with open(filename) as f:
+                line = f.readlines()[line_num]
+            return [float(x) for x in line.split()[1:]]
+
+        cls = self.__class__
+        test_vals = get_line(os.path.join(self.examples_root, cls.example_subdir, 'l2norms.dat'))
+        ref_vals = get_line(os.path.join(self.examples_root, cls.example_subdir, 'l2norms.dat.ref'))
+        for t, r in zip(test_vals, ref_vals):
+            self.assertAlmostEqual(t, r, delta=0.1*r,
+                msg='FAILURE: Last line of l2norms.dat differed from reference values by > 10%\n  test vals:{0}\n  ref vals: {1}'.format(test_vals, ref_vals))
+        print('SUCCESS: Last line of l2norms.dat was within 10% of reference values\n  test vals:{0}\n  ref vals: {1}'.format(test_vals, ref_vals))
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '25',
+            lxd       = '36',
+            lx2       = 'lx1-0',
+            lelg      = '50',
+            ldimt     = '3',
+            toteq     = '5',
+        )
+        self.config_size()
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+        cls = self.__class__
+        try:
+            os.remove(os.path.join(self.examples_root, cls.example_subdir, 'l2norms.dat'))
+        except OSError:
+            pass
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.pplist +=' CMTNEK '
+        self.build_nek()
+        self.run_nek(step_limit=1000)
+        self.diff_l2norms()
+
+    def tearDown(self):
+        self.move_logs()
+
 # ####################################################################
 # #  conj_ht: conj_ht.rea
 # ####################################################################
@@ -1807,7 +1860,7 @@ class MvCylCvode(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel_Steps1e3(self):
-        self.pplist +='CVODE'
+        self.pplist +=' CVODE '
         self.log_suffix += '.steps_1e3'
         self.config_parfile({'GENERAL' : {'numSteps' : '1e3', 'dt' : '1e-3'}})
         self.build_nek()
