@@ -1,0 +1,30 @@
+
+Moffatt eddies test case.
+
+Important files here:
+
+     SIZE
+
+     moffatt   case files
+
+     moff_circ case files
+
+     moff2.m
+
+     run_all   -- a short script to build and run the tests.
+
+
+
+Nek5000 test mode:
+
+    If this case fails (i.e., does not yield a sufficiently 
+    accurate answer), it will print:
+
+      ERROR TOO LARGE FOR MOFFATT CASE   err, tol
+
+    otherwise it will print:
+
+       Success: relative strength/size errors:   8.6596E-06  2.3842E-03
+
+
+
