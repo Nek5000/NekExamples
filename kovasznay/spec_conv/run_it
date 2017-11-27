@@ -1,6 +1,0 @@
-echo '      parameter (lx0=' $1 ')'  > SIZE0
-makenek clean; makenek kov
-cat err.tot
-
-nekl kov
-grep err logfile | tail -1 >> err.tot

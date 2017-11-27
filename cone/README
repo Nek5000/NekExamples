@@ -1,5 +1,3 @@
-
-
 These cases provide examples of the convecting cone problem illustrated 
 in Gottlieb & Orszg (1972) and Deville, Fischer, & Mund (2002).
 
@@ -15,27 +13,7 @@ as follows:
 In this setup, each case (cone016, cone064, cone256) has its own
 directory with its SIZE, .usr, and .box file.  To run any one of 
 these examples, cd to the desired case and run genbox, to produce 
-the .rea file, followed by genmap, to create the .map file). This
-assumes that the Nek5000 tools are compiled and the necessary 
-scripts are copied from the nek5_svn/trunk/tools/scripts/ directory.  
-
-For example, to run the cone016 case:
-  cd cone016
-#Create the .rea file
-  genbox <<EOF
-  cone016.box
-  EOF
-#Create the .map file
-  genmap <<
-  box
-  .05
-  EOF
-# Move the 'box.' files 
-  mvn box cone016
-#Compile the code
-  makenek cone
-#run the code, in the background
-  nekb cone016
+the .rea file, followed by genmap, to create the .map file). 
 
 Note, for this problem, which is a pure convection problem, all of
 the cost is in evaluation of the convection operator.  Thus, it 

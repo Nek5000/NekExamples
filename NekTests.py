@@ -4,136 +4,6 @@ from unittest import skip
 
 import re
 
-
-
-# ###############################################################################
-# #  2d_eigtest: eig1.rea
-# ###############################################################################
-#
-# TODO: implement 2d_eigtest
-
-# class TwoDEigtest(NekTestCase):
-#     example_subdir  = '2d_eigtest'
-#     rea_file        = 'eig1'
-#
-#     def setUp(self):
-#         import shutil
-#         cls = self.__class__
-#
-#         # Copy Nek5000 source and replace hmholtz.f
-#         old_source_root = self.source_root
-#         new_source_root = os.path.join(self.examples_root, cls.example_subdir, 'nek5000')
-#         shutil.copytree(old_source_root, new_source_root)
-#         shutil.copy(
-#             os.path.join(self.examples_root, cls.example_subdir, 'hmholtz_b_prec.f'),
-#             os.path.join(new_source_root, 'core', 'hmholtz.f')
-#         )
-#
-#         self.source_root = new_source_root
-#
-#         self.build_tools(['genmap'])
-#         self.run_genmap(tol='0.01')
-#
-#     @pn_pn_serial
-#     def test_PnPn_Serial(self):
-#         cls = self.__class__
-#
-#         self.config_size(lx2='lx1', ly2='ly1', lz2='lz1')
-#
-#         # Run all problems
-#         for lx0 in range(1,17):
-#             size0_path = os.path.join(self.examples_root, cls.example_subdir, 'SIZE0')
-#             with open(size0_path, 'w') as f:
-#                 f.write('{0}parameter (lx0 = {1} )'.format(' '*6, lx0))
-#             for ext in ('.log', '.fld', '.his', '.sch', '.out', '.ore', '.nre'):
-#                 fpath = os.path.join(self.examples_root, cls.example_subdir, cls.rea_file+ext)
-#                 try:
-#                     os.remove(fpath)
-#                 except OSError:
-#                     pass
-#             self.build_nek()
-#             self.run_nek(log_suffix='{0}.{1}'.format(self.log_suffix, lx0), step_limit=None)
-#
-#         # Append all logs
-#         total_log = os.path.join(
-#             self.examples_root,
-#             cls.example_subdir,
-#             '{0}.log.{1}{2}.{3}'.format(self.rea_file, self.mpi_procs, self.log_suffix, 'tot'))
-#         try:
-#             os.remove(total_log)
-#         except OSError:
-#             pass
-#         with open(total_log, 'a') as f_out:
-#             for lx0 in range(1,17):
-#                 single_log = os.path.join(
-#                     self.examples_root,
-#                     cls.example_subdir,
-#                     '{0}.log.{1}{2}.{3}'.format(self.rea_file, self.mpi_procs, self.log_suffix, lx0))
-#                 with open(single_log, 'r') as f_in:
-#                     f_out.writelines(f_in)
-#
-#         for i in (2, 3, 6, 10):
-#             test_val = self.get_value_from_log(' {0}   '.format(i), column=-6, logfile=total_log)
-#             self.assertAlmostEqual()
-#
-
-###############################################################################
-#  axi: axi.rea
-###############################################################################
-
-class Axi(NekTestCase):
-    example_subdir  = 'axi'
-    case_name        = 'axi'
- 
-    def setUp(self):
- 
-        # Default SIZE parameters. Can be overridden in test cases
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '6',
-            lxd       = '9',
-            lx2       = 'lx1-2',
-            lelg      = '500',
-            ldimt     = '1',
-            lhis      = '100',
-            lelx      = '1',
-            lely      = '1',
-            lelz      = '1',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genmap'])
-        self.run_genmap(tol='0.01')
- 
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
- 
-        pres = self.get_value_from_log('PRES ', column=-4)
-        self.assertAlmostEqualDelayed(pres, target_val=0., delta=76., label='PRES')
- 
-        self.assertDelayedFailures()
- 
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
- 
-        u_press = self.get_value_from_log('U-PRES ', column=-5)
-        self.assertAlmostEqualDelayed(u_press, target_val=0., delta=82., label='U-PRES')
- 
-        self.assertDelayedFailures()
- 
-    def tearDown(self):
-        self.move_logs()
-
 ####################################################################
 #  benard: ray_9.rea
 ####################################################################
@@ -559,57 +429,6 @@ class CylRestart_P(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-####################################################################
-#  double_shear: Testing relaxation-term filtering.
-####################################################################
-
-class DoubleShear(NekTestCase):
-    example_subdir  = 'double_shear'
-    case_name        = 'double_shear'
- 
-    def setUp(self):
- 
-        # Default SIZE parameters. Can be overridden in test cases
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '6',
-            lxd       = '9',
-            lx2       = 'lx1-2',
-            lelg      = '500',
-        )
- 
-        self.build_tools(['genmap'])
-        self.run_genbox()
-        self.mvn('box', self.__class__.case_name)
-        self.run_genmap()
- 
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
- 
-        en = self.get_value_from_log('L2 norm: ', column=-1)
-        self.assertAlmostEqualDelayed(en, target_val=0.86147612200488166, delta=1e-5, label='Energy')
- 
-        self.assertDelayedFailures()
- 
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
- 
-        en = self.get_value_from_log('L2 norm: ', column=-1)
-        self.assertAlmostEqualDelayed(en, target_val=0.85973996057622892, delta=1e-5, label='Energy')
- 
-        self.assertDelayedFailures()
- 
-    def tearDown(self):
-        self.move_logs()
-
 #####################################################################
 #   eddy_neknek: eddy_neknek.rea
 #####################################################################
@@ -946,80 +765,6 @@ class Eddy_Uv(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  ethier; ethier.rea
-####################################################################
-
-class Ethier(NekTestCase):
-    example_subdir = 'ethier'
-    case_name = 'ethier'
- 
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1-2',
-            lelg      = '50',
-        )
- 
-        self.build_tools(['genmap'])
-        self.run_genmap()
- 
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2'] = 'lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=1000)
- 
-        herr = self.get_value_from_log(label='hpts err', column=-1, row=-1)
-        self.assertAlmostEqualDelayed(herr, target_val=1.3776e-08, delta=1e-08, label='hpts err')
- 
-        gmres = self.get_value_from_log('gmres ', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=7., label='gmres')
- 
-        vxerr = self.get_value_from_log(label='L2 err', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(vxerr, target_val=3.635317e-05, delta=1e-07, label='VX err')
- 
-        prerr = self.get_value_from_log(label='L2 err', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(prerr, target_val=1.127384e-04, delta=1e-06, label='PR err')
- 
-        self.assertDelayedFailures()
- 
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2'] = 'lx1'
-        self.config_size()
-        self.build_nek()
- 
-        from re import sub
-        cls = self.__class__
-        rea_path = os.path.join(self.examples_root, cls.example_subdir, cls.case_name + '.par')
-        with open(rea_path, 'r') as f:
-            lines = [sub(r'.*preconditioner.*', 'preconditioner = semg_amg', l, flags=re.I) for l in f]
-        with open(rea_path, 'w') as f:
-            f.writelines(lines)
- 
-        self.run_nek(step_limit=1000)
- 
-        herr = self.get_value_from_log(label='hpts err', column=-1, row=-1)
-        self.assertAlmostEqualDelayed(herr, target_val=1.3776e-08, delta=1e-08, label='hpts err')
- 
-        gmres = self.get_value_from_log('gmres ', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=14., label='gmres')
- 
-        vxerr = self.get_value_from_log(label='L2 err', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(vxerr, target_val=2.407549E-006, delta=1e-08, label='VX err')
- 
-        prerr = self.get_value_from_log(label='L2 err', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(prerr, target_val=7.554325E-005, delta=1e-08, label='PR err')
- 
-        self.assertDelayedFailures()
- 
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
 #  expansion: expansion.rea
 ####################################################################
 #
@@ -1218,55 +963,6 @@ class Fs2_StdWv(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  fs_hydro: fs_hydro.rea
-####################################################################
-
-class FsHydro(NekTestCase):
-    example_subdir = 'fs_hydro'
-    case_name       = 'fs_hydro'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '12',
-            lxd       = '18',
-            lx2       = 'lx1-2',
-            lelg      = '100',
-            ldimt     = '1',
-            lhis      = '100',
-            lelx      = '20',
-            lely      = '60',
-            lelz      = '1',
-            lx1m      = 'lx1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genmap'])
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=1000)
-
-        gmres = self.get_value_from_log('gmres', column=-6,)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=108., label='gmres')
-
-        amp = self.get_value_from_log('AMP', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(amp, target_val=-6.4616452E-05, delta=2e-03, label='AMP')
-
-        solver_time = self.get_value_from_log('total solver time', column=-2,)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=55.0, label='total solver time')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
 #  hemi; hemi
 ####################################################################
 
@@ -1322,51 +1018,6 @@ class Hemi(NekTestCase):
 
         wmax = self.get_value_from_log('wmax', column=-2, row=-1)
         self.assertAlmostEqualDelayed(wmax, target_val=0.48305, delta=1e-05, label='wmax')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
-#  incl_def
-####################################################################
-
-class InclDef(NekTestCase):
-    example_subdir = 'incl_def'
-    case_name = 'incl_def'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1',
-            lelg      = '100',
-            ldimt     = '2',
-            lhis      = '100',
-            lpert     = '1',
-            toteq     = '1',
-            lelx      = '1',
-            lely      = '1',
-            lelz      = '1',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genmap'])
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        phrase = self.get_phrase_from_log('All include files added with success')
-        self.assertIsNotNullDelayed(phrase, label='All include files added with success')
 
         self.assertDelayedFailures()
 
@@ -1436,7 +1087,7 @@ class Kovasznay(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  kov_st_state; kov_st_stokes.rea
+#  kov_st_stokes.rea
 ####################################################################
 
 class KovStState(NekTestCase):
@@ -2771,63 +2422,6 @@ class Taylor(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-# ###############################################################################
-# #  3dbox: b3d.rea
-# ###############################################################################
-
-class ThreeDBox(NekTestCase):
-    example_subdir  = '3dbox'
-    case_name        = 'b3d'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1-2',
-            lelg      = '520',
-            ldimt     = '1',
-            lhis      = '100',
-            lelx      = '8',
-            lely      = '8',
-            lelz      = '8',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-        )
-        self.build_tools(['genbox', 'genmap'])
-        self.run_genbox()
-        self.mvn('box', self.__class__.case_name)
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        phrase = self.get_phrase_from_log('end of time-step loop')
-        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
-
-        self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=10)
-
-        phrase = self.get_phrase_from_log('end of time-step loop')
-        self.assertIsNotNullDelayed(phrase, label='end of time-step loop')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
 ###############################################################################
 #  turbChannel: turbChannel.rea
 ###############################################################################
@@ -2883,54 +2477,6 @@ class TurbChannel(NekTestCase):
 
         solver_time = self.get_value_from_log('total solver time', column=-2)
         self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=25.0, label='total solver time')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
-#  var_vis; var_vis.rea
-####################################################################
-
-class VarVis(NekTestCase):
-    example_subdir = 'var_vis'
-    case_name = 'st2'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1-2',
-            lx1m      = 'lx1',
-            lelg      = '500',
-        )
-        self.build_tools(['genmap'])
-        self.run_genmap()
-
-#     @unittest.expectedFailure
-#     @pn_pn_parallel
-#     def test_PnPn_Parallel(self):
-#         self.size_params['lx2'] = 'lx1'
-#         self.config_size()
-#         self.build_nek()
-#         self.run_nek(step_limit=None)
-# 
-#         # TODO: This fails here and in legacy tests
-#         phrase = self.get_phrase_from_log('ABORT: ')
-#         self.assertIsNotNullDelayed(phrase, label='ABORT')
-#         self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2'] = 'lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        gmres = self.get_value_from_log('gmres ', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=19, label='gmres')
 
         self.assertDelayedFailures()
 

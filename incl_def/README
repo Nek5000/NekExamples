@@ -1,3 +1,0 @@
-Dummy test case to check that all include files can be added at once.
-The problem should be compiled with a Nek version where the conflicts with name variables have been fixed.
-The case is not intended to be run. The example is assumed to be successful if it compiles in serial. If the case is run, it exits after userchk is called for the first time.
