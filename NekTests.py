@@ -1853,7 +1853,7 @@ class Moffatt(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
  
-    @pn_pn_parallel
+    @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.size_params['lx2']='lx1-2'
         self.config_size()
@@ -1887,7 +1887,7 @@ class MoffCirc(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
  
-    @pn_pn_parallel
+    @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.size_params['lx2']='lx1-2'
         self.config_size()
@@ -1925,7 +1925,7 @@ class MvCylCvode(NekTestCase):
         self.build_tools(['genmap'])
         self.run_genmap()
  
-    @pn_pn_parallel
+    @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.log_suffix += '.steps_1e3'
         self.config_parfile({'GENERAL' : {'numSteps' : '1e3', 'dt' : '1e-3'}})
@@ -1943,7 +1943,61 @@ class MvCylCvode(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  mv_wall; mv_wall
+####################################################################
 
+class MvWall(NekTestCase):
+    example_subdir = 'mv_wall'
+    case_name = 'mv_wall'
+ 
+    def setUp(self):
+        self.size_params = dict (
+            ldim     = '2',
+            lx1      = '8',
+            lxd      = '12',
+            lx2      = 'lx1-0',
+            lx1m     = 'lx1',
+            lelg     = '500',
+            ldimt    = '10',
+            lcvelt   = '1',
+        )
+        self.config_size()
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+ 
+        gmres = self.get_value_from_log(label='gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=47., label='gmres')
+
+        timend = self.get_value_from_log(label='time (non-dimen):', column=-1, row=-1)
+        self.assertAlmostEqualDelayed(timend, target_val=1.00, delta=0.00001, label='Final nondimensional time')
+ 
+        self.assertDelayedFailures()
+        
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1 -2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+ 
+        gmres = self.get_value_from_log(label='gmres', column=-6, row=2)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+
+        timend = self.get_value_from_log(label='time (non-dimen):',column=-1,row=-1)
+        self.assertAlmostEqualDelayed(timend, target_val=1.00, delta=0.00001, label='Final nondimensional time')
+        
+        self.assertDelayedFailures()
+ 
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  os7000; u3_t020_n13.rea

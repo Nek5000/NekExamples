@@ -275,28 +275,35 @@ c-----------------------------------------------------------------------
       real  m1
       character*3 cbv
 
+      common /rdump/ ntdump
+      
       n = nx1*ny1*nz1*nelv
       rq  = 2.
       uin = 0.
       call turb_outflow(d,m1,rq,uin)
-   
-      call comp_vort3(vort , w1, w2, vx, vy, vz)
-      call copy (t,vort,n)    ! Vorticity --> T
-      ifto = .true.           ! Dump vorticity as T
 
-c. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+c     to shorten the run
+c     avoid advection of steram function
+      ifheat=.false.
+c     get streamfunction only if it is necessary
+      if (ifoutfld) then        
+         call comp_vort3(vort , w1, w2, vx, vy, vz)
+         call copy (t,vort,n)   ! Vorticity --> T
+         ifto = .true.          ! Dump vorticity as T
+
+c . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 c     Compute streamfunction from vorticity
+         call col3 (rhss,bm1,t,n) ! B*omega
+         call rone (h1s,n)
+         call rzero(h2s,n)
 
-      call col3 (rhss,bm1,t,n)      ! B*omega
-      call rone (h1s,n)
-      call rzero(h2s,n)
-
-      ifield = 2
-      tol    = param(22)
-      imsh   = 2
-      call hmholtz('psi ',psi,rhss,h1s,h2s,tmask,tmult,imsh,tol,200,1)
-      call copy (t,psi,n)    ! Psi --> T (for output)
-
+         ifield = 2
+         tol    = param(22)
+         imsh   = 2
+         call hmholtz('psi ',psi,rhss,h1s,h2s,tmask,tmult,imsh,
+     $        tol,200,1)
+         call copy (t,psi,n)    ! Psi --> T (for output)
+      endif
 c. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 
       ifusermv = .true.
