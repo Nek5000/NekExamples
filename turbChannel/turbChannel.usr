@@ -374,8 +374,6 @@ c-----------------------------------------------------------------------
          zc(i,1) = zscale*zc(i,1)
       enddo
 
-      param(59) = 0     ! all elements are _undeformed_
-
       n = nx1*ny1*nz1*nelt 
       call cfill(ediff,param(2),n)  ! initialize viscosity
 
