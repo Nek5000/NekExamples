@@ -5,6 +5,68 @@ from unittest import skip
 import re
 
 ####################################################################
+#  annulus_2d; cyl2.rea
+####################################################################
+
+class Annulus2d(NekTestCase):
+    example_subdir  = 'annulus_2d'
+    case_name        = 'cyl2'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '15',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        vmax = self.get_value_from_log('tmax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vmax, target_val=2.369E-01, delta=5E-04, label='vmax')
+        
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        vmax = self.get_value_from_log('tmax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vmax, target_val=2.369E-01, delta=5E-04, label='vmax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  benard: ray_9.rea
 ####################################################################
 
@@ -2579,6 +2641,7 @@ if __name__ == '__main__':
         ut_verbose = 1
 
     testList = (
+               Annulus2d,
                Benard_Ray9,
                Blasius,
                CmtInviscidVortex,
