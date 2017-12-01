@@ -837,9 +837,77 @@ class Eddy_Uv(NekTestCase):
 ####################################################################
 #  expansion: expansion.rea
 ####################################################################
-#
-# # TODO: implement expansion tests
-#
+
+class Expansion(NekTestCase):
+    example_subdir  = 'expansion'
+    case_name        = 'expansion'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '5',
+            lxd       = '8',
+            lx2       = 'lx1-2',
+            lelg      = '2900',
+            lpmin     = '2',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=80., label='gmres')
+
+        larea = self.get_value_from_log('ubar', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(larea, target_val=7.8540E-01, delta=5E-04, label='area')
+        
+        ubar = self.get_value_from_log('ubar', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(ubar, target_val=1.0E-00, delta=5E-04, label='ubar')
+
+        wmax = self.get_value_from_log('ubar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(wmax, target_val=2.0E-00, delta=4E-03, label='ubar')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=80., label='gmres')
+
+        larea = self.get_value_from_log('ubar', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(larea, target_val=7.8540E-01, delta=5E-04, label='area')
+        
+        ubar = self.get_value_from_log('ubar', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(ubar, target_val=1.0E-00, delta=5E-04, label='ubar')
+
+        wmax = self.get_value_from_log('ubar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(wmax, target_val=2.0E-00, delta=4E-03, label='ubar')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  ext_cyl; ext_cyl.rea
