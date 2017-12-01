@@ -1729,7 +1729,7 @@ class Ocyl(NekTestCase):
         self.run_nek()
 
         gmres = self.get_value_from_log('gmres', column=-7,row=1)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
 
         self.assertDelayedFailures()
 
@@ -1741,7 +1741,7 @@ class Ocyl(NekTestCase):
         self.run_nek()
 
         gmres = self.get_value_from_log('gmres', column=-6,row=1)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
 
         self.assertDelayedFailures()
 
@@ -1794,7 +1794,7 @@ class Ocyl2(NekTestCase):
         self.run_nek()
 
         gmres = self.get_value_from_log('gmres', column=-6,row=1)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
 
         self.assertDelayedFailures()
 
@@ -2162,6 +2162,70 @@ class Rayleigh_Ray2(NekTestCase):
 
         umax = self.get_value_from_log('umax', column=-3, row=-1)
         self.assertAlmostEqualDelayed(umax, target_val=0.006621465, delta=1e-04, label='umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
+#  expansion: expansion.rea
+####################################################################
+
+class Robin(NekTestCase):
+    example_subdir  = 'robin'
+    case_name        = 'robin'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '12',
+            lxd       = '18',
+            lx2       = 'lx1-0',
+            lelg      = '10',
+            lpmin     = '1',
+            lpmax     = '1',
+            ldimt     = '3',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        hmh = self.get_value_from_log('Hmholtz TEMP', column=-4,row=-1)
+        self.assertAlmostEqualDelayed(hmh, target_val=0., delta=80., label='Hmholtz TEMP')
+
+        tbar = self.get_value_from_log('tbar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tbar, target_val=0.0E-00, delta=1E-05, label='tbar')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        hmh = self.get_value_from_log('Hmholtz TEMP', column=-4,row=-1)
+        self.assertAlmostEqualDelayed(hmh, target_val=0., delta=20., label='Hmholtz TEMP')
+
+        tbar = self.get_value_from_log('tbar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tbar, target_val=0.0E-00, delta=1E-05, label='tbar')
 
         self.assertDelayedFailures()
 
@@ -2856,6 +2920,7 @@ if __name__ == '__main__':
                Pipe_Stenosis,
                Rayleigh_Ray1,
                Rayleigh_Ray2,
+               Robin,
                Shear4_Shear4,
                Shear4_Thin,
                Smooth,
