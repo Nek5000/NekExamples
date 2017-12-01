@@ -146,8 +146,6 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
 
        param(59) = 1  ! all elements deformed
-       param(66) = 4
-       param(67) = 4
 
       ifxyo = .true.
 c     ifusermv = .false.  ! do not define our own mesh velocity

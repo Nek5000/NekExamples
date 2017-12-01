@@ -1692,6 +1692,116 @@ class MvWall(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  ocyl: ocyl.rea ocyl2.rea
+####################################################################
+
+class Ocyl(NekTestCase):
+    example_subdir  = 'ocyl'
+    case_name        = 'ocyl'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '16',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            lpmin     = '1',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class Ocyl2(NekTestCase):
+    example_subdir  = 'ocyl'
+    case_name        = 'ocyl2'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '16',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            lpmin     = '1',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  os7000; u3_t020_n13.rea
 ####################################################################
 
@@ -2720,6 +2830,7 @@ if __name__ == '__main__':
                Eddy_PsiOmega, 
                Eddy_Rich,
                Eddy_Uv,
+               Expansion,
                ExtCyl,
                Fs2_St1,
                Fs2_St2,
@@ -2737,6 +2848,8 @@ if __name__ == '__main__':
                MoffCirc,
                MvCylCvode,
                MvWall,
+               Ocyl,
+               Ocyl2,
                Os7000,
                Peris,
                Pipe_Helix,
