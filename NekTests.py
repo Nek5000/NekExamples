@@ -1036,7 +1036,7 @@ class Hemi(NekTestCase):
 #  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
 ####################################################################
 class LinCav_Adj(NekTestCase):
-    example_subdir = 'dfh_cav'
+    example_subdir = 'lin_dfh_cav'
     case_name = 'lin_dfh_cav_adj'
 
     def setUp(self):
@@ -1068,7 +1068,7 @@ class LinCav_Adj(NekTestCase):
         self.move_logs()
 
 class LinCav_Dir(NekTestCase):
-    example_subdir = 'dfh_cav'
+    example_subdir = 'lin_dfh_cav'
     case_name = 'lin_dfh_cav_dir'
  
     def setUp(self):
@@ -1103,7 +1103,7 @@ class LinCav_Dir(NekTestCase):
 #  channel2D; lin_chan_dir.par, lin_chan_adj.par
 ####################################################################
 class LinChn_Adj(NekTestCase):
-    example_subdir = 'channel2D'
+    example_subdir = 'lin_channel2D'
     case_name = 'lin_chan_adj'
  
     def setUp(self):
@@ -1136,7 +1136,7 @@ class LinChn_Adj(NekTestCase):
         self.move_logs()
 
 class LinChn_Dir(NekTestCase):
-    example_subdir = 'channel2D'
+    example_subdir = 'lin_channel2D'
     case_name = 'lin_chan_dir'
 
     def setUp(self):
