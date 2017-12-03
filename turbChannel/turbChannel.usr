@@ -46,6 +46,9 @@ c start time for averaging
 c output frequency for statistics
 #define tSTATFREQ  uparam(2)
 
+c drive flow with pressure gradient
+#define DPDX uparam(3)
+
 c mesh dimensions
 #define PI (4.*atan(1.))
 #define DELTA 1.
@@ -179,10 +182,12 @@ c
         call copy(t,ediff,n)
       endif
 
-      e2     = glsc3(vy,bm1,vy,n)+glsc3(vz,bm1,vz,n)
-      e2     = e2/volvm1
-      if(nid.eq.0) write(6,2) time,e2
-   2               format(1p2e13.4,' energy')
+
+      ubar = glsc2(vx,bm1,n)/volvm1
+      e2   = glsc3(vy,bm1,vy,n)+glsc3(vz,bm1,vz,n)
+      e2   = e2/volvm1
+      if(nid.eq.0) write(6,2) time,ubar,e2
+   2               format(1p3e13.4,' monitor')
 
 c
 c     Below is just for postprocessing ...
@@ -935,12 +940,19 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      common /cforce/ ffx_new,ffy_new,ffz_new
       common /uforce/ utldo(ldim)
 
       n=nx1*ny1*nz1*nelv
 
-      if (istep.eq.0) f_new=0. !param(71)  ! Update forcing for Ubar = 1
+      if (istep.eq.0) then
+         f_new = 0.
+         if (DPDX.eq.1) then
+            param(54) = -1 ! flow direction (x:1, y:2, z:3)
+            param(55) = 1  ! flowrate (p54>) or Ubar (p54<0)
+         endif
+      endif
+
+      if (DPDX.eq.1) return
 
       u_targ  = 1.
       ubar    = glsc2(u,bm1,n)/volvm1
