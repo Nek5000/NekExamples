@@ -127,6 +127,7 @@ class Benard_Ray9(NekTestCase):
 ####################################################################
 #  blasius: blasius.rea
 ####################################################################
+
 class Blasius(NekTestCase):
     example_subdir  = 'blasius'
     case_name        = 'blasius'
@@ -183,13 +184,6 @@ class Blasius(NekTestCase):
 
     def tearDown(self):
         self.move_logs()
-
-# ####################################################################
-# #  cone: cone.rea, cone016.rea, cone064.rea, cone256.rea
-# ####################################################################
-#
-# # TODO: implement cone
-#
 
 ####################################################################
 #  CMT/inviscid_vortex: pvort.rea
@@ -250,6 +244,187 @@ class CmtInviscidVortex(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+# ####################################################################
+# #  cone/{cone016, cone064, cone256}: cone.rea
+# ####################################################################
+
+class Cone16(NekTestCase):
+    example_subdir = os.path.join('cone','cone016')
+    case_name = 'cone'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '9',
+            lxd       = '14',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='cone016')
+        self.run_genmap(rea_file='box',tol='0.01')
+        self.mvn('box', 'cone')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-2.3032E-02, delta=5E-05, label='Umin')
+        
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=8.5065E-01, delta=5E-05, label='Umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-2.3032E-02, delta=5E-05, label='Umin')
+
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=8.5065E-01, delta=5E-05, label='Umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()    
+        
+class Cone64(NekTestCase):
+    example_subdir = os.path.join('cone','cone064')
+    case_name = 'cone'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '5',
+            lxd       = '8',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='cone064')
+        self.run_genmap(rea_file='box',tol='0.01')
+        self.mvn('box', 'cone')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.2663E-01, delta=5E-04, label='Umin')
+
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.9285E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.2663E-01, delta=5E-04, label='Umin')
+
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.9285E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class Cone256(NekTestCase):
+    example_subdir = os.path.join('cone','cone256')
+    case_name = 'cone'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '3',
+            lxd       = '5',
+            lx2       = 'lx1-2',
+            lelg      = '300',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='cone256')
+        self.run_genmap(rea_file='box',tol='0.01')
+        self.mvn('box', 'cone')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.6392E-01, delta=5E-04, label='Umin')
+        
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.4924E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.6392E-01, delta=5E-04, label='Umin')
+        
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.4924E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+        
 ####################################################################
 #  conj_ht: conj_ht.rea
 ####################################################################
@@ -1165,6 +1340,7 @@ class Hemi(NekTestCase):
 ####################################################################
 #  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
 ####################################################################
+
 class LinCav_Adj(NekTestCase):
     example_subdir = 'lin_dfh_cav'
     case_name = 'lin_dfh_cav_adj'
@@ -1232,6 +1408,7 @@ class LinCav_Dir(NekTestCase):
 ####################################################################
 #  channel2D; lin_chan_dir.par, lin_chan_adj.par
 ####################################################################
+
 class LinChn_Adj(NekTestCase):
     example_subdir = 'lin_channel2D'
     case_name = 'lin_chan_adj'
