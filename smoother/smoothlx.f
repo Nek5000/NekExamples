@@ -1,43 +1,36 @@
-      subroutine smoothmesh(mtyp,nlap,nopt,nouter,noutput,nbc,dcbc,
+      subroutine smoothmesh(mtyp,nlap,nopt,nouter,nbc,dcbc,
      $      idftyp,alpha,beta)
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      parameter (nxyzc=lxc*lyc*lzc,nxyz=lx1*ly1*lz1)
+
+      real xmc(lxc,lyc,lzc,lelv),
+     $     ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv),
+     $     mltc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
-      real x8(2,2,ldim-1,lelv*(2**ldim)),y8(2,2,ldim-1,lelv*(2**ldim))
-      real z8(2,2,ldim-1,lelv*(2**ldim))
+
+      real x8(2**ldim,lelv*(2**ldim)),
+     $     y8(2**ldim,lelv*(2**ldim)),
+     $     z8(2**ldim,lelv*(2**ldim)),
+     $     nodmask(2**ldim,lelv*(2**ldim)),
+     $     dis((2**ldim)*lelv*(2**ldim)),
+     $     mlt((2**ldim)*lelv*(2**ldim))
       common /coarsemesh8/ x8,y8,z8
-      real  dx(lxc*lyc*lzc,lelv),dy(lxc*lyc*lzc,lelv),
-     $   dz(lxc*lyc*lzc,lelv),xbp(lxc*lyc*lzc,lelv),
-     $   ybp(lxc*lyc*lzc,lelv),zbp(lxc*lyc*lzc,lelv)
+
+      real  dx(nxyzc,lelv),dy(nxyzc,lelv),dz(nxyzc,lelv),
+     $      xbp(nxyzc,lelv),ybp(nxyzc,lelv),zbp(nxyzc,lelv)
       common / msmbackup / dx,dy,dz,xbp,ybp,zbp
-      real dxm(lx1,ly1,lz1,lelv),dym(lx1,ly1,lz1,lelv),
-     $     dzm(lx1,ly1,lz1,lelv)
-      real dxn(lx1,ly1,lz1,lelv),dyn(lx1,ly1,lz1,lelv),
-     $     dzn(lx1,ly1,lz1,lelv)
-      real nodmask(2**ldim,lelv*(2**ldim)),dis((2**ldim)*lelv*(2**ldim))
-      real mlt(2**ldim,lelv*(2**ldim)),mltc(lxc*lyc*lzc*lelv)
-      integer opt,noutput,gshl,gshlc,lapinv,optinv
+
+      real dxm(nxyz,lelv),dym(nxyz,lelv),dzm(nxyz,lelv),
+     $     dxn(nxyz,lelv),dyn(nxyz,lelv),dzn(nxyz,lelv)
+
+      integer opt,gshl,gshlc,lapinv,optinv
       real alpha,beta,etstart, etend,f1sav,f1,f1pre
       character*3 dcbc(nbc)
 c     -------------------
 c     -------------------
-c     -------------------
-ccc   USER INPUT
-c     BOUNDARY CONDITIONS NEAR WHICH BOUNDARY LAYER 
-c     RESOLUTION WILL BE PRESERVED
-
-ccc   PARAMETERS TO DETERMINE DISTANCE FUNCTION 
-c     Input idftyp, alpha and be a (alpha is ignore if idftyp is 0)
-c     0 -> 1-exp(-dis/beta) ;   1 -> 0.5(tanh(alpha*(dis-beta))+1)
-
-ccc   NUMBER OF ITERATIONS OF DIFFERENT KIND OF SMOOTHERS
-c     -------------------
-c     -------------------
-c     -------------------
-
 ccc   INITIALIZE VARIABLES
       lapinv = 0
       optinv = 0
@@ -61,9 +54,6 @@ c     COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
       call copy(ybp,ymc,lxc*lyc*lzc*nelt)
       if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelt)
 
-      ifxyo = .true.
-      call outpost(vx,vy,vz,pr,t,'   ')  !original mesh output
-
       call xmtox8(xmc,x8)
       call xmtox8(ymc,y8)
       if (ldim.eq.3) call xmtox8(zmc,z8)
@@ -80,14 +70,12 @@ c     CONSTRUCT DISTANCE FUNCTION
       if (nid.eq.0) write(6,*) 'distance about to be calculated'
       call disfun(dis,idftyp,alpha,beta,dcbc,nbc)
       if (nid.eq.0) write(6,*) 'distance calculated'
-c      call rone(dis,(2**ldim)*nelv*(2**ldim))
 
       etstart=dnekclock()
 c     GET INITIAL ENERGY
       call getglobsum(x8,y8,z8,mlt,gshl,2**ldim,1,f1sav)
       if (nid.eq.0) write(6,*) f1sav,'initial energy'
       f1 = f1sav
-
 
 c     START SMOOTHING HERE
       do j=1,nouter
@@ -117,9 +105,6 @@ c
 
          call xmctoxm1
   
-         if (noutput.gt.0) then
-            if (mod(j,noutput).eq.0) call outpost(vx,vy,vz,pr,t,'   ')
-         endif
          if (nid.eq.0) write(6,*) 'loop complete',j
 
          if (f1.ge.f1pre) goto 5001  !mesh didn't improve since last iteration
@@ -145,7 +130,8 @@ c     the actual surface mesh
       if (nid.eq.0) write(6,*) 'SMSTAT-final quality sum is ', f1
       if (nid.eq.0) write(6,*) 'SMSTAT-improve % ',100.*(f1sav-f1)/f1sav
       if (nid.eq.0) write(6,*) 'SMSTAT-time taken ',etend-etstart
-      call outpost(dx,dy,dz,pr,t,'   ')
+
+      call geom_reset(1)    ! recompute Jacobians, etc.
        
 c     OUTPUT THE MESH
 c      call gen_rea_full(1)                   !output the rea for smooth mesh
@@ -157,16 +143,15 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real dxmc(3,3),dymc(3,3),dzmc(3,3)
-      real dxtmc(3,3),dytmc(3,3),dztmc(3,3)
+      real      dxmc(3,3),dymc(3,3),dzmc(3,3)
+      real      dxtmc(3,3),dytmc(3,3),dztmc(3,3)
       common /coarseders/ dxmc,dymc,dzmc,dxtmc,dytmc,dztmc
-      real ixtmc3(lx1,3),ixmc3(3,lx1)
-      real ixtmf3(3,lx1),ixmf3(lx1,3)
+      real      ixtmc3(lx1,3),ixmc3(3,lx1)
+      real      ixtmf3(3,lx1),ixmf3(lx1,3)
       common /coarseints/ ixmc3,ixtmc3,ixmf3,ixtmf3
-      real zgmc(3),wxmc(3) !points and weights
-      real zgmf(lx1),wxmf(lx1) !points and weights
-c      common /coarswz/ zgmc,wxmc,zgmf,wxmf
-      real w(lx1,lx1)
+      real      zgmc(3),wxmc(3)     !points and weights
+      real      zgmf(lx1),wxmf(lx1) !points and weights
+      real      w(lx1,lx1)
 
 c     Generate GLL points and weight
       call zwgll(zgmc,wxmc,3)
@@ -296,12 +281,13 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
 ! backsup the mesh
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
-      parameter(lt = lxc*lyc*lzc*lelt)
-      common / msmbackup / dx,dy,dz,xbp,ybp,zbp
+
+      parameter(lt = lxc*lyc*lzc*lelv)
       real dx(lt),dy(lt),dz(lt),xbp(lt),ybp(lt),zbp(lt)
+      common / msmbackup / dx,dy,dz,xbp,ybp,zbp
 
       call copy(xbp,xmc,lxc*lyc*lzc*nelt)
       call copy(ybp,ymc,lxc*lyc*lzc*nelt)
@@ -314,15 +300,17 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
+
       real x8(2,2,ldim-1,lelv*(2**ldim)),y8(2,2,ldim-1,lelv*(2**ldim))
       real z8(2,2,ldim-1,lelv*(2**ldim))
       common /coarsemesh8/ x8,y8,z8
-      parameter(lt = lxc*lyc*lzc*lelt)
-      common / msmbackup / dx,dy,dz,xbp,ybp,zbp
+
+      parameter(lt = lxc*lyc*lzc*lelv)
       real dx(lt),dy(lt),dz(lt),xbp(lt),ybp(lt),zbp(lt)
+      common / msmbackup / dx,dy,dz,xbp,ybp,zbp
      
       call copy(xmc,xbp,lxc*lyc*lzc*nelt)
       call copy(ymc,ybp,lxc*lyc*lzc*nelt)
@@ -337,25 +325,33 @@ c-----------------------------------------------------------------------
       subroutine optCG(itmax,nodmask,mlt,gshl,dis,opt,optinv,mltc,gshlc)
       include 'SIZE'
       include 'TOTAL'
+
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      parameter (nxyzc=lxc*lyc*lzc,nxyz=lx1*ly1*lz1)
+
+      real xmc(lxc,lyc,lzc,lelv),
+     $     ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv),
+     $     mltc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
-      real x8(2,2,ldim-1,lelv*(2**ldim)),y8(2,2,ldim-1,lelv*(2**ldim))
-      real z8(2,2,ldim-1,lelv*(2**ldim))
+
+      real x8(2**ldim,lelv*(2**ldim)),
+     $     y8(2**ldim,lelv*(2**ldim)),
+     $     z8(2**ldim,lelv*(2**ldim)),
+     $     nodmask(2**ldim,lelv*(2**ldim)),
+     $     dis(2**ldim,lelv*(2**ldim)),
+     $     mlt(2**ldim,lelv*(2**ldim)),
+     $     dx(2**ldim,lelv*(2**ldim)),
+     $     dy(2**ldim,lelv*(2**ldim)),
+     $     dz(2**ldim,lelv*(2**ldim)),
+     $     dfdx(2**ldim,lelv*(2**ldim),ldim),
+     $     dfdxn(2**ldim,lelv*(2**ldim),ldim),
+     $     sk(2**ldim,lelv*(2**ldim),ldim)
       common /coarsemesh8/ x8,y8,z8
-      real dx(2**ldim,lelv*(2**ldim)),dy(2**ldim,lelv*(2**ldim))
-      real dz(2**ldim,lelv*(2**ldim))
-      real mlt(2**ldim,lelv*(2**ldim))
-      real mltc(lxc*lyc*lzc,lelv)
-      real nodmask(2**ldim,lelv*(2**ldim))
-      real dis((2**ldim),lelv*(2**ldim))
+
       integer iter,gshl,siz,eg,opt,optinv,kerr,gshlc
       real f2,lambda,num,den,scale2
       real alpha,hval,bk,num1,den1,wrk1
-      real dfdx(2**ldim,lelv*(2**ldim),ldim)
-      real dfdxn(2**ldim,lelv*(2**ldim),ldim)
-      real sk(2**ldim,lelv*(2**ldim),ldim)
 
       optinv = 0 !initialize to 0
 
@@ -378,7 +374,7 @@ c-----------------------------------------------------------------------
       do iter=1,itmax
 c  do line search at this point
          call
-     $  dolsalpha(x8,y8,z8,sk,alpha,hval,siz,opt,mlt,gshl,nodmask)
+     $  dolsalpha(x8,y8,z8,sk,alpha,hval,siz,opt,mlt,gshl,nodmask,iter)
 
          if (alpha.eq.0) goto 5002
 
@@ -452,23 +448,27 @@ c  get Bk = dfdxn'*dfdxn / (dfdx'*dfdx)
       end
 c-----------------------------------------------------------------------
       subroutine 
-     $   dolsalpha(xe,ye,ze,sk,alpha,hval,siz,opt,mlt,gshl,nodmask)
+     $   dolsalpha(xe,ye,ze,sk,alpha,hval,siz,opt,mlt,gshl,nodmask,iter)
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real     xmc(lxc,lyc,lzc,lelv),
+     $         ymc(lxc,lyc,lzc,lelv),
+     $         zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
-      real xe(2**ldim,lelv*(2**ldim)),ye(2**ldim,lelv*(2**ldim))
-      real ze(2**ldim,lelv*(2**ldim))
-      real dx(2**ldim,lelv*(2**ldim)),dy(2**ldim,lelv*(2**ldim))
-      real dz(2**ldim,lelv*(2**ldim))
-      real xs(2**ldim,lelv*(2**ldim)),ys(2**ldim,lelv*(2**ldim))
-      real zs(2**ldim,lelv*(2**ldim))
-      real nodmask(2**ldim,lelv*(2**ldim))
-      real mlt(2**ldim,lelv*(2**ldim))
-      real sk((2**ldim),lelv*(2**ldim),ldim)
-      real jac(2**ldim,lelv*(2**ldim))
+      real     xe(2**ldim,lelv*(2**ldim)),
+     $         ye(2**ldim,lelv*(2**ldim)),
+     $         ze(2**ldim,lelv*(2**ldim)),
+     $         dx(2**ldim,lelv*(2**ldim)),
+     $         dy(2**ldim,lelv*(2**ldim)),
+     $         dz(2**ldim,lelv*(2**ldim)),
+     $         xs(2**ldim,lelv*(2**ldim)),
+     $         ys(2**ldim,lelv*(2**ldim)),
+     $         zs(2**ldim,lelv*(2**ldim)),
+     $         nodmask(2**ldim,lelv*(2**ldim)),
+     $         mlt(2**ldim,lelv*(2**ldim)),
+     $         sk((2**ldim),lelv*(2**ldim),ldim),
+     $         jac(2**ldim,lelv*(2**ldim))
       real hval,alpha,wrk1,f1,f2
       integer siz,opt,z,gshl,invflag
       integer n1,n2,chk1,chk2,tstop,maxcount,iter
@@ -527,12 +527,12 @@ c-----------------------------------------------------------------------
 
       if (tstop.eq.1) then 
         alpha = alphasav
-        if (nid.eq.0) write(6,*) 'glob_mesh_sum is', f2
+        if (nid.eq.0) write(6,101) iter,f2
+  101   format(i5,' glob_phi ',1p1e13.6)
       else
         alpha = 0.
         if (nid.eq.0) write(6,*) 'alpha being set to 0'
       endif
-
 
       return
       end
@@ -563,10 +563,11 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real dd1(lx1*ly1*lz1*lelv),dd2(lx1*ly1*lz1*lelv)
-      real ddd(lx1*ly1*lz1*lelv)
-      real ddc(lxc*lyc*lzc,lelv)
-      real dis((2**ldim)*lelv*(2**ldim))
+      real dd1(lx1*ly1*lz1*lelv),
+     $     dd2(lx1*ly1*lz1*lelv),
+     $     ddd(lx1*ly1*lz1*lelv),
+     $     ddc(lxc*lyc*lzc,lelv),
+     $     dis((2**ldim)*lelv*(2**ldim))
       integer i,nbc,j,funtype
       character*3 dcbc(nbc)
       real dscale,dmax,alpha,beta,dum2
@@ -615,7 +616,6 @@ c
           call exitti('Please set the funtype to 0 or 1$',funtype)
       endif
         
-    
       if (nid.eq.0) write(6,*) dmax,'max wall distance'
 
       return
@@ -626,12 +626,16 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
 c     dis*smoothmesh + (1-dis)*original mesh
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),
+     $     ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
-      real dx(lxc*lyc*lzc,lelv),dy(lxc*lyc*lzc,lelv)
-      real dz(lxc*lyc*lzc,lelv)
-      real dis((2**ldim)*lelv*(2**ldim)),dis2(lxc,lyc,lzc,lelv)
+
+      real dx(lxc*lyc*lzc,lelv),
+     $     dy(lxc*lyc*lzc,lelv),
+     $     dz(lxc*lyc*lzc,lelv),
+     $     dis((2**ldim)*lelv*(2**ldim)),
+     $     dis2(lxc,lyc,lzc,lelv)
 
       call x8toxm(dis2,dis)
       dum2 = glamax(dis2,lxc*lyc*lzc*nelv)
@@ -711,19 +715,23 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
 c     This routine fixes the curved edges post smoothing
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),
+     $     ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
+
       common /ctmp0/ zg(3)
-      real w1(lxc*lyc*lzc*lelv),w2(lxc*lyc*lzc*lelt)
+      real w1(lxc*lyc*lzc*lelv),w2(lxc*lyc*lzc*lelv)
       real vcmask(lxc,lyc,lzc,lelv)
       integer f,e,nedge,n,nfaces,gshlc
       integer ke(3,12)
-      real xyz(3,3)
-      real xd(lxc*lyc*lzc),yd(lxc*lyc*lzc)
-      real zd(lxc*lyc*lzc)
-      real mltc(lxc*lyc*lzc*lelv)
+      real    xyz(3,3)
+      real    xd(lxc*lyc*lzc),
+     $        yd(lxc*lyc*lzc),
+     $        zd(lxc*lyc*lzc),
+     $        mltc(lxc*lyc*lzc*lelv)
       real nxv,nyv,nzv
+
       save    ke
       data    ke /  1, 2, 3,    3, 6, 9,    9, 8, 7,    7, 4, 1
      $           , 19,20,21,   21,24,27,   27,26,25,   25,22,19
@@ -851,16 +859,17 @@ c-----------------------------------------------------------------------
       subroutine gradf(f2,dfdx,x8,y8,z8,mlt,gshl,siz,opt,h)
       include 'SIZE'
       include 'TOTAL'
-      real x8(2**ldim,lelv*(2**ldim)),y8(2**ldim,lelt*(2**ldim))
-      real z8(2**ldim,lelv*(2**ldim))
-      real xt(2**ldim),yt(2**ldim),zt(2**ldim)
-      integer siz,opt
+      real x8(2**ldim,lelv*(2**ldim)),
+     $     y8(2**ldim,lelv*(2**ldim)),
+     $     z8(2**ldim,lelv*(2**ldim)),
+     $    mlt(2**ldim,lelv*(2**ldim)),
+     $   dfdx(2**ldim,lelv*(2**ldim),ldim)
+      real xt(2**ldim),
+     $     yt(2**ldim),
+     $     zt(2**ldim)
+      integer siz,opt,vertex,gshl,e,eg,e0,f
       real par(siz)
-      real mlt(2**ldim,lelv*(2**ldim))
-      integer vertex,gshl,e,eg,e0,f
       real f1,fl,gl,f2,h
-      integer i,j,k
-      real dfdx(2**ldim,lelv*(2**ldim),ldim)
  
       f1 = 0
       do e=1,nelv*(2**ldim)
@@ -918,11 +927,12 @@ c-----------------------------------------------------------------------
 c     This routine compiles the jacobian matrix and then does the 
 c     frobenius norm of the matrix times that of the inverse
       integer i,j,k,siz,el,dire
-      real par(siz),det(siz),val
+
+      real par(siz),det(siz)
       real jm(ldim,ldim),jin(ldim,ldim),frn(ldim**2)
-      real x(2**ldim),y(2**ldim),z(2**ldim)
-      real jac(2**ldim),dumc
-      real fr1,fr2,sum1
+      real x(2**ldim),y(2**ldim),z(2**ldim),jac(2**ldim)
+      real fr1,fr2,sum1,dumc,val
+
       integer bzindx(24),czindx(24)
       integer penalty
       SAVE bzindx
@@ -1008,12 +1018,11 @@ c-----------------------------------------------------------------------
       subroutine get_len(val,x,y,z,siz)
       include 'SIZE'
       include 'TOTAL'
-      real x(2**ldim),y(2**ldim),z(2**ldim)
       integer siz
-      real par(siz)
-      integer azindx(24),n1,i
-      real xm,ym,zm
-      real val
+      real x(2**ldim),y(2**ldim),z(2**ldim)
+      real par(siz),xm,ym,zm,val
+
+      integer azindx(24)
       SAVE    azindx
       DATA    azindx  / 1,2 ,2,4, 3,4, 1,3, 2,6, 6,8,
      $                  4,8, 5,6, 7,8, 5,7, 1,5, 3,7 /
@@ -1036,16 +1045,13 @@ c-----------------------------------------------------------------------
       subroutine get_nodscale(scalek,x8,y8,z8,gshl)
       include 'SIZE'
       include 'TOTAL'
-      real x8(2**ldim,lelv*(2**ldim))
-      real y8(2**ldim,lelv*(2**ldim))
-      real z8(2**ldim,lelv*(2**ldim))
-      real scalek,curval
-      integer bzindx(24),n1,i,j,k,e,ind,gshl
-      real work1(1),dum(ldim)
-      real xm,ym,zm
+      real x8(2**ldim,lelv*(2**ldim)),
+     $     y8(2**ldim,lelv*(2**ldim)),
+     $     z8(2**ldim,lelv*(2**ldim))
+      real scalek,curval,xm,ym,zm,work1(1),dum(ldim),wrk1
+      integer bzindx(24),e,gshl
       DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8,
      $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
-      real wrk1
 c     bzindx tells what node is connected to what node
 
       n1 = nelv*(2**ldim)
@@ -1082,11 +1088,13 @@ c-----------------------------------------------------------------------
       common /ivrtx/ vertex
       integer*8 glo_num(lxc*lyc*lzc,lelv),ngv
       integer*8 glo_numk2(2**ldim,lelv*(2**ldim))
-      real mlt(2**ldim,lelv*(2**ldim))
-      real mltc(lxc*lyc*lzc*lelv)
-      real nodmask(2**ldim,lelv*(2**ldim))
-      real wrkmask(lxc*lyc*lzc*lelv)
-      integer gshlc,gshl,e,eg,e0,f,k,j
+
+      real     mlt(2**ldim,lelv*(2**ldim)),
+     $     nodmask(2**ldim,lelv*(2**ldim))
+      real    mltc(lxc*lyc*lzc*lelv),
+     $     wrkmask(lxc*lyc*lzc*lelv)
+      integer gshlc,gshl,e,eg,e0,f
+
       integer zindx(64)
       SAVE zindx
       DATA zindx /  1,  2,  4,  5,  10, 11, 13, 14,
@@ -1166,20 +1174,24 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),
+     $     ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
-      real x8(2,2,ldim-1,lelv*(2**ldim)),y8(2,2,ldim-1,lelv*(2**ldim))
-      real z8(2,2,ldim-1,lelv*(2**ldim))
+
+      real x8(2,2,ldim-1,lelv*(2**ldim)),
+     $     y8(2,2,ldim-1,lelv*(2**ldim)),
+     $     z8(2,2,ldim-1,lelv*(2**ldim))
       common /coarsemesh8/ x8,y8,z8
-      real dxx(2**ldim,lelv*(2**ldim))
-      real dyy(2**ldim,lelv*(2**ldim))
-      real dzz(2**ldim,lelv*(2**ldim))
-      real dis(2**ldim,lelv*(2**ldim))
-      real mlt(2**ldim,lelv*(2**ldim))
-      real mltc(lxc*lyc*lzc,lelv)
-      real nodmask(2**ldim,lelv*(2**ldim))
-      integer iter,i,j,k,n,nxyz,z,e,f,n2,gshl,lapinv,kerr,gshlc
+
+      real dxx(2**ldim,lelv*(2**ldim)),
+     $     dyy(2**ldim,lelv*(2**ldim)),
+     $     dzz(2**ldim,lelv*(2**ldim)),
+     $     dis(2**ldim,lelv*(2**ldim)),
+     $     mlt(2**ldim,lelv*(2**ldim)),
+     $     nodmask(2**ldim,lelv*(2**ldim)),
+     $     mltc(lxc*lyc*lzc,lelv)
+      integer z,e,f,gshl,lapinv,kerr,gshlc
       real xbar,ybar,zbar,sfac
 
       if (nid.eq.0) write(6,*) 'laplacian smoothing started'
@@ -1345,8 +1357,8 @@ C     Note: Subroutines GLMAPM1, GEODAT1, AREA2, SETWGTR and AREA3
 C           share the same array structure in Scratch Common /SCRNS/.
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
       parameter (nxc=3,nyc=3,nzc=1+(ldim-2)*(nxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
 C
       real           XRMc(LXc,LYc,LZc,LELv)
@@ -1463,8 +1475,8 @@ C
       real dxmc(3,3),dymc(3,3),dzmc(3,3)
       real dxtmc(3,3),dytmc(3,3),dztmc(3,3)
       common /coarseders/ dxmc,dymc,dzmc,dxtmc,dytmc,dztmc
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
 C
       NXYc=lxc*lyc
@@ -1501,8 +1513,8 @@ C-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
       integer e
 
@@ -1526,8 +1538,8 @@ C-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
-      real xmc(lxc,lyc,lzc,lelt),ymc(lxc,lyc,lzc,lelt),
-     $     zmc(lxc,lyc,lzc,lelt)
+      real xmc(lxc,lyc,lzc,lelv),ymc(lxc,lyc,lzc,lelv),
+     $     zmc(lxc,lyc,lzc,lelv)
       common /coarsemesh/ xmc,ymc,zmc
       integer e
 
@@ -1551,7 +1563,7 @@ C-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      parameter (lt = lx1*ly1*lz1*lelt)
+      parameter (lt = lx1*ly1*lz1*lelv)
       common /mrthoi/ napprx(2),nappry(2),napprz(2)
       common /mrthov/ apprx(lt,0:mxprev)
      $              , appry(lt,0:mxprev)
@@ -1633,7 +1645,7 @@ c
       real u(1),h1(1),h2(1),mask(1),mult(1),approx (1)
       integer   napprox(1)
 
-      parameter (lt=lx1*ly1*lz1*lelt)
+      parameter (lt=lx1*ly1*lz1*lelv)
       common /scruz/ r (lt),ub(lt)
 
       logical ifstdh

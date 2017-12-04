@@ -3,17 +3,18 @@
 #
 [GENERAL] 
 #startFrom = restart.fld 
-numSteps = 0
+numSteps = 100
 writeInterval = 0
+dt = 1.e-5
 
 [PROBLEMTYPE]
 
 [PRESSURE]
 residualTol = 1e-06
-residualProj = no
+residualProj = yes
 
 [VELOCITY]
 residualTol = 1e-08
-residualProj = no
+residualProj = yes
 density = 1
-viscosity = 0.5
+viscosity = 0.0001

@@ -58,9 +58,9 @@ c-----------------------------------------------------------------------
       include 'NEKUSE'
 
 
-      ux=0.0
+      ux=1.0
       uy=0.0
-      uz=1.0
+      uz=0.0
 
       return
       end
@@ -70,9 +70,9 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      ux=0.0
+      ux=1.0
       uy=0.0
-      uz=1.0
+      uz=0.0
 
       return
       end
@@ -96,17 +96,15 @@ c-----------------------------------------------------------------------
       alpha = 15.     !Input for wall distance function 
       beta  = 0.2     !
 
-      nouter = 10      !total loops around laplacian and optimizer smoothing
-      nlap = 40        !number of laplacian iterations in each loop
+      nouter = 20      !total loops around laplacian and optimizer smoothing
+      nlap = 30        !number of laplacian iterations in each loop
       nopt = 20        !number of optimization iterations in each loop
-      noutput = 0      !output a mesh in *f0000 format after these many loops
 
       mtyp = 1         !metric type
 
-      call smoothmesh(mtyp,nlap,nopt,nouter,noutput,nbc,dcbc,
-     $      idftyp,alpha,beta)
-
-      call exitt
+      ifxyo = .true.
+      call smoothmesh(mtyp,nlap,nopt,nouter,nbc,dcbc,
+     $                idftyp,alpha,beta)
 
       return
       end
