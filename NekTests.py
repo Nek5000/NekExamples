@@ -190,7 +190,7 @@ class Blasius(NekTestCase):
 ####################################################################
 
 class CmtInviscidVortex(NekTestCase):
-    example_subdir = os.path.join('CMT', 'inviscid_vortex')
+    example_subdir = os.path.join('CMT', 'inv_vort')
     case_name = 'pvort'
 
     def diff_l2norms(self):
@@ -932,7 +932,7 @@ class Eddy_Rich(NekTestCase):
 ####################################################################
 
 class Eddy_Uv(NekTestCase):
-    example_subdir  = 'eddy'
+    example_subdir  = 'eddy_uv'
     case_name        = 'eddy_uv'
 
     def setUp(self):
