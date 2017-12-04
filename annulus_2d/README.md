@@ -24,4 +24,5 @@ until a steady-state solution is obtained, indicated by the change in velocity
 magnitude between successive time steps becomes sufficiently small.
 
 [1] Grigull \& Hauf, _Proc. of the 3rd Int. Heat Transfer Conf. 2_, p. 182--195 (1966)
+
 [2] M. Van Dyke _An Album of Fluid Motion_, Parabolic Press, Stanford, CA, (1982)

@@ -10,12 +10,12 @@ for using them as verification tests.
 
 * `annulus_2d`
   * __Test name__ : Annulus2d
-  * __Purpose__ : Natural convection between the two concentric cylinders with Boussinesq approximation
+  * __Purpose__ : Natural convection between the two concentric cylinders with Boussinesq approximation.
   * __Features__ : 
   	* `cyl2.box` builds 2D annulus with genbox
 * `benard`
   * __Test name__ : Benard_Ray9
-  * __Purpose__ : Eddy solutions in doubly-periodic domain.
+  * __Purpose__ : Rayleigh-Benard convection.
   * __Features__ :
 * `blasius`
   * __Test name__ : Blasius
@@ -59,7 +59,7 @@ for using them as verification tests.
   * __Features__ :
 * `ext_cyl`
   * __Test name__ : ExtCyl
-  * __Purpose__ :
+  * __Purpose__ : Eddy solutions in doubly-periodic domain.
   * __Features__ :
 * `fs_2`
   * __Test name__ : Fs2_St1, Fs2_St2, Fs2_StdWv
