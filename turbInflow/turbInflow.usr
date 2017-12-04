@@ -116,17 +116,6 @@ c-----------------------------------------------------------------------
 
       common /c_re395/ ubulk,re_tau,re_b
 
-c     param(66) = 4.   ! These give the std nek binary i/o and are 
-c     param(67) = 4.   ! good default values
-
-c      zmin=-1
-c      zmax=0
-c      call rescale_x(zm1,zmin,zmax)
-
-c     nelx = 10     ! Number of elements in x,y, and z directions.
-c     nely = 8      ! NOTE, this may vary from one mesh to the next.
-c     nelz = 8      ! See .box file to confirm values!
-
       nelx = 1       ! Number of elements in x,y, and z directions.
       nely = 1       ! NOTE, this may vary from one mesh to the next.
       nelz = 1       ! See .box file to confirm values!
@@ -145,25 +134,16 @@ c-----------------------------------------------------------------------
       subroutine userchk
       include 'SIZE'
       include 'TOTAL'
-      include 'ZPER'  ! for nelx,nely,nelz
       parameter (lt=lx1*ly1*lz1*lelt)
       common /c_re395/ ubulk,re_tau,re_b
       common /myoutflow / d(lt),w1(lt) 
-      common /myarrar/  omega, wk1, wk2
-
-      real x0(3)
-      save x0
       real dx,dy,dz,ubar
-      real omega(lt,3), wk1(lt), wk2(lt)
 
       integer icalld
       save    icalld
       data    icalld /0/
 
       integer e
-
-      character*9  mname
-      character*15 rname
 
       n=nx1*ny1*nz1*nelv
 
@@ -402,6 +382,7 @@ c
       return
       end
 c-----------------------------------------------------------------------
+c  subroutines that follow are for fintpts based method
 c-----------------------------------------------------------------------
       subroutine field_copy_si(fieldout,fieldin,idlist,nptsi)
       include 'SIZE'
