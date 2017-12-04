@@ -10,8 +10,9 @@ for using them as verification tests.
 
 * `annulus_2d`
   * __Test name__ : Annulus2d
-  * __Purpose__ : Natural convection between the two concentric cylinders
+  * __Purpose__ : Natural convection between the two concentric cylinders with Boussinesq approximation
   * __Features__ : 
+  	* `cyl2.box` builds 2D annulus with genbox
 * `benard`
   * __Test name__ : Benard_Ray9
   * __Purpose__ :
