@@ -1,0 +1,178 @@
+ NEKTON Version   2.6                                                                                                               
+ Choose a Name for This Session:
+  Beginning Session h1                                                                                                              
+   1 READ PREVIOUS PARAMETERS 
+   2 TYPE IN  NEW  PARAMETERS 
+   3 CONJ. HEAT TRANSFER MERGE
+Choose item:
+ Enter name of previous session
+   1 BUILD FROM FILE          
+   2 BUILD INTERACTIVELY      
+Choose item:
+ Enter name of previous session
+(Default= one2d.rea        )
+ Will Read Mesh and B.C. data from  one2d.rea        
+     Reading Element       1   [    1a]
+                    *** BUILD MENU ***
+   1 END    ELEMENTS          
+   2 MODIFY ELEMENT           
+   3 GLOBAL REFINE            
+   4 CURVE SIDES              
+   5 DELETE ELEMENT           
+   6 ZOOM                     
+   7 SET GRID                 
+   8 DEFINE OBJECT            
+   9 REDRAW MESH              
+  10 IMPORT MESH              
+  11 IMPORT VTK MESH          
+  12 IMPORT vtx MESH          
+  13 REFLECT MESH             
+  14 SAVE                     
+  15 UNDO                     
+Choose item:
+ Deleting element    1 of    1.
+   1 END    ELEMENTS          
+   2 MODIFY ELEMENT           
+   3 GLOBAL REFINE            
+   4 CURVE SIDES              
+   5 DELETE ELEMENT           
+   6 ZOOM                     
+   7 SET GRID                 
+   8 DEFINE OBJECT            
+   9 REDRAW MESH              
+  10 IMPORT MESH              
+  11 IMPORT VTK MESH          
+  12 IMPORT vtx MESH          
+  13 REFLECT MESH             
+  14 SAVE                     
+  15 UNDO                     
+Choose item:
+   1 BUILD MENU               
+   2 STRAIGHTEN CURVE         
+   3 MAKE CIRCLE              
+   4 Convert to Midside Nodes 
+   5 Autosphere               
+   6 Refine hexagons          
+   7 Arc-Circle Transform     
+   8 Convert Midside to Circle
+   9 Circular-Cartesian       
+  10 RENUMBER ELEMENTS        
+Choose item:
+  RMIN: 0.194904    
+  EPS,RMIN: 0.500000E-01 0.194904E+00
+Enter number of elements in core and shell:
+Enter ratio in outer shell:
+  RMIN: 0.472837E-01
+  EPS,RMIN: 0.500000E-01 0.472837E-01
+ zeroing x:     4  38 -0.15942426E-07                                                                                               
+ zeroing x:     1  42 -0.15942426E-07                                                                                               
+ zeroing x:     4  42 -0.25507878E-07                                                                                               
+ zeroing x:     1  46 -0.25507878E-07                                                                                               
+ zeroing x:     4  46 -0.31247151E-07                                                                                               
+ zeroing x:     1  50 -0.31247151E-07                                                                                               
+ zeroing x:     4  50 -0.34690718E-07                                                                                               
+ zeroing x:     1  54 -0.34690718E-07                                                                                               
+ zeroing x:     4  54 -0.36756859E-07                                                                                               
+   1 BUILD MENU               
+   2 STRAIGHTEN CURVE         
+   3 MAKE CIRCLE              
+   4 Convert to Midside Nodes 
+   5 Autosphere               
+   6 Refine hexagons          
+   7 Arc-Circle Transform     
+   8 Convert Midside to Circle
+   9 Circular-Cartesian       
+  10 RENUMBER ELEMENTS        
+Choose item:
+   1 END    ELEMENTS          
+   2 MODIFY ELEMENT           
+   3 GLOBAL REFINE            
+   4 CURVE SIDES              
+   5 DELETE ELEMENT           
+   6 ZOOM                     
+   7 SET GRID                 
+   8 DEFINE OBJECT            
+   9 REDRAW MESH              
+  10 IMPORT MESH              
+  11 IMPORT VTK MESH          
+  12 IMPORT vtx MESH          
+  13 REFLECT MESH             
+  14 SAVE                     
+  15 UNDO                     
+Choose item:
+   1 END GLOBAL REFINE        
+   2 ZIPPER                   
+   3 Non-conf SPLIT           
+   4 SPIDER WEB               
+   5 PICTURE FRAME            
+   6 CORNER FRAME             
+   7 REPLICATE/ROTATE         
+   8 OCT/Multi-SPLIT          
+   9 Mesh Edit                
+  10 SHIFT                    
+  11 STRETCH                  
+  12 CLIP DOMAIN              
+  13 SMOOTH                   
+  14 Clean up vertices        
+Choose item:
+Rep. (1), Rot. (2), Rep/Rot (3) Template (4)? (0=abort)
+Input rotation angle (deg):
+Input number of reps (e.g., 1 --> double mesh size)
+Showing only 90 elements of          224
+   1 END GLOBAL REFINE        
+   2 ZIPPER                   
+   3 Non-conf SPLIT           
+   4 SPIDER WEB               
+   5 PICTURE FRAME            
+   6 CORNER FRAME             
+   7 REPLICATE/ROTATE         
+   8 OCT/Multi-SPLIT          
+   9 Mesh Edit                
+  10 SHIFT                    
+  11 STRETCH                  
+  12 CLIP DOMAIN              
+  13 SMOOTH                   
+  14 Clean up vertices        
+Choose item:
+Showing only 90 elements of          224
+   1 END    ELEMENTS          
+   2 MODIFY ELEMENT           
+   3 GLOBAL REFINE            
+   4 CURVE SIDES              
+   5 DELETE ELEMENT           
+   6 ZOOM                     
+   7 SET GRID                 
+   8 DEFINE OBJECT            
+   9 REDRAW MESH              
+  10 IMPORT MESH              
+  11 IMPORT VTK MESH          
+  12 IMPORT vtx MESH          
+  13 REFLECT MESH             
+  14 SAVE                     
+  15 UNDO                     
+Choose item:
+   1 ACCEPT MATL,QVOL         
+   2 SELECT ELEMENT           
+   3 SELECT MATL [ 11]        
+   4 SET  MATL PROPS,Q        
+   5 SHOW MATL PROPS,Q        
+Choose item:
+   1 ACCEPT B.C.'s            
+   2 REVIEW/MODIFY            
+Choose item:
+Curve side consistency check OK.
+   1 ACCEPT B.C.'s            
+   2 REVIEW/MODIFY            
+Choose item:
+Curve side consistency check OK.
+ Generating Mesh Points for       224  Elements
+   1 EXIT                     
+   2 OUTPUT                   
+   3 DRIVE FORCE              
+   4 INITIAL COND             
+   5 INTEGRAL QUANTITY        
+   6 OBJECT                   
+   7 ZOOM                     
+Choose item:
+Writing Parameters to file
+Deleting tmp.* files.

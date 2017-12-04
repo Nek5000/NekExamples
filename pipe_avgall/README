@@ -1,0 +1,23 @@
+This example demonstrates how to post-process files output by avg_all
+to calculate rms velocities for pipe flow.
+
+1. The script genmesh (included) was used to generate the mesh p1.rea.
+A coarse mesh has been used here for demonstration purposes. Modify
+the parameters in genmesh based on the resolution requirements based
+on the Re number.
+
+2. p1.usr is used to call avg_all in userchk and outputs avgp10*, rmsp10* and
+rm2p10* files. 
+
+3. This mesh has inflow-outflow boundary conditions on the streamwise surfaces.
+Consequently p1.usr has recirculation boundary condition implemented which
+allows flow to develop as it becomes turbulent.
+
+4. After running p1, use the script genpp to generate two list files.
+avg.list will have the name of all the avgp10* files and rms.list will
+have the names of all the rmsp10* files.
+
+5. compile and run the case "pp". pp.usr has the routines which load data from
+files listed in avg.list and rms.list to determine the u,v and w rms
+velocities.
+
