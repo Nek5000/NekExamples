@@ -71,7 +71,6 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      common /c_re395/ ubulk,re_tau,re_b
 
       integer idum
       save    idum
@@ -112,13 +111,6 @@ c-----------------------------------------------------------------------
       subroutine usrdat2
       include 'SIZE'
       include 'TOTAL'
-      include 'ZPER'   ! for nelx,nely,nelz
-
-      common /c_re395/ ubulk,re_tau,re_b
-
-      nelx = 1       ! Number of elements in x,y, and z directions.
-      nely = 1       ! NOTE, this may vary from one mesh to the next.
-      nelz = 1       ! See .box file to confirm values!
 
       return
       end
@@ -130,12 +122,10 @@ c
       return
       end
 c-----------------------------------------------------------------------
-c-----------------------------------------------------------------------
       subroutine userchk
       include 'SIZE'
       include 'TOTAL'
       parameter (lt=lx1*ly1*lz1*lelt)
-      common /c_re395/ ubulk,re_tau,re_b
       common /myoutflow / d(lt),w1(lt) 
       real dx,dy,dz,ubar
 
