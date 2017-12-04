@@ -15,7 +15,7 @@ for using them as verification tests.
   	* `cyl2.box` builds 2D annulus with genbox
 * `benard`
   * __Test name__ : Benard_Ray9
-  * __Purpose__ :
+  * __Purpose__ : Eddy solutions in doubly-periodic domain.
   * __Features__ :
 * `blasius`
   * __Test name__ : Blasius

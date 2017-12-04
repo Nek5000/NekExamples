@@ -1,9 +1,8 @@
 # Natural convection between the two concentric cylinders
 
 This case demonstrates the application of Nek5000 to simulation of natural
-convection between the two concentric cylinders as considered by:
-* Grigull \& Hauf, _Proc. of the 3rd Int. Heat Transfer Conf. 2_, p. 182--195 (1966)
-* M. Van Dyke _An Album of Fluid Motion_, Parabolic Press, Stanford, CA, 1982.
+convection between the two concentric cylinders as considered by Grigull \& Hauf [1]
+and presented by Van Dyke [2].
 
 The inner cylinder (diameter _D/3_) is slightly heated with with 
 respect to the outer one (diameter _D_). The Boussinesq approximation is used
@@ -24,3 +23,5 @@ The simulations are performed for _Gr_ = 120000 and _Pr_=0.8
 until a steady-state solution is obtained, indicated by the change in velocity
 magnitude between successive time steps becomes sufficiently small.
 
+[1] Grigull \& Hauf, _Proc. of the 3rd Int. Heat Transfer Conf. 2_, p. 182--195 (1966)
+[2] M. Van Dyke _An Album of Fluid Motion_, Parabolic Press, Stanford, CA, (1982)
