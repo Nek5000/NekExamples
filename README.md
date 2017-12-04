@@ -19,8 +19,10 @@ for using them as verification tests.
   * __Features__ :
 * `blasius`
   * __Test name__ : Blasius
-  * __Purpose__ :
+  * __Purpose__ : Blasius boundary layer test case in 2D.
   * __Features__ :
+  	* example of the "ON " boundary condition (Outflow, Normal only)
+  	* set of routines calculating Blasious profile
 * `CMT/inv_vort`
   * __Test name__ : CmtInviscidVortex
   * __Purpose__ :
