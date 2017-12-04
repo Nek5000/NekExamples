@@ -1,23 +1,20 @@
 # Natural convection between the two concentric cylinders
 
 This case demonstrates the application of Nek5000 to simulation of natural
-convection between the two concentric cylinders as considered by
-Grigull \& Hauf
-\footnote{Grigull \& Hauf, Proc. of the 3rd Int. Heat Transfer Conf. 2, 
-p. 182--195 (1966)} and presented by Van Dyke
-\footnote{M. Van Dyke {\em An Album of Fluid Motion}, Parabolic Press, 
-Stanford, CA, 1982}.
-The inner cylinder (diameter $D/3$) is slightly heated with with 
-respect to the outer one (diameter $D$). The Boussinesq approximation is used
+convection between the two concentric cylinders as considered by:
+* Grigull \& Hauf, _Proc. of the 3rd Int. Heat Transfer Conf. 2_, p. 182--195 (1966)
+* M. Van Dyke _An Album of Fluid Motion_, Parabolic Press, Stanford, CA, 1982.
+
+The inner cylinder (diameter _D/3_) is slightly heated with with 
+respect to the outer one (diameter _D_). The Boussinesq approximation is used
 to formulate the equations of motion, valid in situations where density
 differences are small enough to be neglected everywhere except in the
 gravitational forcing.  
 
-Normalizing the Navier-Stokes and energy equations with $D$ for the 
-length scale 
-and $D/U$ for the time scale ($U\sim\sqrt{\beta\,g\,D\,(T_{1}-T_{0}})$ is the
-characteristic velocity in the given problem), and introducing nondimensional
-temperature $\theta=(T-T_{0})/(T_{1}-T_{0})$, where $T_0$ and $T_1$ are the
+Normalizing the Navier-Stokes and energy equations with 
+* _D_ for the length scale 
+* _D/U_ for the time scale (_U_ is the characteristic velocity in the given problem)
+* _(T-T\_0)/(T_1-T\_0)_ nondimensional temperature, where T_0 and T_1 are the
 respective temperatures of the outer and inner cylinders, the governing
 nondimensional equations are
 \begin{eqnarray}
