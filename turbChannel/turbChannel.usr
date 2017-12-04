@@ -15,7 +15,7 @@ c
 c   Two SGS models are available:
 c   - high pass filtering (set filtering=hpfrt in .par file)
 c     Typically it's a good idea to use a filterCutOffRation = 0.7
-c     (2 modes for e.g. N=7) using a filter weight of 40.
+c     (2 modes for e.g. N=7) using a relaxation constant of 40.
 c
 c   - dynamic Smagorinsky (set filtering=none in .par file) 
 c     This version computes C_s D^2 (mixing length) dynamically and thus 
@@ -194,13 +194,6 @@ c     Below is just for postprocessing ...
 c
       if (time.lt.tSTATSTART) goto 999 ! don't start averaging
 
-      if(ifoutfld) then
-        if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
-        if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
-      endif
-
-      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
-
       nelx  = NUMBER_ELEMENTS_X
       nely  = NUMBER_ELEMENTS_Y
       nelz  = NUMBER_ELEMENTS_Z
@@ -208,11 +201,13 @@ c
       rho    = 1.
       dnu    = param(2)
       A_w    = XLEN * ZLEN
-      tw     = (dragx(1)+dragx(2))/A_w + 1.e-50
-      u_tau  = sqrt(tw/rho)
-      Re_tau = u_tau*DELTA/dnu
-      diff   = (tw-ffx_new)/tw
-      tplus  = time * Re_tau * u_tau
+
+      if(ifoutfld) then
+        if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
+        if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
+      endif
+
+      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
 
       if(icalld.eq.0) then
         call rzero(uavg,n)
@@ -265,6 +260,11 @@ c
       ! write statistics to file
       if (nid.eq.0 .and. istep.gt.0 .and. 
      &   time.gt.(ntdump+1)*tSTATFREQ) then
+
+         tw     = dragx_avg/A_w
+         u_tau  = sqrt(tw/rho)
+         Re_tau = u_tau*DELTA/dnu
+         tplus  = time * Re_tau * u_tau
 
          ntdump = ntdump + 1
          write(6,*) 'Dumping statistics ...', tplus, Re_tau
