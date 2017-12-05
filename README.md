@@ -22,7 +22,7 @@ for using them as verification tests.
   * __Purpose__ : Blasius boundary layer test case in 2D.
   * __Features__ :
   	* example of the "ON " boundary condition (Outflow, Normal only)
-  	* set of routines calculating Blasius profile
+  	* provides set of routines to calculate Blasius profile
 * `CMT/inv_vort`
   * __Test name__ : CmtInviscidVortex
   * __Purpose__ : Steady isentropic vortex.
@@ -44,19 +44,19 @@ for using them as verification tests.
   	* routine `set_obj` defines objects for surface integrals
 * `eddy_neknek`
   * __Test name__ : Eddy_Neknek
-  * __Purpose__ :
+  * __Purpose__ : Eddy solutions in doubly-periodic domain with the multidomain version of Nek5000.
   * __Features__ :
 * `eddy_psi_omega`
   * __Test name__ : Eddy_PsiOmega
-  * __Purpose__ :
+  * __Purpose__ : Eddy solutions in doubly-periodic domain using the streamfunction-vorticity (psi-omega) formulation.
   * __Features__ :
 * `eddy_rich`
   * __Test name__ : Eddy_Rich
-  * __Purpose__ :
+  * __Purpose__ : Eddy solutions with moving boundary conditions.
   * __Features__ :
 * `eddy_uv`
   * __Test name__ : Eddy_Uv
-  * __Purpose__ :
+  * __Purpose__ : Eddy solutions in doubly-periodic domain with an additional translational velocity.
   * __Features__ :
 * `expansion`
   * __Test name__ : Expansion
@@ -64,7 +64,7 @@ for using them as verification tests.
   * __Features__ :
 * `ext_cyl`
   * __Test name__ : ExtCyl
-  * __Purpose__ : Eddy solutions in doubly-periodic domain.
+  * __Purpose__ : 
   * __Features__ :
 * `fs_2`
   * __Test name__ : Fs2_St1, Fs2_St2, Fs2_StdWv

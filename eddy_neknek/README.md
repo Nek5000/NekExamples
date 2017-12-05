@@ -1,6 +1,26 @@
-# Eddy solutions in doubly-periodic domain with an additional translational velocity.
+#  Eddy solutions in doubly-periodic domain with the multidomain version of Nek5000.
 
-This case monitors the error for an exact 2D solution
+## TO BUILD:
+
+     PPLIST="NEKNEK" 
+	 export PPLIST
+	 makenek eddy_uv
+
+## TO RUN:
+
+Two overlapping meshes are provided: 
+inside.rea (inner mesh) and outside.rea (outer mesh).  
+To run, one needs to type 'neknek inside outside NP1 NP2', 
+where NP1 is the number of processors for the 'inside' session 
+and NP2 is the number of processors for the 'outside' session. 
+For example, if NP1=2 and NP2=4, you would type 
+'neknek inside outside 2 4'.  
+
+eddy_uv.usr uses 3rd order extrapolation (ninter=3) in time
+with 5 iterations per time-step (ngeom = 5) used to converge the
+interface values between the two meshes.
+
+The case monitors the error for an exact 2D solution
 to the Navier-Stokes equations based on the paper of Walsh [1],
 with an additional translational velocity (u0,v0).
 
@@ -34,7 +54,7 @@ be obtained by taking the viscosity to be extremely small,
 so the effective decay is negligible.   This limit, however,
 leads to an unstable state, thus diminsishing the value of 
 Walsh's solution as a high-Reynolds number test case.
-c
+
 It is possible to extend Walsh's solution to a stable convectively-
 dominated case by simulating an array of vortices that translate
 at arbitrary speed by adding a constant to the initial velocity field.  
@@ -49,6 +69,5 @@ magnetic Prandtl number Pm.
 [1] Owen Walsh, "Eddy Solutions of the Navier-Stokes Equations,"
 in The Navier-Stokes Equations II - Theory and Numerical Methods,
 Proceedings, Oberwolfach 1991, J.G. Heywood, K. Masuda,
-R. Rautmann,  S.A. Solonnikov, Eds., Springer-Verlag, pp. 306--309
-(1992).
+R. Rautmann,  S.A. Solonnikov, Eds., Springer-Verlag, pp. 306--309 (1992).
 

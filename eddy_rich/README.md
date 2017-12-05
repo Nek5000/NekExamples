@@ -1,10 +1,11 @@
-# Eddy solutions in doubly-periodic domain with an additional translational velocity.
+# Eddy solutions with moving boundary conditions.
 
 This case monitors the error for an exact 2D solution
 to the Navier-Stokes equations based on the paper of Walsh [1],
-with an additional translational velocity (u0,v0).
+with an additional translational velocity (u0,v0) and a moving
+domain.
 
-The computational domain is [0,2pi]^2 with doubly-periodic 
+The initial computational domain is [0,2pi]^2 with doubly-periodic
 boundary conditions.
 
 Walsh's solution consists of an array of vortices determined 
@@ -34,7 +35,7 @@ be obtained by taking the viscosity to be extremely small,
 so the effective decay is negligible.   This limit, however,
 leads to an unstable state, thus diminsishing the value of 
 Walsh's solution as a high-Reynolds number test case.
-c
+
 It is possible to extend Walsh's solution to a stable convectively-
 dominated case by simulating an array of vortices that translate
 at arbitrary speed by adding a constant to the initial velocity field.  
@@ -49,6 +50,4 @@ magnetic Prandtl number Pm.
 [1] Owen Walsh, "Eddy Solutions of the Navier-Stokes Equations,"
 in The Navier-Stokes Equations II - Theory and Numerical Methods,
 Proceedings, Oberwolfach 1991, J.G. Heywood, K. Masuda,
-R. Rautmann,  S.A. Solonnikov, Eds., Springer-Verlag, pp. 306--309
-(1992).
-
+R. Rautmann,  S.A. Solonnikov, Eds., Springer-Verlag, pp. 306--309 (1992).
