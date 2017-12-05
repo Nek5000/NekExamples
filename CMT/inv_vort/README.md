@@ -1,9 +1,8 @@
+# Steady isentropic vortex
+
 Steady isentropic vortex solution to Euler equations. Calorically perfect gas.
-Widely used for simple validation in the 1990s. See
-Shu (1998)  MRUGESH WHAT REFERENCE IS THIS
-Yee, Vinokur, Djomehri (1999) "Low-dissipative high-order shock-capturing methods
-                               using characteristic-based filters"
-                               J. Comp. Phys. 150, pp. 199-238
+Widely used for simple validation in the 1990s [1].
+
 CMT-Nek_2d_isentropic_vortex.pdf is an old document summarizing our test efforts with the
 OLD, INCORRECTLY-DEALIASED version of the code. The case represented here in pvort.usr
 and pvort.rea corresponds to the lower-left-hand corner of Fig. 6, p. 12. It is a periodic
@@ -23,3 +22,6 @@ TO DO
  (neither did our old dealiasing effort; see Fig. 10 of CMT-Nek_2d_isentropic_vortex.pdf).
 -correct the error measurement. It is not the quotient of two L2 norms, and it is not meaningful for
 rho*v.
+
+[1] Yee, Vinokur, Djomehri "Low-dissipative high-order shock-capturing methods 
+using characteristic-based filters", J. Comp. Phys. 150, pp. 199-238 (1999)

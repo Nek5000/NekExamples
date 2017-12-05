@@ -22,23 +22,26 @@ for using them as verification tests.
   * __Purpose__ : Blasius boundary layer test case in 2D.
   * __Features__ :
   	* example of the "ON " boundary condition (Outflow, Normal only)
-  	* set of routines calculating Blasious profile
+  	* set of routines calculating Blasius profile
 * `CMT/inv_vort`
   * __Test name__ : CmtInviscidVortex
-  * __Purpose__ :
+  * __Purpose__ : Steady isentropic vortex.
   * __Features__ :
+   * example of DG compressible-flow solver
 * `cone/cone016`, `cone/cone064`, `cone/cone256`
   * __Test name__ : Cone16,  Cone64, Cone256
-  * __Purpose__ :
+  * __Purpose__ : Convecting cone problem
   * __Features__ :
 * `conj_ht`
   * __Test name__ :  ConjHt
-  * __Purpose__ :
+  * __Purpose__ : 2D conjugate heat transfer in Poiseiulle flow
   * __Features__ :
+   * `conj_ht.box` builds mesh consisting of 3 boxes: fluid domain and 2 solid walls
 * `cyl_restart`
   * __Test name__ : CylRestart_C, CylRestart_P
-  * __Purpose__ :
+  * __Purpose__ : Full restart capabilities for Nek5000.
   * __Features__ :
+  	* routine `set_obj` defines objects for surface integrals
 * `eddy_neknek`
   * __Test name__ : Eddy_Neknek
   * __Purpose__ :

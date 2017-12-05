@@ -1,3 +1,5 @@
+# Convecting cone problem
+
 These cases provide examples of the convecting cone problem illustrated 
 in Gottlieb & Orszg (1972) and Deville, Fischer, & Mund (2002).
 

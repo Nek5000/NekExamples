@@ -1,9 +1,4 @@
-
-SET UP:
-=======
-
-This directory contains an example of full restart capabilities for
-Nek5000.
+# Example of full restart capabilities for Nek5000.
 
 The model flow is a von Karman street in the wake of a 2D cylinder.
 The quantity of interest is taken to be the lift, which is monitored
@@ -17,8 +12,7 @@ cb   -   restart run for ca case
 pa   -   initial run (with projection)
 pb   -   restart run for pa case
 
-BACKGROUND:
-===========
+## BACKGROUND:
 
 Timestepping in Nek5000 is based on BDFk/EXTk (k=3, typ.), which uses kth-order
 backward-difference formulae (BDFk) to evaluate velocity time derivatives and
@@ -111,9 +105,7 @@ Note also that if one is initiating a computation from something other
 than the full restart mode then the full_restart() call should be commented
 out.
 
-
-COMMENTS:
-=========
+## COMMENTS:
 
 Full reproducibility of the solution is predicated on having sufficient
 history information to replicate the state of "a" when running "b".
