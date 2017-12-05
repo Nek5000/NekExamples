@@ -1,0 +1,74 @@
+=======================Mesh Smoothing in Nek5000=======================
+Ketan Mittal 
+Please contact the author at kmittal2@illinois.edu if you have
+any questions or comments.
+c-----------------------------------------------------------------------
+
+A mesh smoother has been deployed for smoothing meshes in Nek5000.
+This smoother is a combination of Laplacian smoothing and mesh
+optimization, which makes the mesh more uniform while preserving the
+boundary layer resolution of the original mesh. This has shown to
+improve the conditioning of the system for pressure solve, which leads
+to reduction in the number of iterations required for the pressure
+solve at each time-step. This document explains the parameters that
+are important for understanding the functionality of the smoother and
+using it effectively.  The example here demonstrates how to use the
+mesh smoother on a 2D mesh for a turbine blade.
+c-----------------------------------------------------------------------
+
+Note: The smoothing routines are located in smoothlx.f, and the user
+must include 'smoothlx.f' at the top of their .usr file
+c-----------------------------------------------------------------------
+
+SMOOTHER INTERFACE: 
+call smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,idftyp,alpha,beta)
+c-----------------------------------------------------------------------
+
+SMOOTHER PARAMETERS:
+a. Metric type for optimization:
+mtyp   - metric type (currently mtyp should be 1. more metrics will be 
+         added soon)
+
+b. Number of iterations
+nouter - The number of loops for Laplacian and optimization smoothing
+nlap   - number of iterations of Laplacian smoothing in each loop nopt
+- number of iterations of optimization based smoothing in each loop
+  Example: nouter=20,nlap=30,nopt=20
+
+c. Parameters for preserving boundary layer elements near specific
+boundary condition types
+nbc    - number of boundary condition types
+dcbc   - list of boundary conditions types 
+         elements will be preserved
+Example: nbc=2, dcbc = 'W  ','P  '
+         This will preserve boundary layer near W and P surfaces
+
+idftyp - type of function used for boundary layer preservation:
+beta   - idftyp=0 means exponential weight function, 
+                  w=1-exp(-d/beta)
+alpha  - idftyp=1 means tanh based weight function
+                  w=0.5tanh(alpha(d-beta))+1
+Example: idftyp=0, beta=0.2, alpha=15. (alpha is ignored since idftyp=0)
+c-----------------------------------------------------------------------
+
+Example usage in usrdat2:
+      parameter(nbc=2)         !number of boundary conditions
+      character*3 dcbc(nbc)
+      save        dcbc
+      data        dcbc /'W  ','P  '/  !BCs listed here
+
+      idftyp = 0      !distance function - 0 -> exponential, 1-> tanh
+      alpha = 15.     !Input for wall distance function 
+      beta  = 0.2     !Input for wall distance function
+
+      nouter = 20      !total loops around laplacian and optimizer smoothing
+      nlap = 30        !number of laplacian iterations in each loop
+      nopt = 20        !number of optimization iterations in each loop
+
+      mtyp = 1         !metric type
+
+      call smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,idftyp,alpha,beta)
+c-----------------------------------------------------------------------
+
+Please contact the author at kmittal2@illinois.edu if you have any question
+or comments.

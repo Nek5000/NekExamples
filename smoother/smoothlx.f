@@ -1,4 +1,4 @@
-      subroutine smoothmesh(mtyp,nlap,nopt,nouter,nbc,dcbc,
+      subroutine smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,
      $      idftyp,alpha,beta)
       include 'SIZE'
       include 'TOTAL'
@@ -35,7 +35,8 @@ ccc   INITIALIZE VARIABLES
       lapinv = 0
       optinv = 0
 
-      if (nid.eq.0) write(6,*) 'check original mesh'
+      if (nid.eq.0.and.loglevel.ge.5) 
+     $            write(6,*) 'SMOOTHER-check original mesh'
       call fix_geom
 c     Copy original mesh from xm1 to dxm
       call copy(dxm,xm1,lx1*ly1*lz1*nelv)
@@ -45,11 +46,11 @@ c     Copy original mesh from xm1 to dxm
 ccc   Generate interpolators for going to lx1 = 3
       call gen_int_lx1_to_3
 
-c     COPY THE ORIGINAL MESH TO dx,dy,dz vectors
+ccc     COPY THE ORIGINAL MESH TO dx,dy,dz vectors
       call copy(dx,xmc,lxc*lyc*lzc*nelv)
       call copy(dy,ymc,lxc*lyc*lzc*nelv)
       if (ldim.eq.3) call copy(dz,zmc,lxc*lyc*lzc*nelv)
-c     COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
+ccc   COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
       call copy(xbp,xmc,lxc*lyc*lzc*nelt)
       call copy(ybp,ymc,lxc*lyc*lzc*nelt)
       if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelt)
@@ -58,30 +59,31 @@ c     COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
       call xmtox8(ymc,y8)
       if (ldim.eq.3) call xmtox8(zmc,z8)
 
-c     CREATE MASK
+ccc   CREATE MASK
       call genmask(nodmask,mlt,gshl,mltc,gshlc)
 
-c     MASK ELEMENT LAYERS
-c  e is the number of layers of elements right next to 'w' boundary condition
+ccc   MASK ELEMENT LAYERS
+c     e is the number of layers of elements right next to 'w' 
+c     boundary condition
 c     e = 3
 c     call masklayers(nodmask,e)
 
-c     CONSTRUCT DISTANCE FUNCTION
-      if (nid.eq.0) write(6,*) 'distance about to be calculated'
+ccc   CONSTRUCT WEIGHT FUNCTION
       call disfun(dis,idftyp,alpha,beta,dcbc,nbc)
-      if (nid.eq.0) write(6,*) 'distance calculated'
 
       etstart=dnekclock()
-c     GET INITIAL ENERGY
+ccc   GET INITIAL ENERGY
       call getglobsum(x8,y8,z8,mlt,gshl,2**ldim,1,f1sav)
-      if (nid.eq.0) write(6,*) f1sav,'initial energy'
+      if (nid.eq.0) 
+     $   write(6,'(A,1p1e13.6)') 'SMOOTHER-initial energy',f1sav
       f1 = f1sav
 
-c     START SMOOTHING HERE
+ccc   START SMOOTHING HERE
       do j=1,nouter
          f1pre = f1
          time = j
-         if (nid.eq.0) write(6,*) ' iteration begin',j
+         if (nid.eq.0.and.loglevel.ge.2) 
+     $     write(6,'(A,I5)') 'SMOOTHER-iteration',j
          mtyp = 1 !if mtyp = 1, jacobian, 2 = l^2, 3 - scale jacobian
          if (nlap.gt.0) then 
            call fastlap(nlap,nodmask,mlt,gshl,dis,lapinv,mltc,gshlc)
@@ -93,11 +95,8 @@ c     START SMOOTHING HERE
            if (optinv.eq.1) call restbackmesh !xbp->xm1 and xbp->x8
            if (optinv.eq.1) nopt = 0
          endif
-!   lapinv/optinv = 1 terminate that smoother
-!   optinv = 2        terminate that iteration of optimizer
-c        
+        
          call getglobsum(x8,y8,z8,mlt,gshl,2**ldim,mtyp,f1)
-         if (nid.eq.0) write(6,*) j,f1,'glob_mesh_sum'
   
          call xmtox8(xmc,x8)
          call xmtox8(ymc,y8)
@@ -105,35 +104,35 @@ c
 
          call xmctoxm1
   
-         if (nid.eq.0) write(6,*) 'loop complete',j
-
+         if (nid.eq.0) write(6,'(A,I7,1p1e13.5)') 'SMOOTHER-energy',j,f1
+         if (nid.eq.0.and.loglevel.ge.2) write(6,*) 'loop complete',j
          if (f1.ge.f1pre) goto 5001  !mesh didn't improve since last iteration
          if (nopt.eq.0.and.nlap.eq.0) goto 5001 !no iterations left to do
       enddo
  5001 continue
     
       etend=dnekclock()
-      call fix_geom
-      
-c     RESTORE BOUNDARY LAYER
+ccc   RESTORE BOUNDARY LAYER
       call restbndrlayer(dx,dy,dz,dis)  !dx,dy,dz is now actually smooth-coarse
       call fix_geom
 
-c     Solve the Laplace's equation to morph the interior mesh to match
-c     the actual surface mesh
+ccc   Solve the Laplace's equation to morph the interior mesh to match
+ccc   the actual surface mesh
       call opsub3(dxn,dyn,dzn,dxm,dym,dzm,xm1,ym1,zm1)
       call my_mv_mesh(dxn,dyn,dzn)
       call opadd2(xm1,ym1,zm1,dxn,dyn,dzn)
 
-      if (nid.eq.0) write(6,*) 'SMSTAT-initial quality sum was ',f1sav 
       call getglobsum(x8,y8,z8,mlt,gshl,2**ldim,mtyp,f1)
-      if (nid.eq.0) write(6,*) 'SMSTAT-final quality sum is ', f1
-      if (nid.eq.0) write(6,*) 'SMSTAT-improve % ',100.*(f1sav-f1)/f1sav
-      if (nid.eq.0) write(6,*) 'SMSTAT-time taken ',etend-etstart
+      if (nid.eq.0) then
+        write(6,'(A,1p1e13.6)') 'SMOOTHER-initial energy ',f1sav
+        write(6,'(A,1p1e13.6)') 'SMOOTHER-final energy ',f1
+        write(6,'(A,f5.2)') 'SMOOTHER-improve % ',100.*(f1sav-f1)/f1sav
+        write(6,'(A,1p1e13.6)') 'SMOOTHER-time taken ',etend-etstart
+      endif
 
       call geom_reset(1)    ! recompute Jacobians, etc.
        
-c     OUTPUT THE MESH
+ccc   OUTPUT THE MESH
 c      call gen_rea_full(1)                   !output the rea for smooth mesh
 
       return
@@ -182,7 +181,8 @@ c     u1 is size n1xn1 and u2 is size n2xn2
       real u1(n1,n1),u2(n2,n2)
       real w(20,20)
  
-      if (lx1.gt.20) write(6,*) 'increase size of work array'
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+     $                   in int_fine_to_coarse and related routines '
       if (lx1.gt.20) call exitt
 
       call mxm(ixmc3,n2,u1,n1,w,n1)
@@ -202,7 +202,8 @@ c     u1 is size n1xn1 and u2 is size n2xn2
       real w(20*20*20)
       real v(20*20*20)
  
-      if (lx1.gt.20) write(6,*) 'increase size of work array'
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+     $                   in int_fine_to_coarse and related routines '
       if (lx1.gt.20) call exitt
       
       mm = n1*n1
@@ -236,7 +237,8 @@ c     u1 is fine, u2 is coarse
       real u1(n1,n1),u2(n2,n2)
       real w(20,20)
 
-      if (lx1.gt.20) write(6,*) 'increase size of work array'
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+     $                   in int_coarse_to_fine and related routines '
       if (lx1.gt.20) call exitt
 
       call mxm(ixmf3,n1,u2,n2,w,n2)
@@ -256,7 +258,8 @@ c     u1 is size n1xn1 and u2 is size n2xn2
       real w(20*20*20)
       real v(20*20*20)
 
-      if (lx1.gt.20) write(6,*) 'increase size of work array'
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+     $                   in int_coarse_to_fine and related routines '
       if (lx1.gt.20) call exitt
 
       mm = n2*n2
@@ -355,7 +358,8 @@ c-----------------------------------------------------------------------
 
       optinv = 0 !initialize to 0
 
-      if (nid.eq.0) write(6,*) 'Optimization loop started'
+      if (nid.eq.0.and.loglevel.ge.2) 
+     $         write(6,*) 'Optimization loop started'
 
       if (opt.eq.1) siz = 2**ldim !for jacobian
       if (opt.eq.2) siz = 4+8*(ldim-2) !for len
@@ -363,7 +367,8 @@ c-----------------------------------------------------------------------
       n2 = nelv*(2**ldim)*n1
 
       call get_nodscale(hval,x8,y8,z8,gshl)
-      if (nid.eq.0) write(6,*) 'perturbation amount is ',hval
+      if (nid.eq.0.and.loglevel.ge.4) 
+     $   write(6,'(A,1p1e13.5)') 'perturbation amount is ',hval
 
       call gradf(f2,dfdx,x8,y8,z8,mlt,gshl,siz,opt,hval)
       do i=1,ldim
@@ -527,11 +532,12 @@ c-----------------------------------------------------------------------
 
       if (tstop.eq.1) then 
         alpha = alphasav
-        if (nid.eq.0) write(6,101) iter,f2
+        if (nid.eq.0.and.loglevel.ge.3) write(6,101) iter,f2
   101   format(i5,' glob_phi ',1p1e13.6)
       else
         alpha = 0.
-        if (nid.eq.0) write(6,*) 'alpha being set to 0'
+        if (nid.eq.0.and.loglevel.ge.4) 
+     $       write(6,*) 'SMOOTHER-line-search alpha set to 0'
       endif
 
       return
@@ -572,15 +578,16 @@ c-----------------------------------------------------------------------
       character*3 dcbc(nbc)
       real dscale,dmax,alpha,beta,dum2
 
-      if (nid.eq.0) write(6,*) 'distance function being calculated'
+      if (nid.eq.0.and.loglevel.ge.5) 
+     $            write(6,*) 'calculate distance function'
 
       call rone (dd1,lx1*ly1*lz1*nelv)
-      call cheap_dist(dd1,1,dcbc(1))  ! Distance function scaling
+      call sm_cheap_dist(dd1,1,dcbc(1))  ! Distance function scaling
 
       if (nbc.ge.2) then
       do i=2,nbc
          call rone (dd2,lx1*ly1*lz1*nelv)
-         call cheap_dist(dd2,1,dcbc(i))  ! Distance function scaling
+         call sm_cheap_dist(dd2,1,dcbc(i))  ! Distance function scaling
          do j=1,lx1*ly1*lz1*nelv
            dd1(j) = min(dd1(j),dd2(j))
          enddo
@@ -616,7 +623,8 @@ c
           call exitti('Please set the funtype to 0 or 1$',funtype)
       endif
         
-      if (nid.eq.0) write(6,*) dmax,'max wall distance'
+      if (nid.eq.0.and.loglevel.ge.5) 
+     $            write(6,'(A,1p1e13.4)') dmax,'max disfun'
 
       return
       end
@@ -825,10 +833,10 @@ c-----------------------------------------------------------------------
       dot = vlsc2(v1,u2,3)
 
       if (dot.le.0) then
-         write(6,*) 'ERROR 1 IN SHIFT - YOU SHOULD ABORT'
+         write(6,*) 'SMOOTHER-ERROR 1 IN SHIFT - YOU SHOULD ABORT'
          return
       elseif (dot.gt.l02) then
-         write(6,*) 'ERROR 2 IN SHIFT - YOU SHOULD ABORT'
+         write(6,*) 'SMOOTHER-ERROR 2 IN SHIFT - YOU SHOULD ABORT'
          return
       endif
          h = 0.
@@ -1145,7 +1153,6 @@ c     setup the mask first so that it can be distribute as well
       call rone(mlt,n)
       call fgslib_gs_op(gshl,mlt,1,1,0)   ! '+'
       xmlt = glmax(mlt,n)
-      if (nid.eq.0) write(6,*) n,xmlt,' MAX MULT'
       call invcol1(mlt,n)
 
       call fgslib_gs_op(gshl,nodmask,1,2,0)
@@ -1194,7 +1201,8 @@ c-----------------------------------------------------------------------
       integer z,e,f,gshl,lapinv,kerr,gshlc
       real xbar,ybar,zbar,sfac
 
-      if (nid.eq.0) write(6,*) 'laplacian smoothing started'
+      if (nid.eq.0.and.loglevel.ge.2) 
+     $    write(6,*) 'laplacian smoothing started'
 
       n    = 2**ldim
       sfac = 0.01
@@ -1236,7 +1244,7 @@ c-----------------------------------------------------------------------
          else
             dzm = 0.
          endif
-         if (nio.eq.0) write(6,1) k,dxm,dym,dzm
+         if (nio.eq.0.and.loglevel.ge.3) write(6,1) k,dxm,dym,dzm
    1     format(i5,1p3e12.3,' dxm')
 
       enddo
@@ -1252,7 +1260,7 @@ c-----------------------------------------------------------------------
       call glmapm1chkinv(kerr)
       if (kerr.gt.0.) then
         lapinv = 1  !Terminate Laplacian smoothing
-        if (nid.eq.0) write(6,*) 'terminating Laplacian'
+      if (nid.eq.0.and.loglevel.ge.2) write(6,*) 'terminating Laplacian'
       else
        call genbackupmesh
       endif
@@ -1605,7 +1613,7 @@ C-----------------------------------------------------------------------
 
       call rone (h1,n)
       call rzero(h2,n)
-      call cheap_dist(d,1,'W  ')
+      call sm_cheap_dist(d,1,'W  ')
 
       deltap = 5*delta  ! Protected b.l. thickness
       do i=1,n
@@ -1682,7 +1690,6 @@ c
      $    (r,n,approx,napprox,h1,h2,mask,mult,ifwt,ifvec,name6)
 
       tol = -abs(tli)
-c     if (nio.eq.0) write(6,*) 'this is tol:',tol,tli
       if (nel.eq.nelv) then
         call hmhzpf (name,u,r,h1,h2,mask,mult,imsh,tol,maxi,isd,binvm1)
       else
@@ -1695,5 +1702,92 @@ c     if (nio.eq.0) write(6,*) 'this is tol:',tol,tli
       call add2(u,ub,n)
 
       return
+      end
+c-----------------------------------------------------------------------
+      subroutine sm_cheap_dist(d,ifld,b)
+c     this is a copy of the routine in navier5.f, modified to be less
+c     verbose
+
+
+      include 'SIZE'
+      include 'GEOM'       ! Coordinates
+      include 'INPUT'      ! cbc()
+      include 'TSTEP'      ! nelfld
+      include 'PARALLEL'   ! gather-scatter handle for field "ifld"
+
+      real d(lx1,ly1,lz1,lelt)
+
+      character*3 b  ! Boundary condition of interest
+
+      integer e,eg,f
+
+      nel = nelfld(ifld)
+      n = lx1*ly1*lz1*nel
+
+      call domain_size(xmin,xmax,ymin,ymax,zmin,zmax)
+
+      xmn = min(xmin,ymin)
+      xmx = max(xmax,ymax)
+      if (if3d) xmn = min(xmn ,zmin)
+      if (if3d) xmx = max(xmx ,zmax)
+
+      big = 10*(xmx-xmn)
+      call cfill(d,big,n)
+
+      nface = 2*ldim
+      do e=1,nel     ! Set d=0 on walls
+      do f=1,nface
+         if (cbc(f,e,ifld).eq.b) call facev(d,e,f,0.,lx1,ly1,lz1)
+      enddo
+      enddo
+
+      do ipass=1,10000
+         dmax    = 0
+         nchange = 0
+         do e=1,nel
+           do k=1,lz1
+           do j=1,ly1
+           do i=1,lx1
+             i0=max(  1,i-1)
+             j0=max(  1,j-1)
+             k0=max(  1,k-1)
+             i1=min(lx1,i+1)
+             j1=min(ly1,j+1)
+             k1=min(lz1,k+1)
+             do kk=k0,k1
+             do jj=j0,j1
+             do ii=i0,i1
+
+              if (if3d) then
+               dtmp = d(ii,jj,kk,e) + dist3d(
+     $           xm1(ii,jj,kk,e),ym1(ii,jj,kk,e),zm1(ii,jj,kk,e)
+     $          ,xm1(i ,j ,k ,e),ym1(i ,j ,k ,e),zm1(i ,j ,k ,e))
+              else
+               dtmp = d(ii,jj,kk,e) + dist2d(
+     $           xm1(ii,jj,kk,e),ym1(ii,jj,kk,e)
+     $          ,xm1(i ,j ,k ,e),ym1(i ,j ,k ,e))
+              endif
+
+              if (dtmp.lt.d(i,j,k,e)) then
+                d(i,j,k,e) = dtmp
+                nchange = nchange+1
+                dmax = max(dmax,d(i,j,k,e))
+              endif
+             enddo
+             enddo
+             enddo
+
+           enddo
+           enddo
+           enddo
+         enddo
+         call fgslib_gs_op(gsh_fld(ifld),d,1,3,0) ! min over all elements
+         nchange = iglsum(nchange,1)
+         dmax = glmax(dmax,1)
+         if (nio.eq.0.and.loglevel.ge.3) write(6,1) ipass,nchange,dmax,b
+    1    format(i9,i12,1pe12.4,' max distance b: ',a3)
+         if (nchange.eq.0) goto 1000
+      enddo
+ 1000 return
       end
 c-----------------------------------------------------------------------

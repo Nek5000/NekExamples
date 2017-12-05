@@ -102,9 +102,7 @@ c-----------------------------------------------------------------------
 
       mtyp = 1         !metric type
 
-      ifxyo = .true.
-      call smoothmesh(mtyp,nlap,nopt,nouter,nbc,dcbc,
-     $                idftyp,alpha,beta)
+      call smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,idftyp,alpha,beta)
 
       return
       end
