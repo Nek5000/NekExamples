@@ -32,7 +32,7 @@ mtyp   - metric type (currently mtyp should be 1. more metrics will be
 b. Number of iterations
 nouter - The number of loops for Laplacian and optimization smoothing
 nlap   - number of iterations of Laplacian smoothing in each loop nopt
-- number of iterations of optimization based smoothing in each loop
+nopt   - number of iterations of optimization based smoothing in each loop
   Example: nouter=20,nlap=30,nopt=20
 
 c. Parameters for preserving boundary layer elements near specific
