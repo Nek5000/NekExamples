@@ -3,7 +3,7 @@
 It tests the "ON " boundary condition (Outflow, Normal only), given by:
 
      u_parallel  - specified in userbc  (ux, uy, or uz)
-     d (u_n/ dn = 0
+     d (u_n)/ dn = 0
 
 Note that the ON bc works only if the surface in question is normal
 to either the X, Y, or Z axis.
