@@ -1,4 +1,4 @@
-
+# Unsteady conduction with Robin boundary conditions.
 
 This is a 1-element unsteady conduction example that
 illustrates the use of the convection heat-transfer
@@ -49,6 +49,5 @@ robin.usr:
 
 
 The latter approach is used in the robin example given
-here.  Further details are provided in the users.pdf
-documentation and also in this directory in robin.pdf.
+here.
 

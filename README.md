@@ -8,6 +8,8 @@ for using them as verification tests.
 
 ## Example overview
 
+Some examples provide additional pdf files for more complere description.
+
 * `annulus_2d`
   * __Test name__ : Annulus2d
   * __Purpose__ : Natural convection between the two concentric cylinders with Boussinesq approximation.
@@ -100,67 +102,73 @@ for using them as verification tests.
   * __Features__ :
 * `mv_cyl`
   * __Test name__ : MvCylCvode
-  * __Purpose__ :
+  * __Purpose__ : Moving cylinder example using CVODE
   * __Features__ :
 * `mv_wall`
   * __Test name__ : MvWall
-  * __Purpose__ :
+  * __Purpose__ : 2D channel with a moving indentation (ALE implementation).
   * __Features__ :
 * `ocyl`
   * __Test name__ : Ocyl, Ocyl2
-  * __Purpose__ :
+  * __Purpose__ : Oscillating cylinder usiing ALE.
   * __Features__ :
 * `os7000`
   * __Test name__ : Os7000
-  * __Purpose__ :
+  * __Purpose__ : TS waves in plane Poiseuille flow.
   * __Features__ :
 * `peris`
   * __Test name__ : Peris
-  * __Purpose__ :
+  * __Purpose__ : Peristaltic flow.
   * __Features__ :
+  	* moving mesh example with ALE
+  	* special outflow treatment with user defined divergence (usrdiv) in routine `fill_div`
 * `pipe`
   * __Test name__ : Pipe_Helix, Pipe_Stenosis
-  * __Purpose__ :
+  * __Purpose__ : Pipe flow.
   * __Features__ :
+  	* mesh geometry altered by routine `usrdat2`
 * `rayleigh`
   * __Test name__ : Rayleigh_Ray1, Rayleigh_Ray2
-  * __Purpose__ :
+  * __Purpose__ : Rayleigh-Benard convection.
   * __Features__ :
 * `robin`
   * __Test name__ : Robin
-  * __Purpose__ :
+  * __Purpose__ : Unsteady conduction with Robin boundary conditions.
   * __Features__ :
 * `shear4`
   * __Test name__ : Shear4_Shear4, Shear4_Thin
-  * __Purpose__ :
+  * __Purpose__ : Double shear-layer rol-up
   * __Features__ :
+  	* this example illustrates transport of multiple passive scalars
 * `smoother`
   * __Test name__ : Smooth
-  * __Purpose__ :
+  * __Purpose__ : Mesh smoothing in Nek5000.
   * __Features__ :
 * `solid`
   * __Test name__ : Solid
-  * __Purpose__ :
+  * __Purpose__ : Thick-wall hollow sphere under an internal pressure.
   * __Features__ :
+  	* steady elastic solver
 * `strat`
   * __Test name__ : Strat_P0001, Strat_P1000
-  * __Purpose__ :
+  * __Purpose__ : Stratified 2D flow.
   * __Features__ :
 * `taylor`
   * __Test name__ : Taylor
-  * __Purpose__ :
+  * __Purpose__ : Taylor-Couette flow.
   * __Features__ :
 * `turbChannel`
   * __Test name__ : TurbChannel
-  * __Purpose__ :
+  * __Purpose__ : LES of a turbulent channel flow.
   * __Features__ :
+  	* this example uses AMG based coarse grid solver
 * `vortex`
   * __Test name__ : Vortex
-  * __Purpose__ :
+  * __Purpose__ : Vortex breakdown in a container with a rotating lid.
   * __Features__ :
 * `vortex2`
   * __Test name__ : Vortex2
-  * __Purpose__ :
+  * __Purpose__ : Vortex breakdown in a container with a rotating lid (axisymmetric case).
   * __Features__ :
 
 

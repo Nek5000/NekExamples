@@ -2,9 +2,9 @@
 
 ## TO BUILD:
 
-     PPLIST="NEKNEK" 
-	 export PPLIST
-	 makenek eddy_uv
+	PPLIST="NEKNEK" 
+	export PPLIST
+	makenek eddy_uv
 
 ## TO RUN:
 

@@ -1,6 +1,7 @@
+# Pipe flow
 
 This directory contains two pipe cases, where the geometry 
-is altered by "subroutine usrdat2" in the .usr file.
+is altered by routine `usrdat2` in the .usr file.
 
 stenosis
 helix

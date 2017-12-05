@@ -1,7 +1,4 @@
-
-
-              OSCILLATING CYLINDER EXAMPLE
-              ============================
+# Oscillating cylinder using ALE.
 
 
 This case illustrates the Nek5000 ALE (arbitrary Lagrangian-Eulerian)
@@ -9,11 +6,9 @@ formulation for flow past an oscillating cylinder in 2D.
 
 There are two cases:
 
-   - ocyl,  which uses Nek5000's linear elasticity solver to compute
-            the mesh velocity at each step, and
+* ocyl,  which uses Nek5000's linear elasticity solver to compute the mesh velocity at each step, and
 
-   - ocyl2, which uses a _user_supplied_ routine to generate an 
-            interpolating function for the ALE formulation.  
+* ocyl2, which uses a _user_supplied_ routine to generate an interpolating function for the ALE formulation.  
 
 The key for the ALE is that the mesh velocity match the fluid velocity
 at the domain boundaries (more precisely, that their normal component
@@ -70,7 +65,3 @@ in the .rea file and SIZE must have the following settings:
       parameter (ly2=ly1-2)
       parameter (lz2=lz1  )
       parameter (lx1m=lx1,ly1m=ly1,lz1m=lz1)
-
-
-An example of the result is shown in ocyl.gif.
-

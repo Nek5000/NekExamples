@@ -1,3 +1,5 @@
+# TS waves in plane Poiseuille flow.
+
 This usr file originated from the Orr-Sommerfeld study presented
 in the Overlapping Schwarz paper [P.F. Fischer, JCP 133 1997].
 
