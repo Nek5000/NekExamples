@@ -1,17 +1,4 @@
 c-----------------------------------------------------------------------
-c
-c     This is small 2D example of the linear direct and adjoint simulation
-c     of 2D Poiseuille flow, in which a fluid is moving laterally between
-c     two plates whose length and width is much greater than the distance
-c     separating them. Stability of this 2D parallel flow can be investigated
-c     analitcally by local analysis and we compare growth rate of the strongest
-c     mode with the stability calculation.
-c
-c-----------------------------------------------------------------------
-c
-c     .Blasius I.C. and B.C.
-c
-c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,ieg)
       include 'SIZE'
       include 'NEKUSE'          ! UDIFF, UTRANS

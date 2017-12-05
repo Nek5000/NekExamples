@@ -1,4 +1,4 @@
-This is a simple example illustrating flow past a cylinder in 2D.
+# Flow past a cylinder in 2D.
 
 A unit-diameter cylinder is centered at (0,0) in a box on [-15,35] x [-15,15].
 
@@ -11,9 +11,7 @@ For the current case, we have Re=100, which can be specified in the
 p2=-100.  If Nek5000 sees a negative value for parameter 2 it sets
 viscosity to the reciprocal, viscosity = 1/|p2|.
 
-=====
-MESH:
-=====
+## MESH:
 
 The mesh was built by combining a file box.rea generated with genbox, 
 using the input file fpcyl.box, with a second file, import.rea, which
@@ -25,16 +23,14 @@ rerun genbox, and then merge box.rea with import.rea.
 This case has a relatively fine spectral element mesh and should give
 reasonable results for lx1=6 (polynomial order N=5).
 
-The "mkmesh" script shows how to build the box and combine it with
+The `mkmesh` script shows how to build the box and combine it with
 the existing circle mesh.   Just type 
 
-mkmesh
+`mkmesh`
 
 to execute the script.
 
-========
-OUTPUTS:
-========
+## OUTPUTS:
 
  . A simple ad-hoc Strouhal number estimator has been added to the .usr file 
 

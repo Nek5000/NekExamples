@@ -1,16 +1,4 @@
 c-----------------------------------------------------------------------
-c
-c     This is small 2D example of the linear direct and adjoint simulation
-c     of differentially heated square cavity. The linear stability of natural
-c     convection is tested and the grow rate of one of the modes is compared
-c     with the result of the linear stability analysis.
-c     This simulation tests temperature adjoint.
-c
-c-----------------------------------------------------------------------
-c
-c     .Blasius I.C. and B.C.
-c
-c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,ieg)
       include 'SIZE'
       include 'NEKUSE'          ! UDIFF, UTRANS

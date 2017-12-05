@@ -1,12 +1,4 @@
-c-----------------------------------------------------------------------
-c
-c Viscous Flow in a Wedge.
-c
-c This is a Moffatt-eddy case [1] with a circular lid, similar to [2].
-c
-c For more details (but for the straight-lid case), see moffatt.usr.
-c
-
+C-----------------------------------------------------------------------
 #define mprof 2501
 C-----------------------------------------------------------------------
       subroutine uservp(ix,iy,iz,eg) ! set variable properties

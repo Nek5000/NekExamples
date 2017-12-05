@@ -60,39 +60,43 @@ for using them as verification tests.
   * __Features__ :
 * `expansion`
   * __Test name__ : Expansion
-  * __Purpose__ :
+  * __Purpose__ : 3D expanding pipe.
   * __Features__ :
+  	* `mkmesh` provides script for building expanding pipe mesh
 * `ext_cyl`
   * __Test name__ : ExtCyl
-  * __Purpose__ : 
+  * __Purpose__ : Flow past a cylinder in 2D.
   * __Features__ :
+  	* `mkmesh` provides script for building the box and combining it with the existing circle mesh
+  	* routine `set_obj` defines objects for surface integrals
+  	* routine `estimate_strouhal` calculates Strouhal number
 * `fs_2`
   * __Test name__ : Fs2_St1, Fs2_St2, Fs2_StdWv
-  * __Purpose__ :
+  * __Purpose__ : Free-Surface Channel Flow.
   * __Features__ :
 * `hemi`
   * __Test name__ : Hemi
-  * __Purpose__ :
+  * __Purpose__ : Particle tracking in flow past a hemispherical roughness.
   * __Features__ :
 * `lin_channel2D`
   * __Test name__ : LinCav_Adj, LinCav_Dir
-  * __Purpose__ :
+  * __Purpose__ : Linear direct and adjoint simulation of 2D differentially heated square cavity.
   * __Features__ :
 * `lin_dfh_cav`
   * __Test name__ : LinChn_Adj, LinChn_Dir
-  * __Purpose__ :
+  * __Purpose__ : Linear direct and adjoint simulation of 2D Poiseuille flow.
   * __Features__ :
 * `lowMach_test`
   * __Test name__ : LowMachTest
-  * __Purpose__ :
+  * __Purpose__ : Low-Mach number example.
   * __Features__ :
 * `mhd`
   * __Test name__ : Mhd_Gpf, Mhd_GpfB, Mhd_GpfM
-  * __Purpose__ :
+  * __Purpose__ : Helical Forcing Dynamo.
   * __Features__ :
 * `moffatt`
   * __Test name__ : Moffatt, MoffCirc
-  * __Purpose__ :
+  * __Purpose__ : Moffatt eddies - Viscous Flow in a Wedge.
   * __Features__ :
 * `mv_cyl`
   * __Test name__ : MvCylCvode
