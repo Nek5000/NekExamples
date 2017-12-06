@@ -94,7 +94,7 @@ c-----------------------------------------------------------------------
 
       idftyp = 0      !distance function - 0 -> exponential, 1-> tanh
       alpha = 15.     !Input for wall distance function 
-      beta  = 0.2     !
+      beta  = 0.1     !
 
       nouter = 20      !total loops around laplacian and optimizer smoothing
       nlap = 30        !number of laplacian iterations in each loop
