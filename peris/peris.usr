@@ -1,28 +1,4 @@
 c-----------------------------------------------------------------------
-c
-c   Peristaltic Flow Example.
-c
-c   This .usr/.rea/SIZE trio provides a rudimentary example of peristaltic
-c   flow in a tube with inflow/outflow boundary conditions.  
-c
-c   Technically, this example is flawed because the amplitude and frequency
-c   of the peristaltic pumping has no impact on the overall flow rate, due
-c   to the Dirichlet inflow condition specified for velocity.  It thus
-c   should be viewed only as an illustration of one approach to implementing
-c   the boundary conditions and the mesh velocity for the ALE formulation.
-c
-c   This case also illustrates the use of the special outflow treatment,
-c   where div U > 0 is imposed in the last layer of elements in order
-c   to ensure that all characteristics are outgoing where outflow 
-c   conditions have been specified.
-c
-c   The statement ifusermv=.true. in userdat2() indicates that the user
-c   will provide the mesh velocity, wx,wy, and wz.   Note that in SIZE,
-c   it is necessary to set lx1m=lx1, ly1m=ly1, and lz1m=lz1 to allocate
-c   the moving mesh array space.
-c
-c
-c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,ieg)
       include 'SIZE'
       include 'TOTAL'

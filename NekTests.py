@@ -5,6 +5,68 @@ from unittest import skip
 import re
 
 ####################################################################
+#  annulus_2d; cyl2.rea
+####################################################################
+
+class Annulus2d(NekTestCase):
+    example_subdir  = 'annulus_2d'
+    case_name        = 'cyl2'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '15',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        vmax = self.get_value_from_log('tmax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vmax, target_val=2.369E-01, delta=5E-04, label='vmax')
+        
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        vmax = self.get_value_from_log('tmax', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(vmax, target_val=2.369E-01, delta=5E-04, label='vmax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  benard: ray_9.rea
 ####################################################################
 
@@ -30,7 +92,7 @@ class Benard_Ray9(NekTestCase):
             lcvelt    = '1',
         )
  
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(rea_file='ray_9')
  
     @pn_pn_parallel
@@ -65,6 +127,7 @@ class Benard_Ray9(NekTestCase):
 ####################################################################
 #  blasius: blasius.rea
 ####################################################################
+
 class Blasius(NekTestCase):
     example_subdir  = 'blasius'
     case_name        = 'blasius'
@@ -86,7 +149,7 @@ class Blasius(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -122,19 +185,12 @@ class Blasius(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-# ####################################################################
-# #  cone: cone.rea, cone016.rea, cone064.rea, cone256.rea
-# ####################################################################
-#
-# # TODO: implement cone
-#
-
 ####################################################################
 #  CMT/inviscid_vortex: pvort.rea
 ####################################################################
 
 class CmtInviscidVortex(NekTestCase):
-    example_subdir = os.path.join('CMT', 'inviscid_vortex')
+    example_subdir = os.path.join('CMT', 'inv_vort')
     case_name = 'pvort'
 
     def diff_l2norms(self):
@@ -160,9 +216,17 @@ class CmtInviscidVortex(NekTestCase):
             lelg      = '50',
             ldimt     = '3',
             toteq     = '5',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
         )
         self.config_size()
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
 
         cls = self.__class__
@@ -180,6 +244,187 @@ class CmtInviscidVortex(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+# ####################################################################
+# #  cone/{cone016, cone064, cone256}: cone.rea
+# ####################################################################
+
+class Cone16(NekTestCase):
+    example_subdir = os.path.join('cone','cone016')
+    case_name = 'cone'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '9',
+            lxd       = '14',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='cone016')
+        self.run_genmap(rea_file='box',tol='0.01')
+        self.mvn('box', 'cone')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-2.3032E-02, delta=5E-05, label='Umin')
+        
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=8.5065E-01, delta=5E-05, label='Umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-2.3032E-02, delta=5E-05, label='Umin')
+
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=8.5065E-01, delta=5E-05, label='Umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()    
+        
+class Cone64(NekTestCase):
+    example_subdir = os.path.join('cone','cone064')
+    case_name = 'cone'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '5',
+            lxd       = '8',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='cone064')
+        self.run_genmap(rea_file='box',tol='0.01')
+        self.mvn('box', 'cone')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.2663E-01, delta=5E-04, label='Umin')
+
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.9285E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.2663E-01, delta=5E-04, label='Umin')
+
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.9285E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class Cone256(NekTestCase):
+    example_subdir = os.path.join('cone','cone256')
+    case_name = 'cone'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '3',
+            lxd       = '5',
+            lx2       = 'lx1-2',
+            lelg      = '300',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='cone256')
+        self.run_genmap(rea_file='box',tol='0.01')
+        self.mvn('box', 'cone')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.6392E-01, delta=5E-04, label='Umin')
+        
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.4924E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        umin = self.get_value_from_log('Tmax', column=-3)
+        self.assertAlmostEqualDelayed(umin, target_val=-1.6392E-01, delta=5E-04, label='Umin')
+        
+        umax = self.get_value_from_log('Tmax', column=-2)
+        self.assertAlmostEqualDelayed(umax, target_val=7.4924E-01, delta=5E-04, label='Umax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+        
 ####################################################################
 #  conj_ht: conj_ht.rea
 ####################################################################
@@ -205,7 +450,7 @@ class ConjHt(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -266,7 +511,7 @@ class CylRestart_C(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
         self.run_genmap(rea_file='cb', tol='0.01')
 
@@ -358,7 +603,7 @@ class CylRestart_P(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
         self.run_genmap(rea_file='pb', tol='0.01')
 
@@ -449,7 +694,7 @@ class Eddy_Neknek(NekTestCase):
             nsessmax='2',
         )
  
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
  
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
@@ -597,7 +842,7 @@ class Eddy_PsiOmega(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -646,7 +891,7 @@ class Eddy_Rich(NekTestCase):
             lelg      = '500',
         )
  
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
  
         # Tweak the .rea file and run genmap
         from re import sub
@@ -687,7 +932,7 @@ class Eddy_Rich(NekTestCase):
 ####################################################################
 
 class Eddy_Uv(NekTestCase):
-    example_subdir  = 'eddy'
+    example_subdir  = 'eddy_uv'
     case_name        = 'eddy_uv'
 
     def setUp(self):
@@ -701,7 +946,7 @@ class Eddy_Uv(NekTestCase):
             lelg      = '500',
         )
 
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
 
         # Tweak the .rea file and run genmap
         from re import sub
@@ -767,9 +1012,77 @@ class Eddy_Uv(NekTestCase):
 ####################################################################
 #  expansion: expansion.rea
 ####################################################################
-#
-# # TODO: implement expansion tests
-#
+
+class Expansion(NekTestCase):
+    example_subdir  = 'expansion'
+    case_name        = 'expansion'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '5',
+            lxd       = '8',
+            lx2       = 'lx1-2',
+            lelg      = '2900',
+            lpmin     = '2',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=80., label='gmres')
+
+        larea = self.get_value_from_log('ubar', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(larea, target_val=7.8540E-01, delta=5E-04, label='area')
+        
+        ubar = self.get_value_from_log('ubar', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(ubar, target_val=1.0E-00, delta=5E-04, label='ubar')
+
+        wmax = self.get_value_from_log('ubar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(wmax, target_val=2.0E-00, delta=4E-03, label='ubar')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=80., label='gmres')
+
+        larea = self.get_value_from_log('ubar', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(larea, target_val=7.8540E-01, delta=5E-04, label='area')
+        
+        ubar = self.get_value_from_log('ubar', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(ubar, target_val=1.0E-00, delta=5E-04, label='ubar')
+
+        wmax = self.get_value_from_log('ubar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(wmax, target_val=2.0E-00, delta=4E-03, label='ubar')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
 
 ####################################################################
 #  ext_cyl; ext_cyl.rea
@@ -796,7 +1109,7 @@ class ExtCyl(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -857,7 +1170,7 @@ class Fs2_St1(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_2_parallel
@@ -899,7 +1212,7 @@ class Fs2_St2(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_2_parallel
@@ -941,7 +1254,7 @@ class Fs2_StdWv(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_2_parallel
@@ -988,7 +1301,7 @@ class Hemi(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -1024,101 +1337,141 @@ class Hemi(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-
 ####################################################################
-#  kovasznay; kov.rea
+#  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
 ####################################################################
 
-class Kovasznay(NekTestCase):
-    example_subdir = 'kovasznay'
-    case_name = 'kov'
+class LinCav_Adj(NekTestCase):
+    example_subdir = 'lin_dfh_cav'
+    case_name = 'lin_dfh_cav_adj'
 
     def setUp(self):
         self.size_params = dict(
             ldim      = '2',
-            lx1       = '14',
-            lxd       = '20',
-            lx2       = 'lx1',
-            lelg      = '100',
-            ldimt     = '1',
-            lhis      = '100',
-            lelx      = '1',
-            lely      = '1',
-            lelz      = '1',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
+            lx1       = '9',
+            lxd       = '13',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            lpelt     = 'lelt',
         )
-        self.build_tools(['genmap'])
-        self.run_genmap(tol='0.01')
 
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        gmres = self.get_value_from_log(label='gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=34, label='gmres')
-
-        err = self.get_value_from_log(label='err', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(err, target_val=5.14316E-13, delta=1e-06, label='err')
-
-        self.assertDelayedFailures()
+        self.build_tools(['clean','genmap'])
+        self.run_genmap()
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
+        self.size_params['lx2'] = 'lx1-2'
         self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
+        self.build_nek(usr_file='lin_dfh_cav')
+        self.run_nek(step_limit=None)  
 
-        gmres = self.get_value_from_log(label='gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0, delta=14, label='gmres')
-
-        err = self.get_value_from_log(label='err', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(err, target_val=5.90551E-13, delta=1e-06, label='err')
+        omega = self.get_value_from_log('Energy', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(omega, target_val=-7.57304E-03, delta=1E-06, label='growth rate')
 
         self.assertDelayedFailures()
 
     def tearDown(self):
         self.move_logs()
 
-####################################################################
-#  kov_st_stokes.rea
-####################################################################
-
-class KovStState(NekTestCase):
-    # Note: Legacy Analysis.py script only checked Pn-Pn-2 test cases
-    example_subdir = 'kov_st_state'
-    case_name = 'kov_st_stokes'
+class LinCav_Dir(NekTestCase):
+    example_subdir = 'lin_dfh_cav'
+    case_name = 'lin_dfh_cav_dir'
  
     def setUp(self):
         self.size_params = dict(
             ldim      = '2',
-            lx1       = '14',
-            lxd       = '20',
+            lx1       = '9',
+            lxd       = '13',
             lx2       = 'lx1-2',
             lelg      = '500',
+            lpelt     = 'lelt',
         )
  
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
  
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.size_params['lx2'] = 'lx1-2'
         self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
+        self.build_nek(usr_file='lin_dfh_cav')
+        self.run_nek(step_limit=None)  
  
-        err = self.get_value_from_log(label='err', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(err, target_val=8.55641E-10, delta=1e-11, label='err')
+        omega = self.get_value_from_log('Energy', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(omega, target_val=-7.57304E-03, delta=1E-06, label='growth rate')
  
         self.assertDelayedFailures()
  
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
+#  channel2D; lin_chan_dir.par, lin_chan_adj.par
+####################################################################
+
+class LinChn_Adj(NekTestCase):
+    example_subdir = 'lin_channel2D'
+    case_name = 'lin_chan_adj'
+ 
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '15',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            lpert     = '1',
+            lpelt     = 'lelt',
+        )
+ 
+        self.build_tools(['clean','genmap'])
+        self.run_genmap()
+ 
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='lin_chan')
+        self.run_nek(step_limit=None)  
+ 
+        omega = self.get_value_from_log('Energy', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(omega, target_val=-1.2337E-03, delta=2E-06, label='growth rate')
+ 
+        self.assertDelayedFailures()
+ 
+    def tearDown(self):
+        self.move_logs()
+
+class LinChn_Dir(NekTestCase):
+    example_subdir = 'lin_channel2D'
+    case_name = 'lin_chan_dir'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '15',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            lpert     = '1',
+            lpelt     = 'lelt',
+        )
+
+        self.build_tools(['clean','genmap'])
+        self.run_genmap()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek(usr_file='lin_chan')
+        self.run_nek(step_limit=None)  
+
+        omega = self.get_value_from_log('Energy', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(omega, target_val=-1.2337E-03, delta=2E-06, label='growth rate')
+
+        self.assertDelayedFailures()
+
     def tearDown(self):
         self.move_logs()
 
@@ -1139,7 +1492,7 @@ class LowMachTest(NekTestCase):
             lx1m      = 'lx1',
             lelg      = '500',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
  
     @pn_pn_parallel
@@ -1166,141 +1519,6 @@ class LowMachTest(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-####################################################################
-#  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
-####################################################################
-class LinCav_Dir(NekTestCase):
-    example_subdir = 'dfh_cav'
-    case_name = 'lin_dfh_cav_dir'
- 
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '9',
-            lxd       = '13',
-            lx2       = 'lx1-2',
-            lelg      = '500',
-            lpelt     = 'lelt',
-        )
- 
-        self.build_tools(['genmap'])
-        self.run_genmap()
- 
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2'] = 'lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='lin_dfh_cav')
-        self.run_nek(step_limit=None)  
- 
-        omega = self.get_value_from_log('Energy', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(omega, target_val=-7.57304E-03, delta=1E-06, label='growth rate')
- 
-        self.assertDelayedFailures()
- 
-    def tearDown(self):
-        self.move_logs()
-
-class LinCav_Adj(NekTestCase):
-    example_subdir = 'dfh_cav'
-    case_name = 'lin_dfh_cav_adj'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '9',
-            lxd       = '13',
-            lx2       = 'lx1-2',
-            lelg      = '500',
-            lpelt     = 'lelt',
-        )
-
-        self.build_tools(['genmap'])
-        self.run_genmap()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2'] = 'lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='lin_dfh_cav')
-        self.run_nek(step_limit=None)  
-
-        omega = self.get_value_from_log('Energy', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(omega, target_val=-7.57304E-03, delta=1E-06, label='growth rate')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
-#  channel2D; lin_chan_dir.par, lin_chan_adj.par
-####################################################################
-class LinChn_Dir(NekTestCase):
-    example_subdir = 'channel2D'
-    case_name = 'lin_chan_dir'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '10',
-            lxd       = '15',
-            lx2       = 'lx1-2',
-            lelg      = '500',
-            lpert     = '1',
-            lpelt     = 'lelt',
-        )
-
-        self.build_tools(['genmap'])
-        self.run_genmap()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2'] = 'lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='lin_chan')
-        self.run_nek(step_limit=None)  
-
-        omega = self.get_value_from_log('Energy', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(omega, target_val=-1.2337E-03, delta=2E-06, label='growth rate')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-class LinChn_Adj(NekTestCase):
-    example_subdir = 'channel2D'
-    case_name = 'lin_chan_adj'
- 
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '10',
-            lxd       = '15',
-            lx2       = 'lx1-2',
-            lelg      = '500',
-            lpert     = '1',
-            lpelt     = 'lelt',
-        )
- 
-        self.build_tools(['genmap'])
-        self.run_genmap()
- 
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2'] = 'lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='lin_chan')
-        self.run_nek(step_limit=None)  
- 
-        omega = self.get_value_from_log('Energy', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(omega, target_val=-1.2337E-03, delta=2E-06, label='growth rate')
- 
-        self.assertDelayedFailures()
- 
-    def tearDown(self):
-        self.move_logs()
 
 ####################################################################
 #  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
@@ -1328,7 +1546,7 @@ class Mhd_Gpf(NekTestCase):
             lcvelt    = '1',
             lfdm      = '1',
         )
-        self.build_tools(['genbox', 'genmap'])
+        self.build_tools(['clean','genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
         self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'gpf')
@@ -1389,7 +1607,7 @@ class Mhd_GpfB(NekTestCase):
             lcvelt    = '1',
             lfdm      = '1',
         )
-        self.build_tools(['genbox', 'genmap'])
+        self.build_tools(['clean','genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
         self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'gpf_b')
@@ -1445,7 +1663,7 @@ class Mhd_GpfM(NekTestCase):
             lcvelt    = '1',
             lfdm      = '1',
         )
-        self.build_tools(['genbox', 'genmap'])
+        self.build_tools(['clean','genbox', 'genmap'])
         self.run_genbox(box_file='gpf')
         self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'gpf')
@@ -1501,7 +1719,7 @@ class Moffatt(NekTestCase):
             lcvelt   = '1',
         )
         self.config_size()
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
  
     @pn_pn_2_parallel
@@ -1535,7 +1753,7 @@ class MoffCirc(NekTestCase):
             lcvelt   = '1',
         )
         self.config_size()
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
  
     @pn_pn_2_parallel
@@ -1573,7 +1791,7 @@ class MvCylCvode(NekTestCase):
             lcvelt   = 'lelt',
         )
         self.config_size()
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
  
     @pn_pn_2_parallel
@@ -1614,7 +1832,7 @@ class MvWall(NekTestCase):
             lcvelt   = '1',
         )
         self.config_size()
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap()
 
     @pn_pn_parallel
@@ -1651,6 +1869,116 @@ class MvWall(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  ocyl: ocyl.rea ocyl2.rea
+####################################################################
+
+class Ocyl(NekTestCase):
+    example_subdir  = 'ocyl'
+    case_name        = 'ocyl'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '16',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            lpmin     = '1',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class Ocyl2(NekTestCase):
+    example_subdir  = 'ocyl'
+    case_name        = 'ocyl2'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '10',
+            lxd       = '16',
+            lx2       = 'lx1-2',
+            lelg      = '100',
+            lpmin     = '1',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-7,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        gmres = self.get_value_from_log('gmres', column=-6,row=1)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=25., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  os7000; u3_t020_n13.rea
 ####################################################################
 
@@ -1675,7 +2003,7 @@ class Os7000(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -1736,7 +2064,7 @@ class Peris(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -1791,7 +2119,7 @@ class Pipe_Helix(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -1861,7 +2189,7 @@ class Pipe_Stenosis(NekTestCase):
             'O                      Enter Z (6) boundary condition (v,O):',
             'y                      Formatted .rea file? (y or Y):',
         ]
-        self.build_tools(['n2to3', 'genmap'])
+        self.build_tools(['clean','n2to3','genmap'])
         self.run_n2to3(n2to3_input)
         self.run_genmap(tol='0.01')
 
@@ -1919,7 +2247,7 @@ class Rayleigh_Ray1(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(rea_file='ray1', tol='0.01')
 
 
@@ -1979,7 +2307,7 @@ class Rayleigh_Ray2(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap', 'genbox'])
+        self.build_tools(['clean','genbox','genmap'])
         self.run_genbox(box_file='ray2')
         self.run_genmap(rea_file='box', tol='0.01')
         self.mvn('box', 'ray2')
@@ -2018,6 +2346,70 @@ class Rayleigh_Ray2(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  expansion: expansion.rea
+####################################################################
+
+class Robin(NekTestCase):
+    example_subdir  = 'robin'
+    case_name        = 'robin'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '12',
+            lxd       = '18',
+            lx2       = 'lx1-0',
+            lelg      = '10',
+            lpmin     = '1',
+            lpmax     = '1',
+            ldimt     = '3',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            lfdm      = '0',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_serial
+    def test_PnPn_Serial(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        hmh = self.get_value_from_log('Hmholtz TEMP', column=-4,row=-1)
+        self.assertAlmostEqualDelayed(hmh, target_val=0., delta=80., label='Hmholtz TEMP')
+
+        tbar = self.get_value_from_log('tbar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tbar, target_val=0.0E-00, delta=1E-05, label='tbar')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_serial
+    def test_PnPn2_Serial(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        hmh = self.get_value_from_log('Hmholtz TEMP', column=-4,row=-1)
+        self.assertAlmostEqualDelayed(hmh, target_val=0., delta=20., label='Hmholtz TEMP')
+
+        tbar = self.get_value_from_log('tbar', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tbar, target_val=0.0E-00, delta=1E-05, label='tbar')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  shear4; shear4.rea, thin.rea
 ####################################################################
 
@@ -2044,7 +2436,7 @@ class Shear4_Shear4(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2103,7 +2495,7 @@ class Shear4_Thin(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2167,7 +2559,7 @@ class Smooth(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2212,7 +2604,7 @@ class Solid(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2267,7 +2659,7 @@ class Strat_P0001(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2320,7 +2712,7 @@ class Strat_P1000(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2377,7 +2769,7 @@ class Taylor(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2447,7 +2839,7 @@ class TurbChannel(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2510,7 +2902,7 @@ class Vortex(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
     @pn_pn_parallel
@@ -2576,7 +2968,7 @@ class Vortex2(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
         )
-        self.build_tools(['genmap'])
+        self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
         # Tweak .rea file
@@ -2639,3 +3031,85 @@ class Vortex2(NekTestCase):
 
     def tearDown(self):
         self.move_logs()
+        
+###############################################################
+
+if __name__ == '__main__':
+    import unittest, argparse, os
+
+    # Get arguments from command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--f77", default='mpif77', help="The Fortran 77 compiler to use [default: mpif77]")
+    parser.add_argument("--cc", default='mpicc',  help="The C compiler to use [default: mpicc]")
+    parser.add_argument("--ifmpi", default='true', choices=['true', 'false'], help="Enable/disable parallel tests with MPI [default: true]")
+    parser.add_argument("--nprocs", default='4', help="Number of processes to use for MPI tests [default: 4]")
+    parser.add_argument("-v", "--verbose", action='store_true', help="Enable verbose output")
+ 
+    args = parser.parse_args()
+
+    # # Set environment
+    os.environ['CC'] = args.cc
+    os.environ['FC'] = args.f77
+    os.environ['IFMPI'] = args.ifmpi
+    os.environ['PARALLEL_PROCS'] = args.nprocs
+    if args.verbose:
+        os.environ['VERBOSE_TESTS'] = 'true'
+        ut_verbose = 2
+    else:
+        os.environ['VERBOSE_TESTS'] = 'false'
+        ut_verbose = 1
+
+    testList = (
+               Annulus2d,
+               Benard_Ray9,
+               Blasius,
+               CmtInviscidVortex,
+               ConjHt,
+               CylRestart_C,
+               CylRestart_P,
+               Eddy_Neknek,
+               Eddy_PsiOmega, 
+               Eddy_Rich,
+               Eddy_Uv,
+               Expansion,
+               ExtCyl,
+               Fs2_St1,
+               Fs2_St2,
+               Fs2_StdWv,
+               Hemi,
+               LinCav_Adj,
+               LinCav_Dir,
+               LinChn_Adj,
+               LinChn_Dir,
+               LowMachTest,
+               Mhd_Gpf,
+               Mhd_GpfB,
+               Mhd_GpfM,
+               Moffatt,
+               MoffCirc,
+               MvCylCvode,
+               MvWall,
+               Ocyl,
+               Ocyl2,
+               Os7000,
+               Peris,
+               Pipe_Helix,
+               Pipe_Stenosis,
+               Rayleigh_Ray1,
+               Rayleigh_Ray2,
+               Robin,
+               Shear4_Shear4,
+               Shear4_Thin,
+               Smooth,
+               Solid,
+               Strat_P0001,
+               Strat_P1000,
+               Taylor,
+               TurbChannel,
+               Vortex,
+               Vortex2
+               ) 
+
+    suite = unittest.TestSuite([unittest.TestLoader().loadTestsFromTestCase(t) for t in testList])
+    unittest.TextTestRunner(verbosity=ut_verbose, buffer=True).run(suite)
+
