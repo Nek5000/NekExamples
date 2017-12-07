@@ -18,13 +18,7 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
 
     try:
 
-        config_maketools(
-            infile  = maketools_in,
-            outfile = maketools_out,
-            f77     = f77,
-            cc      = cc,
-            bigmem  = bigmem
-        )
+        config_maketools(infile=maketools_in, outfile=maketools_out, f77=f77, cc=cc)
 
         config_basics_inc(
             infile  = os.path.join(tools_root, 'prenek', 'basics.inc'),
@@ -57,40 +51,39 @@ def build_tools(tools_root, tools_bin, f77=None, cc=None, bigmem=None,
     else:
         print('Successfully compiled tools!')
 
-def build_nek(source_root, usr_file, cwd=None, f77=None, cc=None, ifmpi=None, pplist=None, verbose=False):
+def build_nek(source_root, usr_file, cwd=None, opts=None, verbose=False):
+
+    if not opts:
+        _opts = {}
+    else:
+        _opts = opts.copy()
+    _opts.update(SOURCE_ROOT=source_root)
 
     print('Compiling nek5000...')
     print('    Using source directory "{0}"'.format(source_root))
     print('    Using working directory "{0}"'.format(cwd))
     print('    Using .usr file "{0}"'.format(usr_file))
-    print('    Using F77 "{0}"'.format(f77))
-    print('    Using CC "{0}"'.format(cc))
-    print('    Using IFMPI "{0}"'.format(ifmpi))
+    for key, val in _opts.iteritems():
+        print('    Using {0}="{1}"'.format(key, val))
 
     makenek_in  = os.path.join(source_root, 'bin', 'makenek')
     makenek_out = os.path.join(source_root, 'bin', 'makenek.tests')
     logfile     = os.path.join(cwd, 'compiler.out')
     try:
         config_makenek(
-            infile      = makenek_in,
-            outfile     = makenek_out,
-            f77         = f77,
-            cc          = cc,
-            source_root = source_root,
-            ifmpi       = ifmpi,
-            pplist      = pplist,
+            opts=_opts,
+            infile=makenek_in,
+            outfile=makenek_out
         )
 
-        call([makenek_out, 'clean'], cwd=cwd)
+        (stdoutdata, stderrdata) = Popen(
+            [makenek_out, usr_file], cwd=cwd, stdin=PIPE, stderr=STDOUT, stdout=PIPE).communicate(bytes("\n"))
+
+        with open(logfile, 'w') as f:
+            f.writelines(stdoutdata)
+
         if verbose:
-            with open(logfile, 'w') as f:
-                proc = Popen([makenek_out, usr_file], cwd=cwd, stderr=STDOUT, stdout=PIPE)
-                for line in proc.stdout:
-                    sys.stdout.write(line)
-                    f.write(line)
-        else:
-            with open(logfile, 'w') as f:
-                call([makenek_out, usr_file], cwd=cwd, stdout=f)
+            sys.stdout.write(stdoutdata)
 
     except:
         print('Could not compile nek5000!')
