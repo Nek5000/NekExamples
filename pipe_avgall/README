@@ -1,23 +1,34 @@
 This example demonstrates how to post-process files output by avg_all
-to calculate rms velocities for pipe flow.
+to calculate rms velocities for pipe flow. There are two cases in this
+example: p1.usr and prms.usr, both based on the same mesh.
 
-1. The script genmesh (included) was used to generate the mesh p1.rea.
-A coarse mesh has been used here for demonstration purposes. Modify
-the parameters in genmesh based on the resolution requirements based
-on the Re number.
+The mesh is for pipe flow with inflow-outflow boundary conditions in
+the streamwise direction. 
 
-2. p1.usr is used to call avg_all in userchk and outputs avgp10*, rmsp10* and
-rm2p10* files. 
+CASE I - pipe 
+1. pipe.usr is used to "call avg_all" in userchk and
+outputs avgp10*, rmsp10* and rm2p10* files.
 
-3. This mesh has inflow-outflow boundary conditions on the streamwise surfaces.
-Consequently p1.usr has recirculation boundary condition implemented which
-allows flow to develop as it becomes turbulent.
+2. param(68) controls the frequency of files output by the avg_all
+routine 
 
-4. After running p1, use the script genpp to generate two list files.
-avg.list will have the name of all the avgp10* files and rms.list will
-have the names of all the rmsp10* files.
+3. It also has recirculation boundary condition implemented which
+allows turbulence to develop in a fixed section of the mesh. For this
+case, we use the z=0. as the plane for recirculation to the inflow
+(located at z=-2.)
 
-5. compile and run the case "pp". pp.usr has the routines which load data from
-files listed in avg.list and rms.list to determine the u,v and w rms
-velocities.
+Running case 1 will output a few avgp10*, rmsp10* and rm2p10* files.
+Run the script "genlist" to make two list files.  avg.list will have
+the name of all the avgp10* files and rms.list will have the names of
+all the rmsp10* files.
+ 
+CASE II - prms
+1. prms.usr reads in information from the avgp10* and rmsp10* files
+using the routine auto_averager, and then calculates u_rms, v_rms and
+w_rms values along with TKE.
 
+2. In addition to that, prms.usr also calls a routine my_z_average.
+This routine averages the data in streamwise direction. Note: since
+recirculation boundary condition is implemented from z=-2 to z=0, the
+GLL points in this z-range are not used when calculating the average
+(this is done via a mask).

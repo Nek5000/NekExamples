@@ -1,7 +1,7 @@
 c-----------------------------------------------------------------------
 c
 c     This usr file calculates the urms,vrms and wrms using the files
-c     output by p1.usr.
+c     output by pipe.usr.
 c
 c
 c-----------------------------------------------------------------------
@@ -24,10 +24,8 @@ c-----------------------------------------------------------------------
       integer e,f,eg
 c     e = gllel(eg)
 
-
 c     Note: this is an acceleration term, NOT a force!
 c     Thus, ffx will subsequently be multiplied by rho(x,t).
-
 
       ffx = 0.0
       ffy = 0.0
@@ -52,11 +50,11 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       character*127 fname1,fname2
 
-      fname1 = 'avg.list'
-      fname2 = 'rms.list'
-      nelxy = 224
+      fname1 = 'avg.list'  !name of file which has list of all avg files
+      fname2 = 'rms.list'  !name of file which has list of all rms files
+      nelxy = 108          !number of elements in 2D mesh
       call getrms(fname1,fname2,nelxy)
-      if (istep.eq.0) call exitt
+      call exitti('quit after calculating rms with nel2d$',nelxy)
 
       return
       end
@@ -64,20 +62,27 @@ c-----------------------------------------------------------------------
       subroutine getrms(fname1,fname2,nelxy)
       include 'SIZE'
       include 'TOTAL'
-      real uk(lx1*ly1*lz1*lelt)
-      real vk(lx1*ly1*lz1*lelt)
-      real wk(lx1*ly1*lz1*lelt)
-      real pk(lx1*ly1*lz1*lelt)
+      real uk(lx1*ly1*lz1*lelt),
+     $     vk(lx1*ly1*lz1*lelt),
+     $     wk(lx1*ly1*lz1*lelt),
+     $     tk(lx1*ly1*lz1*lelt)
       integer gs_avg_hndl
       save    gs_avg_hndl
       data    gs_avg_hndl / 0 /
       integer lt,nelxy
       character*127 fname1,fname2
+      real rcmask(lx1*ly1*lz1*lelt),zloc
+      real dum(lx1*ly1*lz1*lelt)
 
       lt = lx1*ly1*lz1*nelt
       ifld  = 1
+ccc   Generate the mask for nodes in recirculation zone
+ccc   zplane=0 here since reicrculation was from z=-2 to z=0
+ccc   in case pipe.usr
+      zloc = 0.
+      call genrecirmask(zloc,rcmask)
 
-ccc   avg all the avgp10.f0* files
+ccc   avg all the avgpipe0.f0* files
       call auto_averager(fname1)
 
 ccc   copy uk=vx**2, vk=vy**2, wk=vz**2
@@ -85,7 +90,7 @@ ccc   copy uk=vx**2, vk=vy**2, wk=vz**2
       call col3(vk,vy,vy,lt)
       call col3(wk,vz,vz,lt)
 
-ccc   avg all the rmsp10.f0* files
+ccc   avg all the rmspipe0.f0* files
       call auto_averager(fname2)
 
 ccc   u'^2,v'^2,w'^2 = rms - avg**2
@@ -94,17 +99,23 @@ ccc   u'^2,v'^2,w'^2 = rms - avg**2
       call sub2(vz,wk,lt)
 
 ccc   Average in the z direction
-      call my_z_avg(uk,vx,gs_avg_hndl,nelxy,ifld)
-      call my_z_avg(vk,vy,gs_avg_hndl,nelxy,ifld)
-      call my_z_avg(wk,vz,gs_avg_hndl,nelxy,ifld)
+      call my_z_avg(uk,vx,gs_avg_hndl,nelxy,ifld,rcmask)
+      call my_z_avg(vk,vy,gs_avg_hndl,nelxy,ifld,rcmask)
+      call my_z_avg(wk,vz,gs_avg_hndl,nelxy,ifld,rcmask)
 
 ccc   TKE = 0.5*(u'^2+v'^2+w'^2)
-      call add4(pk,uk,vk,wk,lt)
-      call cmult(pk,0.5,lt)
+      call add4(tk,uk,vk,wk,lt)
+      call cmult(tk,0.5,lt)
 
-ccc   output urms**2,vrms**2 and wrms**2 along with the TKE 
-ccc   TKE is in pressure field
-      call outpost(uk,vk,wk,pk,t,'   ')
+ccc   sqrt uk,vk,wk to get urms, vrms and wrms
+      call vsqrt(uk,lt)
+      call vsqrt(vk,lt)
+      call vsqrt(wk,lt)
+
+ccc   output urms,vrms and wrms along with the TKE 
+ccc   TKE is in temperature field
+      ifto = .true.
+      call outpost(uk,vk,wk,pr,tk,'   ')
 
       return
       end
@@ -118,8 +129,6 @@ c-----------------------------------------------------------------------
       uy=0.0
       uz=0.0
       temp=0.0
-
-
 
       return
       end
@@ -209,13 +218,10 @@ c
       return
       end
 c-----------------------------------------------------------------------
-      subroutine my_z_avg(ua,u,gs_avg_hndl,nelxy,ifld)
+      subroutine my_z_avg(ua,u,gs_avg_hndl,nelxy,ifld,msk)
       include 'SIZE'
       include 'TOTAL'
-
-      real u (lx1,ly1,lz1,lelt)
-      real ua(lx1,ly1,lz1,lelt)
-
+      real u(1),ua(1),msk(1)
       integer gs_avg_hndl,e,ex,ey,ez,eg
 
       if (gs_avg_hndl.eq.0) then
@@ -225,34 +231,27 @@ c-----------------------------------------------------------------------
       nel = nelfld(ifld)
       n   = nx1*ny1*nz1*nel
 
-      call copy(ua,bm1,n)              ! Set the averaging weights
+      call copy(ua,bm1,n)        ! Set the averaging weights
+      call col2(ua,msk,n)        ! zero out values in recirculation zone
       call fgslib_gs_op(gs_avg_hndl,ua,1,1,0) ! Sum weights over columns
 
-
       do i=1,n                          ! ua = (w_j*u_j)/( sum_i w_i)
-         ua(i,1,1,1) = bm1(i,1,1,1)*u(i,1,1,1)/ua(i,1,1,1)
+         ua(i) = bm1(i,1,1,1)*u(i)*msk(i)/ua(i)
       enddo
 
       call fgslib_gs_op(gs_avg_hndl,ua,1,1,0) ! Sum weighted values
-
 
       return
       end
 c-----------------------------------------------------------------------
       subroutine set_gs_zavg_hndl(gs_avg_hndl,nelxy,ifld)
-
 c     Set the z-average handle
-
       include 'SIZE'
       include 'TOTAL'
-
       integer gs_avg_hndl,e,ex,ey,ez,eg
-
       common /nekmpi/ mid,mp,nekcomm,nekgroup,nekreal
-
       common /c_is1/ glo_num(lx1,ly1,lz1,lelv)
       integer*8 glo_num,ex_g
-
 
       nel = nelfld(ifld)
       do e=1,nel
@@ -277,18 +276,16 @@ c     Set the z-average handle
       return
       end
 c-----------------------------------------------------------------------
-
-c automatically added by makenek
-      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
-      integer*8 glo_num(1)
-
+      subroutine genrecirmask(zloc,rcmask)
+      include 'SIZE'
+      include 'TOTAL'
+      real zloc,rcmask(lx1*ly1*lz1*lelt)
+ 
+      call rone(rcmask,lx1*ly1*lz1*nelv)
+      do i=1,lx1*ly1*lz1*nelv
+       if (zm1(i,1,1,1).lt.zloc) rcmask(i) = 0.
+      enddo
+   
       return
       end
-
-c automatically added by makenek
-      subroutine userqtl
-
-      call userqtl_scig
-
-      return
-      end
+c-----------------------------------------------------------------------

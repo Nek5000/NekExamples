@@ -141,7 +141,7 @@
  F      IFCHAR
    8.00000       8.00000      -4.00000      -4.00000     XFAC,YFAC,XZERO,YZERO
  **MESH DATA** 6 lines are X,Y,Z;X,Y,Z. Columns corners 1-4;5-8
-       -1792  3          1792     NELT,NDIM,NELV
+       -1080  3          1080     NELT,NDIM,NELV
            0  PRESOLVE/RESTART OPTIONS  *****
            7          INITIAL CONDITIONS *****
 C Default
