@@ -2828,7 +2828,8 @@ class TurbChannel(NekTestCase):
             lx1       = '8',
             lxd       = '12',
             lx2       = 'lx1-2',
-            lelg      = '600',
+            lelg      = '1600',
+            lpmin     = '4',
             ldimt     = '3',
             lhis      = '100',
             lelx      = '8',
@@ -2850,10 +2851,10 @@ class TurbChannel(NekTestCase):
         self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres', column=-7)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=95., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=35., label='gmres')
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=37.0, label='total solver time')
+#        solver_time = self.get_value_from_log('total solver time', column=-2)
+#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=37.0, label='total solver time')
 
         self.assertDelayedFailures()
 
@@ -2865,10 +2866,10 @@ class TurbChannel(NekTestCase):
         self.run_nek(step_limit=10)
 
         gmres = self.get_value_from_log('gmres', column=-6)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=35., label='gmres')
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=25.0, label='total solver time')
+#        solver_time = self.get_value_from_log('total solver time', column=-2)
+#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=25.0, label='total solver time')
 
         self.assertDelayedFailures()
 
