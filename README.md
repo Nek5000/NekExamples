@@ -168,6 +168,8 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : LES of a turbulent channel flow
   * __Features__ :
   	 * AMG coarse grid solver
+    * OIFS
+    * Variable time step
     * High pass filter relaxation term
     * Computing wall shear stress using objects
     * Planar averaging
