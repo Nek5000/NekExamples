@@ -1,0 +1,2 @@
+ls avgpipe0* > avg.list
+ls rmspipe0* > rms.list
