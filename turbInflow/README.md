@@ -3,6 +3,8 @@
 Som Dutta, Ketan Mittal and Paul Fischer
 December 2017
 
+## Recycling boundary conditions
+
 In many cases, one requires the flow coming into the domain to be fully
 turbulent. In general there are two ways to address the situation: 
 
@@ -71,3 +73,27 @@ Illustration:
 2. The second way to have a turbulent inflow is to use synthetic turblence.                           
    An implementation of synthetic turbulence is currently under construciton, 
    and will be added to the updates of this example in the near future. 
+   
+## Running averages
+
+This example demonstrates as well how to generate and post-process running 
+averages E(X),E(X^2),E(X*Y) genereated by avg_all. There are two user files in 
+this example: turbInflow.usr and prms.usr, both based on the same mesh.
+
+1. turbInflow.usr
+   * calls avg_all in userchk and outputs time averages in files: avgturbInflow0*, rmsturbInflow0* and rm2turbInflow0* files.
+
+   * param(68) controls the frequency of files output by the avg_all
+routine 
+
+   * It also uses recirculation boundary condition  to develop in a fixed section of the mesh. 
+
+   Running this case will output a few avg*, rms* and rm2* files.
+   Next run the script "genlist" to make two list files.  
+    * avg.list contains names of all the avg* files 
+    * rms.list contains names of all the rms* files
+ 
+2. prms.usr 
+   * reads in information from the avg* and rms* files using the routine auto_averager, and then calculates u_rms, v_rms and w_rms values along with TKE.
+
+   * it also calls a routine my_x_average. This routine averages the data in streamwise direction. Note: since recirculation boundary condition is implemented from x=-0 to x=5, the GLL points in this x-range are not used when calculating the average (this is done via a mask).

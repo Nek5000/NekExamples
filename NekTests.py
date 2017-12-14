@@ -2907,25 +2907,83 @@ class TurbInflow(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
+        from subprocess import call, check_call, Popen, PIPE, STDOUT
         self.size_params['lx2']='lx1'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=50)
+        self.run_nek(step_limit=40)
 
         gmres = self.get_value_from_log('gmres', column=-7)
+        e2 = self.get_value_from_log('e2', column=-4, row=-1)
+        ub = self.get_value_from_log('e2', column=-3, row=-1)
+
+        cwd = os.path.join(self.examples_root, self.example_subdir)
+        genlist_in  = os.path.join(cwd, 'genlist')
+        proc = Popen([genlist_in],cwd=cwd,shell=True,stdin=PIPE)
+        proc.wait()
+        
+        # move log file to avoid it to be ovewritten
+        for f in os.listdir(cwd):
+                if 'log' in f and '_run' not in f:
+                    src_file = os.path.join(cwd, f)
+                    dest_file = os.path.join(cwd, f+'_run')
+                    try:
+                        os.rename(src_file, dest_file)
+                    except OSError as E:
+                        # TODO: change to warnings.warning
+                        print("    Could not move {0} to {1}: {2}".format(src_file, dest_file, E))
+                    else:
+                        print("    Moved {0} to {1}".format(src_file, dest_file))
+        
+        self.build_nek(usr_file='prms')
+        self.run_nek(step_limit=None)
+        phrase = self.get_phrase_from_log("FILE:avxturbInflow0.f00001")
+
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=45., label='gmres')
+        self.assertAlmostEqualDelayed(e2, target_val=7.6E-03, delta=2.0E-04, label='e2')
+        self.assertAlmostEqualDelayed(ub, target_val=1.0250, delta=2.0E-04, label='ub')
+        self.assertIsNotNullDelayed(phrase, label='FILE:avxturbInflow0.f00001')
 
         self.assertDelayedFailures()
 
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
+        from subprocess import call, check_call, Popen, PIPE, STDOUT
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=50)
+        self.run_nek(step_limit=40)
 
         gmres = self.get_value_from_log('gmres', column=-6)
+        e2 = self.get_value_from_log('e2', column=-4, row=-1)
+        ub = self.get_value_from_log('e2', column=-3, row=-1)
+
+        cwd = os.path.join(self.examples_root, self.example_subdir)
+        genlist_in  = os.path.join(cwd, 'genlist')
+        proc = Popen([genlist_in],cwd=cwd,shell=True,stdin=PIPE)
+        proc.wait()
+        
+        # move log file to avoid it to be ovewritten
+        for f in os.listdir(cwd):
+                if 'log' in f and '_run' not in f:
+                    src_file = os.path.join(cwd, f)
+                    dest_file = os.path.join(cwd, f+'_run')
+                    try:
+                        os.rename(src_file, dest_file)
+                    except OSError as E:
+                        # TODO: change to warnings.warning
+                        print("    Could not move {0} to {1}: {2}".format(src_file, dest_file, E))
+                    else:
+                        print("    Moved {0} to {1}".format(src_file, dest_file))
+        
+        self.build_nek(usr_file='prms')
+        self.run_nek(step_limit=None)
+        phrase = self.get_phrase_from_log("FILE:avxturbInflow0.f00001")
+
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=90., label='gmres')
+        self.assertAlmostEqualDelayed(e2, target_val=7.6E-03, delta=2.0E-04, label='e2')
+        self.assertAlmostEqualDelayed(ub, target_val=1.0250, delta=2.0E-04, label='ub')
+        self.assertIsNotNullDelayed(phrase, label='FILE:avxturbInflow0.f00001')
 
         self.assertDelayedFailures()
 

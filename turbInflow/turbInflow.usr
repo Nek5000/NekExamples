@@ -149,7 +149,7 @@ c     Compute perturbation energy
       if(nio.eq.0) write(6,1) istep,time,e2,ub,um
     1              format(i6,1p4e13.5,' e2')
 
-******** Recycling using Traditional Way  *******************
+c******** Recycling using Traditional Way  *******************
 
 c      nslab =  5 ! 75% to 65% of inlet section
 
@@ -157,9 +157,9 @@ c      nslab =  5 ! 75% to 65% of inlet section
 c      call set_inflow(nslab)   ! set up inflow BCs
 
 
-*************************************************************
+c*************************************************************
 
-******** Recycling using Findpts ****************************
+c******** Recycling using Findpts ****************************
 
       dx=5.
       dy=0.
@@ -167,7 +167,7 @@ c      call set_inflow(nslab)   ! set up inflow BCs
       ubar = 1.0
       call set_inflow_fpt(dx,dy,dz,ubar)
 
-*************************************************************
+c*************************************************************
 
       uin = 0.                          !  for outflows
       ratio = 2.0  
@@ -175,6 +175,11 @@ c      call set_inflow(nslab)   ! set up inflow BCs
 
       nio = -999       ! TOGGLE I/O VERBOSITY
       if (istep.le.100.or.mod(istep,10).eq.0) nio=nid ! Verbose on.
+
+c     To compute running averages E(X),E(X^2),E(X*Y)
+c     and outputs to avg*.fld*, rms*.fld*, and rm2*.fld* for all
+c     fields.      
+      call avg_all 
 
       return
       end

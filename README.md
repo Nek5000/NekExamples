@@ -180,6 +180,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Features__ :
   	* Recycling boundary condition
   	* Turbulent outflow boundary condition
+  	* Runnig averages computed by avg_all
 * `vortex`
   * __Test name__ : Vortex
   * __Purpose__ : Vortex breakdown in a container with a rotating lid

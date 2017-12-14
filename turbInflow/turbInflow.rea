@@ -12,7 +12,7 @@
    0.00000     p008 CONDUCT
    0.00000     p009 
    0.00000     p010 FINTIME
-   500.00     p011 NSTEPS
+   40.000     p011 NSTEPS
  -0.500000E-02 p012 DT
    0.00000     p013 IOCOMM
    0.00000     p014 IOTIME
@@ -69,7 +69,7 @@
    1.00000     p065 #iofiles (eg, 0 or 64); <0 --> sep. dirs
    6.00000     p066 output : <0=ascii, else binary
    6.00000     p067 restart: <0=ascii, else binary
-  0.100000E+07 p068 iastep: freq for avg_all (0=iostep)
+   20.0000     p068 iastep: freq for avg_all (0=iostep)
    0.00000     p069 
    0.00000     p070 
    0.00000     p071 
