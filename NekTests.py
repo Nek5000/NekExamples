@@ -2876,6 +2876,62 @@ class TurbChannel(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+###############################################################################
+#  turbInflow: turbInflow.rea
+###############################################################################
+
+class TurbInflow(NekTestCase):
+    example_subdir = 'turbInflow'
+    case_name = 'turbInflow'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lelg      = '700',
+            lpmin     = '1',
+            ldimt     = '1',
+            lhis      = '1000',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=50)
+
+        gmres = self.get_value_from_log('gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=45., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=50)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=90., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  vortex; r1854a.rea
 ####################################################################
@@ -3065,6 +3121,9 @@ if __name__ == '__main__':
                Benard_Ray9,
                Blasius,
                CmtInviscidVortex,
+               Cone16,
+               Cone64,
+               Cone256,
                ConjHt,
                CylRestart_C,
                CylRestart_P,
@@ -3107,6 +3166,7 @@ if __name__ == '__main__':
                Strat_P1000,
                Taylor,
                TurbChannel,
+               TurbInflow,
                Vortex,
                Vortex2
                ) 

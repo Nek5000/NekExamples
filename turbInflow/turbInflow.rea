@@ -8468,7 +8468,7 @@
  SYM640  6   0.00000       0.00000       0.00000       0.00000       0.00000    
   ***** NO THERMAL BOUNDARY CONDITIONS *****
            1  PRESOLVE/RESTART OPTIONS  *****
-channel0.f00006                                                                 
+channel0.f00001                                                                 
            7          INITIAL CONDITIONS *****
 C Default                                                                       
 C Default                                                                       

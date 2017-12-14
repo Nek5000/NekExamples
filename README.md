@@ -109,7 +109,8 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : MvWall
   * __Purpose__ : 2D channel with a moving indentation
   * __Features__ :
-    * ALE
+  	* ALE
+    * Turbulent outflow boundary condition
 * `ocyl`
   * __Test name__ : Ocyl, Ocyl2
   * __Purpose__ : Oscillating cylinder
@@ -130,7 +131,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Pipe_Helix, Pipe_Stenosis
   * __Purpose__ : Pipe flow
   * __Features__ :
-  	 * Mesh manipluation
+  	* Mesh manipluation
     * Mesh extrusion
 * `rayleigh`
   * __Test name__ : Rayleigh_Ray1, Rayleigh_Ray2
@@ -144,7 +145,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Shear4_Shear4, Shear4_Thin
   * __Purpose__ : Double shear-layer rollup
   * __Features__ :
-  	 * Filtering
+  	* Filtering
     * Dealiasing
 * `smoother`
   * __Test name__ : Smooth
@@ -167,12 +168,18 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : TurbChannel
   * __Purpose__ : LES of a turbulent channel flow
   * __Features__ :
-  	 * AMG coarse grid solver
-    * OIFS
+  	* AMG coarse grid solver
+  	* OIFS
     * Variable time step
     * High pass filter relaxation term
     * Computing wall shear stress using objects
     * Planar averaging
+* `turbInflow`
+  * __Test name__ : TurbInflow
+  * __Purpose__ : Turbulent channel flow with turbulent inflow
+  * __Features__ :
+  	* Recycling boundary condition
+  	* Turbulent outflow boundary condition
 * `vortex`
   * __Test name__ : Vortex
   * __Purpose__ : Vortex breakdown in a container with a rotating lid
