@@ -81,7 +81,6 @@ ccc   GET INITIAL ENERGY
 ccc   START SMOOTHING HERE
       do j=1,nouter
          f1pre = f1
-         time = j
          if (nid.eq.0.and.loglevel.ge.2) 
      $     write(6,'(A,I5)') 'SMOOTHER-iteration',j
          mtyp = 1 !if mtyp = 1, jacobian, 2 = l^2, 3 - scale jacobian
