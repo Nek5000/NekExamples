@@ -244,6 +244,46 @@ class CmtInviscidVortex(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  CMT/sod3: sod3.rea
+####################################################################
+class CmtSod3(NekTestCase):
+    example_subdir = os.path.join('CMT', 'sod3')
+    case_name = 'sod3'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '9',
+            lxd       = '12',
+            lx2       = 'lx1-0',
+            lelg      = '600',
+            ldimt     = '6',
+            toteq     = '5',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.config_size()
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.build_nek(opts={'PPLIST':'CMTNEK'})
+        self.run_nek()
+
+        errl2 = self.get_value_from_log('Error L2 norm', row=-1, column=-4)
+        self.assertAlmostEqualDelayed(errl2, target_val=2.1e-3, delta=1.0e-4, label='Error L2 norm')
+
+    def tearDown(self):
+        self.move_logs()
+        
 # ####################################################################
 # #  cone/{cone016, cone064, cone256}: cone.rea
 # ####################################################################
@@ -3179,6 +3219,7 @@ if __name__ == '__main__':
                Benard_Ray9,
                Blasius,
                CmtInviscidVortex,
+               CmtSod3,
                Cone16,
                Cone64,
                Cone256,

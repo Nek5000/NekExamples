@@ -61,6 +61,7 @@ c-----------------------------------------------------------------------
       include 'CMTDATA'
 
       integer  e,f
+      real err(4),work(4)
       integer  luout(6)
       character*24 zefn
 
@@ -113,59 +114,32 @@ c     endif
          enddo
       endif
 
-      if(ifoutfld.or.istep.eq.0) then
+      if (mod(istep,10).eq.0) then
          call compute_primitive_vars
 
-c     if (nio.eq.0)then ! badly parallelized
-c$$$      write(zefn,'(a16,i5.5,a1,i1)') 'profiles/rhoprof',istep,'p',nid
-c$$$      open(unit=luout(1),file=zefn,form="formatted")
-c$$$      write(zefn,'(a14,i5.5,a1,i1)') 'profiles/uprof',istep,'p',nid
-c$$$      open(unit=luout(2),file=zefn,form="formatted")
-c$$$      write(zefn,'(a14,i5.5,a1,i1)') 'profiles/vprof',istep,'p',nid
-c$$$      open(unit=luout(3),file=zefn,form="formatted")
-c$$$      write(zefn,'(a14,i5.5,a1,i1)') 'profiles/Tprof',istep,'p',nid
-c$$$      open(unit=luout(4),file=zefn,form="formatted")
-c$$$      write(zefn,'(a17,i5.5,a1,i1)') 'profiles/rhoeprof',istep,'p',nid
-c$$$      open(unit=luout(5),file=zefn,form="formatted")
-c$$$c     write(zefn,'(a16,i5.5,a1,i1)') 'profiles/resprof',istep,'p',nid
-c$$$c     open(unit=luout(5),file=zefn,form="formatted")
-c$$$      write(zefn,'(a17,i5.5,a1,i1)') 'profiles/viscprof',istep,'p',nid
-c$$$      open(unit=luout(6),file=zefn,form="formatted")
-c$$$c     endif
-c$$$     do e=1,nelt
-c$$$        l=0
-c$$$        do k=1,nz1
-c$$$        do j=1,ny1
-c$$$        do i=1,nx1
-c$$$           l=l+1
-c$$$           s=(xm1(i,j,k,e)-diaph1)/time_cmt
-c$$$           CALL SAMPLE(PMstar, UM, S, rhohere, uhere, prshere)
-c$$$c profile writer not parallelized correctly
-c$$$            if (abs(ym1(i,j,k,e)).lt.1.0e-6) then
-c$$$                  write(luout(1),'(3e25.16)')
-c$$$     >               xm1(i,j,k,e),u(i,j,k,1,e),rhohere
-c$$$                  write(luout(2),'(3e25.16)')
-c$$$     >               xm1(i,j,k,e),vx(i,j,k,e),uhere
-c$$$                  write(luout(3),'(2e25.16)')
-c$$$     >               xm1(i,j,k,e),vy(i,j,k,e)
-c$$$                  write(luout(4),'(3e25.16)') xm1(i,j,k,e),T(i,j,k,e,1),
-c$$$     >               prshere/(gmaref-1.0)/rhohere/cvgref
-c$$$                  write(luout(5),'(3e25.16)')
-c$$$     >               xm1(i,j,k,e),u(i,j,k,5,e),energy
-c$$$                  write(luout(6),'(6e25.16)') ! x,visco,diffk,wavevisc,resvisc
-c$$$c    >               xm1(i,j,k,e),vdiff(i,j,k,e,imu),vdiff(i,j,k,e,inus)
-c$$$     >               xm1(i,j,k,e),vdiff(i,j,k,e,inus)
-c$$$c    >              ,t(i,j,k,e,3),res2(i,j,k,e,1),res2(i,j,k,e,2)
-c$$$     >              ,t(i,j,k,e,3),res2(i,j,k,e,2)
-c$$$            endif
-c$$$c profile writer not parallelized correctly
-c$$$         enddo
-c$$$         enddo
-c$$$         enddo
-c$$$      enddo
-c$$$      do i=1,6
-c$$$         close(luout(i))
-c$$$      enddo
+         call rzero(err,4)
+         do e=1,nelt
+            l=0
+            do k=1,nz1
+               do j=1,ny1
+                  do i=1,nx1
+                     l=l+1
+                     s=(xm1(i,j,k,e)-diaph1)/time_cmt
+                     CALL SAMPLE(PMstar, UM, S, rhohere, uhere, prshere)
+                     err(1)=err(1)+(u(i,j,k,1,e)-rhohere)**2*
+     $                    bm1(i,j,k,e)
+                     err(2)=err(2)+(u(i,j,k,2,e)-rhohere*uhere)**2*
+     $                    bm1(i,j,k,e)
+                     err(3)=err(3)+(u(i,j,k,3,e))**2*bm1(i,j,k,e)
+                     energy=prshere/(gmaref-1.0)+0.5*rhohere*uhere**2
+                     err(4)=err(4)+(u(i,j,k,5,e)-energy)**2*bm1(i,j,k,e)
+                  enddo
+               enddo
+            enddo
+         enddo
+
+         call gop(err,work,'+  ',4) ! Add across all processors
+         call vsqrt(err,4)
 
 c     call out_fld_nek ! need restart condition
 c-----------------------------------------------------------------------
@@ -179,8 +153,11 @@ c                  t(:,:,:,:,3)=wavevisc already
          call copy(t(1,1,1,1,4),vdiff(1,1,1,1,inus),n)
          call copy(t(1,1,1,1,5),res2,n) ! residual viscosity
          call copy(t(1,1,1,1,6),res2(1,1,1,1,2),n) ! raw residual
-      endif ! ifoutfld
+         if(nio.eq.0) write(6,10) istep,err
+      endif                     ! ifoutfld
 
+ 10   format(2x,'Error L2 norm : ',i5,4e25.16)
+      
       return
       end
 c-----------------------------------------------------------------------
@@ -326,10 +303,6 @@ c-----------------------------------------------------------------------
       include 'CMTBCDATA'
       include 'CMTDATA'
       include 'PERFECTGAS'   
-
-c until bx initialization explicitly depends on IFMHD
-      ifldmhd=9999
-c until bx initialization explicitly depends on IFMHD
 
       outflsub=.true.
       IFCNTFILT=.false.
