@@ -1,0 +1,263 @@
+c-----------------------------------------------------------------------
+      subroutine print_limits
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'FLUIDPROP'
+
+      real vol,glsum,glmin,glmax,glsc2
+      real tmp(lx1*ly1*lz1*lelv)
+      integer i,n1,n2,nt
+
+C     Primitive Variables
+      real uxmin,uxmax,uxave,uymin,uymax,uyave,uzmin,uzmax,uzave
+      real prmin,prmax,prave
+      real thmin(ldimt),thmax(ldimt),thave(ldimt)
+      real rmsux,rmsuy,rmsuz,rmspr,rmsth(ldimt)
+      real dux,duy,duz,dpr,dth(ldimt)
+      character*15 tname(ldimt)
+
+C     Other Variables
+      real mumin,mumax,muave
+      real ypmin,ypmax,ypave,utmin,utmax,utave
+
+      data tname /'         energy'
+     &           ,'turb kin energy'
+     &           ,'  turb dis freq'/
+      save tname
+
+      n1=nx1*ny1*nz1*nelv
+      n2=nx2*ny2*nz2*nelv
+      nt=nx1*ny1*nz1*nelt
+
+      call get_limits(vx,uxmin,uxmax,uxave,dux,vxlag,rmsux)
+      call get_limits(vy,uymin,uymax,uyave,duy,vylag,rmsuy)
+      if(if3d) call get_limits(vz,uzmin,uzmax,uzave,duz,vzlag,rmsuz)
+      call get_limits(pr,prmin,prmax,prave,dpr,prlag,rmspr)
+      if(ifheat)then
+        do i=1,npscal+1
+          call get_limits(t(1,1,1,1,i),thmin(i),thmax(i),thave(i),dth(i)
+     &                                      ,tlag(1,1,1,1,1,i),rmsth(i))
+        enddo
+      endif
+
+      call copy(tmp,mu_t,n1)
+      call cmult(tmp,1.0/visc0,n1)
+      mumin=glmin(tmp,n1)
+      mumax=glmax(tmp,n1)
+      muave=glsc2(tmp,bm1,n1)/volvm1
+
+C     check limits on the first GLL point away from the wall (should be <1.0!)
+      call y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
+
+      if(nio.eq.0) then
+        write(*,*)
+        write(*,254) 'limits','min','max','ave','max d/dt','rms d/dt'
+        write(*,255) 'u velocity',uxmin,uxmax,uxave,dux,rmsux
+        write(*,255) 'v velocity',uymin,uymax,uyave,duy,rmsuy
+        if(if3d) write(*,255) 'w velocity',uzmin,uzmax,uzave,duz,rmsuz
+        write(*,255) 'pressure',prmin,prmax,prave,dpr,rmspr
+        if(ifheat) then
+          do i=1,npscal+1
+            write(*,255)
+     &               tname(i),thmin(i),thmax(i),thave(i),dth(i),rmsth(i)
+          enddo
+        endif
+        write(*,*)
+        write(*,255) 'viscosity ratio',mumin,mumax,muave
+        write(*,255) 'y_p plus',ypmin,ypmax,ypave
+        write(*,255) 'u_tau',utmin,utmax,utave
+        write(*,*)
+      endif
+
+      call copy(prlag,pr,n2)
+
+ 254  format(a15,5a13)
+ 255  format(a15,5es13.4)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine get_limits(phi,phimin,phimax,phiave,dphi,phip,rmsphi)
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      real phi(1),phip(1),phimin,phimax,phiave,dphi,rmsphi
+      real glsum,glmax,glmin,glsc2
+      integer i,n,ntot,iglsum
+
+      n=nx1*ny1*nz1*nelv
+      ntot=iglsum(n,1)
+
+      rmsphi=0.0
+      dphi=0.0
+      if(istep.ge.1) then
+        do i=1,n
+          dphi=max(dphi,abs(phip(i)-phi(i)))
+          rmsphi=rmsphi+(phip(i)-phi(i))**2
+        enddo
+        rmsphi=glsum(rmsphi,1)
+        rmsphi=sqrt(rmsphi/DBLE(ntot))/dt
+      endif
+      dphi=glmax(dphi,1)
+      dphi=dphi/dt
+
+      phimin=glmin(phi,n)
+      phimax=glmax(phi,n)
+      phiave=glsc2(phi,bm1,n)/volvm1
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+C
+C     NOTE: min value doesn't work if domain has internal corners
+C
+
+      integer e,i,i0,i1,j,j0,j1,k,k0,k1,iw,jw,kw,i2,j2
+      integer ipt,wpt,estrd,isd
+      real gradu(lx1*ly1*lz1,3,3),wd(1)
+      real tau(3),norm(3),vsca,tauw,utau,rho,mu
+      real ypmin,ypmax,yp,ypave,vol,utmin,utmax,utave
+      real glmin,glmax,glsum
+      logical flag
+
+      ypmin=1.0d30
+      ypmax=-1.0d30
+      ypave=0.0
+      utmin=1.0d30
+      utmax=-1.0d30
+      utave=0.0
+      vol=0.0
+
+      do e=1,nelv
+        flag=.true.
+        do isd=1,2*ndim
+          if(cbc(isd,e,1).eq.'W  ')then
+            estrd=(e-1)*nx1*ny1*nz1
+            if(flag)then
+              call gradm11(gradu(1,1,1),gradu(1,1,2),gradu(1,1,3),vx,e)
+              call gradm11(gradu(1,2,1),gradu(1,2,2),gradu(1,2,3),vy,e)
+              if(if3d)
+     &         call gradm11(gradu(1,3,1),gradu(1,3,2),gradu(1,3,3),vz,e)
+              flag=.false.
+            endif
+            i0=1
+            j0=1
+            k0=1
+            i1=nx1
+            j1=ny1
+            k1=nz1
+            if(isd.eq.1) then
+              j0=2
+              j1=2
+            elseif(isd.eq.2) then
+              i0=nx1-1
+              i1=nx1-1
+            elseif(isd.eq.3) then
+              j0=ny1-1
+              j1=ny1-1
+            elseif(isd.eq.4) then
+              i0=2
+              i1=2
+            elseif(isd.eq.5) then
+              k0=2
+              k1=2
+            elseif(isd.eq.6) then
+              k0=nz1-1
+              k1=nz1-1
+            endif
+            do k=k0,k1
+            do j=j0,j1
+            do i=i0,i1
+              iw=i
+              jw=j
+              kw=k
+              if    (isd.eq.1) then
+                jw=1
+                norm(1)=unx(iw,kw,isd,e)
+                norm(2)=uny(iw,kw,isd,e)
+                norm(3)=unz(iw,kw,isd,e)
+              elseif(isd.eq.2) then
+                iw=nx1
+                norm(1)=unx(jw,kw,isd,e)
+                norm(2)=uny(jw,kw,isd,e)
+                norm(3)=unz(jw,kw,isd,e)
+              elseif(isd.eq.3) then
+                jw=ny1
+                norm(1)=unx(iw,kw,isd,e)
+                norm(2)=uny(iw,kw,isd,e)
+                norm(3)=unz(iw,kw,isd,e)
+              elseif(isd.eq.4) then
+                iw=1
+                norm(1)=unx(jw,kw,isd,e)
+                norm(2)=uny(jw,kw,isd,e)
+                norm(3)=unz(jw,kw,isd,e)
+              elseif(isd.eq.5) then
+                kw=1
+                norm(1)=unx(iw,jw,isd,e)
+                norm(2)=uny(iw,jw,isd,e)
+                norm(3)=unz(iw,jw,isd,e)
+              else
+                kw=nx1
+                norm(1)=unx(iw,jw,isd,e)
+                norm(2)=uny(iw,jw,isd,e)
+                norm(3)=unz(iw,jw,isd,e)
+              endif
+              ipt=i +(j -1)*nx1+(k -1)*nx1*ny1
+              wpt=iw+(jw-1)*nx1+(kw-1)*nx1*ny1
+
+              mu=vdiff(iw,jw,kw,e,1)
+              rho=vtrans(iw,jw,kw,e,1)
+
+              do i2=1,ldim
+              tau(i2)=0.0
+                do j2=1,ldim
+                  tau(i2)=tau(i2)+
+     &             mu*(gradu(wpt,i2,j2)+gradu(wpt,j2,i2))*norm(j2)
+                enddo
+              enddo
+
+              vsca=0.0
+              do i2=1,ldim
+                vsca=vsca+tau(i2)*norm(i2)
+              enddo
+
+              tauw=0.0
+              do i2=1,ldim
+                tauw=tauw+(tau(i2)-vsca*norm(i2))**2
+              enddo
+              tauw=sqrt(tauw)
+              utau=sqrt(tauw/rho)
+              yp=wd(ipt+estrd)*utau*rho/mu
+              ypmin=min(ypmin,yp)
+              ypmax=max(ypmax,yp)
+              utave=utave+utau*bm1(i,j,k,e)
+              utmin=min(utau,utmin)
+              utmax=max(utau,utmax)
+              ypave=ypave+yp*bm1(i,j,k,e)
+              vol=vol+bm1(i,j,k,e)
+            enddo
+            enddo
+            enddo
+          endif
+        enddo
+      enddo
+
+      ypmin=glmin(ypmin,1)
+      ypmax=glmax(ypmax,1)
+      ypave=glsum(ypave,1)
+      utmin=glmin(utmin,1)
+      utmax=glmax(utmax,1)
+      utave=glsum(utave,1)
+      vol=glsum(vol,1)
+      ypave=ypave/vol
+      utave=utave/vol
+
+      return
+      end
+c-----------------------------------------------------------------------

@@ -1,0 +1,41 @@
+[GENERAL]
+stopAt = numSteps
+numSteps = 200000
+dt = 5.0e-4
+variableDT = no
+writeControl = timeStep
+writeInterval = 20000
+dealiasing = no
+timeStepper = BDF3
+
+#Reynolds number
+userParam01 = 4.0e4
+
+[PROBLEMTYPE]
+equation = incompNS
+variableProperties = yes
+stressFormulation = yes
+
+#not implemented yet
+#FixedFlow = VelocityX 
+#flowrate = 1.0
+
+[VELOCITY]
+residualTol = 1.0e-7
+residualProj = yes
+
+[PRESSURE]
+residualTol = 1.0e-6
+residualProj = yes
+
+[TEMPERATURE]
+residualTol = 1.0e-7
+residualProj = no 
+
+[SCALAR01]
+residualTol = 1.0e-7
+residualProj = no 
+
+[SCALAR02]
+residualTol = 1.0e-7
+residualProj = no 

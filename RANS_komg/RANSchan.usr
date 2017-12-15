@@ -1,0 +1,224 @@
+c-----------------------------------------------------------------------
+c  nek5000 user-file template
+c
+c  user specified routines:
+c     - uservp  : variable properties
+c     - userf   : local acceleration term for fluid
+c     - userq   : local source term for scalars
+c     - userbc  : boundary conditions
+c     - useric  : initial conditions
+c     - userchk : general purpose routine for checking errors etc.
+c     - userqtl : thermal divergence for lowMach number flows 
+c     - usrdat  : modify element vertices 
+c     - usrdat2 : modify mesh coordinates
+c     - usrdat3 : general purpose routine for initialization
+c     
+c-----------------------------------------------------------------------
+      include 'rans_komg.usr'
+      include 'utilities.usr'
+c-----------------------------------------------------------------------
+      subroutine uservp(ix,iy,iz,eg) ! set variable properties
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'FLUIDPROP'
+
+      integer ix,iy,iz,e,eg
+      real rans_komg_mut,rans_komg_mutsk,rans_komg_mutso
+
+      e = gllel(eg)
+
+      mu_t(ix,iy,iz,e)=rans_komg_mut(ix,iy,iz,e)
+
+      if(ifield.eq.1) then
+        utrans = dens0
+        udiff  = visc0+mu_t(ix,iy,iz,e) 
+      elseif(ifield.eq.2) then
+        utrans = dens0*thcap0
+        udiff  = thcond0+mu_t(ix,iy,iz,e)*thcap0/Pr_t
+      elseif(ifield.eq.3) then
+        utrans = dens0
+        udiff  = visc0+rans_komg_mutsk(ix,iy,iz,e)
+      elseif(ifield.eq.4) then
+        utrans = dens0
+        udiff  = visc0+rans_komg_mutso(ix,iy,iz,e)
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf(ix,iy,iz,eg) ! set acceleration term
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+c
+c     Note: this is an acceleration term, NOT a force!
+c     Thus, ffx will subsequently be multiplied by rho(x,t).
+c
+      integer ix,iy,iz,e,eg
+
+c     e = gllel(eg)
+
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq(ix,iy,iz,eg) ! set source term
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer ix,iy,iz,e,eg
+      real rans_komg_kSrc,rans_komg_omgSrc
+
+      e = gllel(eg)
+
+      if(ifield.eq.3) then
+        qvol = rans_komg_kSrc(ix,iy,iz,e)
+      elseif(ifield.eq.4) then
+        qvol = rans_komg_omgSrc(ix,iy,iz,e)
+      else
+        qvol = 0.0
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc(ix,iy,iz,iside,eg) ! set up boundary conditions
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+c
+c     NOTE ::: This subroutine MAY NOT be called by every process
+c
+      integer ix,iy,iz,iside,e,eg
+    
+C     U, TKE, and Omg are all zero on the wall 
+      ux   = 0.0
+      uy   = 0.0
+      uz   = 0.0
+      temp = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric(ix,iy,iz,eg) ! set up initial conditions
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'FLUIDPROP'
+
+      integer ix,iy,iz,e,eg
+      real Re,turbInt,Cmu,k0,omg0
+
+      Re=1.0/visc0
+      Cmu=9.0d-2
+      turbInt=0.16*(Re**(-1.0/8.0))
+      k0=1.5*(turbInt)**2
+      omg0=(k0**(0.5))/(0.07*(Cmu**(0.25)))
+
+      ux   = 1.0
+      uy   = 0.0
+      uz   = 0.0
+      temp = 0.0
+      if(ifield.eq.3) temp = k0
+      if(ifield.eq.4) temp = omg0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk()
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      call print_limits !monitor the solution
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userqtl ! Set thermal divergence
+
+      call userqtl_scig 
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat()   ! This routine to modify element vertices
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'FLUIDPROP'
+
+      dens0=1.0           !density
+      visc0=1.0/uparam(1) !viscosity
+      thcap0=1.0          !spec heat
+      thcond0=1.0         !conductivity
+
+C     enforce constant average velocity
+      param(54) = -1
+      param(55) = 1.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2()  ! This routine to modify mesh coordinates
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'FLUIDPROP'
+
+      integer i,n
+      real xmin,xmax,ymin,ymax,scaley,scalex
+      real glmin,glmax
+
+      n=nx1*ny1*nz1*nelv
+
+      xmin=glmin(xm1,n)
+      xmax=glmax(xm1,n)
+      ymin=glmin(ym1,n)
+      ymax=glmax(ym1,n)
+
+      scalex=3.0/8.0/(xmax-xmin) !make the elements square on average
+      scaley=1.0/(ymax-ymin)
+
+      call cmult(xm1,scalex,n)
+      call cmult(xm1,scaley,n)
+
+C     build wall distance array
+      call rone(wd,n)
+      call sub2(wd,ym1,n)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3()
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'FLUIDPROP'
+
+      integer ifld_k,ifld_omg
+      real rans_coeffs(21) !array for passing your own coeffs
+      logical ifcoeffs,ifwall
+      
+      ifld_k = 3
+      ifld_omg = 4
+      ifcoeffs=.false. !set to true to pass your own coeffs
+      ifwall=.true.    !set to false to generate the wall distance function automatically
+
+      call rans_komg_init(ifld_k,ifld_omg,dens0,visc0
+     &                                ,ifcoeffs,rans_coeffs,ifwall,wd,1)
+      Pr_t=rans_coeffs(1)
+
+      return
+      end
+c-----------------------------------------------------------------------
