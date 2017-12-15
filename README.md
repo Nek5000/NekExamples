@@ -68,6 +68,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Flow past a cylinder in 2D.
   * __Features__ :
   	 * Evaluating surface integral using objects
+  	 * Saving history points
 * `fs_2`
   * __Test name__ : Fs2_St1, Fs2_St2, Fs2_StdWv
   * __Purpose__ : Free-Surface Channel Flow.

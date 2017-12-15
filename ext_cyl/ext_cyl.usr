@@ -70,6 +70,9 @@ c-----------------------------------------------------------------------
 
       scale = 2.  ! Cd = F/(.5 rho U^2 ) = 2*F
       if (mod(istep,10).eq.0) call torque_calc(scale,x0,.true.,.false.)
+      
+!     write out probes
+      if (mod(ISTEP,10).eq.0) call hpts()
 
       return
       end
