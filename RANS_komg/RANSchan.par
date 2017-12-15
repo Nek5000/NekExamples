@@ -22,7 +22,7 @@ stressFormulation = yes
 
 [VELOCITY]
 residualTol = 1.0e-7
-residualProj = yes
+residualProj = no
 
 [PRESSURE]
 residualTol = 1.0e-6
