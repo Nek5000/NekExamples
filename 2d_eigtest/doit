@@ -1,7 +1,0 @@
-echo '      parameter (lx0=' $1 ')'  > SIZE0
-makenek clean; makenek eig1 ./nek > blah.log1
-cat err.tot
-
-nekl eig1
-grep lam logfile
-grep lam logfile >> err.tot

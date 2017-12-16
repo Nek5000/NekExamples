@@ -6,7 +6,7 @@ c
       integer lpelt,lbelt,toteq,lcvelt
       integer lelx,lely,lelz,mxprev,lgmres,lorder,lhis
       integer maxobj,lpert,nsessmax,lxo
-      integer lfdm
+      integer lfdm, ldimt_proj
 
       ! BASIC
       parameter (ldim=2)               ! domain dimension (2 or 3)
@@ -20,6 +20,7 @@ c
       parameter (ldimt=1)              ! max auxiliary fields (temperature + scalars)
 
       ! OPTIONAL
+      parameter (ldimt_proj=1)         ! max auxiliary fields residual projection
       parameter (lhis=100)             ! max history points
       parameter (maxobj=4)             ! max number of objects
       parameter (lpert=1)              ! max perturbation modes

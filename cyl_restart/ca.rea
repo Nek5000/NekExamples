@@ -12,7 +12,7 @@
       -100.0000         p08 CONDUCT
       0.0000000E+00
       0.0000000E+00     p10 FINTIME
-       7400.000         p11 NSTEPS
+       4900.000         p11 NSTEPS
      -2.0000001E-03     p12 DT
       0.0000000E+00     p13 IOCOMM
       0.0000000E+00     p14 IOTIME

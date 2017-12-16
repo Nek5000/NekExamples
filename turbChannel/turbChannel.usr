@@ -1,42 +1,25 @@
 c-----------------------------------------------------------------------
-c   LES of a turbulent channel flow with Re_tau=590.
-c   Reference: DNS of Turbulent Channel Flow up to Re_tau=590, 1999,
-c              Physics of Fluids, vol 11, 943-945.
-c
-c   Note: 1-D statistics are dumped to reystress.dat and means.dat 
-c
-c   Two SGS models are available:
-c   - simple filtering (set p30=0 in .rea file)
-c     Here, a simple low-pass filtering approrach (in the modal space)
-c     is used.
-c     To define a filter function, use the filer weight in p103 and
-c     specify the additional modes to filter with p101.
-c     Based on two parameters a filter function is automatically 
-c     contructed. The filter gets applied after each time step. 
-c     Typically it's a good idea to filter
-c     1/3 of the modes (2-3 modes for e.g. N=7) using a filter
-c     weight of 0.01-0.05 (depending on the time step).
-c
-c   - dynamic Smagorinsky (set p30=1 in .rea file) 
-c     This version computes C_s D^2 (mixing length) dynamically and thus 
-c     does not need an explicit definition of the filter width D. 
-c     It does, however, need a definition of the grid- to test-filter
-c     width ratio.  See comp_mij().)
-c
-c     If preferred, one can also explicitly define a filter width
-c     and compute C_s using contractions involving this ad-hoc
-c     filter width, then compute C_s D^2 by multiplying by D^2.
-c     In this code, simply comment out the early "return" in 
-c     the routine "set_grid_spacing()".  Preliminary tests indicate 
-c     no discernable difference between the two approaches and the
-c     former (i.e., current configuration) should thus be preferred.
-c
-c     C_s is computed using the Lilly contraction, plus planar and
-c     temporal averaging of the numerator and denominator.
-c
-c     Here, the only clipping of the eddy viscosity is simply to
-c     ensure that C_s > 0.  That is, C_s = max(C_s,0).
-c
+c   CASE PARAMETERS:
+
+c start time for averaging
+#define tSTATSTART uparam(1)
+
+c output frequency for statistics
+#define tSTATFREQ  uparam(2)
+
+c drive flow with pressure gradient
+#define DPDX uparam(3)
+
+c mesh dimensions
+#define PI (4.*atan(1.))
+#define DELTA 1.
+#define XLEN (2.*PI)
+#define YLEN (2*DELTA)
+#define ZLEN PI
+#define NUMBER_ELEMENTS_X 16
+#define NUMBER_ELEMENTS_Y 12
+#define NUMBER_ELEMENTS_Z 8
+
 c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,ieg)
       include 'SIZE'
@@ -88,18 +71,11 @@ c-----------------------------------------------------------------------
       save    icalld
       data    icalld /0/
 
-      character*1   snam1(80)
-      character*1   f1nam1(80),f2nam1(80)
-      character*80  f1name
-      equivalence  (f1nam1,f1name)
-      character*80  f2name
-      equivalence  (f2nam1,f2name)
-
       real atime,timel
       save atime,timel
 
-      integer icount
-      save    icount
+      integer ntdump
+      save    ntdump
 
       common /cdsmag/ ediff(lx1,ly1,lz1,lelv)
       common /cforce/ ffx_new,ffy_new,ffz_new
@@ -136,19 +112,9 @@ c
      &              ,  wo2(lx1,ly1,lz1,lelv)
      &              ,  wo3(lx1,ly1,lz1,lelv)
 
+      real tplus
+
       n=nx1*ny1*nz1*nelv
-
-      pi    = 4.*atan(1.0)
-      rho   = 1.
-      dnu   = param(2)
-      delta = 1.           ! channel half height
-      A_w   = 2.*pi * pi   ! wall area
-
-      nelx = 8       ! Number of elements in x,y, and z directions.
-      nely = 8       ! NOTE, this may vary from one mesh to the next.
-      nelz = 8       !
-
-      ntot = nx1*ny1*nz1*nelv 
 
       ! do some checks
       if (istep.eq.0) then
@@ -160,10 +126,10 @@ c
            if(nid.eq.0) write(6,*) 'ABORT: nel_xyz > lel_xyz!'
            call exitt
          endif
-      endif
 
-      ! add SGS term to RHS (explicit treatment in plan4) 
-      if(ifsplit .and. param(30).gt.0) ifexplvis = .true.
+         call set_obj                   ! objects for surface integrals
+         call rzero(x0,3)               ! torque w.r.t. x0
+      endif
 
       ! driving force for Ubar = 1
       call set_forcing(ffx_new,vx,1)
@@ -177,30 +143,32 @@ c
         call copy(t,ediff,n)
       endif
 
+
+      ubar = glsc2(vx,bm1,n)/volvm1
+      e2   = glsc3(vy,bm1,vy,n)+glsc3(vz,bm1,vz,n)
+      e2   = e2/volvm1
+      if(nid.eq.0) write(6,2) time,ubar,e2
+   2               format(1p3e13.4,' monitor')
+
 c
 c     Below is just for postprocessing ...
 c
-      if(mod(istep,iostep).eq.0 .and. istep.gt.0) then
-        ! compute lambda2 vortex
-        call lambda2(t(1,1,1,1,2))
-        ! compute vorticity --- 3 components returned in t(...)
+      if (time.lt.tSTATSTART) goto 999 ! don't start averaging
+
+      nelx  = NUMBER_ELEMENTS_X
+      nely  = NUMBER_ELEMENTS_Y
+      nelz  = NUMBER_ELEMENTS_Z
+
+      rho    = 1.
+      dnu    = param(2)
+      A_w    = XLEN * ZLEN
+
+      if(ifoutfld) then
+        if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
         if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
       endif
 
-      if (istep.eq.0) then
-         call set_obj                   ! objects for surface integrals
-         call rzero(x0,3)               ! torque w.r.t. x0
-      endif
-
-c     Compute the wall shear
-      call torque_calc(1.0,x0,.false.,.false.)
-
-c     Compute perturbation energy
-      e2 = glsc3(vy,bm1,vy,n)+glsc3(vz,bm1,vz,n)
-      e2 = e2/volvm1
-
-      ifxyo = .true.                        ! Turn on xyz output
-      if (istep.gt.iostep) ifxyo = .false.  ! Turn off xyz output after first dump
+      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
 
       if(icalld.eq.0) then
         call rzero(uavg,n)
@@ -208,10 +176,13 @@ c     Compute perturbation energy
         call rzero(vrms,n)
         call rzero(wrms,n)
         call rzero(uvms,n)
-        atime = 0.
+        dragx_avg = 0
+        atime = 0
         timel = time
-        call planar_average_s(yy     ,ym1 ,w1,w2)
+        call planar_average_s(yy,ym1,w1,w2)
         icalld = 1
+        ntdump = int(time/tSTATFREQ)
+        if(nid.eq.0) write(6,*) 'Start collecting statistics ...'
       endif
 
       dtime = time - timel
@@ -247,24 +218,23 @@ c     Compute perturbation energy
         enddo
       endif
 
-      tw     = dragx_avg/A_w + 1.e-50
-      u_tau  = sqrt(tw/rho)
-      Re_tau = u_tau*delta/dnu
-
-      diff   = (tw-ffx_new)/tw
-      if(nid.eq.0) write(6,1) istep,time,e2,ffx_new,diff
-    1              format(i6,1p4e17.9,' err2')
-
       ! write statistics to file
-      iostep_avg = param(68)
       if (nid.eq.0 .and. istep.gt.0 .and. 
-     &   mod(istep,iostep_avg).eq.0) then
-         write(6,*) 'Dumping statistics ...'
-         open(unit=56,file='reystresses.dat')
+     &   time.gt.(ntdump+1)*tSTATFREQ) then
+
+         tw     = dragx_avg/A_w
+         u_tau  = sqrt(tw/rho)
+         Re_tau = u_tau*DELTA/dnu
+         tplus  = time * Re_tau * u_tau
+
+         ntdump = ntdump + 1
+         write(6,*) 'Dumping statistics ...', tplus, Re_tau
+ 
+         open(unit=56,file='vel_fluc_prof.dat')
          write(56,'(A,1pe14.7)') '#time = ', time
          write(56,'(A)')
-     &   '#  y     y+     R_uu     R_vv     R_ww     R_uv'
-         open(unit=57,file='means.dat')
+     &   '#  y     y+     uu     vv     ww     uv'
+         open(unit=57,file='mean_prof.dat')
          write(57,'(A,1pe14.7)') '#time = ', time
          write(57,'(A)')
      &   '#  y     y+    Umean'
@@ -282,13 +252,12 @@ c     Compute perturbation energy
      &                , uavg_pl(i)/u_tau
     3       format(1p15e17.9)
         enddo
-
         close(56)
         close(57)
-
-        timel = time
-
       endif
+
+      timel = time
+ 999  continue
 
       return
       end
@@ -316,13 +285,31 @@ c-----------------------------------------------------------------------
       save    idum 
       data    idum / 0 /
 
-      if (idum.eq.0) idum = 99 + nid
+      real C, k, kx, ky
+
+      Re_tau = 550 
+      C      = 5.17
+      k      = 0.41
+
+      yp = (1-y)*Re_tau
+      if (y.lt.0) yp = (1+y)*Re_tau
       
-c     blunt profile w/ random perturbations
-      eps = .05
-      ux  = 5*(1.-y**4)/4.  + eps*(ran1(idum)-.5)
-      uy  =                   eps*(ran1(idum)-.5)
-      uz  =                   eps*(ran1(idum)-.5)
+c     Reichardt function
+      ux  = 1/k*log(1+k*yp) + (C - (1/k)*log(k)) *
+     $      (1 - exp(-yp/11) - yp/11*exp(-yp/3))
+      ux  = ux * Re_tau*param(2)
+
+c     perturb
+      eps = 1e-2
+      kx  = 23
+      kz  = 13
+
+      alpha = kx * 2*PI/XLEN
+      beta  = kz * 2*PI/ZLEN 
+
+      ux  = ux  + eps*beta  * sin(alpha*x)*cos(beta*z) 
+      uy  =       eps       * sin(alpha*x)*sin(beta*z)
+      uz  =      -eps*alpha * cos(alpha*x)*sin(beta*z)
 
       temp=0
 
@@ -335,37 +322,26 @@ c-----------------------------------------------------------------------
 
       common /cdsmag/ ediff(lx1,ly1,lz1,lelv)
 
-      one  = 1.
-      pi   = 4.*atan(one)
-      twopi= 2.*pi
-
-      xlen = twopi        !  Here, map domain onto pi x [-1,1] x 2pi
-      zlen = pi           !  Assume that y is already in [-1,1].
-
       n=8*nelv
       xmin = glmin(xc,n)
       xmax = glmax(xc,n)
+      ymin = glmin(yc,n)
+      ymax = glmax(yc,n)
       zmin = glmin(zc,n)
       zmax = glmax(zc,n)
 
-      xscale = xlen/(xmax-xmin)
-      zscale = zlen/(zmax-zmin)
+      xscale = XLEN/(xmax-xmin)
+      yscale = YLEN/(ymax-ymin)
+      zscale = ZLEN/(zmax-zmin)
 
       do i=1,n
-         x       = xc(i,1)
-         xc(i,1) = xscale*x
-
-         z       = zc(i,1)
-         zc(i,1) = zscale*z
+         xc(i,1) = xscale*xc(i,1)
+         yc(i,1) = yscale*yc(i,1)
+         zc(i,1) = zscale*zc(i,1)
       enddo
-
-      param(59) = 0     ! all elements are _undeformed_
 
       n = nx1*ny1*nz1*nelt 
       call cfill(ediff,param(2),n)  ! initialize viscosity
-
-      ! enable stress formulation if we use PN-PN-2 
-      if(lx1.ne.lx2 .and. param(30).gt.0) IFSTRS = .true.
 
       return
       end
@@ -699,7 +675,7 @@ c
       include 'WZ'
       include 'ZPER'
 c
-      real ua(nx1,nelx),u(nx1,ny1,nx1,nelv),w1(nx1,nelx),w2(nx1,nelx)
+      real ua(nx1,lelx),u(nx1,ny1,nx1,nelv),w1(nx1,lelx),w2(nx1,lelx)
       integer e,eg,ex,ey,ez
 c
       nx = nx1*nelx
@@ -925,12 +901,19 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      common /cforce/ ffx_new,ffy_new,ffz_new
       common /uforce/ utldo(ldim)
 
       n=nx1*ny1*nz1*nelv
 
-      if (istep.eq.0) f_new=param(71)  ! Update forcing for Ubar = 1
+      if (istep.eq.0) then
+         f_new = 0.
+         if (DPDX.eq.1) then
+            param(54) = -1 ! flow direction (x:1, y:2, z:3)
+            param(55) = 1  ! flowrate (p54>) or Ubar (p54<0)
+         endif
+      endif
+
+      if (DPDX.eq.1) return
 
       u_targ  = 1.
       ubar    = glsc2(u,bm1,n)/volvm1
