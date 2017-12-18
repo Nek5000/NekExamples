@@ -1,0 +1,42 @@
+This is a simple example of Sod shock tube in 2D.
+
+A diaphragm is initialized at (0,0) in a domain [-1,1] x [0,0.1].
+
+The density ratio across the diaphragm is 8. 
+
+ - Run 'mkdir profiles' to store the thermodynamic, velocity and Entropy Viscosity
+   profiles. 
+
+ - Profile files are written for each processor at a given time. To consolidate 
+   all these into a single file run prof2h5.py.
+
+   Usage: execfile("prof2h5.py") from within a python interpreter
+   produces prof10001.h5, an HDF5 file with the abscissa along the bottom
+   of the domain in the dataset "/x", and the following groups
+
+   "profiles/exact/" containing datasets "u", "d" and "T" for velocity, density
+   and temperature from the E1RPEX exact Riemann solver of Prof. Elueterio F. Toro
+   (included in sod3.usr)
+
+   "profiles/cmt/" containing datasets "u", "d" and "T" for velocity, density
+   and temperature from CMT-nek, and the following datasets
+   "mumax"   : maximum viscosity, determined by maximum wave speed in an element
+   "artdiff" : artificial mass diffusivity nu_s in the Guermond-Popov stress tensor
+               the artificial viscosity coefficient is 4/3*nu_s
+   "resid"   : raw entropy residual at each GLL point along the bottom of each element.
+
+    the solution files contain these variables in
+    s1 : nu_s 
+    s2 : "mumax"
+    s3 : "artdiff"
+    s4 : nu_s with one less smoothing operation
+    s5 : "resid" raw entroppy residual
+
+=====
+NOTE:
+=====
+
+ - The highest Courant number I've gotten to work for this case is 0.3.
+
+ - The tunable parameter in the EVM, 'c_sub_e' is set to 40.0 in usrdat2.
+ - The tunable parameter in the EVM, 'c_max' is set to 0.3 in usrdat2.
