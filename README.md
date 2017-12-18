@@ -26,7 +26,12 @@ Some examples provide additional pdf files for a more complete description.
   	 * "ON " boundary condition (Outflow, Normal only)
 * `CMT/inv_vort`
   * __Test name__ : CmtInviscidVortex
-  * __Purpose__ : Steady isentropic vortex.
+  * __Purpose__ : Steady isentropic vortex
+  * __Features__ :
+    * CMT solver
+* `CMT/sod3`
+  * __Test name__ : CmtSod3
+  * __Purpose__ : Sod shock tube in 2D
   * __Features__ :
     * CMT solver
 * `cone/cone016`, `cone/cone064`, `cone/cone256`
