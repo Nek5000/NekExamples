@@ -2647,17 +2647,6 @@ class Solid(NekTestCase):
         self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        error = self.get_value_from_log('error', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(error, target_val=7.821228E-05, delta=1e-06, label='error')
-        self.assertDelayedFailures()
-
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.size_params['lx2']='lx1-2'
