@@ -1223,7 +1223,7 @@ class Fs2_St1(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
-        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        amp = self.get_value_from_log('amplitude', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=0.6382379, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
@@ -1265,7 +1265,7 @@ class Fs2_St2(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
-        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        amp = self.get_value_from_log('amplitude', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=0.6376125, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
@@ -1307,7 +1307,7 @@ class Fs2_StdWv(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 
-        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        amp = self.get_value_from_log('amplitude', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=0.1403036, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
