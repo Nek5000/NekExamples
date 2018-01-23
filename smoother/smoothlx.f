@@ -51,9 +51,9 @@ ccc     COPY THE ORIGINAL MESH TO dx,dy,dz vectors
       call copy(dy,ymc,lxc*lyc*lzc*nelv)
       if (ldim.eq.3) call copy(dz,zmc,lxc*lyc*lzc*nelv)
 ccc   COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
-      call copy(xbp,xmc,lxc*lyc*lzc*nelt)
-      call copy(ybp,ymc,lxc*lyc*lzc*nelt)
-      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelt)
+      call copy(xbp,xmc,lxc*lyc*lzc*nelv)
+      call copy(ybp,ymc,lxc*lyc*lzc*nelv)
+      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelv)
 
       call xmtox8(xmc,x8)
       call xmtox8(ymc,y8)
@@ -291,9 +291,9 @@ c-----------------------------------------------------------------------
       real dx(lt),dy(lt),dz(lt),xbp(lt),ybp(lt),zbp(lt)
       common / msmbackup / dx,dy,dz,xbp,ybp,zbp
 
-      call copy(xbp,xmc,lxc*lyc*lzc*nelt)
-      call copy(ybp,ymc,lxc*lyc*lzc*nelt)
-      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelt)
+      call copy(xbp,xmc,lxc*lyc*lzc*nelv)
+      call copy(ybp,ymc,lxc*lyc*lzc*nelv)
+      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelv)
 
       return
       end
@@ -314,9 +314,9 @@ c-----------------------------------------------------------------------
       real dx(lt),dy(lt),dz(lt),xbp(lt),ybp(lt),zbp(lt)
       common / msmbackup / dx,dy,dz,xbp,ybp,zbp
 
-      call copy(xmc,xbp,lxc*lyc*lzc*nelt)
-      call copy(ymc,ybp,lxc*lyc*lzc*nelt)
-      if (ldim.eq.3) call copy(zmc,zbp,lxc*lyc*lzc*nelt)
+      call copy(xmc,xbp,lxc*lyc*lzc*nelv)
+      call copy(ymc,ybp,lxc*lyc*lzc*nelv)
+      if (ldim.eq.3) call copy(zmc,zbp,lxc*lyc*lzc*nelv)
       call xmtox8(xmc,x8)
       call xmtox8(ymc,y8)
       if (ldim.eq.3) call xmtox8(zmc,z8)
