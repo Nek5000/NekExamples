@@ -35,6 +35,10 @@ ccc   INITIALIZE VARIABLES
       lapinv = 0
       optinv = 0
 
+      ifield = 1
+      imesh = 1
+      ifflow = .true.
+
       if (nid.eq.0.and.loglevel.ge.5)
      $            write(6,*) 'SMOOTHER-check original mesh'
       call fix_geom
@@ -1660,6 +1664,12 @@ c
       character*6  name6
 
       logical ifwt,ifvec
+
+      ! reset important vars and flags
+
+      ifield = 1
+      imesh = 1
+      ifflow = .true.
 
       call chcopy(cname,name,4)
       call capit (cname,4)
