@@ -30,7 +30,7 @@ c-----------------------------------------------------------------------
 
 
       ffx=0.0
-      ffy=0.0  
+      ffy=0.0
       ffz=0.0
 
       return
@@ -93,7 +93,7 @@ c-----------------------------------------------------------------------
       data        dcbc /'W  ','P  '/  !BCs listed here
 
       idftyp = 0      !distance function - 0 -> exponential, 1-> tanh
-      alpha = 15.     !Input for wall distance function 
+      alpha = 15.     !Input for wall distance function
       beta  = 0.1     !
 
       nouter = 20      !total loops around laplacian and optimizer smoothing
