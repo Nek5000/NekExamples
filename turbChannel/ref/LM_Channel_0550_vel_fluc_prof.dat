@@ -1,78 +1,78 @@
-% Filename : LM_Channel_0550_vel_fluc_prof.dat 
-% 
-% Description : Variance and covariance of velocity components 
-% 
-% Total number of data points  : 192
-% 
-% 
-% 
-% 
-% The data in this file was extracted from a direct numerical simulation 
-% of fully developed plane turbulent channel flow. The file is available at 
-% http://turbulence.ices.utexas.edu, where it will be updated as necessary. 
-% 
-% When publishing results using this data, the following paper should be 
-% cited as the source:  
-% 
-%    Myoungkyu Lee and Robert D. Moser,  
-%    Direct numerical simulation of turbulent channel flow up to Re_tau = 5200, 
-%    2015, Journal of Fluid Mechanics, vol. 774, pp. 395-415 
-% 
-% The paper can be found at http://journals.cambridge.org/article_S0022112015002682 
-% 
-% NOTE: before publication, please check 
-% http://turbulence.ices.utexas.edu for any updates to the data and an 
-% updated citation 
-% 
-% 
-% Contact to Robert D. Moser(rmoser@ices.utexas.edu) or M.K. Lee(mk@ices.utexas.edu) for questions.
-% 
-% 
-% The parameters defining the simulation from which this data were extracted are: 
-% 
-%  Grid (streamwise)       nx = 1536 
-%  Grid (wall-normal)      ny = 384 
-%  Grid (spanwise)         nz = 1024 
-%  Streamwise domain size  Lx = 8pi 
-%  Spanwise domain size    Lz = 3pi 
-%  B-Spline order           n = 7 
-%  Kinematic Viscosity     nu = 1.00000e-04 
-%  Channel half width   delta = 1.000 
-%  Avg streamwise vel  U_mean = 1.000 
-%  Friction vel         u_tau = 5.43496e-02 
-%  Re_tau              Re_tau =  543.496 
-% 
-% 
-% All data are normalized by u_tau and nu (signified with a ^+) except 
-% for y/delta 
-% 
-% This file was last updated on 6/15/2015.
-% 
-% 
-% 
-% Remark: 
-% 
-%      y/delta : Grid point in wall-normal direction, Normalized by channel half width 
-%      y^+     : Grid point in wall-normal direction 
-%      u'u'    : Variance of u 
-%      v'v'    : Variance of v 
-%      w'w'    : Variance of w 
-%      u'v'    : Covariance of u and v 
-%      u'w'    : Covariance of u and w 
-%      v'w'    : Covariance of v and w 
-%       k      : Turbulent kinetic energy, k = 0.5*(u'u' + v'v' + w'w')
-% 
-% *   Estimated standard deviations of datasets in this file are in the file: LM_Channel_0550_vel_fluc_stdev.dat 
-% 
-% **  Data at y/delta = 1.0 is not computed due to code performance optimization 
-% 
-% *** u'w' and v'w' should be zero due to (statistical) symmetries in the flow. 
-%     These are reported here none-the-less as an indicator of the quality of the statistics.  
-% 
-% -----------End of header--------- 
-% 
-%         y/delta                    y^+                    u'u'                     v'v'                     w'w'                     u'v'                     u'w'                     v'w'                       k            
-%--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Filename : LM_Channel_0550_vel_fluc_prof.dat 
+# 
+# Description : Variance and covariance of velocity components 
+# 
+# Total number of data points  : 192
+# 
+# 
+# 
+# 
+# The data in this file was extracted from a direct numerical simulation 
+# of fully developed plane turbulent channel flow. The file is available at 
+# http://turbulence.ices.utexas.edu, where it will be updated as necessary. 
+# 
+# When publishing results using this data, the following paper should be 
+# cited as the source:  
+# 
+#    Myoungkyu Lee and Robert D. Moser,  
+#    Direct numerical simulation of turbulent channel flow up to Re_tau = 5200, 
+#    2015, Journal of Fluid Mechanics, vol. 774, pp. 395-415 
+# 
+# The paper can be found at http://journals.cambridge.org/article_S0022112015002682 
+# 
+# NOTE: before publication, please check 
+# http://turbulence.ices.utexas.edu for any updates to the data and an 
+# updated citation 
+# 
+# 
+# Contact to Robert D. Moser(rmoser@ices.utexas.edu) or M.K. Lee(mk@ices.utexas.edu) for questions.
+# 
+# 
+# The parameters defining the simulation from which this data were extracted are: 
+# 
+#  Grid (streamwise)       nx = 1536 
+#  Grid (wall-normal)      ny = 384 
+#  Grid (spanwise)         nz = 1024 
+#  Streamwise domain size  Lx = 8pi 
+#  Spanwise domain size    Lz = 3pi 
+#  B-Spline order           n = 7 
+#  Kinematic Viscosity     nu = 1.00000e-04 
+#  Channel half width   delta = 1.000 
+#  Avg streamwise vel  U_mean = 1.000 
+#  Friction vel         u_tau = 5.43496e-02 
+#  Re_tau              Re_tau =  543.496 
+# 
+# 
+# All data are normalized by u_tau and nu (signified with a ^+) except 
+# for y/delta 
+# 
+# This file was last updated on 6/15/2015.
+# 
+# 
+# 
+# Remark: 
+# 
+#      y/delta : Grid point in wall-normal direction, Normalized by channel half width 
+#      y^+     : Grid point in wall-normal direction 
+#      u'u'    : Variance of u 
+#      v'v'    : Variance of v 
+#      w'w'    : Variance of w 
+#      u'v'    : Covariance of u and v 
+#      u'w'    : Covariance of u and w 
+#      v'w'    : Covariance of v and w 
+#       k      : Turbulent kinetic energy, k = 0.5*(u'u' + v'v' + w'w')
+# 
+# *   Estimated standard deviations of datasets in this file are in the file: LM_Channel_0550_vel_fluc_stdev.dat 
+# 
+# **  Data at y/delta = 1.0 is not computed due to code performance optimization 
+# 
+# *** u'w' and v'w' should be zero due to (statistical) symmetries in the flow. 
+#     These are reported here none-the-less as an indicator of the quality of the statistics.  
+# 
+# -----------End of header--------- 
+# 
+#         y/delta                    y^+                    u'u'                     v'v'                     w'w'                     u'v'                     u'w'                     v'w'                       k            
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     0.000000000000000e+00    0.000000000000000e+00    1.458396928712247e-34    0.000000000000000e+00    2.948178917405795e-34    0.000000000000000e+00   -5.537036511105955e-37    0.000000000000000e+00    2.203287923059021e-34
     4.960055044689327e-06    2.695770315769523e-03    1.189616701975902e-06    7.394295099260748e-15    4.932175247058725e-07   -1.910620852615977e-11    6.905025634259438e-10   -2.450115603811746e-14    8.414171170380350e-07
     2.479993079318454e-05    1.347866438236128e-02    2.973259640193555e-05    4.606104124225703e-12    1.229709691599479e-05   -2.390467144677508e-09    1.727014011308768e-08   -3.061343925352193e-12    2.101484896201723e-05

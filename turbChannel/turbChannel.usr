@@ -1,43 +1,4 @@
 c-----------------------------------------------------------------------
-c   HiOCFD5 Testcase: WS2 / Resolution Coarse (ID:MS3)
-c   LES of a turbulent channel flow with Re_tau=550
-c
-c   Reference: 
-c   (1) https://how5.cenaero.be/content/ws2-les-plane-channel-ret550 
-c   (2) Myoungkyu Lee and Robert D. Moser,  
-c   Direct numerical simulation of turbulent channel flow up to 
-c   Re_tau = 5200, 2015, Journal of Fluid Mechanics, vol. 774, 
-c   pp. 395-415
-c
-c   Note: 1-D statistics are dumped to 
-c   mean_prof.dat and vel_fluc_prof.dat 
-c
-c   Two SGS models are available:
-c   - high pass filtering (set filtering=hpfrt in .par file)
-c     Typically it's a good idea to use a filterCutOffRation = 0.7
-c     (2 modes for e.g. N=7) using a filter weight of 40.
-c
-c   - dynamic Smagorinsky (set filtering=none in .par file) 
-c     This version computes C_s D^2 (mixing length) dynamically and thus 
-c     does not need an explicit definition of the filter width D. 
-c     It does, however, need a definition of the grid- to test-filter
-c     width ratio.  See comp_mij().)
-c
-c     If preferred, one can also explicitly define a filter width
-c     and compute C_s using contractions involving this ad-hoc
-c     filter width, then compute C_s D^2 by multiplying by D^2.
-c     In this code, simply comment out the early "return" in 
-c     the routine "set_grid_spacing()".  Preliminary tests indicate 
-c     no discernable difference between the two approaches and the
-c     former (i.e., current configuration) should thus be preferred.
-c
-c     C_s is computed using the Lilly contraction, plus planar and
-c     temporal averaging of the numerator and denominator.
-c
-c     Here, the only clipping of the eddy viscosity is simply to
-c     ensure that C_s > 0.  That is, C_s = max(C_s,0).
-
-c-----------------------------------------------------------------------
 c   CASE PARAMETERS:
 
 c start time for averaging
@@ -194,13 +155,6 @@ c     Below is just for postprocessing ...
 c
       if (time.lt.tSTATSTART) goto 999 ! don't start averaging
 
-      if(ifoutfld) then
-        if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
-        if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
-      endif
-
-      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
-
       nelx  = NUMBER_ELEMENTS_X
       nely  = NUMBER_ELEMENTS_Y
       nelz  = NUMBER_ELEMENTS_Z
@@ -208,11 +162,13 @@ c
       rho    = 1.
       dnu    = param(2)
       A_w    = XLEN * ZLEN
-      tw     = (dragx(1)+dragx(2))/A_w + 1.e-50
-      u_tau  = sqrt(tw/rho)
-      Re_tau = u_tau*DELTA/dnu
-      diff   = (tw-ffx_new)/tw
-      tplus  = time * Re_tau * u_tau
+
+      if(ifoutfld) then
+        if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
+        if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
+      endif
+
+      call torque_calc(1.0,x0,.false.,.false.) ! wall shear
 
       if(icalld.eq.0) then
         call rzero(uavg,n)
@@ -265,6 +221,11 @@ c
       ! write statistics to file
       if (nid.eq.0 .and. istep.gt.0 .and. 
      &   time.gt.(ntdump+1)*tSTATFREQ) then
+
+         tw     = dragx_avg/A_w
+         u_tau  = sqrt(tw/rho)
+         Re_tau = u_tau*DELTA/dnu
+         tplus  = time * Re_tau * u_tau
 
          ntdump = ntdump + 1
          write(6,*) 'Dumping statistics ...', tplus, Re_tau

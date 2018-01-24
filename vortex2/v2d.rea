@@ -104,7 +104,7 @@
       0.0000000E+00     p100 reserved
       0.0000000E+00     p101   No. of additional filter modes
       0.0000000E+00
-      1.0000000E-03     p103   weight of stabilizing filter (.01)
+      0.0000000E+00     p103   weight of stabilizing filter (.01)
       4  Lines of passive scalar data follows2 CONDUCT; 2RHOCP
    1.00000       1.00000       1.00000       1.00000       1.00000
    1.00000       1.00000       1.00000       1.00000

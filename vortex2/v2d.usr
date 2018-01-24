@@ -1,37 +1,4 @@
 c-----------------------------------------------------------------------
-c
-c
-c     This is an axisymmetric example of the vortex breakdown problem
-c     described in the Nek5000 Examples document.   
-c
-c     The domain size is 2x1.  The rotating lid is located at x=2.
-c     For Re=1492, there is a single flow reversal (bubble) on the axis.
-c
-c     See
-c
-c     https://nek5000.mcs.anl.gov/index.php/UG#Documentation
-c
-c     and click on Examples, where more detail is given for this case.
-c     See also ../vortex in the /examples directory, which shows
-c     the corresponding 3D simulation configuration, but at Re=1854.
-c
-c
-c     In this example, the azimuthal velocity is stored in the temperature
-c     array t(...).
-c
-c     To have temperature serve the role of azimuthal velocity, you must
-c     set the flag IFAZIV to be true either in the .usr file or in the .rea
-c     file.
-c
-c     Note that the .rea and .box files specify "A  " on the y=0 boundary,
-c     which is requisite for any axisymmetric flow problem that includes
-c     the x-axis.
-c
-c     Also, any element touching the x-axis must be oriented with the "r"
-c     direction pointing in the positive x direction.  (This condition
-c     is automatically met for elements generated with genbox.)
-c
-c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,eg)
       include 'SIZE'
       include 'TOTAL'

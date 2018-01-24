@@ -75,7 +75,7 @@ c
          ymxr = ymx/ymx0
          vy2l = vy2/vy2l
          if (nid.eq.0) write(6,1) istep,time,ymx,vy2,ymxr
-    1    format(i5,1p4e14.6,' amp')
+    1    format(i5,1p4e14.6,' amplitude')
       endif
       vy2l = vy2
 
