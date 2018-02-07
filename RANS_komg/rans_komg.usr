@@ -857,6 +857,11 @@ c
       real coeffs_in(1),wdin(1),rho_in,mu_in
       integer ntot
       logical ifcoeffs,ifwall
+      real w1(lx1*ly1*lz1*lelv)
+      real w2(lx1*ly1*lz1*lelv)
+      real w3(lx1*ly1*lz1*lelv)
+      real w4(lx1*ly1*lz1*lelv)
+      real w5(lx1*ly1*lz1*lelv)
 
       character*3 bcw
 
@@ -906,7 +911,8 @@ c solve for omega_pert
       else
         bcw = 'W  '
         if(nid.eq.0) write(*,*) 'BC for distance ', bcw
-        call cheap_dist(ywd,1,bcw)
+        call distf(ywd,1,bcw,w1,w2,w3,w4,w5)
+        call copy(wdin,ywd,ntot)
       endif
       call rans_komg_omegabase
 
