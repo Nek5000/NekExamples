@@ -230,7 +230,7 @@ c             write(*,*) 'Neg  KEY  ', nkey_neg, xkey_neg
           o_x(i)= omp_x(i)+expn * dfdx_omegb(i,1,1,e) *f_omegb(i,1,1,e)
           o_y(i)= omp_y(i)+expn * dfdy_omegb(i,1,1,e) *f_omegb(i,1,1,e)
           if(if3d) 
-     $    o_z(i)= omp_z(i)+expn * dfdx_omegb(i,1,1,e) *f_omegb(i,1,1,e)
+     $    o_z(i)= omp_z(i)+expn * dfdz_omegb(i,1,1,e) *f_omegb(i,1,1,e)
           omwom (i)= 1.0/(1.0+t(i,1,1,e,ifld_omega-1)/f_omegb(i,1,1,e))
 
 c See equations from eqns_k_omega1.pdf from Eq. (3) onwards
@@ -583,7 +583,7 @@ c             write(*,*) 'Neg  KEY  ', nkey_neg, xkey_neg
           o_x(i)= omp_x(i)+expn * dfdx_omegb(i,1,1,e) *f_omegb(i,1,1,e)
           o_y(i)= omp_y(i)+expn * dfdy_omegb(i,1,1,e) *f_omegb(i,1,1,e)
           if(if3d) 
-     $    o_z(i)= omp_z(i)+expn * dfdx_omegb(i,1,1,e) *f_omegb(i,1,1,e)
+     $    o_z(i)= omp_z(i)+expn * dfdz_omegb(i,1,1,e) *f_omegb(i,1,1,e)
           omwom (i)= 1.0/(1.0+t(i,1,1,e,ifld_omega-1)/f_omegb(i,1,1,e))
 
 c See equations from eqns_k_omega1.pdf from Eq. (3) onwards
@@ -764,7 +764,7 @@ c Compute production of omega
 
 ! Compute dissipation of omega
 
-          Y_w = rho * beta *f_b * omega * omega
+          Y_w = rho * beta * omega * omega
 
 ! Compute additional SST term for omega
 
