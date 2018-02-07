@@ -16,10 +16,6 @@ equation = incompNS
 variableProperties = yes
 stressFormulation = yes
 
-#not implemented yet
-#FixedFlow = VelocityX 
-#flowrate = 1.0
-
 [VELOCITY]
 residualTol = 1.0e-7
 residualProj = no
