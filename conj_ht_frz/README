@@ -1,0 +1,10 @@
+This case is identical to the CHT case. But it runs with a frozen
+velocity and the heat load is unsteady.
+
+The heat load is sinusoidal and the parameters can be controlled
+through the par file.
+
+The temperature and scalar 1 are solved with Helmholtz and compared
+/ grep tmax to get the comparison.
+If you want to maximize the CVODE advantage follow instructions in the 
+.par file.
