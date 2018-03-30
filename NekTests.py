@@ -244,6 +244,46 @@ class CmtInviscidVortex(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  CMT/sod3: sod3.rea
+####################################################################
+class CmtSod3(NekTestCase):
+    example_subdir = os.path.join('CMT', 'sod3')
+    case_name = 'sod3'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '9',
+            lxd       = '12',
+            lx2       = 'lx1-0',
+            lelg      = '600',
+            ldimt     = '6',
+            toteq     = '5',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.config_size()
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.build_nek(opts={'PPLIST':'CMTNEK'})
+        self.run_nek()
+
+        errl2 = self.get_value_from_log('Error L2 norm', row=-1, column=-4)
+        self.assertAlmostEqualDelayed(errl2, target_val=2.1e-3, delta=1.0e-4, label='Error L2 norm')
+
+    def tearDown(self):
+        self.move_logs()
+        
 # ####################################################################
 # #  cone/{cone016, cone064, cone256}: cone.rea
 # ####################################################################
@@ -1183,7 +1223,7 @@ class Fs2_St1(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
-        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        amp = self.get_value_from_log('amplitude', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=0.6382379, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
@@ -1225,7 +1265,7 @@ class Fs2_St2(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=38., label='gmres')
 
-        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        amp = self.get_value_from_log('amplitude', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=0.6376125, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
@@ -1267,7 +1307,7 @@ class Fs2_StdWv(NekTestCase):
         gmres = self.get_value_from_log('gmres', column=-6,)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 
-        amp = self.get_value_from_log('amp', column=-2, row=-1)
+        amp = self.get_value_from_log('amplitude', column=-2, row=-1)
         self.assertAlmostEqualDelayed(amp, target_val=0.1403036, delta=1e-06, label='amp')
 
         self.assertDelayedFailures()
@@ -2607,17 +2647,6 @@ class Solid(NekTestCase):
         self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
 
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        error = self.get_value_from_log('error', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(error, target_val=7.821228E-05, delta=1e-06, label='error')
-        self.assertDelayedFailures()
-
     @pn_pn_2_parallel
     def test_PnPn2_Parallel(self):
         self.size_params['lx2']='lx1-2'
@@ -3179,6 +3208,7 @@ if __name__ == '__main__':
                Benard_Ray9,
                Blasius,
                CmtInviscidVortex,
+               CmtSod3,
                Cone16,
                Cone64,
                Cone256,

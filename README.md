@@ -26,7 +26,12 @@ Some examples provide additional pdf files for a more complete description.
   	 * "ON " boundary condition (Outflow, Normal only)
 * `CMT/inv_vort`
   * __Test name__ : CmtInviscidVortex
-  * __Purpose__ : Steady isentropic vortex.
+  * __Purpose__ : Steady isentropic vortex
+  * __Features__ :
+    * CMT solver
+* `CMT/sod3`
+  * __Test name__ : CmtSod3
+  * __Purpose__ : Sod shock tube in 2D
   * __Features__ :
     * CMT solver
 * `cone/cone016`, `cone/cone064`, `cone/cone256`
@@ -39,6 +44,11 @@ Some examples provide additional pdf files for a more complete description.
   * __Features__ :
     * Conjugate heat transfer
     * Scalar solve with CVODE
+* `conj_ht_frz`
+  * __Test name__ :  ConjHtFrz
+  * __Purpose__ : ConjHT with frozen velocity field
+  * __Features__ :
+    * No velocity solve
 * `cyl_restart`
   * __Test name__ : CylRestart_C, CylRestart_P
   * __Purpose__ : Performing a full restart
@@ -68,6 +78,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Flow past a cylinder in 2D.
   * __Features__ :
   	 * Evaluating surface integral using objects
+  	 * Saving history points
 * `fs_2`
   * __Test name__ : Fs2_St1, Fs2_St2, Fs2_StdWv
   * __Purpose__ : Free-Surface Channel Flow.

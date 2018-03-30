@@ -35,7 +35,11 @@ ccc   INITIALIZE VARIABLES
       lapinv = 0
       optinv = 0
 
-      if (nid.eq.0.and.loglevel.ge.5) 
+      ifield = 1
+      imesh = 1
+      ifflow = .true.
+
+      if (nid.eq.0.and.loglevel.ge.5)
      $            write(6,*) 'SMOOTHER-check original mesh'
       call fix_geom
 c     Copy original mesh from xm1 to dxm
@@ -51,9 +55,9 @@ ccc     COPY THE ORIGINAL MESH TO dx,dy,dz vectors
       call copy(dy,ymc,lxc*lyc*lzc*nelv)
       if (ldim.eq.3) call copy(dz,zmc,lxc*lyc*lzc*nelv)
 ccc   COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
-      call copy(xbp,xmc,lxc*lyc*lzc*nelt)
-      call copy(ybp,ymc,lxc*lyc*lzc*nelt)
-      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelt)
+      call copy(xbp,xmc,lxc*lyc*lzc*nelv)
+      call copy(ybp,ymc,lxc*lyc*lzc*nelv)
+      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelv)
 
       call xmtox8(xmc,x8)
       call xmtox8(ymc,y8)
@@ -63,7 +67,7 @@ ccc   CREATE MASK
       call genmask(nodmask,mlt,gshl,mltc,gshlc)
 
 ccc   MASK ELEMENT LAYERS
-c     e is the number of layers of elements right next to 'w' 
+c     e is the number of layers of elements right next to 'w'
 c     boundary condition
 c     e = 3
 c     call masklayers(nodmask,e)
@@ -74,18 +78,17 @@ ccc   CONSTRUCT WEIGHT FUNCTION
       etstart=dnekclock()
 ccc   GET INITIAL ENERGY
       call getglobsum(x8,y8,z8,mlt,gshl,2**ldim,1,f1sav)
-      if (nid.eq.0) 
+      if (nid.eq.0)
      $   write(6,'(A,1p1e13.6)') 'SMOOTHER-initial energy',f1sav
       f1 = f1sav
 
 ccc   START SMOOTHING HERE
       do j=1,nouter
          f1pre = f1
-         time = j
-         if (nid.eq.0.and.loglevel.ge.2) 
+         if (nid.eq.0.and.loglevel.ge.2)
      $     write(6,'(A,I5)') 'SMOOTHER-iteration',j
          mtyp = 1 !if mtyp = 1, jacobian, 2 = l^2, 3 - scale jacobian
-         if (nlap.gt.0) then 
+         if (nlap.gt.0) then
            call fastlap(nlap,nodmask,mlt,gshl,dis,lapinv,mltc,gshlc)
            if (lapinv.eq.1) nlap = 0
            if (lapinv.eq.1) call restbackmesh
@@ -95,22 +98,22 @@ ccc   START SMOOTHING HERE
            if (optinv.eq.1) call restbackmesh !xbp->xm1 and xbp->x8
            if (optinv.eq.1) nopt = 0
          endif
-        
+
          call getglobsum(x8,y8,z8,mlt,gshl,2**ldim,mtyp,f1)
-  
+
          call xmtox8(xmc,x8)
          call xmtox8(ymc,y8)
          if (ldim.eq.3) call xmtox8(zmc,z8)
 
          call xmctoxm1
-  
+
          if (nid.eq.0) write(6,'(A,I7,1p1e13.5)') 'SMOOTHER-energy',j,f1
          if (nid.eq.0.and.loglevel.ge.2) write(6,*) 'loop complete',j
          if (f1.ge.f1pre) goto 5001  !mesh didn't improve since last iteration
          if (nopt.eq.0.and.nlap.eq.0) goto 5001 !no iterations left to do
       enddo
  5001 continue
-    
+
       etend=dnekclock()
 ccc   RESTORE BOUNDARY LAYER
       call restbndrlayer(dx,dy,dz,dis)  !dx,dy,dz is now actually smooth-coarse
@@ -131,7 +134,7 @@ ccc   the actual surface mesh
       endif
 
       call geom_reset(1)    ! recompute Jacobians, etc.
-       
+
 ccc   OUTPUT THE MESH
 c      call gen_rea_full(1)                   !output the rea for smooth mesh
 
@@ -180,14 +183,14 @@ c     u1 is size n1xn1 and u2 is size n2xn2
       common /coarseints/ ixmc3,ixtmc3,ixmf3,ixtmf3
       real u1(n1,n1),u2(n2,n2)
       real w(20,20)
- 
-      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array
      $                   in int_fine_to_coarse and related routines '
       if (lx1.gt.20) call exitt
 
       call mxm(ixmc3,n2,u1,n1,w,n1)
       call mxm(w,n2,ixtmc3,n1,u2,n2)
-   
+
       return
       end
 c-----------------------------------------------------------------------
@@ -201,11 +204,11 @@ c     u1 is size n1xn1 and u2 is size n2xn2
       real u1(n1,n1,n1),u2(n2,n2,n2)
       real w(20*20*20)
       real v(20*20*20)
- 
-      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array
      $                   in int_fine_to_coarse and related routines '
       if (lx1.gt.20) call exitt
-      
+
       mm = n1*n1
       mn = n1*n2
       nn = n2*n2
@@ -219,7 +222,7 @@ c     u1 is size n1xn1 and u2 is size n2xn2
          iw = iw+nn
       enddo
       call mxm(w,nn,ixtmc3,n1,u2,n2)
-  
+
       return
       end
 c-----------------------------------------------------------------------
@@ -237,7 +240,7 @@ c     u1 is fine, u2 is coarse
       real u1(n1,n1),u2(n2,n2)
       real w(20,20)
 
-      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array
      $                   in int_coarse_to_fine and related routines '
       if (lx1.gt.20) call exitt
 
@@ -258,7 +261,7 @@ c     u1 is size n1xn1 and u2 is size n2xn2
       real w(20*20*20)
       real v(20*20*20)
 
-      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array 
+      if (lx1.gt.20) write(6,*) 'SMOOTHER-increase size of work array
      $                   in int_coarse_to_fine and related routines '
       if (lx1.gt.20) call exitt
 
@@ -292,9 +295,9 @@ c-----------------------------------------------------------------------
       real dx(lt),dy(lt),dz(lt),xbp(lt),ybp(lt),zbp(lt)
       common / msmbackup / dx,dy,dz,xbp,ybp,zbp
 
-      call copy(xbp,xmc,lxc*lyc*lzc*nelt)
-      call copy(ybp,ymc,lxc*lyc*lzc*nelt)
-      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelt)
+      call copy(xbp,xmc,lxc*lyc*lzc*nelv)
+      call copy(ybp,ymc,lxc*lyc*lzc*nelv)
+      if (ldim.eq.3) call copy(zbp,zmc,lxc*lyc*lzc*nelv)
 
       return
       end
@@ -314,10 +317,10 @@ c-----------------------------------------------------------------------
       parameter(lt = lxc*lyc*lzc*lelv)
       real dx(lt),dy(lt),dz(lt),xbp(lt),ybp(lt),zbp(lt)
       common / msmbackup / dx,dy,dz,xbp,ybp,zbp
-     
-      call copy(xmc,xbp,lxc*lyc*lzc*nelt)
-      call copy(ymc,ybp,lxc*lyc*lzc*nelt)
-      if (ldim.eq.3) call copy(zmc,zbp,lxc*lyc*lzc*nelt)
+
+      call copy(xmc,xbp,lxc*lyc*lzc*nelv)
+      call copy(ymc,ybp,lxc*lyc*lzc*nelv)
+      if (ldim.eq.3) call copy(zmc,zbp,lxc*lyc*lzc*nelv)
       call xmtox8(xmc,x8)
       call xmtox8(ymc,y8)
       if (ldim.eq.3) call xmtox8(zmc,z8)
@@ -358,7 +361,7 @@ c-----------------------------------------------------------------------
 
       optinv = 0 !initialize to 0
 
-      if (nid.eq.0.and.loglevel.ge.2) 
+      if (nid.eq.0.and.loglevel.ge.2)
      $         write(6,*) 'Optimization loop started'
 
       if (opt.eq.1) siz = 2**ldim !for jacobian
@@ -367,7 +370,7 @@ c-----------------------------------------------------------------------
       n2 = nelv*(2**ldim)*n1
 
       call get_nodscale(hval,x8,y8,z8,gshl)
-      if (nid.eq.0.and.loglevel.ge.4) 
+      if (nid.eq.0.and.loglevel.ge.4)
      $   write(6,'(A,1p1e13.5)') 'perturbation amount is ',hval
 
       call gradf(f2,dfdx,x8,y8,z8,mlt,gshl,siz,opt,hval)
@@ -408,7 +411,7 @@ c  get Bk = dfdxn'*dfdxn / (dfdx'*dfdx)
          call gop(num1,wrk1,'+  ',1)
          call gop(den1,wrk1,'+  ',1)
          bk = num1/den1
-  
+
          do k=1,ldim
          do j=1,nelv*(2**ldim)
          do i=1,2**ldim
@@ -417,7 +420,7 @@ c  get Bk = dfdxn'*dfdxn / (dfdx'*dfdx)
          enddo
          enddo
          enddo
-        
+
          if (mod(iter,5).eq.0.or.iter.eq.itmax) then
           call x8toxm(xmc,x8)
           call x8toxm(ymc,y8)
@@ -452,7 +455,7 @@ c  get Bk = dfdxn'*dfdxn / (dfdx'*dfdx)
       return
       end
 c-----------------------------------------------------------------------
-      subroutine 
+      subroutine
      $   dolsalpha(xe,ye,ze,sk,alpha,hval,siz,opt,mlt,gshl,nodmask,iter)
       include 'SIZE'
       include 'TOTAL'
@@ -530,13 +533,13 @@ c-----------------------------------------------------------------------
         endif
       enddo
 
-      if (tstop.eq.1) then 
+      if (tstop.eq.1) then
         alpha = alphasav
         if (nid.eq.0.and.loglevel.ge.3) write(6,101) iter,f2
   101   format(i5,' glob_phi ',1p1e13.6)
       else
         alpha = 0.
-        if (nid.eq.0.and.loglevel.ge.4) 
+        if (nid.eq.0.and.loglevel.ge.4)
      $       write(6,*) 'SMOOTHER-line-search alpha set to 0'
       endif
 
@@ -555,7 +558,7 @@ c-----------------------------------------------------------------------
 
       fl = 0.
       do e=1,nelv*(2**ldim)
-        if (opt.eq.1) 
+        if (opt.eq.1)
      $     call get_jac(f1,xe(1,e),ye(1,e),ze(1,e),siz,e,1)
         if (opt.eq.2) call get_len(f1,xe(1,e),ye(1,e),ze(1,e),siz)
         fl = fl+f1
@@ -578,7 +581,7 @@ c-----------------------------------------------------------------------
       character*3 dcbc(nbc)
       real dscale,dmax,alpha,beta,dum2
 
-      if (nid.eq.0.and.loglevel.ge.5) 
+      if (nid.eq.0.and.loglevel.ge.5)
      $            write(6,*) 'calculate distance function'
 
       call rone (dd1,lx1*ly1*lz1*nelv)
@@ -602,7 +605,7 @@ c      call outpost(dd1,vy,vz,pr,t,'   ')
       nxyz = lx1*ly1*lz1
       if (ldim.eq.2) then
        do i=1,nelv
-         call int_fine_to_coarse_2d(dd1((i-1)*nxyz+1),ddc(1,i),lx1,lxc) 
+         call int_fine_to_coarse_2d(dd1((i-1)*nxyz+1),ddc(1,i),lx1,lxc)
        enddo
       else
        do i=1,nelv
@@ -622,8 +625,8 @@ c
       else
           call exitti('Please set the funtype to 0 or 1$',funtype)
       endif
-        
-      if (nid.eq.0.and.loglevel.ge.5) 
+
+      if (nid.eq.0.and.loglevel.ge.5)
      $            write(6,'(A,1p1e13.4)') dmax,'max disfun'
 
       return
@@ -752,8 +755,8 @@ c     START BY LOOPING OVER EACH ELEMENT AND THEN OVER EACH EDGE
 
       n      = lxc*lyc*lzc*nelv
       call rone  (vcmask,n)
-      do e=1,nelv                
-      do f=1,nfaces              
+      do e=1,nelv
+      do f=1,nfaces
        if (cbc(f,e,1).ne.'E  ') call facev (vcmask,e,f,0.0,lxc,lyc,lzc)
       enddo
       enddo
@@ -855,7 +858,7 @@ c-----------------------------------------------------------------------
             x1(2) = 0.5*(x0(2)+x2(2))
             x1(3) = 0.5*(x0(3)+x2(3))
          endif
-         
+
 
       nx = x1(1)
       ny = x1(2)
@@ -878,47 +881,47 @@ c-----------------------------------------------------------------------
       integer siz,opt,vertex,gshl,e,eg,e0,f
       real par(siz)
       real f1,fl,gl,f2,h
- 
+
       f1 = 0
       do e=1,nelv*(2**ldim)
-      if (opt.eq.1) 
+      if (opt.eq.1)
      $    call get_jac(fl,x8(1,e),y8(1,e),z8(1,e),siz,e,0)
-      if (opt.eq.2) call get_len(fl,x8(1,e),y8(1,e),z8(1,e),siz)  
+      if (opt.eq.2) call get_len(fl,x8(1,e),y8(1,e),z8(1,e),siz)
          f1 = f1+fl
          call copy(xt,x8(1,e),2**ldim)
          call copy(yt,y8(1,e),2**ldim)
          call copy(zt,z8(1,e),2**ldim)
          do j=1,2**ldim
-            xt(j) = x8(j,e)+h 
+            xt(j) = x8(j,e)+h
       if (opt.eq.1) call get_jac(gl,xt,yt,zt,siz,e,1)
       if (opt.eq.2) call get_len(gl,xt,yt,zt,siz)
-            xt(j) = x8(j,e)-h 
+            xt(j) = x8(j,e)-h
       if (opt.eq.1) call get_jac(fl,xt,yt,zt,siz,e,1)
       if (opt.eq.2) call get_len(fl,xt,yt,zt,siz)
-            xt(j) = x8(j,e) 
+            xt(j) = x8(j,e)
            dfdx(j,e,1) = (gl-fl)/(2.*h)
 
-            yt(j) = y8(j,e)+h 
+            yt(j) = y8(j,e)+h
       if (opt.eq.1) call get_jac(gl,xt,yt,zt,siz,e,2)
       if (opt.eq.2) call get_len(gl,xt,yt,zt,siz)
-            yt(j) = y8(j,e)-h 
+            yt(j) = y8(j,e)-h
       if (opt.eq.1) call get_jac(fl,xt,yt,zt,siz,e,2)
       if (opt.eq.2) call get_len(fl,xt,yt,zt,siz)
-            yt(j) = y8(j,e) 
+            yt(j) = y8(j,e)
            dfdx(j,e,2) = (gl-fl)/(2.*h)
 
             if (ldim.eq.3) then
-             zt(j) = z8(j,e)+h 
+             zt(j) = z8(j,e)+h
       if (opt.eq.1) call get_jac(gl,xt,yt,zt,siz,e,3)
       if (opt.eq.2) call get_len(gl,xt,yt,zt,siz)
-             zt(j) = z8(j,e)-h 
+             zt(j) = z8(j,e)-h
       if (opt.eq.1) call get_jac(fl,xt,yt,zt,siz,e,3)
       if (opt.eq.2) call get_len(fl,xt,yt,zt,siz)
-             zt(j) = z8(j,e) 
+             zt(j) = z8(j,e)
            dfdx(j,e,ldim) = (gl-fl)/(2.*h)
             endif
-          enddo 
-      enddo 
+          enddo
+      enddo
 
       call fgslib_gs_op(gshl,dfdx(1,1,1),1,1,0)
       call fgslib_gs_op(gshl,dfdx(1,1,2),1,1,0)
@@ -932,7 +935,7 @@ c-----------------------------------------------------------------------
       subroutine get_jac(val,x,y,z,siz,el,dire)
       include 'SIZE'
       include 'TOTAL'
-c     This routine compiles the jacobian matrix and then does the 
+c     This routine compiles the jacobian matrix and then does the
 c     frobenius norm of the matrix times that of the inverse
       integer i,j,k,siz,el,dire
 
@@ -944,13 +947,13 @@ c     frobenius norm of the matrix times that of the inverse
       integer bzindx(24),czindx(24)
       integer penalty
       SAVE bzindx
-      DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8, 
+      DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8,
      $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
 c     bzindx tells which node is node connected to in r,s,t direction
-c     example: node 1 is connected to 2,3,5; 2 to 1,4,6 and so on  
+c     example: node 1 is connected to 2,3,5; 2 to 1,4,6 and so on
       SAVE czindx
       DATA czindx / 1,1,1,  -1,1,1, 1,-1,1, -1,-1,1,
-     $              1,1,-1, -1,1,-1, 1,-1,-1, -1,-1,-1 / 
+     $              1,1,-1, -1,1,-1, 1,-1,-1, -1,-1,-1 /
 c     this tells which node is to be subtracted.
 
       if (siz.ne.2**ldim) then
@@ -965,17 +968,17 @@ c     this tells which node is to be subtracted.
          ind2 = ind1+j
             jm(1,j) = 0.5*czindx(ind2)*(x(bzindx(ind2))-x(i))
             jm(2,j) = 0.5*czindx(ind2)*(y(bzindx(ind2))-y(i))
-            if (ldim.eq.3) 
+            if (ldim.eq.3)
      $      jm(ldim,j) = 0.5*czindx(ind2)*(z(bzindx(ind2))-z(i))
         enddo
-c     jacobian matrix has been calculated at this point. 
+c     jacobian matrix has been calculated at this point.
 c     now calculate determinant
        if (ldim.eq.3) then
-         jac(i)=jm(1,1)*(jm(2,2)*jm(ldim,ldim)-jm(2,ldim)*jm(ldim,2))+ 
+         jac(i)=jm(1,1)*(jm(2,2)*jm(ldim,ldim)-jm(2,ldim)*jm(ldim,2))+
      $          jm(1,ldim)*(jm(2,1)*jm(ldim,2)-jm(2,2)*jm(ldim,1))   +
      $          jm(1,2)*(jm(2,ldim)*jm(ldim,1)-jm(2,1)*jm(ldim,ldim))
         else
-           jac(i)=jm(1,1)*jm(2,2)-jm(2,1)*jm(1,2) 
+           jac(i)=jm(1,1)*jm(2,2)-jm(2,1)*jm(1,2)
         endif
 c      calculate inverse matrix
        if (ldim.eq.3) then
@@ -986,7 +989,7 @@ c      calculate inverse matrix
          jin(1,2) = jm(1,ldim)*jm(ldim,2)-jm(ldim,ldim)*jm(1,2)
          jin(2,2) = jm(1,1)*jm(ldim,ldim)-jm(ldim,1)*jm(1,ldim)
          jin(ldim,2) = jm(1,2)*jm(ldim,1)-jm(ldim,2)*jm(1,1)
-       
+
          jin(1,ldim) = jm(1,2)*jm(2,ldim)-jm(2,2)*jm(1,ldim)
          jin(2,ldim) = jm(1,ldim)*jm(2,1)-jm(2,ldim)*jm(1,1)
          jin(ldim,ldim) = jm(1,1)*jm(2,2)-jm(2,1)*jm(1,2)
@@ -997,15 +1000,15 @@ c      calculate inverse matrix
          jin(1,2) = -jm(1,2)
          jin(2,2) = jm(1,1)
        endif
-       
+
        dumc = 1/jac(i)
        call cmult(jin,dumc,ldim**2) !scale inverse by inv det
-  
+
        call rzero(frn,ldim**2)
        call col3(frn,jm,jm,ldim**2) !square the entries
        sum1 = vlsum(frn,ldim**2)
        fr1 = SQRT(sum1)           !squareroot
-             
+
        call rzero(frn,ldim**2)
        call col3(frn,jin,jin,ldim**2)
        sum1 = vlsum(frn,ldim**2)
@@ -1201,7 +1204,7 @@ c-----------------------------------------------------------------------
       integer z,e,f,gshl,lapinv,kerr,gshlc
       real xbar,ybar,zbar,sfac
 
-      if (nid.eq.0.and.loglevel.ge.2) 
+      if (nid.eq.0.and.loglevel.ge.2)
      $    write(6,*) 'laplacian smoothing started'
 
       n    = 2**ldim
@@ -1229,7 +1232,7 @@ c-----------------------------------------------------------------------
          call col2(dyy,dis,n2)
          call dsavg_general(dyy,mlt,gshl)
          call add2(y8,dyy,n2)
-        
+
          if (ldim.eq.3) then
           call col2(dzz,nodmask,n2)
           call col2(dzz,dis,n2)
@@ -1264,7 +1267,7 @@ c-----------------------------------------------------------------------
       else
        call genbackupmesh
       endif
-       
+
       return
       end
 c-----------------------------------------------------------------------
@@ -1277,7 +1280,7 @@ c-----------------------------------------------------------------------
 
       call fgslib_gs_op(gshl,u,1,1,0) ! '+'
       call col2(u,mlt,(2**ldim)*nelv*(2**ldim))
-      
+
       return
       end
 c-----------------------------------------------------------------------
@@ -1361,7 +1364,7 @@ c-----------------------------------------------------------------------
       INCLUDE 'INPUT'
       INCLUDE 'SOLN'
 C
-C     Note: Subroutines GLMAPM1, GEODAT1, AREA2, SETWGTR and AREA3 
+C     Note: Subroutines GLMAPM1, GEODAT1, AREA2, SETWGTR and AREA3
 C           share the same array structure in Scratch Common /SCRNS/.
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
       parameter (nxc=3,nyc=3,nzc=1+(ldim-2)*(nxc-1))
@@ -1439,7 +1442,7 @@ C
          if (ierr.ne.0) kerr = kerr+1
   500 CONTINUE
       kerr = iglsum(kerr,1)
-      
+
       RETURN
       END
 C-----------------------------------------------------------------------
@@ -1661,6 +1664,12 @@ c
       character*6  name6
 
       logical ifwt,ifvec
+
+      ! reset important vars and flags
+
+      ifield = 1
+      imesh = 1
+      ifflow = .true.
 
       call chcopy(cname,name,4)
       call capit (cname,4)

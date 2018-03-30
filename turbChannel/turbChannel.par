@@ -17,16 +17,13 @@ writeInterval = 100.0
 
 userParam01 = 100    # start time collecting statistics
 userParam02 = 20     # writeInterval 1D statistics 
-userParam03 = 1      # drive flow with pressure gradient instead of body force
 
-#dealiasing = no
-
-filtering = hpfrt # set to none in case of Smagorinski 
+filtering = hpfrt
 filterWeight = 10
 filterCutoffRatio = 0.9 
 
 [PROBLEMTYPE]
-variableProperties = no # set to yes in case of Smagorinski
+variableProperties = no
 equation = incompNS
 
 [PRESSURE]

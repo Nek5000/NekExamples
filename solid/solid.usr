@@ -43,7 +43,8 @@ c-----------------------------------------------------------------------
       ifxyo = .true.
       call outpost(vx,vy,vz,pr,t,'   ')
 
-      call exitti ('Done elast solve$',nelv)
+      if (nio.eq.0) write(*,*) 'Done elast solve; nelv',nelv
+      call exitt0
 
       return
       end
