@@ -8,15 +8,14 @@ writeInterval = 20000
 dealiasing = no
 timeStepper = BDF3
 
-#Reynolds number
-userParam01 = 4.0e4
-
 [PROBLEMTYPE]
 equation = incompNS
 variableProperties = yes
 stressFormulation = yes
 
 [VELOCITY]
+density = 1.0
+viscosity = -40000.0
 residualTol = 1.0e-7
 residualProj = no
 
@@ -25,13 +24,20 @@ residualTol = 1.0e-6
 residualProj = yes
 
 [TEMPERATURE]
+solver = none
+rhoCp = 1.0
+conductivity = -40000.0
 residualTol = 1.0e-7
 residualProj = no 
 
 [SCALAR01]
+density = 1.0
+diffusivity = -40000.0
 residualTol = 1.0e-7
 residualProj = no 
 
 [SCALAR02]
+density = 1.0
+diffusivity = -40000.0
 residualTol = 1.0e-7
 residualProj = no 

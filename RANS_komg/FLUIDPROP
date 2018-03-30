@@ -1,4 +1,0 @@
-      real dens0,visc0,thcond0,thcap0,Pr_t,mu_t,wd
-
-      common /FLUIDPROP/ dens0,visc0,thcond0,thcap0,Pr_t
-     & ,mu_t(lx1,ly1,lz1,lelv),wd(lx1,ly1,lz1,lelv)
