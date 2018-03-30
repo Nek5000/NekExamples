@@ -1,0 +1,38 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+numSteps = 10000
+dt = 5e-03
+writeInterval = 1000
+
+userparam01=0.25  # Frequency of Heat pulsation
+userparam02=0.50  # Amplitude of Heat pulsation
+
+[PROBLEMTYPE]
+equation = incompNS
+variableProperties = yes
+
+[PRESSURE]
+residualTol = 1e-06
+residualProj = no
+
+[VELOCITY]
+residualTol = 1e-08
+density = 1
+viscosity = 0.5
+
+[TEMPERATURE] # temperature with Hmholtz 
+conjugateHeatTransfer = yes 
+rhoCp = 1.0
+conductivity = 0.5
+residualTol = 1e-08
+
+[SCALAR01] # temperature with CVODE
+conjugateHeatTransfer = yes 
+solver = cvode
+absoluteTol = 1e-08
+
+[CVODE]
+relativeTol = 1e-06
+dtmax = 0  # set to dt to allow for a 1:1 comparison between Helmholtz and CVODE.
