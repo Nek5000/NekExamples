@@ -1,9 +1,12 @@
-c-----------------------------------------------------------------------
-c Problem dependent constants:
+c- CASE PARAMETERS------------------------------------------------------
 
-#define lpart 4000
+#define INTP_NMAX 4000
+#define LPART INTP_NMAX /* max number of particles per MPI rank */
 
+c- INCLUDES ------------------------------------------------------------
+#include "intp_usr.f"
 c-----------------------------------------------------------------------
+
       subroutine uservp (ix,iy,iz,eg)
       include 'SIZE'
       include 'TOTAL'
@@ -188,8 +191,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      common /rparts/ pts(ldim,lpart),vel(ldim,2:3,lpart)
-      common /iparts/ npart,partid(lpart)
+      common /rparts/ pts(ldim,LPART),vel(ldim,2:3,LPART)
+      common /iparts/ npart,partid(LPART)
       integer partid
 
       ifto = .true.
@@ -283,16 +286,12 @@ c
 
       real uvw(ldim,n),xyz(ldim,n)
 
-      parameter(nmax=lpart,nfldmx=ldim) 
+      parameter(nmax=LPART,nfldmx=ldim) 
 
       common /rwk_intp/ 
      $       fwrk(lx1*ly1*lz1*lelt,nfldmx),
-     $       rwk(nmax,ldim+1),
      $       fpts(ldim*nmax),
      $       pts(ldim*nmax)
-      common /iwk_intp/ 
-     $       iwk(nmax,3)
-
 
       integer icalld,e
       save    icalld
@@ -312,19 +311,19 @@ c
          if (if3d) pts(i + n*2) = xyz(3,i)
       enddo
 
-      if (icalld.eq.0) then		! interpolation setup
+      if (icalld.eq.0) then
         icalld = 1
         tolin  = 1.e-8
-        call intp_setup(tolin)
+        nmsh   = lx1 
+        call intp_setup(tolin,nmsh)
       endif
 
       ! pack working array
       call opcopy(fwrk(1,1),fwrk(1,2),fwrk(1,3),vx,vy,vz)
 
       ! interpolate
-      call intp_do(fpts,fwrk,ndim,
-     $             pts(1),pts(1+n),pts(2*n+1),n,
-     $             iwk,rwk,nmax,.true.)
+      call intp_nfld(fpts,fwrk,ndim,pts(1),pts(1+n),pts(2*n+1),
+     $               n,.true.)
 
       do i=1,n
          uvw(1,i) = fpts(i)
@@ -342,8 +341,8 @@ c     Lagrangian particle advection
       include 'SIZE'
       include 'TOTAL'
 
-      real x(ldim,lpart),vh(ldim,2:3,lpart),partv(lpart)
-      common /scruz/ u1(ldim,lpart)
+      real x(ldim,LPART),vh(ldim,2:3,LPART),partv(LPART)
+      common /scruz/ u1(ldim,LPART)
 
       common /padvc/ xmx(3,0:2)
 
@@ -388,10 +387,10 @@ c----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
       
-      real x(ldim,lpart),partv(lpart)
-      integer partid(lpart)
+      real x(ldim,LPART),partv(LPART)
+      integer partid(LPART)
 
-      common /scrns/ x_tmp(ldim+1,lpart),work(ldim+1,lpart)
+      common /scrns/ x_tmp(ldim+1,LPART),work(ldim+1,LPART)
 
       character*128 fname
 
@@ -411,18 +410,18 @@ c----------------------------------------------------------------------
       min_points = iglmin(partid,npart)
       max_points = iglmax(partid,npart)
       n_active   = max_points - min_points + 1
-      npass = n_active / lpart
-      if (n_active.gt.npass*lpart) npass = npass+1
+      npass = n_active / LPART
+      if (n_active.gt.npass*LPART) npass = npass+1
       ilast=min_points-1
 
       do ipass=1,npass
 
-        mpart = min(lpart,max_points-ilast)
+        mpart = min(LPART,max_points-ilast)
         i0    = ilast
         i1    = i0 + mpart
         ilast = i1
 
-        call rzero(x_tmp,(ldim+1)*lpart)
+        call rzero(x_tmp,(ldim+1)*LPART)
         do ii=1,npart
           if (i0.lt.partid(ii).and.partid(ii).le.i1) then
             i = partid(ii)-i0
@@ -431,7 +430,7 @@ c----------------------------------------------------------------------
           endif
         enddo
 
-        call gop(x_tmp,work,'+  ',(ldim+1)*lpart)
+        call gop(x_tmp,work,'+  ',(ldim+1)*LPART)
         if (nid.eq.0) write(72,2)((x_tmp(k,i),k=1,ldim+1),i=1,mpart)
  2      format(1p4e17.9)
         
@@ -447,8 +446,8 @@ C-----------------------------------------------------------------------
       include 'TOTAL'
       include 'mpif.h'
 
-      common /rparts/ pts(ldim,lpart),vel(ldim,2:3,lpart),partv(lpart)
-      common /iparts/ npart,partid(lpart)
+      common /rparts/ pts(ldim,LPART),vel(ldim,2:3,LPART),partv(LPART)
+      common /iparts/ npart,partid(LPART)
       integer partid
 
       real ptime           ! Time the particle motion
@@ -487,8 +486,8 @@ c
       include 'SIZE'
       include 'TOTAL'
 
-      real x(ldim,lpart),partv(lpart)
-      integer partid(lpart)
+      real x(ldim,LPART),partv(LPART)
+      integer partid(LPART)
 
       integer lcount,icount
       save    lcount,icount
@@ -496,7 +495,7 @@ c
 
       if (mod(istep,ipstep).ne.0) return
 
-      llpart = lpart
+      lLPART = LPART
 
       dx = 0.05
       dy = .025
@@ -518,7 +517,7 @@ c
 
          if (mod(k,np).eq.nid) then ! Inject particle _only_ on this processor
             l=l+1  ! local count
-            if (l.gt.llpart) l=1 ! Retire old particles by overwriting their data
+            if (l.gt.lLPART) l=1 ! Retire old particles by overwriting their data
             x(1,l) = xp
             x(2,l) = yp
             x(3,l) = zp
