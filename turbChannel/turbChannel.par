@@ -3,6 +3,7 @@
 #
 [GENERAL] 
 #startFrom = restart.fld 
+
 stopAt = endTime
 endTime = 200 
 

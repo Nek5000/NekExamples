@@ -27,7 +27,7 @@ c
       parameter (toteq=1)              ! max number of conserved scalars in cmt
       parameter (nsessmax=1)           ! max sessions
       parameter (lxo=lx1)              ! max grid size on output (lxo>=lx1)
-      parameter (lelx=16,lely=12,lelz=8) ! global tensor mesh dimensions
+      parameter (lelx=40,lely=40,lelz=40) ! global tensor mesh dimensions
       parameter (mxprev=30,lgmres=20)  ! max dim of projection & Krylov space
       parameter (lorder=2)             ! max order in time
 
