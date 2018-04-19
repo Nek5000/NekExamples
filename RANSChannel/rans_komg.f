@@ -182,8 +182,8 @@ c ---------------------
         do i=1,lxyz
 
           rho = param(1) ! vtrans(i,1,1,e,1)
-          nu  = param(2) ! vdiff (i,1,1,e,1)
-          mu  = rho * nu
+          mu  = param(2) ! vdiff (i,1,1,e,1)
+          nu  = mu/rho
 
 c limits for k, omega
 
@@ -518,8 +518,8 @@ c ---------------------
         do i=1,lxyz
 
           rho = param(1) ! vtrans(i,1,1,e,1)
-          nu  = param(2) ! vdiff (i,1,1,e,1)
-          mu  = rho * nu
+          mu  = param(2) ! vdiff (i,1,1,e,1)
+          nu  = mu/rho
 
 c limits for k, omega
 
@@ -871,8 +871,8 @@ c ---------------------
         do i=1,lxyz
 
           rho = param(1) ! vtrans(i,1,1,e,1)
-          nu  = param(2) ! vdiff (i,1,1,e,1)
-          mu  = rho * nu
+          mu  = param(2) ! vdiff (i,1,1,e,1)
+          nu  = mu/rho
 
 c limits for k, omega
 
@@ -1239,8 +1239,8 @@ c ---------------------
         do i=1,lxyz
 
           rho = param(1) ! vtrans(i,1,1,e,1)
-          nu  = param(2) ! vdiff (i,1,1,e,1)
-          mu  = rho * nu
+          mu  = param(2) ! vdiff (i,1,1,e,1)
+          nu  = mu/rho
 
 c limits for k, omega
 
@@ -1650,8 +1650,8 @@ c ---------------------
         do i=1,lxyz
 
           rho = param(1) ! vtrans(i,1,1,e,1)
-          nu  = param(2) ! vdiff (i,1,1,e,1)
-          mu  = rho * nu
+          mu  = param(2) ! vdiff (i,1,1,e,1)
+          nu  = mu/rho
 
 c limits for k, omega
 
@@ -1930,8 +1930,8 @@ c ---------------------
         do i=1,lxyz
 
           rho = param(1) ! vtrans(i,1,1,e,1)
-          nu  = param(2) ! vdiff (i,1,1,e,1)
-          mu  = rho * nu
+          mu  = param(2) ! vdiff (i,1,1,e,1)
+          nu  = mu/rho
 
 c limits for k, omega
 
@@ -2211,14 +2211,14 @@ c
       integer i,j,k,e
       real    nu
 
-      real dudx(lx1,ly1,lz1,lelv), dudy(lx1,ly1,lz1,lelv)
-     $   , dudz(lx1,ly1,lz1,lelv), temt(lx1,ly1,lz1,lelv)
+c     real dudx(lx1,ly1,lz1,lelv), dudy(lx1,ly1,lz1,lelv)
+c    $   , dudz(lx1,ly1,lz1,lelv), temt(lx1,ly1,lz1,lelv)
 
       real kv_min,omeg_max
 
       omeg_max   = coeffs(15)
       beta0      = coeffs(6)
-      nu  = param(2)
+      nu  = param(2)/param(1)
       ntot1 = nx1*ny1*nz1*nelv
 
       betainf_str = coeffs(11)
@@ -2233,17 +2233,20 @@ c     write(*,*) 'Cf, beta, ywd_min is ', Cfcon, betainf_str, yw_min
       call opdssum(dfdx_omegb,dfdy_omegb,dfdz_omegb)
       call opcolv (dfdx_omegb,dfdy_omegb,dfdz_omegb,binvm1)
 
-      call gradm1 (dudx,      dudy      ,dudz,  dfdx_omegb)
-      call copy   (delsqf_omegb, dudx, ntot1)
-      call gradm1 (dudx,      dudy      ,dudz,  dfdy_omegb)
-      call add2   (delsqf_omegb, dudy, ntot1)
-      call gradm1 (dudx,      dudy      ,dudz,  dfdz_omegb)
-      call add2   (delsqf_omegb, dudz, ntot1)
+c     call gradm1 (dudx,      dudy      ,dudz,  dfdx_omegb)
+c     call copy   (delsqf_omegb, dudx, ntot1)
+c     call gradm1 (dudx,      dudy      ,dudz,  dfdy_omegb)
+c     call add2   (delsqf_omegb, dudy, ntot1)
+c     call gradm1 (dudx,      dudy      ,dudz,  dfdz_omegb)
+c     call add2   (delsqf_omegb, dudz, ntot1)
 
       toll = 1.0e-08
 
-      call vdot3  (delfsq_omegb,dfdx_omegb,dfdy_omegb,dfdz_omegb 
-     $                         ,dfdx_omegb,dfdy_omegb,dfdz_omegb,ntot1)
+c     call vdot3  (delfsq_omegb,dfdx_omegb,dfdy_omegb,dfdz_omegb 
+c    $                         ,dfdx_omegb,dfdy_omegb,dfdz_omegb,ntot1)
+
+      call rzero  (delsqf_omegb, ntot1)
+      call rone   (delfsq_omegb, ntot1)
 
       do e = 1,nelv
       do k = 1,nz1
