@@ -154,6 +154,7 @@ c-----------------------------------------------------------------------
       call y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
       if(nio.eq.0) then
         write(6,256)'y_p+',ypmin,ypmax,ypave
+        write(6,256)'u_tau',utmin,utmax,utave
         write(6,*)
       endif
 
