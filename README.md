@@ -44,6 +44,11 @@ Some examples provide additional pdf files for a more complete description.
   * __Features__ :
     * Conjugate heat transfer
     * Scalar solve with CVODE
+* `conj_ht_frz`
+  * __Test name__ :  ConjHtFrz
+  * __Purpose__ : ConjHT with frozen velocity field
+  * __Features__ :
+    * No velocity solve
 * `cyl_restart`
   * __Test name__ : CylRestart_C, CylRestart_P
   * __Purpose__ : Performing a full restart

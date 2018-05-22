@@ -1,0 +1,138 @@
+c-----------------------------------------------------------------------
+c   
+c     This case is identical to the CHT case. But it runs with a frozen
+c     velocity and the heat load is unsteady.
+c
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      if (ifield.eq.1) then
+         utrans  = param(1)
+         udiff   = param(2)
+      else
+         utrans  = param(7)        ! thermal properties
+         udiff   = param(8)
+         if (ieg .gt. nelgv) then  ! properties in the solid
+            udiff   = 0.1*param(8) ! conductivity
+            utrans  = 1.0
+         endif
+      endif
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+ 
+      pi = 4.0*atan(1.0)
+      omega = 2*pi*uparam(1)
+      amp = uparam(2)
+
+      ! Adding a sinusoidal to the heat deposition in the solid
+      qvol = 0.0
+      if (ieg.gt.nelgv) qvol = 1.0+amp*sin(omega*time)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      include 'SIZE'
+      include 'TOTAL'
+
+      common /scrns/ w1   (lx1,ly1,lz1,lelt)
+     $              ,terr (lx1,ly1,lz1,lelt)
+
+      nv = nx1*ny1*nz1*nelv
+      nt = nx1*ny1*nz1*nelt
+ 
+      ! compare the two scalars
+      if (mod(istep,100).eq.0) then
+         call sub3(terr,t,t(1,1,1,1,2),nt)
+         terrmaxa = glamax(terr,nt)
+         call invcol2(terr,t,nt)
+         terrmaxr = glamax(terr,nt)
+
+         if (nid.eq.0) write(6,1) istep,time,terrmaxa,terrmaxr
+   1     format(i9,1p3e12.5,' terr')
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,ieg)
+c     NOTE ::: This subroutine MAY NOT be called by every process
+
+C     Set boundary conditions
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ux   = 4.0*y*(1. - y)
+      uy   = 0.0
+      uz   = 0.0
+
+      temp = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+
+C     Set initial conditions
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ux   = 4.0*y*(1. - y)
+      uy   = 0.0
+      uz   = 0.0
+      temp = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+
+      include 'SIZE'
+      include 'TOTAL'
+
+c     TURN off velocity solve (forzen velocity)
+c     This should be done here to ensure the velocity is properly
+c     initialized in the lag arrays
+      ifflow = .false.
+
+      return
+      end
+c-----------------------------------------------------------------------
