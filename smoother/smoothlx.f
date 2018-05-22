@@ -1,3 +1,28 @@
+      subroutine meshsmoother
+      include 'SIZE'
+      include 'TOTAL'
+ccc   Call the actual smoother routine
+      parameter(ndfsbc=1)         !number of boundary conditions
+      character*3 dfsbc(ndfsbc)
+      save        dfsbc
+      data        dfsbc /'W  '/  !BCs listed here
+
+      idftyp = 0      !distance function - 0 -> exponential, 1-> tanh
+      alpha = 15.     !Input for wall distance function 
+      beta  = 0.1     !
+
+      nouter = 50      !total loops around laplacian and optimizer smoothing
+      nlap = 20        !number of laplacian iterations in each loop
+      nopt = 20        !number of optimization iterations in each loop
+
+      mtyp = 1         !metric type
+
+      call smoothmesh(mtyp,nouter,nlap,nopt,ndfsbc,dfsbc,idftyp,alpha,
+     $                 beta)
+     
+      return
+      end
+c-----------------------------------------------------------------------
       subroutine smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,
      $      idftyp,alpha,beta)
       include 'SIZE'
@@ -46,7 +71,7 @@ c     Copy original mesh from xm1 to dxm
 ccc   Generate interpolators for going to lx1 = 3
       call gen_int_lx1_to_3
 
-ccc     COPY THE ORIGINAL MESH TO dx,dy,dz vectors
+ccc   COPY THE ORIGINAL MESH TO dx,dy,dz vectors
       call copy(dx,xmc,lxc*lyc*lzc*nelv)
       call copy(dy,ymc,lxc*lyc*lzc*nelv)
       if (ldim.eq.3) call copy(dz,zmc,lxc*lyc*lzc*nelv)
@@ -61,12 +86,6 @@ ccc   COPY THE ORIGINAL MESH FOR BACKUP IF MESH BECOMES INVERTED
 
 ccc   CREATE MASK
       call genmask(nodmask,mlt,gshl,mltc,gshlc)
-
-ccc   MASK ELEMENT LAYERS
-c     e is the number of layers of elements right next to 'w' 
-c     boundary condition
-c     e = 3
-c     call masklayers(nodmask,e)
 
 ccc   CONSTRUCT WEIGHT FUNCTION
       call disfun(dis,idftyp,alpha,beta,dcbc,nbc)
@@ -112,7 +131,7 @@ ccc   START SMOOTHING HERE
     
       etend=dnekclock()
 ccc   RESTORE BOUNDARY LAYER
-      call restbndrlayer(dx,dy,dz,dis)  !dx,dy,dz is now actually smooth-coarse
+      call restbndrlayer(dx,dy,dz,dis,mltc,gshlc)  !dx,dy,dz is now actually smooth-coarse
       call fix_geom
 
 ccc   Solve the Laplace's equation to morph the interior mesh to match
@@ -353,7 +372,8 @@ c-----------------------------------------------------------------------
 
       integer iter,gshl,siz,eg,opt,optinv,kerr,gshlc
       real f2,lambda,num,den,scale2
-      real alpha,hval,bk,num1,den1,wrk1
+      real alpha,bk,num1,den1,wrk1
+      real hval(2**ldim,lelv*(2**ldim))
 
       optinv = 0 !initialize to 0
 
@@ -366,8 +386,8 @@ c-----------------------------------------------------------------------
       n2 = nelv*(2**ldim)*n1
 
       call get_nodscale(hval,x8,y8,z8,gshl)
-      if (nid.eq.0.and.loglevel.ge.4) 
-     $   write(6,'(A,1p1e13.5)') 'perturbation amount is ',hval
+c      if (nid.eq.0.and.loglevel.ge.4) 
+c     $   write(6,'(A,1p1e13.5)') 'perturbation amount is ',hval
 
       call gradf(f2,dfdx,x8,y8,z8,mlt,gshl,siz,opt,hval)
       do i=1,ldim
@@ -378,7 +398,7 @@ c-----------------------------------------------------------------------
       do iter=1,itmax
 c  do line search at this point
          call
-     $  dolsalpha(x8,y8,z8,sk,alpha,hval,siz,opt,mlt,gshl,nodmask,iter)
+     $  dolsalpha(x8,y8,z8,sk,alpha,siz,opt,mlt,gshl,nodmask,iter)
 
          if (alpha.eq.0) goto 5002
 
@@ -399,8 +419,8 @@ c  get Bk = dfdxn'*dfdxn / (dfdx'*dfdx)
          do k=1,ldim
          do j=1,nelv*(2**ldim)
          do i=1,2**ldim
-          num1 = dfdxn(i,j,k)*dfdxn(i,j,k) + num1
-          den1 = dfdx(i,j,k)*dfdx(i,j,k) + den1
+          num1 = dfdxn(i,j,k)*mlt(i,j)*dfdxn(i,j,k) + num1
+          den1 = dfdx(i,j,k)*mlt(i,j)*dfdx(i,j,k) + den1
          enddo
          enddo
          enddo
@@ -452,7 +472,7 @@ c  get Bk = dfdxn'*dfdxn / (dfdx'*dfdx)
       end
 c-----------------------------------------------------------------------
       subroutine 
-     $   dolsalpha(xe,ye,ze,sk,alpha,hval,siz,opt,mlt,gshl,nodmask,iter)
+     $   dolsalpha(xe,ye,ze,sk,alpha,siz,opt,mlt,gshl,nodmask,iter)
       include 'SIZE'
       include 'TOTAL'
       parameter (lxc=3,lyc=3,lzc=1+(ldim-2)*(lxc-1))
@@ -473,13 +493,33 @@ c-----------------------------------------------------------------------
      $         mlt(2**ldim,lelv*(2**ldim)),
      $         sk((2**ldim),lelv*(2**ldim),ldim),
      $         jac(2**ldim,lelv*(2**ldim))
-      real hval,alpha,wrk1,f1,f2
+      real alpha,wrk1,f1,f2
       integer siz,opt,z,gshl,invflag
       integer n1,n2,chk1,chk2,tstop,maxcount,iter
 
-      alpha = 1.0
+      common /lsinfo / lssteps
+      real lssteps(5)
+      integer icalld
+      save    icalld
+      data    icalld /0/
+      integer idx
+      save    idx   
+      data    idx    /0/
+
+      if (icalld.eq.0) then
+        call rzero(lssteps,5)
+        icalld = 1
+        idx = 0
+      endif
+
+      if (idx.lt.6) then
+        alpha = 1.0
+      else
+        dumsum = vlsum(lssteps,5)
+        alpha = 2.*dumsum
+      endif
       alphasav = alpha
-      maxcount = 10
+      maxcount = 20
       chk1 = 0
       chk2 = 0
       tstop = 0
@@ -529,10 +569,22 @@ c-----------------------------------------------------------------------
         endif
       enddo
 
+      if (idx.lt.6) then
+        idx = idx+1
+        lssteps(idx) = alphasav
+      else
+        lssteps(1) = lssteps(2)
+        lssteps(2) = lssteps(3)
+        lssteps(3) = lssteps(4)
+        lssteps(4) = lssteps(5)
+        lssteps(5) = alphasav
+      endif
+
       if (tstop.eq.1) then 
         alpha = alphasav
         if (nid.eq.0.and.loglevel.ge.3) write(6,101) iter,f2
   101   format(i5,' glob_phi ',1p1e13.6)
+c        write(6,*) z,'number of ls steps'
       else
         alpha = 0.
         if (nid.eq.0.and.loglevel.ge.4) 
@@ -623,12 +675,12 @@ c
       endif
         
       if (nid.eq.0.and.loglevel.ge.5) 
-     $            write(6,'(A,1p1e13.4)') dmax,'max disfun'
+     $            write(6,'(1p1e13.4,A)') dmax,'max disfun'
 
       return
       end
 c-----------------------------------------------------------------------
-      subroutine restbndrlayer(dx,dy,dz,dis)
+      subroutine restbndrlayer(dx,dy,dz,dis,mltc,gshlc)
       include 'SIZE'
       include 'TOTAL'
 c     dis*smoothmesh + (1-dis)*original mesh
@@ -642,7 +694,10 @@ c     dis*smoothmesh + (1-dis)*original mesh
      $     dy(lxc*lyc*lzc,lelv),
      $     dz(lxc*lyc*lzc,lelv),
      $     dis((2**ldim)*lelv*(2**ldim)),
-     $     dis2(lxc,lyc,lzc,lelv)
+     $     dis2(lxc,lyc,lzc,lelv),
+     $     mltc(lxc,lyc,lzc,lelv)
+
+      integer gshlc
 
       call x8toxm(dis2,dis)
       dum2 = glamax(dis2,lxc*lyc*lzc*nelv)
@@ -669,6 +724,7 @@ c     dis*smoothmesh + (1-dis)*original mesh
       call sub2(dy,ymc,lxc*lyc*lzc*nelv)
       if (ndim.eq.3) call sub2(dz,zmc,lxc*lyc*lzc*nelv)
 
+      call fixcurs(mltc,gshlc)
       call xmctoxm1
 
       return
@@ -753,7 +809,8 @@ c     START BY LOOPING OVER EACH ELEMENT AND THEN OVER EACH EDGE
       call rone  (vcmask,n)
       do e=1,nelv                
       do f=1,nfaces              
-       if (cbc(f,e,1).ne.'E  ') call facev (vcmask,e,f,0.0,lxc,lyc,lzc)
+       if (cbc(f,e,1).ne.'E  '.and.cbc(f,e,1).ne.'   ') 
+     $ call facev (vcmask,e,f,0.0,lxc,lyc,lzc)
       enddo
       enddo
       call fgslib_gs_op(gshlc,vcmask,1,2,0)
@@ -876,7 +933,7 @@ c-----------------------------------------------------------------------
      $     zt(2**ldim)
       integer siz,opt,vertex,gshl,e,eg,e0,f
       real par(siz)
-      real f1,fl,gl,f2,h
+      real f1,fl,gl,f2,h(2**ldim,lelv*(2**ldim))
  
       f1 = 0
       do e=1,nelv*(2**ldim)
@@ -888,33 +945,33 @@ c-----------------------------------------------------------------------
          call copy(yt,y8(1,e),2**ldim)
          call copy(zt,z8(1,e),2**ldim)
          do j=1,2**ldim
-            xt(j) = x8(j,e)+h 
+            xt(j) = x8(j,e)+h(j,e) 
       if (opt.eq.1) call get_jac(gl,xt,yt,zt,siz,e,1)
       if (opt.eq.2) call get_len(gl,xt,yt,zt,siz)
-            xt(j) = x8(j,e)-h 
+            xt(j) = x8(j,e)-h(j,e) 
       if (opt.eq.1) call get_jac(fl,xt,yt,zt,siz,e,1)
       if (opt.eq.2) call get_len(fl,xt,yt,zt,siz)
             xt(j) = x8(j,e) 
-           dfdx(j,e,1) = (gl-fl)/(2.*h)
+           dfdx(j,e,1) = (gl-fl)/(2.*h(j,e))
 
-            yt(j) = y8(j,e)+h 
+            yt(j) = y8(j,e)+h(j,e) 
       if (opt.eq.1) call get_jac(gl,xt,yt,zt,siz,e,2)
       if (opt.eq.2) call get_len(gl,xt,yt,zt,siz)
-            yt(j) = y8(j,e)-h 
+            yt(j) = y8(j,e)-h(j,e) 
       if (opt.eq.1) call get_jac(fl,xt,yt,zt,siz,e,2)
       if (opt.eq.2) call get_len(fl,xt,yt,zt,siz)
             yt(j) = y8(j,e) 
-           dfdx(j,e,2) = (gl-fl)/(2.*h)
+           dfdx(j,e,2) = (gl-fl)/(2.*h(j,e))
 
             if (ldim.eq.3) then
-             zt(j) = z8(j,e)+h 
+             zt(j) = z8(j,e)+h(j,e) 
       if (opt.eq.1) call get_jac(gl,xt,yt,zt,siz,e,3)
       if (opt.eq.2) call get_len(gl,xt,yt,zt,siz)
-             zt(j) = z8(j,e)-h 
+             zt(j) = z8(j,e)-h(j,e) 
       if (opt.eq.1) call get_jac(fl,xt,yt,zt,siz,e,3)
       if (opt.eq.2) call get_len(fl,xt,yt,zt,siz)
              zt(j) = z8(j,e) 
-           dfdx(j,e,ldim) = (gl-fl)/(2.*h)
+           dfdx(j,e,ldim) = (gl-fl)/(2.*h(j,e))
             endif
           enddo 
       enddo 
@@ -1055,32 +1112,39 @@ c-----------------------------------------------------------------------
       real x8(2**ldim,lelv*(2**ldim)),
      $     y8(2**ldim,lelv*(2**ldim)),
      $     z8(2**ldim,lelv*(2**ldim))
-      real scalek,curval,xm,ym,zm,work1(1),dum(ldim),wrk1
+      real curval,xm,ym,zm,work1(1),dum,wrk1
+c      real scalek
+      real scalek(2**ldim,lelv*(2**ldim))
       integer bzindx(24),e,gshl
       DATA bzindx / 2,3,5, 1,4,6, 4,1,7, 3,2,8,
      $             6,7,1, 5,8,2, 8,5,3, 7,6,4 /
 c     bzindx tells what node is connected to what node
 
       n1 = nelv*(2**ldim)
-      curval = 1e+100
+      n2 = n1*(2**ldim)
+      curval = 1e+10
+      call rone(scalek,n2)
+      call cmult(scalek,curval,n2)
 
       do e=1,nelv*(2**ldim)
       do i=1,2**ldim
+        curval = 1e+10
         ind = (i-1)*3
       do j=1,ldim
         xm = x8(i,e)-x8(bzindx(ind+j),e)
         ym = y8(i,e)-y8(bzindx(ind+j),e)
         zm = 0.
       if (ldim.eq.3) zm = z8(i,e)-z8(bzindx(ind+j),e)
-        dum(j) = sqrt(xm*xm+ym*ym+zm*zm)
-        curval = min(dum(j),curval)
+        dum = sqrt(xm*xm+ym*ym+zm*zm)
+        curval = min(dum,curval)
       enddo
+        scalek(i,e) = curval
       enddo
       enddo
 c
-      call gop(curval,wrk1,'m  ',1)
-      fac = 1.e-1
-      scalek = fac*curval
+      fac = 1.e-2
+      call cmult(scalek,fac,n2)
+      call fgslib_gs_op(gshl,scalek,1,3,0)
 
       return
       end
@@ -1122,7 +1186,7 @@ c     setup the mask first so that it can be distribute as well
       call rone(wrkmask,lxc*lyc*lzc*nelv)
       do e=1,nelv
       do f=1,2*ldim
-         if(cbc(f,e,1).ne.'E  ')then
+         if(cbc(f,e,1).ne.'E  '.and.cbc(f,e,1).ne.'   ')then
            call facev(wrkmask,e,f,zero,lxc,lyc,lzc)
          endif
       enddo
@@ -1623,7 +1687,8 @@ C-----------------------------------------------------------------------
       call rone(mask,n)
       do e=1,nelv
       do f=1,nface
-        if (cbc(f,e,1).ne.'E  ') call facev(mask,e,f,0.,nx1,ny1,nz1)
+        if (cbc(f,e,1).ne.'E  '.and.cbc(f,e,1).ne.'   ') 
+     $     call facev(mask,e,f,0.,nx1,ny1,nz1)
       enddo
       enddo
       call dsop(mask,'mul',nx1,ny1,nz1)

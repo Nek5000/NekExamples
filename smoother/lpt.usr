@@ -87,22 +87,28 @@ c-----------------------------------------------------------------------
       subroutine usrdat2
       include 'SIZE'
       include 'TOTAL'
-      parameter(nbc=2)         !number of boundary conditions
-      character*3 dcbc(nbc)
-      save        dcbc
-      data        dcbc /'W  ','P  '/  !BCs listed here
 
-      idftyp = 0      !distance function - 0 -> exponential, 1-> tanh
-      alpha = 15.     !Input for wall distance function 
-      beta  = 0.1     !
+      call meshsmoother 
 
-      nouter = 20      !total loops around laplacian and optimizer smoothing
-      nlap = 30        !number of laplacian iterations in each loop
-      nopt = 20        !number of optimization iterations in each loop
+ccc   The default parameters for the smoother are:
+c      parameter(nbc=1)         !number of boundary conditions
+c      character*3 dcbc(nbc)
+c      save        dcbc
+c      data        dcbc /'W  '/  !BCs listed here
 
-      mtyp = 1         !metric type
+c      idftyp = 0      !distance function - 0 -> exponential, 1-> tanh
+c      alpha = 15.     !Input for wall distance function 
+c      beta  = 0.1     !
 
-      call smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,idftyp,alpha,beta)
+c      nouter = 50      !total loops around laplacian and optimizer smoothing
+c      nlap = 20        !number of laplacian iterations in each loop
+c      nopt = 20        !number of optimization iterations in each loop
+
+c      mtyp = 1         !metric type
+ccc
+ccc    NOTE:The user can modify these parameters and run the smoother 
+ccc    with modified parameters as:
+ccc    call smoothmesh(mtyp,nouter,nlap,nopt,nbc,dcbc,idftyp,alpha,beta)
 
       return
       end
