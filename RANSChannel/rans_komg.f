@@ -8,11 +8,11 @@
       data timel /-1.0/
 
       if(time.ne.timel) then
-         if(ifrans_komg_highRe)    call rans_komg_highRe_compute
+         if(ifrans_komg_stndrd)    call rans_komg_stndrd_compute
          if(ifrans_komg_lowRe)     call rans_komg_lowRe_compute
-         if(ifrans_komgSST_highRe) call rans_komgSST_highRe_compute
+         if(ifrans_komgSST_stndrd) call rans_komgSST_stndrd_compute
          if(ifrans_komgSST_lowRe)  call rans_komgSST_lowRe_compute
-         if(ifrans_komg_highRe_noreg)call rans_komg_highRe_compute_noreg
+         if(ifrans_komg_stndrd_noreg)call rans_komg_stndrd_compute_noreg
          if(ifrans_komg_lowRe_noreg)call rans_komg_lowRe_compute_noreg
          timel = time
       endif
@@ -80,7 +80,7 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
-      subroutine rans_komg_highRe_compute
+      subroutine rans_komg_stndrd_compute
 c
 c     Compute RANS source terms and diffusivities on an 
 c     element-by-element basis
@@ -759,7 +759,7 @@ c      write(*,*) 'Neg Key   ', nkey_neg, xkey_neg
       return
       end
 c-----------------------------------------------------------------------
-      subroutine rans_komgSST_highRe_compute
+      subroutine rans_komgSST_stndrd_compute
 c
 c     Compute RANS source terms and diffusivities on an 
 c     element-by-element basis
@@ -1548,7 +1548,7 @@ c      write(*,*) 'Neg Key   ', nkey_neg, xkey_neg
       return
       end
 c-----------------------------------------------------------------------
-      subroutine rans_komg_highRe_compute_noreg
+      subroutine rans_komg_stndrd_compute_noreg
 c
 c     Compute RANS source terms and diffusivities on an 
 c     element-by-element basis
@@ -2131,36 +2131,38 @@ c
      &,w4(lx1*ly1*lz1*lelv)
      &,w5(lx1*ly1*lz1*lelv)
 
-      integer n
+      integer n,wall_id
       real coeffs_in(1),ywd_in(1)
       logical ifcoeffs
 
       character*3 bcw
+      character*32 mname(6)
+
+      data mname
+     &/'regularized standard k-omega    '
+     &,'regularized low-Re k-omega      '
+     &,'regularized standard k-omega SST'
+     &,'regularized low-Re k-omega SST  '
+     &,'non-regularized standard k-omega'
+     &,'non-regularized low-Re komega   '/
 
       n=nx1*ny1*nz1*nelv
 
-      ifrans_komg_highRe       = .FALSE.
+      ifrans_komg_stndrd       = .FALSE.
       ifrans_komg_lowRe        = .FALSE.
-      ifrans_komgSST_highRe    = .FALSE.
+      ifrans_komgSST_stndrd    = .FALSE.
       ifrans_komgSST_lowRe     = .FALSE.
-      ifrans_komg_highRe_noreg = .FALSE.
+      ifrans_komg_stndrd_noreg = .FALSE.
       ifrans_komg_lowRe_noreg  = .FALSE.
-      if(model_id .eq.0) ifrans_komg_highRe       = .TRUE.
+      if(model_id .eq.0) ifrans_komg_stndrd       = .TRUE.
       if(model_id .eq.1) ifrans_komg_lowRe        = .TRUE.
-      if(model_id .eq.2) ifrans_komgSST_highRe    = .TRUE.
+      if(model_id .eq.2) ifrans_komgSST_stndrd    = .TRUE.
       if(model_id .eq.3) ifrans_komgSST_lowRe     = .TRUE.
-      if(model_id .eq.4) ifrans_komg_highRe_noreg = .TRUE.
+      if(model_id .eq.4) ifrans_komg_stndrd_noreg = .TRUE.
       if(model_id .eq.5) ifrans_komg_lowRe_noreg  = .TRUE.
 
-      if(nid.eq.0) then
-         write(*,*) 'Using model_id ', model_id 
-         write(*,*) 'ifrans_komg_highRe ', ifrans_komg_highRe
-         write(*,*) 'ifrans_komg_lowRe ', ifrans_komg_lowRe
-         write(*,*) 'ifrans_komgSST_highRe ', ifrans_komgSST_highRe
-         write(*,*) 'ifrans_komgSST_lowRe ', ifrans_komgSST_lowRe
-         write(*,*) 'ifrans_komg_highRe_noreg ',ifrans_komg_highRe_noreg
-         write(*,*) 'ifrans_komg_lowRe_noreg ',ifrans_komg_lowRe_noreg
-      endif
+      if(nid.eq.0) write(*,'(a,1x,a)') 
+     &                      'Using model:',mname(model_id+1)
       ifld_k     = ifld_k_in
       ifld_omega = ifld_omega_in
       if (ifld_omega.gt.ldimt1 .or. ifld_k.gt.ldimt1) 
@@ -2178,21 +2180,26 @@ c     $               should be >=$',ncoeffs)
             coeffs(i) =coeffs_in(i)
          enddo
       else
-         if(ifrans_komg_highRe .or. ifrans_komg_lowRe) 
+         if(ifrans_komg_stndrd .or. ifrans_komg_lowRe) 
      $                    call rans_komg_set_defaultcoeffs
-         if(ifrans_komgSST_highRe .or. ifrans_komgSST_lowRe) 
+         if(ifrans_komgSST_stndrd .or. ifrans_komgSST_lowRe) 
      $                    call rans_komgSST_set_defaultcoeffs
-         if(ifrans_komg_highRe_noreg .or. ifrans_komg_lowRe_noreg)
+         if(ifrans_komg_stndrd_noreg .or. ifrans_komg_lowRe_noreg)
      $                    call rans_komg_set_defaultcoeffs
       endif
 
 c solve for omega_pert
-      bcw    = 'W  '
-      ifld   = 1
-      if(nid.eq.0.and.wall_id.gt.0) write(*,*) 'BC for distance ', bcw
-      if(wall_id.eq.0) call copy(ywd,ywd_in,n)
-      if(wall_id.eq.1) call cheap_dist(ywd,1,bcw)
-      if(wall_id.eq.2) call distf(ywd,ifld,bcw,w1,w2,w3,w4,w5)
+      if(wall_id.eq.0) then
+        write(*,*) 'Using user supplied wall distance'
+        call copy(ywd,ywd_in,n)
+      else
+        bcw    = 'W  '
+        ifld   = 1
+        if(nid.eq.0) write(*,*) 'BC for distance ', bcw
+        if(wall_id.eq.1) call cheap_dist(ywd,ifld,bcw)
+        if(wall_id.eq.2) call distf(ywd,ifld,bcw,w1,w2,w3,w4,w5)
+        call copy(ywd_in,ywd,n)
+      endif
 
       call rans_komg_omegabase
 

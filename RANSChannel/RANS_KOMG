@@ -18,10 +18,10 @@
 
       real kSrc, omgSrc, mut, mutsk, mutso
 
-      common /ifrans/ ifrans_komg_highRe, ifrans_komg_lowRe
-     $               ,ifrans_komgSST_highRe, ifrans_komgSST_lowRe
-     $               ,ifrans_komg_highRe_noreg,ifrans_komg_lowRe_noreg
-      logical         ifrans_komg_highRe, ifrans_komg_lowRe
-     $               ,ifrans_komgSST_highRe, ifrans_komgSST_lowRe
-     $               ,ifrans_komg_highRe_noreg,ifrans_komg_lowRe_noreg
+      common /ifrans/ ifrans_komg_stndrd, ifrans_komg_lowRe
+     $               ,ifrans_komgSST_stndrd, ifrans_komgSST_lowRe
+     $               ,ifrans_komg_stndrd_noreg,ifrans_komg_lowRe_noreg
+      logical         ifrans_komg_stndrd, ifrans_komg_lowRe
+     $               ,ifrans_komgSST_stndrd, ifrans_komgSST_lowRe
+     $               ,ifrans_komg_stndrd_noreg,ifrans_komg_lowRe_noreg
 
