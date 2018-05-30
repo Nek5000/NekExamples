@@ -318,7 +318,7 @@ c	    if(nu_t.gt.5000*mu)nu_t = 5000*mu
           if (xk3.le.0)then
             f_beta_str = 1.0
           else
-            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1 + 400.0*xk3*xk3)
+            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1.0 + 400.0*xk3*xk3)
           endif
           Y_k = rho * betai_str * f_beta_str * k * omega
  
@@ -390,11 +390,12 @@ c  form 3: -(omw/om) k (del_yw/yw) \del_omp/omw
 
         call addcol3(extra_src_omega, rhoalpfr, tempv,    lxyz)
 
-c need to multiply VX, VY, VZ by variable rho (vtrans) for compressible 
+c add rho v * del_omw
         call col3   (tempv,dfdx_omegb(1,1,1,e),VX(1,1,1,e),lxyz)
         call addcol3(tempv,dfdy_omegb(1,1,1,e),VY(1,1,1,e),lxyz)
         if(if3d)
      $  call addcol3(tempv,dfdz_omegb(1,1,1,e),VZ(1,1,1,e),lxyz)
+        call col2   (tempv,vtrans(1,1,1,e,1),lxyz)
         call admcol3(extra_src_omega,tempv,f_omegb(1,1,1,e),expm,lxyz)
 
         call add2   (omgSrc(1,1,1,e), extra_src_omega           ,lxyz)
@@ -660,7 +661,7 @@ c	    if(nu_t.gt.5000*mu)nu_t = 5000*mu
           if (xk3.le.0)then
             f_beta_str = 1.0
           else
-            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1 + 400.0*xk3*xk3)
+            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1.0 + 400.0*xk3*xk3)
           endif
           Y_k = rho * betai_str * f_beta_str * k * omega
  
@@ -672,7 +673,7 @@ c g(i) is S**2 in equation sheet
 
 c Compute production of omega
           alpha = (alp_inf/alp_str) * 
-     $          ((alpha_0 + (re_t/r_w))/(1 + (re_t/r_w)))
+     $          ((alpha_0 + (re_t/r_w))/(1.0 + (re_t/r_w)))
 
           G_w = alpha*alp_str*rho*g(i)
 
@@ -733,11 +734,12 @@ c  form 3: -(omw/om) k (del_yw/yw) \del_omp/omw
 
         call addcol3(extra_src_omega, rhoalpfr, tempv,    lxyz)
 
-c need to multiply VX, VY, VZ by variable rho (vtrans) for compressible 
+c add rho v * del_omw
         call col3   (tempv,dfdx_omegb(1,1,1,e),VX(1,1,1,e),lxyz)
         call addcol3(tempv,dfdy_omegb(1,1,1,e),VY(1,1,1,e),lxyz)
         if(if3d)
      $  call addcol3(tempv,dfdz_omegb(1,1,1,e),VZ(1,1,1,e),lxyz)
+        call col2   (tempv,vtrans(1,1,1,e,1),lxyz)
         call admcol3(extra_src_omega,tempv,f_omegb(1,1,1,e),expm,lxyz)
 
         call add2   (omgSrc(1,1,1,e), extra_src_omega           ,lxyz)
@@ -1101,11 +1103,12 @@ c  form 3: -(omw/om) k (del_yw/yw) \del_omp/omw
 
         call addcol3(extra_src_omega, rhoalpfr, tempv,    lxyz)
 
-c need to multiply VX, VY, VZ by variable rho (vtrans) for compressible 
+c add rho v * del_omw
         call col3   (tempv,dfdx_omegb(1,1,1,e),VX(1,1,1,e),lxyz)
         call addcol3(tempv,dfdy_omegb(1,1,1,e),VY(1,1,1,e),lxyz)
         if(if3d)
      $  call addcol3(tempv,dfdz_omegb(1,1,1,e),VZ(1,1,1,e),lxyz)
+        call col2   (tempv,vtrans(1,1,1,e,1),lxyz)
         call admcol3(extra_src_omega,tempv,f_omegb(1,1,1,e),expm,lxyz)
 
         call add2   (omgSrc(1,1,1,e), extra_src_omega           ,lxyz)
@@ -1396,12 +1399,12 @@ c	    if(nu_t.gt.5000*mu)nu_t = 5000*mu
           if (xk3.le.0)then
             f_beta_str = 1.0
           else
-            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1 + 400.0*xk3*xk3)
+            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1.0 + 400.0*xk3*xk3)
           endif
 
 c Compute production of omega
           alpha = (alp_inf/alp_str) *
-     $          ((alpha_0 + (re_t/r_w))/(1 + (re_t/r_w)))
+     $          ((alpha_0 + (re_t/r_w))/(1.0 + (re_t/r_w)))
 
           gammai = alpha*alp_str
 
@@ -1522,11 +1525,12 @@ c  form 3: -(omw/om) k (del_yw/yw) \del_omp/omw
 
         call addcol3(extra_src_omega, rhoalpfr, tempv,    lxyz)
 
-c need to multiply VX, VY, VZ by variable rho (vtrans) for compressible 
+c add rho v * del_omw
         call col3   (tempv,dfdx_omegb(1,1,1,e),VX(1,1,1,e),lxyz)
         call addcol3(tempv,dfdy_omegb(1,1,1,e),VY(1,1,1,e),lxyz)
         if(if3d)
      $  call addcol3(tempv,dfdz_omegb(1,1,1,e),VZ(1,1,1,e),lxyz)
+        call col2   (tempv,vtrans(1,1,1,e,1),lxyz)
         call admcol3(extra_src_omega,tempv,f_omegb(1,1,1,e),expm,lxyz)
 
         call add2   (omgSrc(1,1,1,e), extra_src_omega           ,lxyz)
@@ -1779,7 +1783,7 @@ c	    if(nu_t.gt.5000*mu)nu_t = 5000*mu
           if (xk3.le.0)then
             f_beta_str = 1.0
           else
-            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1 + 400.0*xk3*xk3)
+            f_beta_str = (1.0 + 680.0*xk3*xk3)/(1.0 + 400.0*xk3*xk3)
           endif
           Y_k = rho * betai_str * f_beta_str * k * omega
  
