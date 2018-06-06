@@ -3,7 +3,7 @@
 #
 [GENERAL] 
 #startFrom = restart.fld 
-
+loglevel = 3
 stopAt = endTime
 endTime = 200 
 
@@ -24,15 +24,20 @@ filterWeight = 10
 filterCutoffRatio = 0.9 
 
 [PROBLEMTYPE]
-variableProperties = no
+variableProperties = yes
 equation = incompNS
 
 [PRESSURE]
 preconditioner = semg_amg
-residualTol = 1e-04
+residualTol = 1e-4 
 residualProj = yes
 
 [VELOCITY]
-residualTol = 1e-07
+residualTol = 1e-6 
 density = 1
 viscosity = -10000
+
+#[TEMPERATURE]
+#rhoCp = 1.
+#conductivity = -10000
+#residualTol = 1e-6 

@@ -1,4 +1,14 @@
-c- CASE PARAMETERS------------------------------------------------------
+c- description ---------------------------------------------------------
+c  
+c  Turbulent channel flow
+c
+c-----------------------------------------------------------------------
+
+c- global includes -----------------------------------------------------
+#include "experimental/avs.f"
+c-----------------------------------------------------------------------
+
+c- constants -----------------------------------------------------------
 
 #define tSTATSTART uparam(1) /* start time for averaging */
 #define tSTATFREQ  uparam(2) /* output frequency for statistics */
@@ -6,8 +16,8 @@ c- CASE PARAMETERS------------------------------------------------------
 c data extraction along wall normal direction
 #define INTP_NMAX 100 /* number of sample points */
 #define BETAI 2.4     /* sample points stretching parameter */
-#define XCINT 1.0     /* x coordinate */
-#define ZCINT 1.0     /* z coordinate */
+#define XCINT 1.0     /* x coordinate of 1D line*/
+#define ZCINT 1.0     /* z coordinate of 1D line */
 
 c mesh dimensions
 #define PI (4.*atan(1.))
@@ -19,17 +29,26 @@ c mesh dimensions
 #define NUMBER_ELEMENTS_Y 12
 #define NUMBER_ELEMENTS_Z 8
 
-c- INCLUDES ------------------------------------------------------------
-#include "intp_usr.f"
 c-----------------------------------------------------------------------
-
       subroutine uservp (ix,iy,iz,ieg)
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
 
-      udiff  = 1.
+      integer e
+      parameter (avs_c    = 0.5)
+      parameter (avs_cmax = 0.1)
+      parameter (ncut     = 2)
+
       utrans = 1.
+      udiff  = param(2)
+
+      if (ifield .eq. 2) then
+         e = gllel(ieg)
+         udiff = param(8)
+         udiff_a = avs_vdiff(ix,iy,iz,e,ifield,avs_c,avs_cmax,ncut)
+         udiff = udiff + udiff_a
+      endif
 
       return
       end
@@ -51,7 +70,7 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      qvol = 0.0
+      qvol =  0.0
 
       return
       end
@@ -59,7 +78,6 @@ c-----------------------------------------------------------------------
       subroutine userchk
       include 'SIZE'
       include 'TOTAL'
-      include 'ZPER'  ! for nelx,nely,nelz
 
       real x0(3)
       data x0 /0.0, 0.0, 0.0/ 
@@ -75,29 +93,38 @@ c-----------------------------------------------------------------------
       integer ntdump
       save    ntdump
 
-      integer nint
-      save    nint
+      real    rwk(INTP_NMAX,ldim+1) ! r, s, t, dist2
+      integer iwk(INTP_NMAX,3)      ! code, proc, el 
+      save    rwk, iwk
+
+      integer nint, intp_h
+      save    nint, intp_h
+
+      logical iffpts
+      save iffpts
 
       real xint(INTP_NMAX),yint(INTP_NMAX),zint(INTP_NMAX)
       save xint, yint, zint
       save igs_x, igs_z
 
-      parameter(nstat=5)
+      parameter(nstat=9)
       real ravg(lx1*ly1*lz1*lelt,nstat)
       real stat(lx1*ly1*lz1*lelt,nstat)
       real stat_y(INTP_NMAX*nstat)
-      common /dstat/ ravg, stat, stat_y
+      save ravg, stat, stat_y
 
       common /ctorq/ dragx(0:maxobj),dragpx(0:maxobj),dragvx(0:maxobj)
      $             , dragy(0:maxobj),dragpy(0:maxobj),dragvy(0:maxobj)
      $             , dragz(0:maxobj),dragpz(0:maxobj),dragvz(0:maxobj)
-c
+
      $             , torqx(0:maxobj),torqpx(0:maxobj),torqvx(0:maxobj)
      $             , torqy(0:maxobj),torqpy(0:maxobj),torqvy(0:maxobj)
      $             , torqz(0:maxobj),torqpz(0:maxobj),torqvz(0:maxobj)
-c
+
      $             , dpdx_mean,dpdy_mean,dpdz_mean
      $             , dgtq(3,4)
+
+      save dragx_avg
 
       logical ifverbose
       common /gaaa/    wo1(lx1,ly1,lz1,lelv)
@@ -105,6 +132,7 @@ c
      &              ,  wo3(lx1,ly1,lz1,lelv)
 
       real tplus
+      real tmn, tmx
 
       n     = nx1*ny1*nz1*nelv
       nelx  = NUMBER_ELEMENTS_X
@@ -112,16 +140,17 @@ c
       nelz  = NUMBER_ELEMENTS_Z
 
       if (istep.eq.0) then
-         if (nelx.gt.lelx .or. nely.gt.lely .or. nelz.gt.lelz)
-     $       call exitti('nel_xyz > lel_xyz!$',1)
          call set_obj
+         call prepost(.true.,'  ')
       endif
 
       ubar = glsc2(vx,bm1,n)/volvm1
       e2   = glsc3(vy,bm1,vy,n)+glsc3(vz,bm1,vz,n)
       e2   = e2/volvm1
-      if(nid.eq.0) write(6,2) time,ubar,e2
-   2               format(1p3e13.4,' monitor')
+      tmn  = glmin(t,n)
+      tmx  = glmax(t,n)
+      if(nid.eq.0) write(6,2) time,ubar,e2,tmn,tmx
+   2               format(1p5e13.4,' monitor')
 
       if (time.lt.tSTATSTART) return
 
@@ -129,18 +158,16 @@ c
 c     What follows computes some statistics ...
 c
 
-      if(ifoutfld) then
-        if(ldimt.ge.2) call lambda2(t(1,1,1,1,2))
-        if(ldimt.ge.5) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
-      endif
-
-      call torque_calc(1.0,x0,.false.,.false.) ! compute wall shear
+c      if(ifoutfld) then
+c        if (ldimt.ge.2) call lambda2(t(1,1,1,1,2))
+c        if (ldimt.ge.3) call comp_vort3(t(1,1,1,1,3),wo1,wo2,vx,vy,vz)
+c      endif
 
       if(icalld.eq.0) then
         if(nid.eq.0) write(6,*) 'Start collecting statistics ...'
 
-        nxm = 2 ! linear mesh
-        call intp_setup(0.0,nxm)
+        nxm = 2 ! mesh is linear
+        call intp_setup(0.0,nxm,intp_h)
         nint = 0
         if (nid.eq.0) then
           nint = INTP_NMAX
@@ -151,8 +178,10 @@ c
           enddo
           call cfill(zint,ZCINT,size(zint))
         endif
-        call intp_nfld(stat_y,ravg,1,xint,yint,zint,nint,.true.)
-
+        iffpts = .true. ! dummy call to find points
+        call intp_nfld(stat_y,ravg,1,xint,yint,zint,nint,
+     $                 iwk,rwk,INTP_NMAX,iffpts,intp_h)
+        iffpts = .false.
         call gtpp_gs_setup(igs_x,nelx     ,nely,nelz,1) ! x-avx
         call gtpp_gs_setup(igs_z,nelx*nely,1   ,nelz,3) ! z-avg
 
@@ -172,15 +201,24 @@ c
       if (atime.ne.0. .and. dtime.ne.0.) then
         beta      = dtime / atime
         alpha     = 1. - beta
-        ifverbose = .false.
 
+        ifverbose = .false.
         call avg1(ravg(1,1),vx   ,alpha,beta,n,'uavg',ifverbose)
         call avg2(ravg(1,2),vx   ,alpha,beta,n,'urms',ifverbose)
         call avg2(ravg(1,3),vy   ,alpha,beta,n,'vrms',ifverbose)
         call avg2(ravg(1,4),vz   ,alpha,beta,n,'wrms',ifverbose)
         call avg3(ravg(1,5),vx,vy,alpha,beta,n,'uvmm',ifverbose)
+
+        call avg1(ravg(1,6),t    ,alpha,beta,n,'tavg',ifverbose)
+        call avg2(ravg(1,7),t    ,alpha,beta,n,'trms',ifverbose)
+        call avg3(ravg(1,8),vx,t ,alpha,beta,n,'utmm',ifverbose)
+        call avg3(ravg(1,9),vy,t ,alpha,beta,n,'vtmm',ifverbose)
+
+        call torque_calc(1.0,x0,.false.,.false.) ! compute wall shear
         dragx_avg = alpha*dragx_avg + beta*0.5*(dragx(1)+dragx(2))
       endif
+
+      timel = time
 
       ! write statistics to file
       if(istep.gt.0 .and. time.gt.(ntdump+1)*tSTATFREQ) then
@@ -190,11 +228,19 @@ c
             call planar_avg(stat(1,i),wo1      ,igs_z)
          enddo
 
-c         call outpost(wo1,stat(1,1),ravg(1,1),t,t,'sta')
-  
-         ! extract data along wall normal direction (1D profile)
-         call intp_nfld(stat_y,stat,nstat,xint,yint,zint,nint,.false.)
+         ! evaluate d<T>/dy at the lower wall
+         call opgrad(wo1,wo2,wo3,stat(1,6))
+         call dssum(wo2,lx1,ly1,lz1)
+         call col2(wo2,binvm1,n)
+         call intp_nfld(stat_y,wo2,1,xint,yint,zint,nint,
+     $                  iwk,rwk,INTP_NMAX,iffpts,intp_h)
+         dTdy_w = stat_y(1)
 
+         ! extract data along wall normal direction (1D profile)
+         call intp_nfld(stat_y,stat,nstat,xint,yint,zint,nint,
+     $                  iwk,rwk,INTP_NMAX,iffpts,intp_h)
+
+         ntdump = ntdump + 1
          if (nid.ne.0) goto 998 
 
          rho    = param(1)
@@ -202,54 +248,59 @@ c         call outpost(wo1,stat(1,1),ravg(1,1),t,t,'sta')
          A_w    = XLEN * ZLEN
          tw     = dragx_avg / A_w
          u_tau  = sqrt(tw / rho)
+         qw     = -param(8) * dTdy_w
+         t_tau  = 1/u_tau * qw
          Re_tau = u_tau * DELTA / dnu
-         tplus  = time * Re_tau * u_tau
+         tplus  = time * u_tau**2 / dnu
 
-         write(6,*) 'Dumping statistics ...', tplus, Re_tau
+         write(6,*) 'Dumping statistics ...', Re_tau, t_tau
  
          open(unit=56,file='vel_fluc_prof.dat')
          write(56,'(A,1pe14.7)') '#time = ', time
-         write(56,'(A)') '#  y     y+     uu     vv     ww     uv'
+         write(56,'(A)') 
+     $    '#  y    y+    uu    vv    ww    uv    tt    ut    -vt'
 
          open(unit=57,file='mean_prof.dat')
          write(57,'(A,1pe14.7)') '#time = ', time
-         write(57,'(A)') '#  y     y+    Umean'
+         write(57,'(A)') 
+     $    '#  y    y+    Umean    Tmean'
 
          do i = 1,nint
+            yy = 1+yint(i)
             write(56,3) 
-     &           yint(i),
-     &           yint(i)*Re_tau,
+     &           yy,
+     &           yy*Re_tau,
      &           (stat_y(1*nint+i)-(stat_y(0*nint+i))**2)/u_tau**2,
      &           stat_y(2*nint+i)/u_tau**2,
      &           stat_y(3*nint+i)/u_tau**2,
-     &           stat_y(4*nint+i)/u_tau**2
+     &           stat_y(4*nint+i)/u_tau**2,
+     &           (stat_y(6*nint+i)-(stat_y(5*nint+i))**2)/t_tau**2,
+     &           stat_y(7*nint+i)/qw,
+     &           -stat_y(8*nint+i)/qw
 
             write(57,3) 
-     &           yint(i),
-     &           yint(i)*Re_tau, 
-     &           stat_y(0*nint+i)/u_tau
+     &           yy,
+     &           yy*Re_tau, 
+     &           stat_y(0*nint+i)/u_tau,
+     &           stat_y(5*nint+i)/t_tau
 
   3         format(1p15e17.9)
          enddo
          close(56)
          close(57)
 
-         ntdump = ntdump + 1
  998  endif
-
-      timel = time
 
       return
       end
 c-----------------------------------------------------------------------
-      subroutine userbc (ix,iy,iz,iside,ieg) ! just called for the walls
+      subroutine userbc (ix,iy,iz,iside,ieg)
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'
 
-      ux = 0.0
-      uy = 0.0
-      uz = 0.0
+      if (y.lt.0) temp = 1.0
+      if (y.gt.0) temp = 0.0
 
       return
       end
@@ -289,6 +340,10 @@ c-----------------------------------------------------------------------
       uy  =       eps       * sin(alpha*x)*sin(beta*z)
       uz  =      -eps*alpha * cos(alpha*x)*sin(beta*z)
 
+      ! thin boundary layer at the lower wall
+      gamma = 5e-6 ! initial thickness
+      temp = erfc((1+y)/sqrt(1./param(8) * gamma))
+
       return
       end
 c-----------------------------------------------------------------------
@@ -321,6 +376,13 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
+      do iel=1,nelt
+      do ifc=1,2*ndim
+         cbc(ifc,iel,2) = cbc(ifc,iel,1) 
+         if (cbc(ifc,iel,1) .eq. 'W  ') cbc(ifc,iel,2) = 't  '
+      enddo
+      enddo
+
       return
       end
 c-----------------------------------------------------------------------
@@ -331,6 +393,8 @@ c-----------------------------------------------------------------------
       param(54) = -1  ! use >0 for const flowrate or <0 bulk vel
                       ! flow direction is given by (1=x, 2=y, 3=z) 
       param(55) = 1.0 ! flowrate/bulk-velocity 
+
+      iffilter(2) = .false. ! artificial visocity only
 
       return
       end
@@ -399,7 +463,7 @@ c
       call invcol1(wrk,n)
 
       do i=1,n
-         ua(i,1,1,1) = u(i,1,1,1) ! bm1(i,1,1,1)*u(i,1,1,1)*wrk(i,1,1,1)
+         ua(i,1,1,1) = bm1(i,1,1,1)*u(i,1,1,1)*wrk(i,1,1,1)
       enddo
 
       call fgslib_gs_op(hndl,ua,1,1,0) ! Sum weighted values

@@ -11,7 +11,7 @@ c
       ! BASIC
       parameter (ldim=3)               ! domain dimension (2 or 3)
       parameter (lx1=8)                ! p-order (avoid uneven and values <6)
-      parameter (lxd=12)               ! p-order for over-integration (dealiasing) 
+      parameter (lxd=10)               ! p-order for over-integration (dealiasing) 
       parameter (lx2=lx1-0)            ! p-order for pressure (lx1 or lx1-2)
                                      
       parameter (lelg=1540)            ! max total number of elements
@@ -32,7 +32,7 @@ c
       parameter (lorder=2)             ! max order in time
 
       parameter (lelt=lelg/lpmin + 2)  ! max number of local elements per MPI rank
-      parameter (lx1m=1)               ! polynomial order mesh solver
+      parameter (lx1m=lx1)             ! polynomial order mesh solver
       parameter (lbelt=1)              ! mhd
       parameter (lpelt=1)              ! linear stability
       parameter (lcvelt=1)             ! cvode
