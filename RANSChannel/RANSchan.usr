@@ -1,3 +1,5 @@
+#include "experimental/rans_komg.f"
+
 c-----------------------------------------------------------------------
 c  nek5000 user-file template
 c
@@ -13,8 +15,6 @@ c     - usrdat  : modify element vertices
 c     - usrdat2 : modify mesh coordinates
 c     - usrdat3 : general purpose routine for initialization
 c     
-c-----------------------------------------------------------------------
-      include 'rans_komg.f'
 c-----------------------------------------------------------------------
       subroutine uservp(ix,iy,iz,eg) ! set variable properties
       implicit none
@@ -150,12 +150,14 @@ c-----------------------------------------------------------------------
 
       real ypmin,ypmax,ypave,utmin,utmax,utave
 
-      call print_limits !monitor the solution
-      call y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
-      if(nio.eq.0) then
-        write(6,256)'y_p+',ypmin,ypmax,ypave
-        write(6,256)'u_tau',utmin,utmax,utave
-        write(6,*)
+      if (mod(istep,10).eq.0) then
+        call print_limits !monitor the solution
+        call y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
+        if(nio.eq.0) then
+          write(6,256)'y_p+',ypmin,ypmax,ypave
+          write(6,256)'u_tau',utmin,utmax,utave
+          write(6,*)
+        endif
       endif
 
  256  format(a15,3es13.4)

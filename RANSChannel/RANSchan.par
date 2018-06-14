@@ -1,10 +1,9 @@
 [GENERAL]
-stopAt = numSteps
-numSteps = 200000
-dt = 5.0e-4
-variableDT = no
-writeControl = timeStep
-writeInterval = 20000
+stopAt = endTime
+endTime = 10
+dt = 1.0e-3
+writeControl = runTime
+writeInterval = 10.0
 timeStepper = BDF2
 
 [PROBLEMTYPE]
@@ -14,7 +13,7 @@ stressFormulation = yes
 
 [VELOCITY]
 density = 1.0
-viscosity = -40000.0
+viscosity = -1e5
 residualTol = 1.0e-7
 
 [PRESSURE]
@@ -23,15 +22,23 @@ residualTol = 1.0e-5
 [TEMPERATURE]
 solver = none
 rhoCp = 1.0
-conductivity = -40000.0
-residualTol = 1.0e-6
+conductivity = -1e5
+residualTol = 1.0e-7
 
-[SCALAR01]
+[SCALAR01] # tke
 density = 1.0
-diffusivity = -40000.0
-residualTol = 1.0e-6
+diffusivity = -1e5
+residualTol = 1.0e-7
+#solver = cvode
+#absoluteTol = 1e-06
 
-[SCALAR02]
+[SCALAR02] # omega 
 density = 1.0
-diffusivity = -40000.0
-residualTol = 1.0e-6
+diffusivity = -1e5
+residualTol = 1.0e-7
+#solver = cvode
+#absoluteTol = 1e-06
+
+[CVODE]
+relativeTol = 1e-04
+dtmax = 1e-02
