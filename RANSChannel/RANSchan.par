@@ -5,8 +5,7 @@ dt = 5.0e-4
 variableDT = no
 writeControl = timeStep
 writeInterval = 20000
-dealiasing = no
-timeStepper = BDF3
+timeStepper = BDF2
 
 [PROBLEMTYPE]
 equation = incompNS
@@ -17,27 +16,22 @@ stressFormulation = yes
 density = 1.0
 viscosity = -40000.0
 residualTol = 1.0e-7
-residualProj = no
 
 [PRESSURE]
-residualTol = 1.0e-6
-residualProj = yes
+residualTol = 1.0e-5
 
 [TEMPERATURE]
 solver = none
 rhoCp = 1.0
 conductivity = -40000.0
-residualTol = 1.0e-7
-residualProj = no 
+residualTol = 1.0e-6
 
 [SCALAR01]
 density = 1.0
 diffusivity = -40000.0
-residualTol = 1.0e-7
-residualProj = no 
+residualTol = 1.0e-6
 
 [SCALAR02]
 density = 1.0
 diffusivity = -40000.0
-residualTol = 1.0e-7
-residualProj = no 
+residualTol = 1.0e-6
