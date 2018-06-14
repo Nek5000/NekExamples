@@ -2906,6 +2906,28 @@ class TurbChannel(NekTestCase):
         self.move_logs()
 
 ###############################################################################
+#  RANSChan: RANSChan.par
+###############################################################################
+
+class RANSChannel(NekTestCase):
+    example_subdir = 'RANSChannel'
+    case_name = 'RANSchan'
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.build_nek()
+        self.run_nek(step_limit=5000)
+
+        u_tau = self.get_value_from_log('u_tau', column=-1, row=-1)
+        self.assertAlmostEqualDelayed(u_tau, target_val=1.22E-02, delta=1.0E-04, label='u_tau')
+#       self.assertAlmostEqualDelayed(u_tau, target_val=4.94E-02, delta=1.0E-04, label='u_tau')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+###############################################################################
 #  turbInflow: turbInflow.rea
 ###############################################################################
 

@@ -1,0 +1,542 @@
+c-----------------------------------------------------------------------
+c  nek5000 user-file template
+c
+c  user specified routines:
+c     - uservp  : variable properties
+c     - userf   : local acceleration term for fluid
+c     - userq   : local source term for scalars
+c     - userbc  : boundary conditions
+c     - useric  : initial conditions
+c     - userchk : general purpose routine for checking errors etc.
+c     - userqtl : thermal divergence for lowMach number flows 
+c     - usrdat  : modify element vertices 
+c     - usrdat2 : modify mesh coordinates
+c     - usrdat3 : general purpose routine for initialization
+c     
+c-----------------------------------------------------------------------
+      include 'rans_komg.f'
+c-----------------------------------------------------------------------
+      subroutine uservp(ix,iy,iz,eg) ! set variable properties
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer ix,iy,iz,e,eg
+      real rans_komg_mut,rans_komg_mutsk,rans_komg_mutso
+      real mu_t,Pr_t
+
+      e = gllel(eg)
+
+      Pr_t=0.91
+      mu_t=rans_komg_mut(ix,iy,iz,e)
+
+      utrans = cpfld(ifield,2)
+      if(ifield.eq.1) then
+        udiff = cpfld(ifield,1)+mu_t
+      elseif(ifield.eq.2) then
+        udiff = cpfld(ifield,1)+mu_t*cpfld(ifield,2)/(Pr_t*cpfld(1,2))
+      elseif(ifield.eq.3) then
+        udiff = cpfld(ifield,1)+rans_komg_mutsk(ix,iy,iz,e)
+      elseif(ifield.eq.4) then
+        udiff = cpfld(ifield,1)+rans_komg_mutso(ix,iy,iz,e)
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf(ix,iy,iz,eg) ! set acceleration term
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+c
+c     Note: this is an acceleration term, NOT a force!
+c     Thus, ffx will subsequently be multiplied by rho(x,t).
+c
+      integer ix,iy,iz,e,eg
+
+c     e = gllel(eg)
+
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq(ix,iy,iz,eg) ! set source term
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer ix,iy,iz,e,eg
+      real rans_komg_kSrc,rans_komg_omgSrc
+
+      e = gllel(eg)
+
+      if(ifield.eq.3) then
+        qvol = rans_komg_kSrc(ix,iy,iz,e)
+      elseif(ifield.eq.4) then
+        qvol = rans_komg_omgSrc(ix,iy,iz,e)
+      else
+        qvol = 0.0
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc(ix,iy,iz,iside,eg) ! set up boundary conditions
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+c
+c     NOTE ::: This subroutine MAY NOT be called by every process
+c
+      integer ix,iy,iz,iside,e,eg
+    
+C     U, TKE, and Omg are all zero on the wall 
+      ux   = 0.0
+      uy   = 0.0
+      uz   = 0.0
+      temp = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric(ix,iy,iz,eg) ! set up initial conditions
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      real wd
+      common /walldist/ wd(lx1,ly1,lz1,lelv)
+
+      integer ix,iy,iz,e,eg
+      real darcy,utau,sigm,kmax,omax,yplus,fact,Re
+
+      e = gllel(eg)
+
+      Re    = 1.0/param(2)
+      darcy = 0.316/(Re**0.25)
+      utau  = sqrt(darcy/8.0)
+      sigm  = 0.6
+      kmax  = 4.5*utau*utau
+      omax  = 0.5*utau*utau*Re
+      yplus = max(wd(ix,iy,iz,e)*utau*Re,1.0e-3)
+
+      ux   = 3.0/2.0*(1.0-y*y)
+      uy   = 0.0
+      uz   = 0.0
+      temp = 0.0
+
+      fact = exp(-(log10(yplus)-1.0)**2/(2.0*sigm**2))
+      if(ifield.eq.3) temp = kmax*fact
+      if(ifield.eq.4) temp = omax*fact
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk()
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      real wd
+      common /walldist/ wd(lx1,ly1,lz1,lelv)
+
+      real ypmin,ypmax,ypave,utmin,utmax,utave
+
+      call print_limits !monitor the solution
+      call y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
+      if(nio.eq.0) then
+        write(6,256)'y_p+',ypmin,ypmax,ypave
+        write(6,256)'u_tau',utmin,utmax,utave
+        write(6,*)
+      endif
+
+ 256  format(a15,3es13.4)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userqtl ! Set thermal divergence
+
+      call userqtl_scig 
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat()   ! This routine to modify element vertices
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+C     enforce constant average velocity
+      param(54) = -1
+      param(55) = 1.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2()  ! This routine to modify mesh coordinates
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      real wd
+      common /walldist/ wd(lx1,ly1,lz1,lelv)
+
+      integer i,n
+      real xmin,xmax,ymin,ymax,scaley,scalex
+      real glmin,glmax
+
+      n=nx1*ny1*nz1*nelv
+
+      xmin=glmin(xm1,n)
+      xmax=glmax(xm1,n)
+      ymin=glmin(ym1,n)
+      ymax=glmax(ym1,n)
+
+      scalex=3.0/8.0/(xmax-xmin) !make the elements square on average
+      scaley=1.0/(ymax-ymin)
+
+      call cmult(xm1,scalex,n)
+      call cmult(ym1,scaley,n)
+
+c     calculate wall distance for regularized k-omega
+      call rone(wd,n)
+      call sub2(wd,ym1,n)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3()
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      real wd
+      common /walldist/ wd(lx1,ly1,lz1,lelv)
+
+      integer ifld_k,ifld_omg,m_id,w_id
+      real coeffs(21) !array for passing your own coeffs
+      logical ifcoeffs
+      
+      ifld_k = 3 !address of tke equation in t array
+      ifld_omg = 4 !address of omega equation in t array
+      ifcoeffs=.false. !set to true to pass your own coeffs
+
+C     Supported models:
+c     m_id = 0 !regularized high-Re k-omega (no wall functions)
+      m_id = 1 !regularized low-Re k-omega
+c     m_id = 2 !regularized high-Re k-omega SST (no wall functions)
+c     m_id = 3 !regularized low-Re k-omega SST
+
+C     Wall distance function:
+      w_id = 0 ! user specified
+c     w_id = 1 ! cheap_dist (path to wall, may work better for periodic boundaries)
+c     w_id = 2 ! distf (coordinate difference, provides smoother function)
+
+      call rans_komg_init(ifld_k,ifld_omg,ifcoeffs,coeffs,w_id,wd,m_id)
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine get_limits(phi,phimin,phimax,phiave,dphi,phip,rmsphi,n)
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      integer i,n,ntot,iglsum
+      real phi(1),phip(1),phimin,phimax,phiave,dphi,rmsphi
+      real glmin,glmax,glsc2,glsum
+
+      ntot=iglsum(n,1)
+
+      rmsphi=0.0
+      dphi=0.0
+      if(istep.ge.1) then
+        do i=1,n
+          dphi=max(dphi,abs(phip(i)-phi(i)))
+          rmsphi=rmsphi+(phip(i)-phi(i))**2
+        enddo
+        rmsphi=glsum(rmsphi,1)
+        rmsphi=sqrt(rmsphi/DBLE(ntot))/dt
+      endif
+      dphi=glmax(dphi,1)
+      dphi=dphi/dt
+
+      phimin=glmin(phi,n)
+      phimax=glmax(phi,n)
+      phiave=glsc2(phi,bm1,n)/volvm1
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine get_limits_nodt(phi,phimin,phimax,phiave)
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      integer n
+      real phi(1),phimin,phimax,phiave
+      real glmin,glmax,glsc2
+
+      n=nx1*ny1*nz1*nelv
+
+      phimin=glmin(phi,n)
+      phimax=glmax(phi,n)
+      phiave=glsc2(phi,bm1,n)/volvm1
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+C     calculate min, max, and average y_p+ and u_tau values
+
+      integer e,i,i0,i1,j,j0,j1,k,k0,k1,iw,jw,kw,i2,j2
+      integer ipt,wpt,estrd,isd,jsd
+      real msk(lx1,ly1,lz1,lelv)
+      real gradu(lx1*ly1*lz1,3,3),wd(1)
+      real tau(3),norm(3),vsca,tauw,utau,rho,mu
+      real ypmin,ypmax,yp,ypave,vol,utmin,utmax,utave
+      real glmin,glmax,glsum
+      logical ifgrad, ifdid
+
+      data ifdid /.false./
+      save ifdid, msk
+
+      ypmin=1.0d30
+      ypmax=-1.0d30
+      ypave=0.0
+      utmin=1.0d30
+      utmax=-1.0d30
+      utave=0.0
+      vol=0.0
+
+C     first build the mask
+      if(.not.ifdid)then
+        ifdid=.true.
+        call rone(msk,nx1*ny1*nz1*nelv)
+        do e=1,nelv
+          do isd=1,2*ndim
+            if(cbc(isd,e,1).eq.'W  ') then
+              call backpts(i0,i1,j0,j1,k0,k1,isd)
+              do k=k0,k1
+              do j=j0,j1
+              do i=i0,i1
+                msk(i,j,k,e)=0.0
+              enddo
+              enddo
+              enddo
+            endif
+          enddo
+          do isd=1,2*ndim
+            if(cbc(isd,e,1).eq.'W  ') then
+              call facind(i0,i1,j0,j1,k0,k1,lx1,ly1,lz1,isd)
+              do k=k0,k1
+              do j=j0,j1
+              do i=i0,i1
+                msk(i,j,k,e)=1.0
+              enddo
+              enddo
+              enddo
+            endif
+          enddo
+        enddo
+        call dssum(msk,nx1,ny1,nz1) !for elements with edges but not faces along a wall
+      endif
+
+      do e=1,nelv
+        ifgrad=.true.
+        do isd=1,2*ndim
+          if(cbc(isd,e,1).eq.'W  ')then
+            estrd=(e-1)*nx1*ny1*nz1
+            if(ifgrad)then
+              call gradm11(gradu(1,1,1),gradu(1,1,2),gradu(1,1,3),vx,e)
+              call gradm11(gradu(1,2,1),gradu(1,2,2),gradu(1,2,3),vy,e)
+              if(if3d)
+     &         call gradm11(gradu(1,3,1),gradu(1,3,2),gradu(1,3,3),vz,e)
+              ifgrad=.false.
+            endif
+            call backpts(i0,i1,j0,j1,k0,k1,isd)
+            do k=k0,k1
+            do j=j0,j1
+            do i=i0,i1
+              if(msk(i,j,k,e).lt.0.5) then
+                iw=i
+                jw=j
+                kw=k
+                if    (isd.eq.1) then
+                  jw=1
+                elseif(isd.eq.2) then
+                  iw=nx1
+                elseif(isd.eq.3) then
+                  jw=ny1
+                elseif(isd.eq.4) then
+                  iw=1
+                elseif(isd.eq.5) then
+                  kw=1
+                else
+                  kw=nx1
+                endif
+                call getSnormal(norm,iw,jw,kw,isd,e)
+                ipt=i +(j -1)*nx1+(k -1)*nx1*ny1
+                wpt=iw+(jw-1)*nx1+(kw-1)*nx1*ny1
+
+                mu=vdiff(iw,jw,kw,e,1)
+                rho=vtrans(iw,jw,kw,e,1)
+
+                do i2=1,ldim
+                tau(i2)=0.0
+                  do j2=1,ldim
+                    tau(i2)=tau(i2)+
+     &                   mu*(gradu(wpt,i2,j2)+gradu(wpt,j2,i2))*norm(j2)
+                  enddo
+                enddo
+
+                vsca=0.0
+                do i2=1,ldim
+                  vsca=vsca+tau(i2)*norm(i2)
+                enddo
+
+                tauw=0.0
+                do i2=1,ldim
+                  tauw=tauw+(tau(i2)-vsca*norm(i2))**2
+                enddo
+                tauw=sqrt(tauw)
+                utau=sqrt(tauw/rho)
+                yp=wd(ipt+estrd)*utau*rho/mu
+                ypmin=min(ypmin,yp)
+                ypmax=max(ypmax,yp)
+                ypave=ypave+yp*bm1(i,j,k,e)
+                utmin=min(utau,utmin)
+                utmax=max(utau,utmax)
+                utave=utave+utau*bm1(i,j,k,e)
+                vol=vol+bm1(i,j,k,e)
+              endif
+            enddo
+            enddo
+            enddo
+          endif
+        enddo
+      enddo
+
+      ypmin=glmin(ypmin,1)
+      ypmax=glmax(ypmax,1)
+      ypave=glsum(ypave,1)
+      utmin=glmin(utmin,1)
+      utmax=glmax(utmax,1)
+      utave=glsum(utave,1)
+      vol=glsum(vol,1)
+      ypave=ypave/vol
+      utave=utave/vol
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine backpts(i0,i1,j0,j1,k0,k1,isd)
+      implicit none
+      include 'SIZE'
+
+      integer i0,i1,j0,j1,k0,k1,isd
+
+      i0=1
+      j0=1
+      k0=1
+      i1=nx1
+      j1=ny1
+      k1=nz1
+      if(isd.eq.1) then
+        j0=2
+        j1=2
+      elseif(isd.eq.2) then
+        i0=nx1-1
+        i1=nx1-1
+      elseif(isd.eq.3) then
+        j0=ny1-1
+        j1=ny1-1
+      elseif(isd.eq.4) then
+        i0=2
+        i1=2
+      elseif(isd.eq.5) then
+        k0=2
+        k1=2
+      elseif(isd.eq.6) then
+        k0=nz1-1
+        k1=nz1-1
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine print_limits
+      implicit none
+      include 'SIZE'
+      include 'TOTAL'
+
+      real vol,glsum,glmin,glmax,glsc2
+      real tmp(lx1*ly1*lz1*lelv)
+      integer i,n1,n2,nt
+
+      real uxmin,uxmax,uxave,uymin,uymax,uyave,uzmin,uzmax,uzave
+      real prmin,prmax,prave
+      real thmin(ldimt),thmax(ldimt),thave(ldimt)
+      real rmsux,rmsuy,rmsuz,rmspr,rmsth(ldimt)
+      real dux,duy,duz,dpr,dth(ldimt)
+      character*15 tname
+
+      n1=nx1*ny1*nz1*nelv
+      n2=nx2*ny2*nz2*nelv
+      nt=nx1*ny1*nz1*nelt
+
+      call get_limits(vx,uxmin,uxmax,uxave,dux,vxlag,rmsux,n1)
+      call get_limits(vy,uymin,uymax,uyave,duy,vylag,rmsuy,n1)
+      if(if3d) call get_limits(vz,uzmin,uzmax,uzave,duz,vzlag,rmsuz,n1)
+      call get_limits(pr,prmin,prmax,prave,dpr,prlag,rmspr,n2)
+      if(ifheat)then
+        do i=1,npscal+1
+          if(idpss(i).eq.0) call get_limits(t(1,1,1,1,i),thmin(i) !Helmholtz solver
+     &          ,thmax(i),thave(i),dth(i),tlag(1,1,1,1,1,i),rmsth(i),nt)
+          if(idpss(i).eq.1) call get_limits_nodt(t(1,1,1,1,i) !CVODE solver
+     &                                   ,thmin(i),thmax(i),thave(i),nt)
+        enddo
+      endif
+
+      if(nio.eq.0) then
+        write(*,*)
+        write(*,254) 'limits','min','max','ave','max d/dt','rms d/dt'
+        write(*,255) 'u velocity',uxmin,uxmax,uxave,dux,rmsux
+        write(*,255) 'v velocity',uymin,uymax,uyave,duy,rmsuy
+        if(if3d) write(*,255) 'w velocity',uzmin,uzmax,uzave,duz,rmsuz
+        write(*,255) 'pressure',prmin,prmax,prave,dpr,rmspr
+        if(ifheat) then
+          do i=1,npscal+1
+            if(i.eq.1) write(tname,'(a15)') "temperature"
+            if(i.gt.1) write(tname,'(a14,i1)') "PS ",i-1
+            if(idpss(i).eq.0)write(*,255)
+     &               tname,thmin(i),thmax(i),thave(i),dth(i),rmsth(i)
+            if(idpss(i).eq.1)write(*,256)
+     &               tname,thmin(i),thmax(i),thave(i),'--','--'
+          enddo
+        endif
+        write(*,*)
+      endif
+
+      call copy(prlag,pr,n2)
+
+ 254  format(a15,5a13)
+ 255  format(a15,5es13.4)
+ 256  format(a15,3es13.4,2a13)
+
+      return
+      end
+c-----------------------------------------------------------------------
