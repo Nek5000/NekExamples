@@ -2,8 +2,7 @@
 # nek parameter file
 #
 [GENERAL] 
-#startFrom = restart.fld 
-loglevel = 3
+#startFrom = restart.fld time=0 
 stopAt = endTime
 endTime = 200 
 

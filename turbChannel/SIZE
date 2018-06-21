@@ -14,9 +14,9 @@ c
       parameter (lxd=10)               ! p-order for over-integration (dealiasing) 
       parameter (lx2=lx1-0)            ! p-order for pressure (lx1 or lx1-2)
                                      
-      parameter (lelg=1540)            ! max total number of elements
+      parameter (lelg=2000)            ! max total number of elements
       parameter (lpmin=4)              ! min MPI ranks
-      parameter (lpmax=64)             ! max MPI ranks
+      parameter (lpmax=128)            ! max MPI ranks
       parameter (ldimt=2)              ! max auxiliary fields (temperature + scalars)
 
       ! OPTIONAL
@@ -27,7 +27,7 @@ c
       parameter (toteq=1)              ! max number of conserved scalars in cmt
       parameter (nsessmax=1)           ! max sessions
       parameter (lxo=lx1)              ! max grid size on output (lxo>=lx1)
-      parameter (lelx=40,lely=40,lelz=40) ! global tensor mesh dimensions
+      parameter (lelx=1,lely=1,lelz=1) ! global tensor mesh dimensions
       parameter (mxprev=30,lgmres=20)  ! max dim of projection & Krylov space
       parameter (lorder=2)             ! max order in time
 

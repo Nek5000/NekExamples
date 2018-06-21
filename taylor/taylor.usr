@@ -69,17 +69,6 @@ c-----------------------------------------------------------------------
       parameter (ll=lx1*ly1*lz1*lelv)
       common /myexact/ ue(ll),ve(ll),ud(ll),vd(ll)
 
-      common /ctorq/ dragx(0:maxobj),dragpx(0:maxobj),dragvx(0:maxobj)
-     $             , dragy(0:maxobj),dragpy(0:maxobj),dragvy(0:maxobj)
-     $             , dragz(0:maxobj),dragpz(0:maxobj),dragvz(0:maxobj)
-c
-     $             , torqx(0:maxobj),torqpx(0:maxobj),torqvx(0:maxobj)
-     $             , torqy(0:maxobj),torqpy(0:maxobj),torqvy(0:maxobj)
-     $             , torqz(0:maxobj),torqpz(0:maxobj),torqvz(0:maxobj)
-c
-     $             , dpdx_mean,dpdy_mean,dpdz_mean
-     $             , dgtq(3,4)
-
       real x0(3)
 
       common /taylor/  r0,r1,w0,w1,a,b  ! Parameters
