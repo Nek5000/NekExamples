@@ -185,6 +185,10 @@ Some examples provide additional pdf files for a more complete description.
     * High pass filter relaxation term
     * Computing wall shear stress using objects
     * Planar averaging
+* `turbPipe`
+  * __Test name__ : TurbPipe
+  * __Purpose__ : LES of a round turbulent pipe flow
+  * __Features__ :
 * `turbInflow`
   * __Test name__ : TurbInflow
   * __Purpose__ : Turbulent channel flow with turbulent inflow
@@ -199,4 +203,8 @@ Some examples provide additional pdf files for a more complete description.
 * `vortex2`
   * __Test name__ : Vortex2
   * __Purpose__ : Vortex breakdown in a container with a rotating lid (axisymmetric case)
+  * __Features__ :
+* `tgv`
+  * __Test name__ : Tgv
+  * __Purpose__ : Taylor Green Vortex flow
   * __Features__ :
