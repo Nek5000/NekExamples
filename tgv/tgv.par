@@ -1,0 +1,28 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+polynomialOrder = 7
+PnPnFormulation = yes
+minNumProcesses = 16
+maxNumProcesses = 1024
+
+stopAt = endTime
+endTime = 20
+dt = 1e-02
+timeStepper = bdf3
+
+writeControl = runTime
+writeInterval = 2
+
+[PROBLEMTYPE]
+equation = incompNS
+
+[PRESSURE]
+residualTol = 1e-04
+residualProj = yes
+
+[VELOCITY]
+residualTol = 1e-06
+density = 1
+viscosity = -1600
