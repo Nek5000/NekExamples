@@ -1,0 +1,34 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+#startFrom = restart.fld U time=0 
+stopAt = endTime
+endTime = 150
+
+dt = 1.0e-2
+timeStepper = bdf2
+extrapolation = OIFS
+targetCFL = 3.8
+
+writeControl = runTime
+writeInterval = 20
+
+filtering = hpfrt
+filterWeight = 10
+filterCutoffRatio = 0.9 
+
+[MESH]
+numberOfBCFields = 1
+
+[PROBLEMTYPE]
+equation = incompNS
+
+[PRESSURE]
+residualTol = 1e-04
+residualProj = yes
+
+[VELOCITY]
+density = 1.
+viscosity = -19000
+residualTol = 1e-06
