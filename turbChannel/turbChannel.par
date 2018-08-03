@@ -4,7 +4,7 @@
 [GENERAL] 
 #startFrom = restart.fld time=0 
 stopAt = endTime
-endTime = 200 
+endTime = 400
 
 dt = 0
 timeStepper = bdf2
@@ -13,9 +13,9 @@ variableDt = yes
 targetCFL = 3.5
 
 writeControl = runTime
-writeInterval = 100.0
+writeInterval = 50.0
 
-userParam01 = 100    # start time collecting statistics
+userParam01 = 200    # start time collecting statistics
 userParam02 = 20     # writeInterval 1D statistics 
 
 filtering = hpfrt
@@ -23,7 +23,7 @@ filterWeight = 10
 filterCutoffRatio = 0.9 
 
 [PROBLEMTYPE]
-variableProperties = yes
+#variableProperties = yes
 equation = incompNS
 
 [PRESSURE]

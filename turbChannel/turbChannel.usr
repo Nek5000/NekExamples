@@ -1,9 +1,3 @@
-c- description ---------------------------------------------------------
-c  
-c  Turbulent channel flow
-c
-c-----------------------------------------------------------------------
-
 c- constants -----------------------------------------------------------
 
 #define tSTATSTART uparam(1) /* start time for averaging */
@@ -17,13 +11,11 @@ c data extraction along wall normal direction
 
 c mesh dimensions
 #define PI (4.*atan(1.))
-#define DELTA 1.
 #define XLEN (2.*PI)
-#define YLEN (2*DELTA)
 #define ZLEN PI
-#define NUMBER_ELEMENTS_X 18
+#define NUMBER_ELEMENTS_X 16
 #define NUMBER_ELEMENTS_Y 12
-#define NUMBER_ELEMENTS_Z 9
+#define NUMBER_ELEMENTS_Z 8
 
 c-----------------------------------------------------------------------
       subroutine uservp (ix,iy,iz,ieg)
@@ -242,7 +234,7 @@ c
          u_tau  = sqrt(tw / rho)
          qw     = -param(8) * dTdy_w
          t_tau  = 1/u_tau * qw
-         Re_tau = u_tau * DELTA / dnu
+         Re_tau = u_tau / dnu
          tplus  = time * u_tau**2 / dnu
 
          write(6,*) 'Dumping statistics ...', Re_tau, t_tau
@@ -343,6 +335,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'      ! _before_ mesh is generated, which 
       include 'TOTAL'     ! guarantees GLL mapping of mesh.
 
+      beta = 2.4
+
       n = nelv * 2**ldim
       xmin = glmin(xc,n)
       xmax = glmax(xc,n)
@@ -352,12 +346,13 @@ c-----------------------------------------------------------------------
       zmax = glmax(zc,n)
 
       xscale = XLEN/(xmax-xmin)
-      yscale = YLEN/(ymax-ymin)
+      yscale = 1./(ymax-ymin)
       zscale = ZLEN/(zmax-zmin)
 
       do i=1,n
          xc(i,1) = xscale*xc(i,1)
          yc(i,1) = yscale*yc(i,1)
+         yc(i,1) = tanh(beta*(2*yc(i,1)-1))/tanh(beta)
          zc(i,1) = zscale*zc(i,1)
       enddo
 
