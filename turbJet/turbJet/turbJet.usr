@@ -1,0 +1,170 @@
+c
+c This is a round turbulent jet flow example using LES
+c
+
+#define U_CO 0.05
+
+C  USER SPECIFIED ROUTINES:
+C
+C     - boundary conditions
+C     - initial conditions
+C     - variable properties
+C     - forcing function for fluid (f)
+C     - forcing function for passive scalar (q)
+C     - general purpose routine for checking errors etc.
+C
+C-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,ieg)
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e
+
+      e = gllel(ieg)
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,ieg)
+
+      include 'SIZE'
+      include 'TSTEP'
+      include 'NEKUSE'
+
+      FFY = 0.0
+      FFX = 0.0
+      FFZ = 0.0
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,ieg)
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e
+
+      e = gllel(ieg)
+      qvol = 0.
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine userchk
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      common /myoutflow/  d(lx1,ly1,lz1,lelt),m1(lx1*ly1*lz1,lelt)
+      real m1
+
+      data icalld /0/
+      save icalld 
+
+      n = nx1*ny1*nz1*nelt
+
+      rq     = 2.5
+      uin_tb = 1.
+      call turb_outflow(d,m1,rq,uin_tb)
+ 
+      if(ifoutfld) then
+        ifto = .true.
+        call lambda2(t(1,1,1,1,1))
+      endif 
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,ieg)
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'NEKNEK'
+
+      integer e, bID
+
+      e = gllel(ieg)
+      bID = boundaryIDList(iside,e)
+ 
+      if (bID.eq.3 .or. bID.eq.4) then ! coflow + lateral
+         ux = 0.0
+         uy = 0.0
+         uz = sstep(0.0, U_CO, 0.6, 0.035, r)
+      else ! jet
+         ux  = valint(ix,iy,iz,e,1)
+         uy  = valint(ix,iy,iz,e,2) 
+         uz  = valint(ix,iy,iz,e,3)
+      endif
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+
+      include 'SIZE'
+      include 'TSTEP'
+      include 'NEKUSE'
+
+      if (r.le.0.5) then
+         uz = 24*(0.5**4 - r**4) 
+      else
+         uz = sstep(0.0, U_CO, 0.6, 0.035, r)
+      endif
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine usrdat
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine usrdat2
+
+      include 'SIZE'
+      include 'TOTAL'
+
+c set velocity BCs
+      call setbc(1,1,'int') ! upstream inflow
+      call setbc(2,1,'W  ') ! upstream pipe wall
+      call setbc(3,1,'v  ') ! coflow
+      call setbc(4,1,'v  ') ! lateral farfield
+      call setbc(5,1,'O  ') 
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine usrdat3
+
+      include 'SIZE'
+      include 'TOTAL'
+      
+      return
+      end
+C-----------------------------------------------------------------------
+       real function sstep(vbs,vas,sp,epsmr,r)
+
+c      Smooth Step Function
+c      Create a smooth jump from vbs,vas (if r is increasing)
+c      with a inflection point sp and a smoothness factor epsmr
+c      (epsmr->0 discontinous jump)
+c      r denotes the independent variable
+
+       implicit none
+       real vbs,vas,sp,r,epsmr
+       real delta,aid
+
+       delta = (vas-vbs)
+       aid =  0.5*delta*(tanh((r-sp)/epsmr) + 1.0) + vbs
+       sstep = aid !max(1e-15,aid)
+
+       return
+       end
