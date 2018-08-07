@@ -179,23 +179,32 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : TurbChannel
   * __Purpose__ : LES of a turbulent channel flow
   * __Features__ :
-  	* AMG coarse grid solver
-  	* OIFS
+    * AMG coarse grid solver
+    * OIFS
     * Variable time step
     * High pass filter relaxation term
     * Computing wall shear stress using objects
+    * Runnig averages computed by avg_all
     * Planar averaging
+    * Extract 1D statistics using interpolation
 * `turbPipe`
   * __Test name__ : TurbPipe
   * __Purpose__ : LES of a round turbulent pipe flow
   * __Features__ :
+* `turbJet`
+  * __Test name__ : TurbJet
+  * __Purpose__ : LES of a round turbulent jet
+  * __Features__ :
+    * NEK-NEK to generate fully turbulent inflow boundary
+    * NEK-NEK in MPMD mode
+    * OIFS
+    * High pass filter relaxation term
+    * Turbulent outflow boundary condition to prevent backflow
 * `turbInflow`
   * __Test name__ : TurbInflow
   * __Purpose__ : Turbulent channel flow with turbulent inflow
   * __Features__ :
   	* Recycling boundary condition
-  	* Turbulent outflow boundary condition
-  	* Runnig averages computed by avg_all
 * `vortex`
   * __Test name__ : Vortex
   * __Purpose__ : Vortex breakdown in a container with a rotating lid
