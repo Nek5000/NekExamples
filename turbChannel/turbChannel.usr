@@ -5,11 +5,11 @@ c- constants -----------------------------------------------------------
 
 c data extraction along wall normal direction
 #define INTP_NMAX 200 /* number of sample points */
-#define BETAI 2.4     /* sample points stretching parameter */
 #define XCINT 1.0     /* x coordinate of 1D line*/
 #define ZCINT 1.0     /* z coordinate of 1D line */
 
 c mesh dimensions
+#define BETAM 2.4     /* wall normal stretching parameter */
 #define PI (4.*atan(1.))
 #define XLEN (2.*PI)
 #define ZLEN PI
@@ -154,7 +154,7 @@ c
           call cfill(xint,XCINT,size(xint))
           do i = 1,INTP_NMAX 
              yi = (i-1.)/(INTP_NMAX-1)
-             yint(i) = tanh(BETAI*(2*yi-1))/tanh(BETAI)
+             yint(i) = tanh(BETAM*(2*yi-1))/tanh(BETAM)
           enddo
           call cfill(zint,ZCINT,size(zint))
         endif
@@ -335,8 +335,6 @@ c-----------------------------------------------------------------------
       include 'SIZE'      ! _before_ mesh is generated, which 
       include 'TOTAL'     ! guarantees GLL mapping of mesh.
 
-      beta = 2.4
-
       n = nelv * 2**ldim
       xmin = glmin(xc,n)
       xmax = glmax(xc,n)
@@ -352,7 +350,7 @@ c-----------------------------------------------------------------------
       do i=1,n
          xc(i,1) = xscale*xc(i,1)
          yc(i,1) = yscale*yc(i,1)
-         yc(i,1) = tanh(beta*(2*yc(i,1)-1))/tanh(beta)
+         yc(i,1) = tanh(BETAM*(2*yc(i,1)-1))/tanh(BETAM)
          zc(i,1) = zscale*zc(i,1)
       enddo
 
