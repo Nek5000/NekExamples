@@ -319,7 +319,7 @@ c-----------------------------------------------------------------------
       ifrich = .true.
 
       if (ifsplit) then
-         write(*,*) 'ERROR: pn,pn-2 is not supported for ifrich == true'
+         write(*,*) 'ERROR: pn-pn is not supported for ifrich == true'
          call exitt
       endif
 
