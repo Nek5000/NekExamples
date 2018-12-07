@@ -384,29 +384,3 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
-      subroutine planar_avg(ua,u,hndl)
-c
-c     Note: This works only for global tensor product or extruded meshes 
-c
-      include 'SIZE'
-      include 'TOTAL'
-
-      real ua(lx1,ly1,lz1,lelv)
-      real u (lx1,ly1,lz1,lelv)
-
-      common /scrcg/ wrk(lx1,ly1,lz1,lelv)
-
-      n = nx1*ny1*nz1*nelv
-
-      call copy(wrk,bm1,n)              ! Set the averaging weights
-      call fgslib_gs_op(hndl,wrk,1,1,0) ! Sum weights
-      call invcol1(wrk,n)
-
-      do i=1,n
-         ua(i,1,1,1) = bm1(i,1,1,1)*u(i,1,1,1)*wrk(i,1,1,1)
-      enddo
-
-      call fgslib_gs_op(hndl,ua,1,1,0) ! Sum weighted values
-
-      return
-      end
