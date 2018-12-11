@@ -487,6 +487,7 @@ c-----------------------------------------------------------------------
 
       real vol,glsum,glmin,glmax,glsc2
       real tmp(lx1*ly1*lz1*lelv)
+      real prlagl(lx2*ly2*lz2*lelv)
       integer i,n1,n2,nt
 
       real uxmin,uxmax,uxave,uymin,uymax,uyave,uzmin,uzmax,uzave
@@ -496,6 +497,8 @@ c-----------------------------------------------------------------------
       real dux,duy,duz,dpr,dth(ldimt)
       character*15 tname
 
+      save prlagl
+
       n1=nx1*ny1*nz1*nelv
       n2=nx2*ny2*nz2*nelv
       nt=nx1*ny1*nz1*nelt
@@ -503,7 +506,7 @@ c-----------------------------------------------------------------------
       call get_limits(vx,uxmin,uxmax,uxave,dux,vxlag,rmsux,n1)
       call get_limits(vy,uymin,uymax,uyave,duy,vylag,rmsuy,n1)
       if(if3d) call get_limits(vz,uzmin,uzmax,uzave,duz,vzlag,rmsuz,n1)
-      call get_limits(pr,prmin,prmax,prave,dpr,prlag,rmspr,n2)
+      call get_limits(pr,prmin,prmax,prave,dpr,prlagl,rmspr,n2)
       if(ifheat)then
         do i=1,npscal+1
           if(idpss(i).eq.0) call get_limits(t(1,1,1,1,i),thmin(i) !Helmholtz solver
@@ -533,7 +536,7 @@ c-----------------------------------------------------------------------
         write(*,*)
       endif
 
-      call copy(prlag,pr,n2)
+      call copy(prlagl,pr,n2)
 
  254  format(a15,5a13)
  255  format(a15,5es13.4)
