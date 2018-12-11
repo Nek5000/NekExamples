@@ -315,7 +315,7 @@ c
 
       if (icalld.eq.0) then
         icalld = 1
-        call interp_setup(0,0,intp_h)
+        call interp_setup(intp_h,0.0,0,nelt)
       endif
 
       ! pack working array
