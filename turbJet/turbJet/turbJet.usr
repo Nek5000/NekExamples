@@ -136,7 +136,7 @@ c set velocity BCs
       call setbc(1,1,'int') ! upstream inflow
       call setbc(2,1,'W  ') ! upstream pipe wall
       call setbc(3,1,'v  ') ! coflow
-      call setbc(4,1,'v  ') ! lateral farfield
+      call setbc(4,1,'SYM') ! lateral farfield
       call setbc(5,1,'O  ') 
 
       return
