@@ -237,7 +237,7 @@ class CmtInviscidVortex(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.build_nek(opts={'PPLIST':'CMTNEK'})
+        self.build_nek()
         self.run_nek(step_limit=1000)
         self.diff_l2norms()
 
@@ -275,7 +275,7 @@ class CmtSod3(NekTestCase):
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
-        self.build_nek(opts={'PPLIST':'CMTNEK'})
+        self.build_nek()
         self.run_nek()
 
         errl2 = self.get_value_from_log('Error L2 norm', row=-1, column=-4)
@@ -755,7 +755,7 @@ class Eddy_Neknek(NekTestCase):
  
         self.size_params['lx2'] = 'lx1'
         self.config_size()
-        self.build_nek(opts={'PPLIST':'NEKNEK'})
+        self.build_nek()
         run_neknek(
             cwd = cwd,
             inside = 'inside',
@@ -814,7 +814,7 @@ class Eddy_Neknek(NekTestCase):
  
         self.size_params['lx2'] = 'lx1-2'
         self.config_size()
-        self.build_nek(opts={'PPLIST':'NEKNEK'})
+        self.build_nek()
         run_neknek(
             cwd = cwd,
             inside = 'inside',
