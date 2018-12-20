@@ -2,25 +2,25 @@ c
 c     Include file to dimension static arrays
 c     and to set some hardwired run-time parameters
 c
-      integer ldim,lx1,lxd,lx2,lx1m,lelg,lelt,lpmin,lpmax,ldimt
+      integer ldim,lx1,lxd,lx2,lx1m,lelg,lelt,lpmin,ldimt
       integer lpelt,lbelt,toteq,lcvelt
       integer lelx,lely,lelz,mxprev,lgmres,lorder,lhis
       integer maxobj,lpert,nsessmax,lxo
-      integer lfdm, ldimt_proj
+      integer lfdm,ldimt_proj,lelr
 
       ! BASIC
       parameter (ldim=2)               ! domain dimension (2 or 3)
-      parameter (lx1=6)                ! p-order (avoid uneven and values <6)
-      parameter (lxd=8)                ! p-order for over-integration (dealiasing) 
-      parameter (lx2=lx1-2)            ! p-order for pressure (lx1 or lx1-2)
+      parameter (lx1=6)                ! GLL points per element along each direction
+      parameter (lxd=8)                ! GL  points for over-integration (dealiasing) 
+      parameter (lx2=lx1-2)            ! GLL points for pressure (lx1 or lx1-2)
                                      
-      parameter (lelg=200)             ! max total number of elements
-      parameter (lpmin=1)              ! min MPI ranks
-      parameter (lpmax=1024)           ! max MPI ranks
+      parameter (lelg=200)             ! max number of global elements
+      parameter (lpmin=1)              ! min number of MPI ranks 
       parameter (ldimt=1)              ! max auxiliary fields (temperature + scalars)
 
       ! OPTIONAL
       parameter (ldimt_proj=1)         ! max auxiliary fields residual projection
+      parameter (lelr=1)               ! max number of elements per restart file
       parameter (lhis=100)             ! max history points
       parameter (maxobj=4)             ! max number of objects
       parameter (lpert=1)              ! max perturbation modes
@@ -36,7 +36,7 @@ c
       parameter (lbelt=1)              ! mhd
       parameter (lpelt=1)              ! linear stability
       parameter (lcvelt=1)             ! cvode
-      parameter (lfdm=0)  ! == 1 for fast diagonalization method
+      parameter (lfdm=0)               ! == 1 for fast diagonalization method
 
       ! INTERNALS
       include 'SIZE.inc'
