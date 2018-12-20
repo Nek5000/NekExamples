@@ -550,6 +550,7 @@ class CylRestart_C(NekTestCase):
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
+            lelr      = 'lelg/lpmin + 3',
         )
         self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
@@ -642,6 +643,7 @@ class CylRestart_P(NekTestCase):
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
+            lelr      = 'lelg/lpmin + 3',
         )
         self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
