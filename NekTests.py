@@ -1721,8 +1721,8 @@ class Mhd_GpfM(NekTestCase):
         self.build_nek(usr_file='gpf')
         self.run_nek(rea_file='gpf_m', step_limit=None)
 
-        phrase = self.get_phrase_from_log(label="ERROR: FDM")
-        self.assertIsNotNullDelayed(phrase, label='ERROR: FDM')
+        phrase = self.get_phrase_from_log(label="ABORT: MHD")
+        self.assertIsNotNullDelayed(phrase, label='ABORT: MHD')
         self.assertDelayedFailures()
 
 
