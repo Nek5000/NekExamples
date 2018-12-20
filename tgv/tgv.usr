@@ -78,7 +78,20 @@ c-----------------------------------------------------------------------
      &               w2 (lx1*ly1*lz1*lelv),
      &               omg(lx1*ly1*lz1*lelv,ldim)
 
+      character*80 fnames(3)
+
       n = nx1*ny1*nz1*nelv
+
+c      if (.false.) then
+c         call blank(fnames,size(fnames)*80)
+c         fnames(1) ='rs6tgv0.f00001'
+c         fnames(2) ='rs6tgv0.f00002'
+c         fnames(3) ='rs6tgv0.f00003'
+c         call full_restart(fnames,3) ! replace istep=0,1,..
+c      endif
+c
+c      iostep_full = iostep
+c      call full_restart_save(iostep_full)
 
       sum_e1 = 0.
       sum_e2 = 0.
@@ -93,11 +106,6 @@ c-----------------------------------------------------------------------
       e2 = 0.5 * glsum(sum_e2,1) / volvm1
       if (nid.eq.0) write(6,2) time, e1, e2
   2                 format(1p3e13.4,' monitor')
-
-      if(ifoutfld) then
-        ifto = .true.
-        if (ldimt.ge.1) call lambda2(t(1,1,1,1,1))
-      endif
 
       return
       end
