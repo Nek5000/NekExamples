@@ -200,11 +200,6 @@ Some examples provide additional pdf files for a more complete description.
     * OIFS
     * High pass filter relaxation term
     * Turbulent outflow boundary condition to prevent backflow
-* `turbInflow`
-  * __Test name__ : TurbInflow
-  * __Purpose__ : Turbulent channel flow with turbulent inflow
-  * __Features__ :
-  	* Recycling boundary condition
 * `vortex`
   * __Test name__ : Vortex
   * __Purpose__ : Vortex breakdown in a container with a rotating lid
