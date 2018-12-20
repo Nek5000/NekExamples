@@ -2799,6 +2799,7 @@ class Taylor(NekTestCase):
             lbelt     = '1',
             lpelt     = '1',
             lcvelt    = '1',
+            maxobj    = '4',
         )
         self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
