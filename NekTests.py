@@ -931,6 +931,7 @@ class Eddy_Rich(NekTestCase):
             lxd       = '12',
             lx2       = 'lx1-2',
             lelg      = '500',
+            lx1m      = 'lx1',
         )
  
         self.build_tools(['clean','genmap'])
