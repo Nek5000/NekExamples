@@ -1,12 +1,5 @@
 #  Eddy solutions in doubly-periodic domain with the multidomain version of Nek5000.
 
-## TO BUILD:
-
-	PPLIST="NEKNEK" 
-	export PPLIST
-	makenek eddy_uv
-
-## TO RUN:
 
 Two overlapping meshes are provided: 
 inside.rea (inner mesh) and outside.rea (outer mesh).  
@@ -14,7 +7,10 @@ To run, one needs to type 'neknek inside outside NP1 NP2',
 where NP1 is the number of processors for the 'inside' session 
 and NP2 is the number of processors for the 'outside' session. 
 For example, if NP1=2 and NP2=4, you would type 
-'neknek inside outside 2 4'.  
+
+````
+neknek inside outside 2 4
+````  
 
 eddy_uv.usr uses 3rd order extrapolation (ninter=3) in time
 with 5 iterations per time-step (ngeom = 5) used to converge the

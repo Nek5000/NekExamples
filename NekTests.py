@@ -5,68 +5,6 @@ from unittest import skip
 import re
 
 ####################################################################
-#  annulus_2d; cyl2.rea
-####################################################################
-
-class Annulus2d(NekTestCase):
-    example_subdir  = 'annulus_2d'
-    case_name        = 'cyl2'
-
-    def setUp(self):
-        self.size_params = dict(
-            ldim      = '2',
-            lx1       = '10',
-            lxd       = '15',
-            lx2       = 'lx1-2',
-            lelg      = '100',
-            ldimt     = '1',
-            lhis      = '100',
-            lelx      = '1',
-            lely      = '1',
-            lelz      = '1',
-            lx1m      = '1',
-            lbelt     = '1',
-            lpelt     = '1',
-            lcvelt    = '1',
-            lfdm      = '0',
-        )
-        self.build_tools(['clean','genmap'])
-        self.run_genmap(tol='0.01')
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek()
-        self.run_nek()
-
-        gmres = self.get_value_from_log('gmres', column=-7,row=1)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
-
-        vmax = self.get_value_from_log('tmax', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vmax, target_val=2.369E-01, delta=5E-04, label='vmax')
-        
-        self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek()
-        self.run_nek()
-
-        gmres = self.get_value_from_log('gmres', column=-6,row=1)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
-
-        vmax = self.get_value_from_log('tmax', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vmax, target_val=2.369E-01, delta=5E-04, label='vmax')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-####################################################################
 #  benard: ray_9.rea
 ####################################################################
 
@@ -1429,124 +1367,6 @@ class Mhd_Gpf(NekTestCase):
 
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0, delta=15, label='gmres')
-
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-
-
-class Mhd_GpfB(NekTestCase):
-    example_subdir = 'mhd'
-    case_name = 'gpf_b'
-
-    def setUp(self):
-        # Probably a cleaner way to do this...
-        # I'm just mimicking the
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '6',
-            lxd       = '1+3*lx1/2',
-            lx2       = 'lx1-2',
-            lelg      = '150',
-            ldimt     = '2',
-            lhis      = '200',
-            lelx      = '4',
-            lely      = '4',
-            lelz      = '8',
-            lx1m      = '1',
-            lbelt     = 'lelt',
-            lpelt     = '1',
-            lcvelt    = '1',
-            lfdm      = '1',
-        )
-        self.build_tools(['clean','genbox', 'genmap'])
-        self.run_genbox(box_file='gpf')
-        self.run_genmap(rea_file='box', tol='0.01')
-        self.mvn('box', 'gpf_b')
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_b', step_limit=None)
-
-        phrase = self.get_phrase_from_log("ABORT: MHD")
-        self.assertIsNotNullDelayed(phrase, label='ABORT: MHD')
-        self.assertDelayedFailures()
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_b', step_limit=None)
-
-        rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
-class Mhd_GpfM(NekTestCase):
-    example_subdir = 'mhd'
-    case_name = 'gpf_m'
-
-    def setUp(self):
-        import shutil
-        # Probably a cleaner way to do this...
-        # I'm just mimicking the
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '6',
-            lxd       = '1+3*lx1/2',
-            lx2       = 'lx1-2',
-            lelg      = '150',
-            ldimt     = '2',
-            lhis      = '200',
-            lelx      = '4',
-            lely      = '4',
-            lelz      = '8',
-            lx1m      = '1',
-            lbelt     = 'lelt',
-            lpelt     = '1',
-            lcvelt    = '1',
-            lfdm      = '1',
-        )
-        self.build_tools(['clean','genbox', 'genmap'])
-        self.run_genbox(box_file='gpf')
-        self.run_genmap(rea_file='box', tol='0.01')
-        self.mvn('box', 'gpf')
-        shutil.copy(
-            os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf.map'),
-            os.path.join(self.examples_root, self.__class__.example_subdir, 'gpf_m.map')
-        )
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.size_params['lx2']='lx1'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_m', step_limit=None)
-
-        phrase = self.get_phrase_from_log(label="ABORT: MHD")
-        self.assertIsNotNullDelayed(phrase, label='ABORT: MHD')
-        self.assertDelayedFailures()
-
-
-    @pn_pn_2_parallel
-    def test_PnPn2_Parallel(self):
-        self.size_params['lx2']='lx1-2'
-        self.config_size()
-        self.build_nek(usr_file='gpf')
-        self.run_nek(rea_file='gpf_m', step_limit=None)
 
         rtavg = self.get_value_from_log('rtavg_gr_Em', column=-4, row=-1)
         self.assertAlmostEqualDelayed(rtavg, target_val=2.56712250E-01, delta=.02, label='rtavg')
@@ -2930,7 +2750,6 @@ if __name__ == '__main__':
         ut_verbose = 1
 
     testList = (
-               Annulus2d,
                Benard_Ray9,
                Blasius,
                CmtInviscidVortex,
@@ -2939,8 +2758,6 @@ if __name__ == '__main__':
                Cone64,
                Cone256,
                ConjHt,
-               CylRestart_C,
-               CylRestart_P,
                Eddy_Neknek,
                Eddy_PsiOmega, 
                Eddy_Rich,
@@ -2980,7 +2797,6 @@ if __name__ == '__main__':
                Strat_P1000,
                Taylor,
                TurbChannel,
-               TurbInflow,
                Vortex,
                Vortex2
                ) 
