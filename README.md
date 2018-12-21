@@ -9,16 +9,11 @@ the simulation.
 
 Some examples provide additional pdf files for a more complete description.
 
-* `annulus_2d`
-  * __Test name__ : Annulus2d
-  * __Purpose__ : Natural convection between the two concentric cylinders with Boussinesq approximation.
-  * __Features__ : 
-    * Customized acceleration term (userf)
 * `benard`
   * __Test name__ : Benard_Ray9
   * __Purpose__ : Rayleigh-Benard convection.
   * __Features__ :
-    * Customized acceleration term (userf)
+    	* 	Customized acceleration term (userf)
 * `blasius`
   * __Test name__ : Blasius
   * __Purpose__ : Blasius boundary layer test case in 2D.
@@ -28,12 +23,12 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : CmtInviscidVortex
   * __Purpose__ : Steady isentropic vortex
   * __Features__ :
-    * CMT solver
+    	* CMT solver
 * `CMT/sod3`
   * __Test name__ : CmtSod3
   * __Purpose__ : Sod shock tube in 2D
   * __Features__ :
-    * CMT solver
+    	* CMT solver
 * `cone/cone016`, `cone/cone064`, `cone/cone256`
   * __Test name__ : Cone16,  Cone64, Cone256
   * __Purpose__ : Convecting cone problem
@@ -42,21 +37,18 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ :  ConjHt
   * __Purpose__ : 2D Poiseiulle flow moving between two heated finite thickness plates
   * __Features__ :
-    * Conjugate heat transfer
-    * Scalar solve with CVODE
+    	* Conjugate heat transfer
+    	* Scalar solve with CVODE
 * `conj_ht_frz`
   * __Test name__ :  ConjHtFrz
-  * __Purpose__ : ConjHT with frozen velocity field
+  * __Purpose__ : 2D Poiseiulle flow moving between two heated finite thickness
   * __Features__ :
-    * No velocity solve
-* `cyl_restart`
-  * __Test name__ : CylRestart_C, CylRestart_P
-  * __Purpose__ : Performing a full restart
-  * __Features__ :
+    	* Temperature solve with frozen velocity
 * `eddy_neknek`
   * __Test name__ : Eddy_Neknek
-  * __Purpose__ : Eddy solutions in doubly-periodic domain with two overlaping domains
+  * __Purpose__ : Eddy solutions in doubly-periodic domain domains
   * __Features__ :
+  		* Overlapping domains 
 * `eddy_psi_omega`
   * __Test name__ : Eddy_PsiOmega
   * __Purpose__ : Eddy solutions in doubly-periodic domain using the streamfunction-vorticity (psi-omega) formulation
@@ -87,7 +79,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Hemi
   * __Purpose__ : Particle tracking in flow past a hemispherical roughness.
   * __Features__ :
-    * Particle tracking using interpolation tool
+    	* Particle tracking using interpolation tool
 * `lin_channel2D`
   * __Test name__ : LinCav_Adj, LinCav_Dir
   * __Purpose__ : Linear direct and adjoint simulation of 2D differentially heated square cavity
@@ -100,8 +92,8 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : LowMachTest
   * __Purpose__ : Low-Mach number benchmark problem
   * __Features__ :
-    * User specified divergence
-    * User specified propteries
+    	* Thermal divergence
+    	* Variable (solution depended) properties
 * `mhd`
   * __Test name__ : Mhd_Gpf, Mhd_GpfB, Mhd_GpfM
   * __Purpose__ : Helical Forcing Dynamo
@@ -114,20 +106,20 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : MvCylCvode
   * __Purpose__ : Isentropic compression/expansion in a cylinder
   * __Features__ :
-    * User specified mesh motion
-    * Varying thermodynamic pressure
+    	* User specified mesh motion
+    	* Varying thermodynamic pressure
 * `mv_wall`
   * __Test name__ : MvWall
   * __Purpose__ : 2D channel with a moving indentation
   * __Features__ :
-  	* ALE
-    * Turbulent outflow boundary condition
+  		* ALE
+    	* Outflow treatment to prevent backflow
 * `ocyl`
   * __Test name__ : Ocyl, Ocyl2
   * __Purpose__ : Oscillating cylinder
   * __Features__ :
-    * Linear elasticity solver
-    * ALE
+    	* Linear elasticity solver
+    	* ALE
 * `os7000`
   * __Test name__ : Os7000
   * __Purpose__ : TS waves in plane Poiseuille flow
@@ -136,13 +128,13 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Peris
   * __Purpose__ : Peristaltic flow.
   * __Features__ :
-  	 * Moving mesh with ALE
-  	 * Outflow treatment to prevent backflow
+    	* Moving mesh with ALE
+    	* Outflow treatment to prevent backflow
 * `pipe`
   * __Test name__ : Pipe_Helix, Pipe_Stenosis
   * __Purpose__ : Pipe flow
   * __Features__ :
-  	* Mesh manipluation
+    * Mesh manipluation
     * Mesh extrusion
 * `rayleigh`
   * __Test name__ : Rayleigh_Ray1, Rayleigh_Ray2
@@ -156,8 +148,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Shear4_Shear4, Shear4_Thin
   * __Purpose__ : Double shear-layer rollup
   * __Features__ :
-  	* Filtering
-    * Dealiasing
+    	* Filtering
 * `smoother`
   * __Test name__ : Smooth
   * __Purpose__ : Mesh smoothing
@@ -166,7 +157,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Solid
   * __Purpose__ : Thick-wall hollow sphere under an internal pressure
   * __Features__ :
-  	 * Steady elastic solver
+    	* Steady elastic solver
 * `strat`
   * __Test name__ : Strat_P0001, Strat_P1000
   * __Purpose__ : Stratified 2D flow
@@ -177,38 +168,43 @@ Some examples provide additional pdf files for a more complete description.
   * __Features__ :
 * `turbChannel`
   * __Test name__ : TurbChannel
-  * __Purpose__ : LES of a turbulent channel flow
+  * __Purpose__ : Turbulent channel flow
   * __Features__ :
-    * AMG coarse grid solver
-    * OIFS
-    * Variable time step
-    * High pass filter relaxation term
-    * Computing wall shear stress using objects
-    * Runnig averages computed by avg_all
-    * Planar averaging
-    * Extract 1D statistics using interpolation
+    	* AMG coarse grid solver
+    	* OIFS
+    	* High pass filter relaxation term
+    	* Computing wall shear stress using objects
+    	* Runnig averages computed by avg_all
+    	* Planar averaging
+    	* Extract 1D statistics using interpolation
+* `RANSChannel`
+  * __Test name__ : RANSChannel
+  * __Purpose__ : Turbulent channel flow
+  * __Features__ :
+  		* kOmg turbulence model 	
 * `turbPipe`
   * __Test name__ : TurbPipe
-  * __Purpose__ : LES of a round turbulent pipe flow
+  * __Purpose__ : Round turbulent pipe flow
   * __Features__ :
 * `turbJet`
   * __Test name__ : TurbJet
   * __Purpose__ : LES of a round turbulent jet
   * __Features__ :
-    * NEK-NEK to generate fully turbulent inflow boundary
-    * NEK-NEK in MPMD mode
-    * OIFS
-    * High pass filter relaxation term
-    * Turbulent outflow boundary condition to prevent backflow
+    	* NEK-NEK to generate fully turbulent inflow boundary
+    	* OIFS
+    	* High pass filter relaxation term
+    	* Outflow treatment to prevent backflow
 * `vortex`
   * __Test name__ : Vortex
   * __Purpose__ : Vortex breakdown in a container with a rotating lid
   * __Features__ :
 * `vortex2`
   * __Test name__ : Vortex2
-  * __Purpose__ : Vortex breakdown in a container with a rotating lid (axisymmetric case)
+  * __Purpose__ : Vortex breakdown in a container with a rotating lid 
   * __Features__ :
+    	* Axissymmetric formulation
 * `tgv`
   * __Test name__ : Tgv
   * __Purpose__ : Taylor Green Vortex flow
   * __Features__ :
+  		* Performing a full restart
