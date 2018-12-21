@@ -1396,6 +1396,7 @@ class LinCav_Adj(NekTestCase):
             lx2       = 'lx1-2',
             lelg      = '500',
             lpelt     = 'lelt',
+            lelr      = 'lelg/lpmin + 4',
         )
 
         self.build_tools(['clean','genmap'])
@@ -1428,6 +1429,7 @@ class LinCav_Dir(NekTestCase):
             lx2       = 'lx1-2',
             lelg      = '500',
             lpelt     = 'lelt',
+            lelr      = 'lelg/lpmin + 4',
         )
  
         self.build_tools(['clean','genmap'])
@@ -1465,6 +1467,7 @@ class LinChn_Adj(NekTestCase):
             lelg      = '500',
             lpert     = '1',
             lpelt     = 'lelt',
+            lelr      = 'lelg/lpmin + 4',
         )
  
         self.build_tools(['clean','genmap'])
@@ -1498,6 +1501,7 @@ class LinChn_Dir(NekTestCase):
             lelg      = '500',
             lpert     = '1',
             lpelt     = 'lelt',
+            lelr      = 'lelg/lpmin + 4',
         )
 
         self.build_tools(['clean','genmap'])
