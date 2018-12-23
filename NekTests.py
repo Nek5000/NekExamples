@@ -439,10 +439,10 @@ class ConjHt(NekTestCase):
         self.run_nek(step_limit=None)
 
         gmres = self.get_value_from_log('gmres', column=-7,)
-        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=46., label='gmres')
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 
         tmax = self.get_value_from_log('tmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(tmax, target_val=13.1073, delta=1E-06, label='tmax')
+        self.assertAlmostEqualDelayed(tmax, target_val=13.1073, delta=1E-05, label='tmax')
 
         self.assertDelayedFailures()
 
