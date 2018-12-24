@@ -1,9 +1,9 @@
 [GENERAL]
 stopAt = endTime
-endTime = 10
+endTime = 150
 dt = 1.0e-3
 writeControl = runTime
-writeInterval = 10.0
+writeInterval = 30.0
 timeStepper = BDF2
 
 [PROBLEMTYPE]
@@ -14,31 +14,31 @@ stressFormulation = yes
 [VELOCITY]
 density = 1.0
 viscosity = -1e5
-residualTol = 1.0e-7
+residualTol = 1e-6
 
 [PRESSURE]
-residualTol = 1.0e-5
+residualTol = 1e-4
 
 [TEMPERATURE]
 solver = none
 rhoCp = 1.0
 conductivity = -1e5
-residualTol = 1.0e-7
+residualTol = 1e-6
 
 [SCALAR01] # tke
 density = 1.0
 diffusivity = -1e5
-residualTol = 1.0e-7
+residualTol = 1e-6
 #solver = cvode
-#absoluteTol = 1e-06
+#absoluteTol = 1e-6
 
 [SCALAR02] # omega 
 density = 1.0
 diffusivity = -1e5
-residualTol = 1.0e-7
+residualTol = 1e-6
 #solver = cvode
-#absoluteTol = 1e-06
+#absoluteTol = 1e-6
 
 [CVODE]
-relativeTol = 1e-04
-dtmax = 1e-02
+relativeTol = 1e-4
+dtmax = 1e-2
