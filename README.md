@@ -208,3 +208,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Taylor Green Vortex flow
   * __Features__ :
   		* Performing a full restart
+* `kovasznay`
+  * __Test name__ : Kov
+  * __Purpose__ : Kovasznay flow an analytical two-dimensional steady solution
+  * __Features__ :
