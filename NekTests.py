@@ -343,7 +343,7 @@ class ConjHt(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
 
         tmax = self.get_value_from_log('tmax', column=-2, row=-1)
-        self.assertAlmostEqualDelayed(tmax, target_val=13.1073, delta=1E-05, label='tmax')
+        self.assertAlmostEqualDelayed(tmax, target_val=13.1072, delta=1E-05, label='tmax')
 
         self.assertDelayedFailures()
 
