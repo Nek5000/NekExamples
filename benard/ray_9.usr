@@ -285,7 +285,7 @@ c Ra_crit_23 fit
                   endif
 c Rc accuracy
                   if (nid.eq.0) write(6,20) Rc,Racf,Rac3,Raer,Rae3
-                  istep = nsteps	! exit
+                  lastep = 1	! exit
                endif
 c adjust Ra
                rapr     =  Ra*Prnum			! Ra factors to adjust
