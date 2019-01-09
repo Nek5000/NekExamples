@@ -2147,8 +2147,8 @@ class Smooth(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        phrase = self.get_phrase_from_log('Mesh smoothing completed.')
-        self.assertIsNotNullDelayed(phrase, label='Mesh smoothing completed.')
+        phrase = self.get_phrase_from_log('SMOOTHER-time taken')
+        self.assertIsNotNullDelayed(phrase, label='SMOOTHER-time taken')
 
         self.assertDelayedFailures()
 
