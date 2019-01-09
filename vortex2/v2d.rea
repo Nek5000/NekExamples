@@ -11,9 +11,9 @@
        1.000000	        p07 RHOCP
       -1492.000         p08 CONDUCT
       0.0000000E+00
-      0.0000000E+00     p10 FINTIME
+       1.600000E+02     p10 FINTIME
        80000.00         p11 NSTEPS
-      2.0000000E-02     p12 DT
+       2.000000E-02     p12 DT
       0.0000000E+00     p13 IOCOMM
       0.0000000E+00     p14 IOTIME
        5000.000         p15 IOSTEP
