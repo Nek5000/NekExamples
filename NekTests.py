@@ -2563,11 +2563,11 @@ class Vortex2(NekTestCase):
         self.run_genmap(tol='0.01')
 
         # Tweak .rea file
-        rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.case_name + '.rea')
-        with open(rea_file_path, 'r') as f:
-            lines = [re.sub(r'(^\s+[\d.]+\s+p11.*$)', r' 8000\g<1>', l) for l in f]
-        with open(rea_file_path, 'w') as f:
-            f.writelines(lines)
+        #rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.case_name + '.rea')
+        #with open(rea_file_path, 'r') as f:
+        #    lines = [re.sub(r'(^\s+[\d.]+\s+p11.*$)', r' 8000\g<1>', l) for l in f]
+        #with open(rea_file_path, 'w') as f:
+        #    f.writelines(lines)
 
         # Extra tweaks to the SIZE file
         size_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, 'SIZE')
