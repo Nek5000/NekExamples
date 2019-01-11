@@ -15,7 +15,10 @@ The mesh was generated in Cubit, exported as EXODUSII and converted using ext2ne
 * Run turbPipe for say t=200 to get a fully turbulent pipe flow
 
 ### Step 2 - Coupled Simulation
-* Restart turbPipe from the saved solution 
-* Run the two Nek5000 sessions using e.g. neknekb_mpmd turbPipe turbJet 4 28
+* Restart turbPipe from the saved checkpoint 
+* Run the two sessions using e.g. 
+```
+neknekb_mpmd turbPipe turbJet 4 28 uncoupled
+```
 * Note, adjust the number of MPI ranks used for each session such that turbJet 
   never waits (check 'data exchange' timings in turbJet.logfile) for the inflow data.
