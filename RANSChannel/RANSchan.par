@@ -1,6 +1,6 @@
 [GENERAL]
 stopAt = endTime
-endTime = 150
+endTime = 100
 dt = 1.0e-3
 writeControl = runTime
 writeInterval = 30.0
