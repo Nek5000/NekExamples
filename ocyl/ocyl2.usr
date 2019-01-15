@@ -76,8 +76,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      if (param(33) .eq. 0.0) param(33) = 1.0     !  frequency = param(33)
-      if (param(34) .eq. 0.0) param(34) = 0.3     !  amplitude = param(34)
+      if (param(34) .eq. 0.0) param(34) = 1.0     !  frequency = param(34)
+      if (param(35) .eq. 0.0) param(35) = 0.3     !  amplitude = param(35)
 
       return
       end
@@ -206,8 +206,8 @@ c
       if (istep.eq.0) call my_base_meshv(basev,h1,h2,rhs,msk,tmp)
 
 
-      frequency = param(33)
-      amplitude = param(34)
+      frequency = param(34)
+      amplitude = param(35)
       omega     = frequency*2*pi
 
       ucx = 0.0                        ! Cylinder velocity components

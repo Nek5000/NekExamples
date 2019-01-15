@@ -1798,6 +1798,27 @@ class Pipe_Stenosis(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+###############################################################################
+#  RANSChan: RANSChan.par
+###############################################################################
+
+class RANSChannel(NekTestCase):
+    example_subdir = 'RANSChannel'
+    case_name = 'RANSchan'
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.build_nek()
+        self.run_nek()
+
+        u_tau = self.get_value_from_log('u_tau', column=-1, row=-1)
+        self.assertAlmostEqualDelayed(u_tau, target_val=3.9367E-02, delta=1.0E-04, label='u_tau')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ####################################################################
 #  rayleigh; ray1.rea, ray2.rea
 ####################################################################
@@ -2444,27 +2465,6 @@ class TurbChannel(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
-###############################################################################
-#  RANSChan: RANSChan.par
-###############################################################################
-
-class RANSChannel(NekTestCase):
-    example_subdir = 'RANSChannel'
-    case_name = 'RANSchan'
-
-    @pn_pn_parallel
-    def test_PnPn_Parallel(self):
-        self.build_nek()
-        self.run_nek()
-
-        u_tau = self.get_value_from_log('u_tau', column=-1, row=-1)
-        self.assertAlmostEqualDelayed(u_tau, target_val=3.9367E-02, delta=1.0E-04, label='u_tau')
-
-        self.assertDelayedFailures()
-
-    def tearDown(self):
-        self.move_logs()
-
 ####################################################################
 #  vortex; r1854a.rea
 ####################################################################
@@ -2652,8 +2652,6 @@ if __name__ == '__main__':
     testList = (
                Benard_Ray9,
                Blasius,
-               CmtInviscidVortex,
-               CmtSod3,
                Cone16,
                Cone64,
                Cone256,
@@ -2674,8 +2672,6 @@ if __name__ == '__main__':
                LinChn_Dir,
                LowMachTest,
                Mhd_Gpf,
-               Mhd_GpfB,
-               Mhd_GpfM,
                Moffatt,
                MoffCirc,
                MvCylCvode,
@@ -2686,6 +2682,7 @@ if __name__ == '__main__':
                Peris,
                Pipe_Helix,
                Pipe_Stenosis,
+               RANSChannel,
                Rayleigh_Ray1,
                Rayleigh_Ray2,
                Robin,
