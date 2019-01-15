@@ -34,9 +34,9 @@
   0.000000E+00 p030 > 0 ==> properties set in uservp()
   0.000000E+00 p031 NPERT: #perturbation modes
   0.000000E+00 p032 #BCs in re2 file, if > 0
-  0.200000     p033  user: frequency of oscillation
-  0.500000     p034  user: amplitude of oscillation
-  0.000000E+00 p035 
+  0.000000E+00 p033
+  0.200000     p034  user: frequency of oscillation
+  0.500000     p035  user: amplitude of oscillation
   0.000000E+00 p036  XMAGNET
   0.000000E+00 p037  NGRIDS
   0.000000E+00 p038  NORDER2

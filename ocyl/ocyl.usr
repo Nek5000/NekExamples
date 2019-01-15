@@ -39,8 +39,8 @@ c-----------------------------------------------------------------------
       include 'INPUT'
       include 'NEKUSE'
 
-      frequency = param(33)
-      amplitude = param(34)
+      frequency = param(34)
+      amplitude = param(35)
 
       if (x .lt. -1.1) then
         ux=1
@@ -70,8 +70,8 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      if (param(33) .eq. 0.0) param(33) = 1.0
-      if (param(34) .eq. 0.0) param(34) = 1.0e-2
+      if (param(34) .eq. 0.0) param(34) = 1.0
+      if (param(35) .eq. 0.0) param(35) = 1.0e-2
 
       return
       end
