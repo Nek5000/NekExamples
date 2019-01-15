@@ -2,13 +2,8 @@
 # nek parameter file
 #
 [GENERAL] 
-polynomialOrder = 7
-PnPnFormulation = yes
-minNumProcesses = 16
-maxNumProcesses = 1024
-
 stopAt = endTime
-endTime = 20
+endTime = 5.0
 dt = 1e-02
 timeStepper = bdf3
 
