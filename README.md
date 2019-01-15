@@ -19,16 +19,6 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Blasius boundary layer test case in 2D.
   * __Features__ :
   	 * "ON " boundary condition (Outflow, Normal only)
-* `CMT/inv_vort`
-  * __Test name__ : CmtInviscidVortex
-  * __Purpose__ : Steady isentropic vortex
-  * __Features__ :
-    	* CMT solver
-* `CMT/sod3`
-  * __Test name__ : CmtSod3
-  * __Purpose__ : Sod shock tube in 2D
-  * __Features__ :
-    	* CMT solver
 * `cone/cone016`, `cone/cone064`, `cone/cone256`
   * __Test name__ : Cone16,  Cone64, Cone256
   * __Purpose__ : Convecting cone problem
@@ -80,6 +70,10 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Particle tracking in flow past a hemispherical roughness.
   * __Features__ :
     	* Particle tracking using interpolation tool
+* `kovasznay`
+  * __Test name__ : Kov
+  * __Purpose__ : Kovasznay flow an analytical two-dimensional steady solution
+  * __Features__ :
 * `lin_channel2D`
   * __Test name__ : LinCav_Adj, LinCav_Dir
   * __Purpose__ : Linear direct and adjoint simulation of 2D differentially heated square cavity
@@ -95,7 +89,7 @@ Some examples provide additional pdf files for a more complete description.
     	* Thermal divergence
     	* Variable (solution depended) properties
 * `mhd`
-  * __Test name__ : Mhd_Gpf, Mhd_GpfB, Mhd_GpfM
+  * __Test name__ : Mhd_Gpf
   * __Purpose__ : Helical Forcing Dynamo
   * __Features__ :
 * `moffatt`
@@ -134,8 +128,13 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Pipe_Helix, Pipe_Stenosis
   * __Purpose__ : Pipe flow
   * __Features__ :
-    * Mesh manipluation
-    * Mesh extrusion
+       * Mesh manipluation
+       * Mesh extrusion
+* `RANSChannel`
+  * __Test name__ : RANSChannel
+  * __Purpose__ : Turbulent channel flow
+  * __Features__ :
+  		* kOmg turbulence model 
 * `rayleigh`
   * __Test name__ : Rayleigh_Ray1, Rayleigh_Ray2
   * __Purpose__ : Rayleigh-Benard convection
@@ -166,6 +165,11 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : Taylor
   * __Purpose__ : Taylor-Couette flow
   * __Features__ :
+* `tgv`
+  * __Test name__ : Tgv
+  * __Purpose__ : Taylor Green Vortex flow
+  * __Features__ :
+  		* Performing a full restart
 * `turbChannel`
   * __Test name__ : TurbChannel
   * __Purpose__ : Turbulent channel flow
@@ -176,16 +180,7 @@ Some examples provide additional pdf files for a more complete description.
     	* Computing wall shear stress using objects
     	* Runnig averages computed by avg_all
     	* Planar averaging
-    	* Extract 1D statistics using interpolation
-* `RANSChannel`
-  * __Test name__ : RANSChannel
-  * __Purpose__ : Turbulent channel flow
-  * __Features__ :
-  		* kOmg turbulence model 	
-* `turbPipe`
-  * __Test name__ : TurbPipe
-  * __Purpose__ : Round turbulent pipe flow
-  * __Features__ :
+    	* Extract 1D statistics using interpolation	
 * `turbJet`
   * __Test name__ : TurbJet
   * __Purpose__ : LES of a round turbulent jet
@@ -194,6 +189,10 @@ Some examples provide additional pdf files for a more complete description.
     	* OIFS
     	* High pass filter relaxation term
     	* Outflow treatment to prevent backflow
+* `turbPipe`
+  * __Test name__ : TurbPipe
+  * __Purpose__ : Round turbulent pipe flow
+  * __Features__ :
 * `vortex`
   * __Test name__ : Vortex
   * __Purpose__ : Vortex breakdown in a container with a rotating lid
@@ -203,12 +202,4 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Vortex breakdown in a container with a rotating lid 
   * __Features__ :
     	* Axissymmetric formulation
-* `tgv`
-  * __Test name__ : Tgv
-  * __Purpose__ : Taylor Green Vortex flow
-  * __Features__ :
-  		* Performing a full restart
-* `kovasznay`
-  * __Test name__ : Kov
-  * __Purpose__ : Kovasznay flow an analytical two-dimensional steady solution
-  * __Features__ :
+

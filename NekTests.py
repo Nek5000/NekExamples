@@ -365,6 +365,61 @@ class ConjHt(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  conj_ht: conj_ht.rea
+####################################################################
+
+class ConjHtFrz(NekTestCase):
+    example_subdir  = 'conj_ht_frz'
+    case_name        = 'conj_ht_frz'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '4',
+            lxd       = '7',
+            lx2       = 'lx1',
+            lelg      = '100',
+            ldimt     = '2',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = 'lelt',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek(opts={'PPLIST':'CVODE'})
+        self.run_nek(step_limit=1000)
+
+        tmax = self.get_value_from_log('terr', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tmax, target_val=2.82007e-06, delta=1E-09, label='tmax')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek(opts={'PPLIST':'CVODE'})        
+        self.run_nek(step_limit=1000)
+
+        tmax = self.get_value_from_log('terr', column=-2, row=-1)
+        self.assertAlmostEqualDelayed(tmax, target_val=2.78268E-06, delta=1E-09, label='tmax')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 #####################################################################
 #   eddy_neknek: eddy_neknek.rea
 #####################################################################
@@ -1030,6 +1085,53 @@ class Hemi(NekTestCase):
         self.move_logs()
 
 ####################################################################
+#  kovasznay; kov.rea
+####################################################################
+
+class Kov(NekTestCase):
+    example_subdir = 'kovasznay'
+    case_name = 'kov'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2'] = 'lx1-0'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=3.22859E-06 , delta=1e-07, label='err')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2'] = 'lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        err = self.get_value_from_log(label='err', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val= 1.49460E-05, delta=1e-06, label='err')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+####################################################################
 #  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
 ####################################################################
 
@@ -1217,7 +1319,7 @@ class LowMachTest(NekTestCase):
 
 
 ####################################################################
-#  mhd; gpf.rea, gpf_m.rea, gpf_b.rea
+#  mhd; gpf.rea
 ####################################################################
 
 class Mhd_Gpf(NekTestCase):
@@ -1945,7 +2047,7 @@ class Rayleigh_Ray2(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  expansion: expansion.rea
+#  robin: robin.rea
 ####################################################################
 
 class Robin(NekTestCase):
@@ -2403,6 +2505,42 @@ class Taylor(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+####################################################################
+#  tgv; tgv.rea
+####################################################################
+
+class Tgv(NekTestCase):
+    example_subdir = 'tgv'
+    case_name = 'tgv'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '10',
+            lx2       = 'lx1-2',
+            lpmin     = '2',
+            lelg      = '600',
+        )
+
+        self.build_tools(['genmap'])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2'] = 'lx1-0'
+        self.config_size()
+        self.build_nek()
+        self.run_nek()
+
+        err = self.get_value_from_log(label='monitor', column=-3, row=-1)
+        self.assertAlmostEqualDelayed(err, target_val=0.118435751357, delta=1e-03, label='energy')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
 ###############################################################################
 #  turbChannel: turbChannel.rea
 ###############################################################################
@@ -2459,6 +2597,62 @@ class TurbChannel(NekTestCase):
 
 #        solver_time = self.get_value_from_log('total solver time', column=-2)
 #        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=25.0, label='total solver time')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+###############################################################################
+#  turbChannel: turbChannel.rea
+###############################################################################
+
+class TurbPipe(NekTestCase):
+    example_subdir = 'turbPipe'
+    case_name = 'turbPipe'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '10',
+            lx2       = 'lx1-2',
+            lelg      = '1620',
+            lpmin     = '4',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=48., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=48., label='gmres')
 
         self.assertDelayedFailures()
 
@@ -2656,6 +2850,7 @@ if __name__ == '__main__':
                Cone64,
                Cone256,
                ConjHt,
+               ConjHtFrz,
                Eddy_Neknek,
                Eddy_PsiOmega, 
                Eddy_Rich,
@@ -2666,6 +2861,7 @@ if __name__ == '__main__':
                Fs2_St2,
                Fs2_StdWv,
                Hemi,
+               Kov,
                LinCav_Adj,
                LinCav_Dir,
                LinChn_Adj,
@@ -2693,7 +2889,10 @@ if __name__ == '__main__':
                Strat_P0001,
                Strat_P1000,
                Taylor,
+               Tgv,
                TurbChannel,
+               TurbJet,
+               TurbPipe,
                Vortex,
                Vortex2
                ) 
