@@ -141,6 +141,8 @@ c set velocity BCs
       call setbc(4,1,'SYM') ! lateral farfield
       call setbc(5,1,'O  ') 
 
+      call neknek_setup
+
       return
       end
 C-----------------------------------------------------------------------
@@ -149,7 +151,6 @@ C-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      call neknek_setup
       
       return
       end
