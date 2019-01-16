@@ -366,7 +366,7 @@ class ConjHt(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  conj_ht: conj_ht.rea
+#  conj_ht_frz: conj_ht_frz.rea
 ####################################################################
 
 class ConjHtFrz(NekTestCase):
@@ -1132,7 +1132,7 @@ class Kov(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
+#  lin_dfh_cav; lin_dfh_cav_dir.par, lin_dfh_cav_adj.par
 ####################################################################
 
 class LinCav_Adj(NekTestCase):
@@ -1202,7 +1202,7 @@ class LinCav_Dir(NekTestCase):
         self.move_logs()
 
 ####################################################################
-#  channel2D; lin_chan_dir.par, lin_chan_adj.par
+#  lin_channel2D; lin_chan_dir.par, lin_chan_adj.par
 ####################################################################
 
 class LinChn_Adj(NekTestCase):
@@ -2604,7 +2604,7 @@ class TurbChannel(NekTestCase):
         self.move_logs()
 
 ###############################################################################
-#  turbChannel: turbChannel.rea
+#  turbPipe: turbPipe.rea
 ###############################################################################
 
 class TurbPipe(NekTestCase):
