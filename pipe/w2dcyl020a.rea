@@ -123,7 +123,7 @@
   F     IFMODEL
   F     IFKEPS
   F     IFMVBD
-  F     IFCHAR
+  T     IFCHAR
    5.00000       5.00000      -2.75000      -2.75000     XFAC,YFAC,XZERO,YZERO
  **MESH DATA** 1st line is X of corner 1,2,3,4. 2nd line is Y.
        20        2       20 NEL,NDIM,NELV

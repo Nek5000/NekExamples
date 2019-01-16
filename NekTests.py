@@ -2151,7 +2151,7 @@ class Shear4_Shear4(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-03, label='peak vorticity')
 
         self.assertDelayedFailures()
 
@@ -2166,7 +2166,7 @@ class Shear4_Shear4(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
 
         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(vort, target_val=3.031328E+01, delta=1e-03, label='peak vorticity')
 
         self.assertDelayedFailures()
 
@@ -2210,7 +2210,7 @@ class Shear4_Thin(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=26., label='gmres')
 
         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(vort, target_val=9.991753E+01, delta=5e-03, label='peak vorticity')
 
         self.assertDelayedFailures()
 
@@ -2225,7 +2225,7 @@ class Shear4_Thin(NekTestCase):
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=17., label='gmres')
 
         vort = self.get_value_from_log('peak vorticity', column=-3, row=-1)
-        self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=1e-06, label='peak vorticity')
+        self.assertAlmostEqualDelayed(vort, target_val=9.991556E+01, delta=5e-03, label='peak vorticity')
 
         self.assertDelayedFailures()
 
