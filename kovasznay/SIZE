@@ -14,7 +14,7 @@ c
       parameter (lxd=12)               ! GL  points for over-integration (dealiasing) 
       parameter (lx2=lx1-2)            ! GLL points for pressure (lx1 or lx1-2)
                                      
-      parameter (lelg=10)              ! max number of global elements
+      parameter (lelg=500)            ! max number of global elements
       parameter (lpmin=1)              ! min number of MPI ranks 
       parameter (lelt=lelg/lpmin + 3)  ! max number of local elements per MPI rank
       parameter (ldimt=1)              ! max auxiliary fields (temperature + scalars)
