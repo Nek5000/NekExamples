@@ -1908,6 +1908,29 @@ class RANSChannel(NekTestCase):
     example_subdir = 'RANSChannel'
     case_name = 'RANSchan'
 
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '2',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-0',
+            lelg      = '64',
+            ldimt     = '3',
+            lhis      = '1000',
+            lpert     = '1',
+            toteq     = '1',
+            lelx      = '3',
+            lely      = '8',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.config_size()
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(rea_file='RANSchan', tol='0.01')
+
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
         self.build_nek()
@@ -2754,28 +2777,6 @@ class Vortex2(NekTestCase):
         )
         self.build_tools(['clean','genmap'])
         self.run_genmap(tol='0.01')
-
-        # Tweak .rea file
-        #rea_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, self.case_name + '.rea')
-        #with open(rea_file_path, 'r') as f:
-        #    lines = [re.sub(r'(^\s+[\d.]+\s+p11.*$)', r' 8000\g<1>', l) for l in f]
-        #with open(rea_file_path, 'w') as f:
-        #    f.writelines(lines)
-
-        # Extra tweaks to the SIZE file
-        size_file_path = os.path.join(self.examples_root, self.__class__.example_subdir, 'SIZE')
-        with open(size_file_path, 'r') as f:
-            lines = f.readlines()
-
-        lines = [re.sub(
-            r'( {6}parameter *)\(lx1=10,ly1=lx1,lz1=1,lelt=80,lelv=lelt\)( *)',
-            r'\g<1>(lx1=8,ly1=lx1,lz1=1,lelt=80,lelv=lelt)\g<2>', l, flags=re.I) for l in lines]
-        lines = [re.sub(
-            r'( {6}parameter *)\(lxd=15,lyd=lxd,lzd=1\)( *)',
-            r'\g<1>(lxd=12,lyd=lxd,lzd=1)\g<2>', l, flags=re.I) for l in lines]
-
-        with open(size_file_path, 'w') as f:
-            f.writelines(lines)
 
     @pn_pn_parallel
     def test_PnPn_Parallel(self):
