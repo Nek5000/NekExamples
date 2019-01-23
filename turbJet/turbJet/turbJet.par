@@ -4,7 +4,7 @@
 [GENERAL] 
 #startFrom = restart.fld time=0
 stopAt = endTime
-endTime = 600 
+endTime = 150 
 
 dt = 1.0e-2
 timeStepper = bdf2
@@ -23,6 +23,7 @@ numberOfBCFields = 1
 
 [PROBLEMTYPE]
 equation = incompNS
+stressFormulation = yes
 
 [PRESSURE]
 residualTol = 1e-04

@@ -8,6 +8,8 @@ is obtained from another session (turbPipe).
 
 The mesh was generated in Cubit, exported as EXODUSII and converted using ext2nek.
 
+This example uses Dong outflow bc.
+
 ## How to run this example
 
 ### Step 1 - Precursor Turbulent Inlet

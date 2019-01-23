@@ -188,7 +188,7 @@ Some examples provide additional pdf files for a more complete description.
     	* NEK-NEK to generate fully turbulent inflow boundary
     	* OIFS
     	* High pass filter relaxation term
-    	* Outflow treatment to prevent backflow
+    	* Outflow treatment to prevent backflow using Dong bc
 * `turbPipe`
   * __Test name__ : TurbPipe
   * __Purpose__ : Round turbulent pipe flow

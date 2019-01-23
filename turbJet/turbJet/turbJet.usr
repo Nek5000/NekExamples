@@ -58,22 +58,10 @@ C-----------------------------------------------------------------------
 
       include 'SIZE'
       include 'TOTAL'
-
-      common /myoutflow/  d(lx1,ly1,lz1,lelt),m1(lx1*ly1*lz1,lelt)
-      real m1
-
-      data icalld /0/
-      save icalld 
-
-      n = nx1*ny1*nz1*nelt
-
-      rq     = 2.5
-      uin_tb = 1.
-      call turb_outflow(d,m1,rq,uin_tb)
  
       if(ifoutfld) then
         ifto = .true.
-        call lambda2(t(1,1,1,1,1))
+        call lambda2(t)
       endif 
 
       call neknek_exchange
@@ -88,12 +76,29 @@ C-----------------------------------------------------------------------
       include 'NEKUSE'
       include 'NEKNEK'
 
-      integer e, bID
+      integer e, bID, ixy
+      real vn, U0, delta, S0
 
       e = gllel(ieg)
       bID = boundaryIDList(iside,e)
- 
-      if (bID.eq.3 .or. bID.eq.4) then ! coflow + lateral
+      
+c     Dong boundary condition
+      pa = 0.0
+      U0 = 1.0                  ! characteristic velocity
+      delta = 0.1               ! small positive constant
+      if (cbu.eq.'o  ') then
+         if (iside.eq.1.or.iside.eq.3) then
+            ixy = (iz-1)*lx1 + ix
+         else if (iside.eq.2.or.iside.eq.4) then
+            ixy = (iz-1)*ly1 + iy
+         else
+            ixy = (iy-1)*lx1 + ix
+         endif
+         vn = ux*unx(ixy,1,iside,e) + uy*uny(ixy,1,iside,e) + 
+     $        uz*unz(ixy,1,iside,e)
+         S0 = 0.5*(1.0 - tanh(vn/U0/delta))
+         pa = -0.5*(ux*ux+uy*uy+uz*uz)*S0       
+      elseif (bID.eq.3 .or. bID.eq.4) then ! coflow + lateral
          ux = 0.0
          uy = 0.0
          uz = sstep(0.0, U_CO, 0.6, 0.035, r)

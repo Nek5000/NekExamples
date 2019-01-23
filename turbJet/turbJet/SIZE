@@ -12,7 +12,7 @@ c
       parameter (ldim=3)               ! domain dimension (2 or 3)
       parameter (lx1=8)                ! GLL points per element along each direction
       parameter (lxd=10)               ! GL  points for over-integration (dealiasing) 
-      parameter (lx2=lx1-0)            ! GLL points for pressure (lx1 or lx1-2)
+      parameter (lx2=lx1-2)            ! GLL points for pressure (lx1 or lx1-2)
                                      
       parameter (lelg=12228)           ! max total number of elements
       parameter (lpmin=24)             ! min MPI ranks
@@ -22,15 +22,15 @@ c
       ! OPTIONAL
       parameter (ldimt_proj=1)         ! max auxiliary fields residual projection
       parameter (lelr=lelt)            ! max number of local elements per restart file
-      parameter (lhis=1000)            ! max history/monitoring points
-      parameter (maxobj=4)             ! max number of objects
+      parameter (lhis=100)             ! max history/monitoring points
+      parameter (maxobj=1)             ! max number of objects
       parameter (lpert=1)              ! max number of perturbations
       parameter (toteq=1)              ! max number of conserved scalars in CMT
       parameter (nsessmax=2)           ! max sessions to NEKNEK
       parameter (lxo=lx1)              ! max GLL points on output (lxo>=lx1)
       parameter (mxprev=20,lgmres=30)  ! max dim of projection & Krylov space
       parameter (lorder=3)             ! max order in time
-      parameter (lx1m=1)               ! GLL points mesh solver
+      parameter (lx1m=lx1)             ! GLL points mesh solver
       parameter (lfdm=0)               ! unused 
       parameter (lelx=1,lely=1,lelz=1) ! global tensor mesh dimensions
 
