@@ -202,4 +202,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : Vortex breakdown in a container with a rotating lid 
   * __Features__ :
     	* Axissymmetric formulation
-
+* `bp5`
+  * __Test name__ : bp5
+  * __Purpose__ : Ceed benchmark solving a standard Poisson equation 
+  * __Features__ :
