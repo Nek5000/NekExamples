@@ -23,6 +23,7 @@ numberOfBCFields = 1
 
 [PROBLEMTYPE]
 equation = incompNS
+stressFormulation = yes
 
 [PRESSURE]
 residualTol = 1e-04

@@ -59,17 +59,17 @@ C-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      common /myoutflow/  d(lx1,ly1,lz1,lelt),m1(lx1*ly1*lz1,lelt)
-      real m1
+c      common /myoutflow/  d(lx1,ly1,lz1,lelt),m1(lx1*ly1*lz1,lelt)
+c      real m1
 
       data icalld /0/
       save icalld 
 
       n = nx1*ny1*nz1*nelt
 
-      rq     = 2.5
-      uin_tb = 1.
-      call turb_outflow(d,m1,rq,uin_tb)
+c      rq     = 2.5
+c      uin_tb = 1.
+c      call turb_outflow(d,m1,rq,uin_tb)
  
       if(ifoutfld) then
         ifto = .true.
@@ -91,18 +91,23 @@ C-----------------------------------------------------------------------
       integer e, bID
 
       e = gllel(ieg)
-      bID = boundaryIDList(iside,e)
- 
-      if (bID.eq.3 .or. bID.eq.4) then ! coflow + lateral
+      bID = boundaryID(iside,e)
+
+      pa = 0.0
+      if (cbu.eq.'o  ') then
+         U0 = 1.0                  ! characteristic velocity
+         delta = 0.1               ! small positive constant
+         pa = dongOutflow(ix,iy,iz,e,iside,U0,delta)
+      elseif (bID.eq.3) then ! coflow
          ux = 0.0
          uy = 0.0
          uz = sstep(0.0, U_CO, 0.6, 0.035, r)
       else ! jet
          ux  = valint(ix,iy,iz,e,1)
-         uy  = valint(ix,iy,iz,e,2) 
+         uy  = valint(ix,iy,iz,e,2)
          uz  = valint(ix,iy,iz,e,3)
       endif
-
+ 
       return
       end
 C-----------------------------------------------------------------------
@@ -139,7 +144,8 @@ c set velocity BCs
       call setbc(2,1,'W  ') ! upstream pipe wall
       call setbc(3,1,'v  ') ! coflow
       call setbc(4,1,'SYM') ! lateral farfield
-      call setbc(5,1,'O  ') 
+      call setbc(5,1,'o  ') 
+c      call setbc(5,1,'O  ') 
 
       call neknek_setup
 
@@ -155,7 +161,7 @@ C-----------------------------------------------------------------------
       return
       end
 C-----------------------------------------------------------------------
-       real function sstep(vbs,vas,sp,epsmr,r)
+      real function sstep(vbs,vas,sp,epsmr,r)
 
 c      Smooth Step Function
 c      Create a smooth jump from vbs,vas (if r is increasing)
@@ -163,13 +169,35 @@ c      with a inflection point sp and a smoothness factor epsmr
 c      (epsmr->0 discontinous jump)
 c      r denotes the independent variable
 
-       implicit none
-       real vbs,vas,sp,r,epsmr
-       real delta,aid
+      implicit none
+      real vbs,vas,sp,r,epsmr
+      real delta,aid
 
-       delta = (vas-vbs)
-       aid =  0.5*delta*(tanh((r-sp)/epsmr) + 1.0) + vbs
-       sstep = aid !max(1e-15,aid)
+      delta = (vas-vbs)
+      aid =  0.5*delta*(tanh((r-sp)/epsmr) + 1.0) + vbs
+      sstep = aid !max(1e-15,aid)
 
-       return
-       end
+      return
+      end
+C-----------------------------------------------------------------------
+      function dongOutflow(ix,iy,iz,iel,iside,u0,delta)
+
+      include 'SIZE'
+      include 'SOLN'
+      include 'GEOM'
+
+      real sn(3)
+
+      ux = vx(ix,iy,iz,iel)
+      uy = vy(ix,iy,iz,iel)
+      uz = vz(ix,iy,iz,iel)
+
+      call getSnormal(sn,ix,iy,iz,iside,iel)
+      vn = ux*sn(1) + uy*sn(2) + uz*sn(3) 
+      S0 = 0.5*(1.0 - tanh(vn/u0/delta))
+
+      dongOutflow = -0.5*(ux*ux+uy*uy+uz*uz)*S0
+
+      return
+      end
+C-----------------------------------------------------------------------

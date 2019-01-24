@@ -30,7 +30,7 @@ c
       parameter (lxo=lx1)              ! max GLL points on output (lxo>=lx1)
       parameter (mxprev=20,lgmres=30)  ! max dim of projection & Krylov space
       parameter (lorder=3)             ! max order in time
-      parameter (lx1m=1)               ! GLL points mesh solver
+      parameter (lx1m=lx1)             ! GLL points mesh solver
       parameter (lfdm=0)               ! unused 
       parameter (lelx=1,lely=1,lelz=1) ! global tensor mesh dimensions
 

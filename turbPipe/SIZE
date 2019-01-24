@@ -10,9 +10,9 @@ c
 
       ! BASIC
       parameter (ldim=3)               ! domain dimension (2 or 3)
-      parameter (lx1=8)                ! GLL points per element along each direction
-      parameter (lxd=10)               ! GL  points for over-integration (dealiasing) 
-      parameter (lx2=lx1-2)            ! GLL points for pressure (lx1 or lx1-2)
+      parameter (lx1=6)                ! GLL points per element along each direction
+      parameter (lxd=8)                ! GL  points for over-integration (dealiasing) 
+      parameter (lx2=lx1-0)            ! GLL points for pressure (lx1 or lx1-2)
                                      
       parameter (lelg=1620)            ! max number of global elements
       parameter (lpmin=4)              ! min number of MPI ranks 
@@ -26,7 +26,7 @@ c
       parameter (maxobj=1)             ! max number of objects
       parameter (lpert=1)              ! max number of perturbations
       parameter (toteq=1)              ! max number of conserved scalars in CMT
-      parameter (nsessmax=1)           ! max sessions to NEKNEK
+      parameter (nsessmax=2)           ! max sessions to NEKNEK
       parameter (lxo=lx1)              ! max GLL points on output (lxo>=lx1)
       parameter (mxprev=20,lgmres=30)  ! max dim of projection & Krylov space
       parameter (lorder=3)             ! max order in time
