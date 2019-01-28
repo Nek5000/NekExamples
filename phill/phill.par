@@ -13,12 +13,12 @@ variableDt = yes
 targetCFL = 0.5
 
 writeControl = timeStep #runTime
-writeInterval = 10
+writeInterval = 250
 
 dealiasing = yes
 filtering = hpfrt #hpfrt, none, explicit
-filterWeight = .01
-filterCutoffRatio = 0.98
+filterWeight = 10.0
+filterCutoffRatio = 0.9
 
 [PROBLEMTYPE]
 equation = incompNS
@@ -27,12 +27,12 @@ variableProperties = no
 
 [PRESSURE]
 preconditioner = semg_xxt
-residualTol = 1e-6
+residualTol = 1e-4
 residualProj = yes
 
 [VELOCITY]
-residualTol = 1e-7
+residualTol = 1e-6
 residualProj = yes
-density = 1
-viscosity = -700
+density = 1.0
+viscosity = -10000
 advection = yes

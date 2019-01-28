@@ -126,7 +126,7 @@ Some examples provide additional pdf files for a more complete description.
     	* Outflow treatment to prevent backflow
 * `phill`
   * __Test name__ : Phill
-  * __Purpose__ : 2D flow over periodic hill
+  * __Purpose__ : 3D flow over periodic hill
   * __Features__ :
        * Mesh manipluation
 * `pipe`

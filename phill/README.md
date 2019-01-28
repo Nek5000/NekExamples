@@ -1,4 +1,4 @@
-# 2D PERIODIC HILL
+# 3D PERIODIC HILL
 
 This example is similar to the one presented in Nek5000 documentation, however
 the hill profile is consistent with Almeida et al. 1993 and described at

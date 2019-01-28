@@ -88,7 +88,7 @@ c     Hill parameters
       common /hill_param/ Lx, Ly, Lz, W, H
       Lx = 9.
       Ly = 3.035
-      Lz = 1.0
+      Lz = 4.5
       W  = 1.929
       H = 1.
 
