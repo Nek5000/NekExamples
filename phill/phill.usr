@@ -1,0 +1,369 @@
+C-----------------------------------------------------------------------
+c
+c     user subroutines required by nek5000
+c
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'          ! UDIFF, UTRANS
+
+      UDIFF =0.
+      UTRANS=0.
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'          ! FF[XYZ]
+
+      FFX = 0.0
+      FFY = 0.0
+      FFZ = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'          ! QVOL
+
+      QVOL   = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      implicit none
+      include 'SIZE'
+      include 'TSTEP'
+
+c     Point for torque calculation
+      real x0(3)
+      data x0 /3*0.0/      
+
+      if (istep.eq.0) call set_obj      
+      
+      call torque_calc(1.,x0,.true.,.false.)
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,ieg)
+      implicit none
+      include 'SIZE'
+      include 'NEKUSE'          ! UX, UY, UZ, TEMP, X, Y, PA
+      integer ix,iy,iz,iside,ieg      
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+      implicit none
+      include 'SIZE'
+      include 'NEKUSE'          ! UX, UY, UZ, TEMP, X, Y, Z
+      integer ix,iy,iz,ieg
+
+      ux = 1.0
+      uy = 0.0
+      uz = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      implicit none
+      include 'SIZE'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      implicit none
+      include 'SIZE'
+      include 'SOLN'            ! vx,vy,vz,pr,t
+      
+c     Hill parameters
+      real Lx, Ly, Lz, W, H
+      common /hill_param/ Lx, Ly, Lz, W, H
+      Lx = 9.
+      Ly = 3.035
+      Lz = 4.5
+      W  = 1.929
+      H = 1.
+
+c               Lx      
+c      <----------------->
+c      ___________________ 
+c                           ^
+c                           |
+c                           |
+c      _                 _  | Ly
+c   ^   \               /   |
+c H |    \             /    |
+c   v     \___________/     v
+c      <-->
+c       W
+      
+c     Transform box mesh to periodic hill (only for the conforming mesh!!)
+      call box2phill
+
+c      call gen_re2(0)
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+      implicit none
+      include 'SIZE'
+      include 'INPUT'           ! param, if3d
+      include 'MASS'            ! volvm1      
+      
+c     Local variables
+      real Ubulk
+      
+c     Hill parameters
+      real Lx, Ly, Lz, W, H
+      common /hill_param/ Lx, Ly, Lz, W, H
+
+c     apply mass flux to drive the flow such that
+c     - Ubulk = velocity averaged over the whole domain
+c     - Ubar_inlet = velocity averaged over the inlet plane = 1.
+      if (if3d) then
+         Ubulk = (Lx*(Ly-H)*Lz)/volvm1
+      else
+         Ubulk = (Lx*(Ly-H))/volvm1
+      endif
+
+      if (nid.eq.0) write(6,*) 'U_bulk = ', Ubulk, ' Ubar_inlet = 1'
+      
+      param(54) = -1            ! x-direction
+      param(55) = Ubulk         ! Ubulk      
+      
+      return
+      end
+c-----------------------------------------------------------------------
+c     - iobj = 1: bottom wall
+c     - iobj = 2: top wall
+      subroutine set_obj 
+      implicit none
+      include 'SIZE'
+      include 'INPUT'           ! nhis, nobj, maxobj, nmember, object
+      include 'GEOM'            ! area
+      include 'PARALLEL'        ! lglel
+
+      integer ii, iel, ieg, iobj, nface, mem, nn
+      integer boundary_id, bid
+      real vlsum                ! function
+
+c     Array containing the area of each object for checking purposes
+c     ( + work array)
+      real a(maxobj), wa(maxobj) ! length of nobj
+
+      nobj = 2
+      iobj = 0
+      nhis = 0
+      do ii=nhis+1,nhis+nobj
+         iobj = iobj+1
+         hcode(10,ii) = 'I'
+         hcode( 1,ii) = 'F'
+         hcode( 2,ii) = 'F'
+         hcode( 3,ii) = 'F'
+         lochis(1,ii) = iobj
+         a(iobj) = 0.
+      enddo
+      nhis = nhis + nobj
+
+      if (maxobj.lt.nobj) call exitti('increase maxobj in SIZE$',nobj)
+
+      nface = 2*ndim
+      nn = nx1*nz1
+
+      do iel=1,nelv
+         if (cbc(1,iel,1).eq.'W  ') then
+            iobj = 1
+            nmember(iobj) = nmember(iobj) + 1
+            mem = nmember(iobj)
+            ieg  = lglel(iel)
+            object(iobj,mem,1) = ieg
+            object(iobj,mem,2) = 1
+            a(iobj) = a(iobj) + vlsum(area(1,1,1,iel),nn)
+         elseif (cbc(3,iel,1).eq.'W  ') then
+            iobj = 2
+            nmember(iobj) = nmember(iobj) + 1
+            mem = nmember(iobj)
+            ieg  = lglel(iel)
+            object(iobj,mem,1) = ieg
+            object(iobj,mem,2) = 3
+            a(iobj) = a(iobj) + vlsum(area(1,1,3,iel),nn)
+         endif
+      enddo
+
+      call gop(a, wa, '+  ', maxobj)
+      
+      if (nid .eq. 0) then
+         write (6,*) 'Surface area of object: '
+         do iobj = 1,nobj
+            write (6,2) '- ', iobj,' : ', a(iobj)
+         enddo
+      endif
+ 2    format(a2,i1,a3,1es18.10e1)
+
+      return
+      end
+C-----------------------------------------------------------------------
+      subroutine box2phill
+      implicit none
+      include 'SIZE'
+      include 'GEOM'            ! {x,y,z}m1
+      include 'INPUT'           ! param
+      include 'SOLN'
+
+      integer i, ntot
+      real Lx, Ly, Lz, Wh, H    ! x dimension, y dimension, hill half width, hill height
+      common /hill_param/ Lx, Ly, Lz, Wh, H
+      real shift, amp
+      real xscale, yscale, zscale, yh, xx, yy, zz
+      real hill_step,hill_height,xfac,glmax,glmin
+      real xmin, xmax, ymin, ymax, zmin, zmax
+      save xmin, xmax, ymin, ymax, zmin, zmax
+      logical ifminmax
+      save ifminmax
+      data ifminmax /.false./
+      
+      ntot = nx1*ny1*nz1*nelt
+
+      if (.not.ifminmax) then
+         ifminmax = .true.
+         xmin = glmin(xm1,ntot)
+         xmax = glmax(xm1,ntot)
+         ymin = glmin(ym1,ntot)
+         ymax = glmax(ym1,ntot)
+         if (if3d) then
+            zmin = glmin(zm1,ntot)
+            zmax = glmax(zm1,ntot)
+         endif
+      endif
+      
+c     Set rectangular domain [0,Lx]x[0,Ly]x[0,Lz]
+      xscale = Lx/(xmax-xmin)
+      yscale = Ly/(ymax-ymin)
+      do i=1,ntot
+         xx = xm1(i,1,1,1)
+         yy = ym1(i,1,1,1)
+         xm1(i,1,1,1) = (xx - xmin) * xscale
+         ym1(i,1,1,1) = (yy - ymin) * yscale
+      enddo
+      if (if3d) then
+         zscale = Lz/(zmax-zmin)
+         do i=1,ntot
+            zz = zm1(i,1,1,1)
+            zm1(i,1,1,1) = (zz - zmin) * zscale
+         enddo
+      endif
+
+c     Shift points in x
+      amp = 0.25
+      do i=1,ntot
+         xx = xm1(i,1,1,1)
+         yy = ym1(i,1,1,1)
+         xm1(i,1,1,1) = xx + amp*shift(xx,yy,Lx,Ly,Wh)
+      enddo
+      
+c     Add hill
+      do i=1,ntot
+         xx = xm1(i,1,1,1)
+         yy = ym1(i,1,1,1)
+         yh = hill_height(xx,Lx,Wh,H)
+         yscale = 1-yh/Ly
+         ym1(i,1,1,1) = yh + yy * yscale
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+C     Step function for the hill
+C
+C          x=0
+C           | 
+C      _____|  
+C   ^       \
+C   |        \     x->
+C h |         \
+C   v          \_____
+C           <-->
+C            w     
+      function hill_step(x,w,h)
+      implicit none
+
+      real x,xs,w,h
+      real y,hill_step
+
+      xs = x/w
+
+      if (xs.le.0) then
+         y = h
+      elseif (xs.gt.0.and.xs.le.9./54.) then
+         y = h*min(1.,1.+7.05575248e-1*xs**2-1.1947737203e1*xs**3)
+      elseif (xs.gt.9./54.and.xs.le.14./54.) then
+         y = h*(0.895484248+1.881283544*xs-10.582126017*xs**2
+     $        +10.627665327*xs**3)
+      elseif (xs.gt.14./54.and.xs.le.20./54.) then
+         y = h*(0.92128609+1.582719366*xs-9.430521329*xs**2
+     $        +9.147030728*xs**3)
+      elseif (xs.gt.20./54..and.xs.le.30./54.) then
+         y = h*(1.445155365-2.660621763*xs+2.026499719*xs**2
+     $        -1.164288215*xs**3)
+      elseif (xs.gt.30./54..and.xs.le.40./54.) then
+         y = h*(0.640164762+1.6863274926*xs-5.798008941*xs**2
+     $        +3.530416981*xs**3)
+      elseif (xs.gt.40./54..and.xs.le.1.) then
+         y = h*(2.013932568-3.877432121*xs+1.713066537*xs**2
+     $        +0.150433015*xs**3)
+      else
+         y = 0.
+      endif
+
+      hill_step = y
+      
+      return
+      end
+c----------------------------------------------------------------------- 
+      function hill_height(x,Lx,w,H)
+      implicit none
+      real hill_height,hill_step,x,Lx,w,h
+      real xx
+
+      if (x.lt.0) then
+         xx = Lx + mod(x, Lx)
+      elseif (x.gt.Lx) then
+         xx = mod(x, Lx)
+      else
+         xx = x
+      endif
+
+      hill_height = hill_step(xx,w,h) + hill_step(Lx-xx,w,h)
+      
+      return
+      end          
+c-----------------------------------------------------------------------      
+      function shift(x,y,Lx,Ly,W)
+      implicit none
+      real x,y,Lx,Ly,W
+      real xfac,yfac,shift
+
+      yfac = (1-y/Ly)**3
+
+      if (x.le.W/2) then
+         xfac = -2./W * x
+      elseif (x.gt.W/2.and.x.le.Lx-W/2) then
+         xfac = 2./(Lx-W) * x -1-W/(Lx-W)
+      elseif (x.gt.Lx-W/2) then
+         xfac = -2./W * x + 2*Lx/W
+      endif
+
+      shift = xfac*yfac
+
+      return
+      end
+c-----------------------------------------------------------------------

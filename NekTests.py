@@ -1774,6 +1774,72 @@ class Peris(NekTestCase):
     def tearDown(self):
         self.move_logs()
 
+# ####################################################################
+# #  phill; phill.par
+# ####################################################################
+
+class Phill(NekTestCase):
+    example_subdir = 'phill'
+    case_name = 'phill'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '8',
+            lxd       = '12',
+            lx2       = 'lx1-2',
+            lelg      = '7000',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = '1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+            maxobj    = '2',
+            lpmin     = '12',
+        )
+        self.build_tools(['clean','genbox','genmap'])
+        self.run_genbox(box_file='phill')
+        self.mvn('box', 'phill')
+        self.run_genmap(tol='0.01')
+        
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1-0'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=25)
+
+        drag1 = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag1, target_val=3.928E-01, delta=1E-04, label='1dragx')
+        
+        drag2 = self.get_value_from_log('2dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag2, target_val=6.663E-01, delta=1E-04, label='2dragx')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=25)
+
+        drag1 = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag1, target_val=4.291E-01, delta=1E-04, label='1dragx')
+
+        drag2 = self.get_value_from_log('2dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag2, target_val=6.958E-01, delta=1E-04, label='2dragx')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+
 ####################################################################
 #  pipe; helix.rea, stenosis.rea
 ####################################################################
@@ -2511,8 +2577,8 @@ class Taylor(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        solver_time = self.get_value_from_log('total solver time', column=-2)
-        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
+#        solver_time = self.get_value_from_log('total solver time', column=-2)
+#        self.assertAlmostEqualDelayed(solver_time, target_val=0.1, delta=40., label='total solver time')
 
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=14, label='gmres')
@@ -2877,6 +2943,7 @@ if __name__ == '__main__':
                Ocyl2,
                Os7000,
                Peris,
+               Phill,
                Pipe_Helix,
                Pipe_Stenosis,
                RANSChannel,
