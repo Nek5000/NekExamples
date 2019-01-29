@@ -1799,6 +1799,7 @@ class Phill(NekTestCase):
             lpelt     = '1',
             lcvelt    = '1',
             maxobj    = '2',
+            lpmin     = '12',
         )
         self.build_tools(['clean','genbox','genmap'])
         self.run_genbox(box_file='phill')
@@ -1810,13 +1811,13 @@ class Phill(NekTestCase):
         self.size_params['lx2']='lx1-0'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=100)
+        self.run_nek(step_limit=25)
 
-        #umin = self.get_value_from_log('1dragx', column=-4, row=-1)
-        #self.assertAlmostEqualDelayed(umin, target_val=1.6549E-01, delta=1E-04, label='1dragx')
+        drag1 = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag1, target_val=3.928E-01, delta=1E-04, label='1dragx')
         
-        #umax = self.get_value_from_log('2dragx', column=-4, row=-1)
-        #self.assertAlmostEqualDelayed(umax, target_val=2.6403E-01, delta=1E-04, label='2dragx')
+        drag2 = self.get_value_from_log('2dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag2, target_val=6.663E-01, delta=1E-04, label='2dragx')
 
         self.assertDelayedFailures()
 
@@ -1825,13 +1826,13 @@ class Phill(NekTestCase):
         self.size_params['lx2']='lx1-2'
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=100)
+        self.run_nek(step_limit=25)
 
-        #umin = self.get_value_from_log('1dragx', column=-4, row=-1)
-        #self.assertAlmostEqualDelayed(umin, target_val=1.6564E-01, delta=1E-04, label='1dragx')
+        drag1 = self.get_value_from_log('1dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag1, target_val=4.291E-01, delta=1E-04, label='1dragx')
 
-        #umax = self.get_value_from_log('2dragx', column=-4, row=-1)
-        #self.assertAlmostEqualDelayed(umax, target_val=2.6403E-01, delta=1E-04, label='2dragx')
+        drag2 = self.get_value_from_log('2dragx', column=-4, row=-1)
+        self.assertAlmostEqualDelayed(drag2, target_val=6.958E-01, delta=1E-04, label='2dragx')
 
         self.assertDelayedFailures()
 
