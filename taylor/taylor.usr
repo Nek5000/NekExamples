@@ -74,7 +74,14 @@ c-----------------------------------------------------------------------
       common /taylor/  r0,r1,w0,w1,a,b  ! Parameters
 
       integer e
+      integer bIDs(1), iobj_wall(2)
 
+      if (istep.eq.0) then
+         bIDs(1) = 1
+         call create_obj(iobj_wall(1),bIDs,1)
+         bIDs(1) = 2
+         call create_obj(iobj_wall(2),bIDs,1)
+      endif
 
 c     Compute the wall shear
       call rzero(x0,3)               ! torque w.r.t. x0
@@ -133,13 +140,11 @@ c-----------------------------------------------------------------------
 
       common /taylor/  r0,r1,w0,w1,a,b  ! Parameters
 
-
       e  = gllel(eg)
       ux = ue(i,j,k,e)
       uy = ve(i,j,k,e)
       uz = 0
       temp=0
-
 
       return
       end
@@ -153,13 +158,6 @@ c-----------------------------------------------------------------------
 c     call platform_timer(0) ! not too verbose
 c     call platform_timer(1) ! mxm, ping-pong, and all_reduce timer
 
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine usrdat3
-      include 'SIZE'
-      include 'TOTAL'
-c
       return
       end
 c-----------------------------------------------------------------------
@@ -216,59 +214,23 @@ c     Rescale geometry onto a box that is on [0:2pi] x [0,1]
       enddo
       enddo
 
-      call set_obj             ! Define objects for surface integrals
+c     mark faces for object definition
+      do e=1,nelt
+         if (cbc(1,e,1) .eq. 'v  ') then  ! bottom wall
+            boundaryID(1,e) = 1
+         else if (cbc(3,e,1) .eq. 'v  ') then ! top wall
+            boundaryID(3,iel) = 2
+         endif 
+      enddo
 
       call exact(ue,ve,ud,vd)  ! Fill initial conditions
-
-
+      
       return
       end
 c-----------------------------------------------------------------------
-      subroutine set_obj  ! define objects for surface integrals
-c
+      subroutine usrdat3
       include 'SIZE'
       include 'TOTAL'
-c
-      integer e,f
-c
-c     Define new objects
-c
-      nobj = 2			! for Periodic
-      iobj = 0
-      do ii=nhis+1,nhis+nobj
-         iobj = iobj+1
-         hcode(10,ii) = 'I'
-         hcode( 1,ii) = 'F' ! 'F'
-         hcode( 2,ii) = 'F' ! 'F'
-         hcode( 3,ii) = 'F' ! 'F'
-         lochis(1,ii) = iobj
-      enddo
-      nhis = nhis + nobj
-c
-      if (maxobj.lt.nobj) write(6,*) 'increase maxobj in SIZEu. rm *.o'
-      if (maxobj.lt.nobj) call exitt
-c
-      nxyz = nx1*ny1*nz1
-      do e=1,nelv
-      do f=1,2*ndim
-         if (cbc(f,e,1).eq.'v  ') then
-            iobj = 0
-            if (f.eq.1) iobj=1  ! lower wall
-            if (f.eq.3) iobj=2  ! upper wall
-            if (iobj.gt.0) then
-               nmember(iobj) = nmember(iobj) + 1
-               mem = nmember(iobj)
-               ieg = lglel(e)
-               object(iobj,mem,1) = ieg
-               object(iobj,mem,2) = f
-c              write(6,1) iobj,mem,f,ieg,e,nid,' OBJ'
-    1          format(6i9,a4)
-            endif
-c
-         endif
-      enddo
-      enddo
-c     write(6,*) 'number',(nmember(k),k=1,4)
 c
       return
       end
