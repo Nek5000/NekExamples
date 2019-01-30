@@ -40,9 +40,16 @@ c-----------------------------------------------------------------------
 
 c     Point for torque calculation
       real x0(3)
-      data x0 /3*0.0/      
+      data x0 /3*0.0/    
+      
+      integer bIDs(1), iobj_wall(2)
 
-      if (istep.eq.0) call set_obj      
+      if (istep.eq.0) then
+         bIDs(1) = 1
+         call create_obj(iobj_wall(1),bIDs,1)
+         bIDs(1) = 2
+         call create_obj(iobj_wall(2),bIDs,1)
+      endif    
       
       call torque_calc(1.,x0,.true.,.false.)
       
@@ -64,9 +71,30 @@ c-----------------------------------------------------------------------
       include 'NEKUSE'          ! UX, UY, UZ, TEMP, X, Y, Z
       integer ix,iy,iz,ieg
 
-      ux = 1.0
-      uy = 0.0
-      uz = 0.0
+      real amp, ran
+      
+      amp = 0.2
+
+      ran = 3.e4*(ieg+X*sin(Y)+Z*cos(Y))
+     $     + 4.7e2*ix*iy*iz - 1.5e3*ix*iy + .5e5*ix
+      ran = 6.e3*sin(ran)
+      ran = 3.e3*sin(ran)
+      ran = cos(ran)
+      ux = 1. + ran*amp
+      
+      ran = (2+ran)*1.e4*(ieg+Y*sin(Z)+X*cos(Z))
+     $     + 1.5e3*ix*iy*iz - 2.5e3*ix*iy + 8.9e4*ix
+      ran = 2.e3*sin(ran)
+      ran = 7.e3*sin(ran)
+      ran = cos(ran)
+      uy = ran*amp
+      
+      ran = (4+ran)*5.1e4*(ieg+Z*sin(X)+Y*cos(X))
+     $     + 4.6e3*ix*iy*iz - 2.9e4*ix*iy + 3.7e3*ix
+      ran = 9.e3*sin(ran)
+      ran = 4.e3*sin(ran)
+      ran = cos(ran)
+      uz = ran*amp
 
       return
       end
@@ -82,10 +110,18 @@ c-----------------------------------------------------------------------
       implicit none
       include 'SIZE'
       include 'SOLN'            ! vx,vy,vz,pr,t
+      include 'GEOM'            ! boundaryID
+      include 'INPUT'           ! cbc
       
+      integer iel
+c     mesh stretching
+      real Betax, Betay
 c     Hill parameters
       real Lx, Ly, Lz, W, H
-      common /hill_param/ Lx, Ly, Lz, W, H
+      common /hill_param/ Lx, Ly, Lz, W, H, Betax, Betay
+      
+      Betax = 2.0
+      Betay = 2.4
       Lx = 9.
       Ly = 3.035
       Lz = 4.5
@@ -109,6 +145,15 @@ c     Transform box mesh to periodic hill (only for the conforming mesh!!)
       call box2phill
 
 c      call gen_re2(0)
+
+c     mark faces for object definition
+      do iel=1,nelt
+         if (cbc(1,iel,1) .eq. 'W  ') then  ! bottom wall
+            boundaryID(1,iel) = 1
+         else if (cbc(3,iel,1) .eq. 'W  ') then ! top wall
+            boundaryID(3,iel) = 2
+         endif 
+      enddo
       
       return
       end
@@ -122,9 +167,10 @@ c-----------------------------------------------------------------------
 c     Local variables
       real Ubulk
       
+      real Betax,Betay
 c     Hill parameters
       real Lx, Ly, Lz, W, H
-      common /hill_param/ Lx, Ly, Lz, W, H
+      common /hill_param/ Lx, Ly, Lz, W, H, Betax, Betay
 
 c     apply mass flux to drive the flow such that
 c     - Ubulk = velocity averaged over the whole domain
@@ -143,75 +189,6 @@ c     - Ubar_inlet = velocity averaged over the inlet plane = 1.
       return
       end
 c-----------------------------------------------------------------------
-c     - iobj = 1: bottom wall
-c     - iobj = 2: top wall
-      subroutine set_obj 
-      implicit none
-      include 'SIZE'
-      include 'INPUT'           ! nhis, nobj, maxobj, nmember, object
-      include 'GEOM'            ! area
-      include 'PARALLEL'        ! lglel
-
-      integer ii, iel, ieg, iobj, nface, mem, nn
-      integer boundary_id, bid
-      real vlsum                ! function
-
-c     Array containing the area of each object for checking purposes
-c     ( + work array)
-      real a(maxobj), wa(maxobj) ! length of nobj
-
-      nobj = 2
-      iobj = 0
-      nhis = 0
-      do ii=nhis+1,nhis+nobj
-         iobj = iobj+1
-         hcode(10,ii) = 'I'
-         hcode( 1,ii) = 'F'
-         hcode( 2,ii) = 'F'
-         hcode( 3,ii) = 'F'
-         lochis(1,ii) = iobj
-         a(iobj) = 0.
-      enddo
-      nhis = nhis + nobj
-
-      if (maxobj.lt.nobj) call exitti('increase maxobj in SIZE$',nobj)
-
-      nface = 2*ndim
-      nn = nx1*nz1
-
-      do iel=1,nelv
-         if (cbc(1,iel,1).eq.'W  ') then
-            iobj = 1
-            nmember(iobj) = nmember(iobj) + 1
-            mem = nmember(iobj)
-            ieg  = lglel(iel)
-            object(iobj,mem,1) = ieg
-            object(iobj,mem,2) = 1
-            a(iobj) = a(iobj) + vlsum(area(1,1,1,iel),nn)
-         elseif (cbc(3,iel,1).eq.'W  ') then
-            iobj = 2
-            nmember(iobj) = nmember(iobj) + 1
-            mem = nmember(iobj)
-            ieg  = lglel(iel)
-            object(iobj,mem,1) = ieg
-            object(iobj,mem,2) = 3
-            a(iobj) = a(iobj) + vlsum(area(1,1,3,iel),nn)
-         endif
-      enddo
-
-      call gop(a, wa, '+  ', maxobj)
-      
-      if (nid .eq. 0) then
-         write (6,*) 'Surface area of object: '
-         do iobj = 1,nobj
-            write (6,2) '- ', iobj,' : ', a(iobj)
-         enddo
-      endif
- 2    format(a2,i1,a3,1es18.10e1)
-
-      return
-      end
-C-----------------------------------------------------------------------
       subroutine box2phill
       implicit none
       include 'SIZE'
@@ -220,8 +197,9 @@ C-----------------------------------------------------------------------
       include 'SOLN'
 
       integer i, ntot
+      real Betax, Betay
       real Lx, Ly, Lz, Wh, H    ! x dimension, y dimension, hill half width, hill height
-      common /hill_param/ Lx, Ly, Lz, Wh, H
+      common /hill_param/ Lx, Ly, Lz, Wh, H, Betax ,Betay
       real shift, amp
       real xscale, yscale, zscale, yh, xx, yy, zz
       real hill_step,hill_height,xfac,glmax,glmin
@@ -245,7 +223,19 @@ C-----------------------------------------------------------------------
          endif
       endif
       
-c     Set rectangular domain [0,Lx]x[0,Ly]x[0,Lz]
+C     decrease resolution in the high velocity regions (increase CFL)
+      do i=1,ntot
+         xm1(i,1,1,1) = 0.5*(sinh(Betax*(xm1(i,1,1,1)-0.5))/
+     $    sinh(Betax*0.5) + 1.0)
+      enddo
+
+c     increase resolution near the wall
+      do i=1,ntot
+         ym1(i,1,1,1) = 0.5*(tanh(Betay*(2*ym1(i,1,1,1)-1.0))/
+     $    tanh(Betay) + 1.0)
+      enddo
+      
+c     rescale rectangular domain [0,Lx]x[0,Ly]x[0,Lz]
       xscale = Lx/(xmax-xmin)
       yscale = Ly/(ymax-ymin)
       do i=1,ntot

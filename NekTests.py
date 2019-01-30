@@ -1814,10 +1814,10 @@ class Phill(NekTestCase):
         self.run_nek(step_limit=25)
 
         drag1 = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(drag1, target_val=3.928E-01, delta=1E-04, label='1dragx')
+        self.assertAlmostEqualDelayed(drag1, target_val=5.129E-01, delta=3E-04, label='1dragx')
         
         drag2 = self.get_value_from_log('2dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(drag2, target_val=6.663E-01, delta=1E-04, label='2dragx')
+        self.assertAlmostEqualDelayed(drag2, target_val=8.311E-01, delta=3E-04, label='2dragx')
 
         self.assertDelayedFailures()
 
@@ -1829,10 +1829,10 @@ class Phill(NekTestCase):
         self.run_nek(step_limit=25)
 
         drag1 = self.get_value_from_log('1dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(drag1, target_val=4.291E-01, delta=1E-04, label='1dragx')
+        self.assertAlmostEqualDelayed(drag1, target_val=2.495E-01, delta=3E-04, label='1dragx')
 
         drag2 = self.get_value_from_log('2dragx', column=-4, row=-1)
-        self.assertAlmostEqualDelayed(drag2, target_val=6.958E-01, delta=1E-04, label='2dragx')
+        self.assertAlmostEqualDelayed(drag2, target_val=9.488E-01, delta=3E-04, label='2dragx')
 
         self.assertDelayedFailures()
 
