@@ -3,18 +3,20 @@
 #
 [GENERAL] 
 stopAt = endTime
-endTime = 5.0
+endTime = 20.0
 dt = 1e-02
-timeStepper = bdf3
+timeStepper = bdf2
+extrapolation = OIFS
+targetCFL = 1.9
 
 writeControl = runTime
-writeInterval = 2
+writeInterval = 0
 
 [PROBLEMTYPE]
 equation = incompNS
 
 [PRESSURE]
-residualTol = 1e-04
+residualTol = 1e-05
 residualProj = yes
 
 [VELOCITY]
