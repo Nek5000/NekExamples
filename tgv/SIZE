@@ -11,7 +11,7 @@ c
       ! BASIC
       parameter (ldim=3)               ! domain dimension (2 or 3)
       parameter (lx1=8)                ! GLL points per element along each direction
-      parameter (lxd=10)               ! GL  points for over-integration (dealiasing) 
+      parameter (lxd=12)               ! GL  points for over-integration (dealiasing) 
       parameter (lx2=lx1-0)            ! GLL points for pressure (lx1 or lx1-2)
                                      
       parameter (lelg=600)            ! max number of global elements
