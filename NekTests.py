@@ -1841,7 +1841,7 @@ class Phill(NekTestCase):
 
 
 ####################################################################
-#  pipe; helix.rea, stenosis.rea
+#  pipe; helix.rea, stenosis.rea, cyclic.rea
 ####################################################################
 
 class Pipe_Helix(NekTestCase):
@@ -1960,6 +1960,57 @@ class Pipe_Stenosis(NekTestCase):
 
         gmres = self.get_value_from_log('gmres', column=-6)
         self.assertAlmostEqualDelayed(gmres, target_val=0., delta=51., label='gmres')
+
+        self.assertDelayedFailures()
+
+    def tearDown(self):
+        self.move_logs()
+
+class Pipe_Cyclic(NekTestCase):
+    example_subdir = 'pipe'
+    case_name = 'cyclic'
+
+    def setUp(self):
+        self.size_params = dict(
+            ldim      = '3',
+            lx1       = '6',
+            lxd       = '10',
+            lx2       = 'lx1-2',
+            lelg      = '500',
+            ldimt     = '1',
+            lhis      = '100',
+            lelx      = '1',
+            lely      = '1',
+            lelz      = '1',
+            lx1m      = 'lx1',
+            lbelt     = '1',
+            lpelt     = '1',
+            lcvelt    = '1',
+        )
+        self.build_tools(['clean','genmap'])
+        self.run_genmap(tol='0.01')
+
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
+        self.size_params['lx2']='lx1'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-7)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=20., label='gmres')
+
+        self.assertDelayedFailures()
+
+    @pn_pn_2_parallel
+    def test_PnPn2_Parallel(self):
+        self.size_params['lx2']='lx1-2'
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=10)
+
+        gmres = self.get_value_from_log('gmres', column=-6)
+        self.assertAlmostEqualDelayed(gmres, target_val=0., delta=123., label='gmres')
 
         self.assertDelayedFailures()
 
