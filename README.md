@@ -130,11 +130,13 @@ Some examples provide additional pdf files for a more complete description.
   * __Features__ :
        * Mesh manipluation
 * `pipe`
-  * __Test name__ : Pipe_Helix, Pipe_Stenosis
+  * __Test name__ : Pipe_Helix, Pipe_Stenosis, Pipe_Cyclic
   * __Purpose__ : Pipe flow
   * __Features__ :
        * Mesh manipluation
        * Mesh extrusion
+       * Cyclic boundary condition
+       * Volume forcing for azimuthal flow
 * `RANSChannel`
   * __Test name__ : RANSChannel
   * __Purpose__ : Turbulent channel flow
