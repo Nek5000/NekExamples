@@ -147,7 +147,7 @@ c
         if(nid.eq.0) write(6,*) 'Start collecting statistics ...'
 
         nxm = 1 ! mesh is linear
-        call interp_setup(intp_h,0.0,nxm,nelv)
+        call interp_setup(intp_h,0.0,nxm,nelt)
         nint = 0
         if (nid.eq.0) then
           nint = INTP_NMAX
