@@ -15,6 +15,9 @@ targetCFL = 0.5
 writeControl = timeStep #runTime
 writeInterval = 250
 
+userParam01 = 200    # start time collecting statistics
+userParam02 = 20     # writeInterval 1D statistics
+
 dealiasing = yes
 filtering = hpfrt #hpfrt, none, explicit
 filterWeight = 10.0

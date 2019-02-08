@@ -36,13 +36,16 @@ c-----------------------------------------------------------------------
       subroutine userchk
       implicit none
       include 'SIZE'
+      include 'INPUT'
       include 'TSTEP'
+      include 'SOLN'
 
 c     Point for torque calculation
       real x0(3)
       data x0 /3*0.0/    
       
       integer bIDs(1), iobj_wall(2)
+      common /local_obj/ iobj_wall
 
       if (istep.eq.0) then
          bIDs(1) = 1
@@ -52,6 +55,13 @@ c     Point for torque calculation
       endif    
       
       call torque_calc(1.,x0,.true.,.false.)
+
+      if(ifoutfld) then
+        ifto = .true.
+        call lambda2(t)
+      endif
+      
+      call statistics
       
       return
       end
@@ -357,3 +367,194 @@ c-----------------------------------------------------------------------
       return
       end
 c-----------------------------------------------------------------------
+      subroutine statistics
+
+c
+c     What follows computes some statistics ...
+c
+      include 'SIZE'
+      include 'TOTAL'
+
+c     parameters for line definition
+      integer intp_nmax, nelx, nely, nelz
+      parameter (intp_nmax=200, nelx=22, nely=16, nelz=19)
+      real xcint, zcint, ylen, betam
+      parameter (xcint=4.0, zcint=2.25, ylen=3.035, betam=2.4)
+
+c     statistics start time and output frequency
+      real tstatstar, tstatfreq
+
+c     object definition
+      real a_tmp(maxobj), wa(maxobj), A_w
+      save A_w
+
+      real x0(3)
+      data x0 /0.0, 0.0, 0.0/ 
+      save x0
+
+      integer icalld
+      save    icalld
+      data    icalld /0/
+
+      real atime,timel
+      save atime,timel
+
+      integer ntdump
+      save    ntdump
+      
+      real    rwk(intp_nmax,ldim+1) ! r, s, t, dist2
+      integer iwk(intp_nmax,3)      ! code, proc, el 
+      save    rwk, iwk
+
+      integer nint, intp_h
+      save    nint, intp_h
+
+      logical iffpts
+      save iffpts
+
+      real xint(intp_nmax),yint(intp_nmax),zint(intp_nmax)
+      save xint, yint, zint
+      save igs_z
+
+      parameter(nstat=5)
+      real ravg(lx1*ly1*lz1*lelt,nstat)
+      real stat(lx1*ly1*lz1*lelt,nstat)
+      real stat_y(intp_nmax*nstat)
+      save ravg, stat, stat_y
+
+      save dragx_avg
+
+      logical ifverbose
+      common /gaaa/    wo1(lx1,ly1,lz1,lelv)
+     &              ,  wo2(lx1,ly1,lz1,lelv)
+     &              ,  wo3(lx1,ly1,lz1,lelv)
+
+      real tmn, tmx
+
+      integer bIDs(1)
+      save iobj_wall
+
+      tstatstar = uparam(1)
+      tstatfreq = uparam(2)
+      
+      if (time.lt.tstatstar) return
+
+      n     = nx1*ny1*nz1*nelv
+
+      if(icalld.eq.0) then
+        if(nid.eq.0) write(6,*) 'Start collecting statistics ...'
+
+        call interp_setup(intp_h,0.0,0,nelv)
+        nint = 0
+        if (nid.eq.0) then
+          nint = intp_nmax
+          call cfill(xint,xcint,size(xint))
+          do i = 1,intp_nmax 
+             yi = (i-1.)/(intp_nmax-1)
+             yint(i) = ylen*0.5*(tanh(betam*(2*yi-1.0))/
+     $                 tanh(betam)+1.0)
+          enddo
+          call cfill(zint,zcint,size(zint))
+        endif
+        iffpts = .true. ! dummy call to find points
+        call interp_nfld(stat_y,ravg,1,xint,yint,zint,nint,
+     $                   iwk,rwk,intp_nmax,iffpts,intp_h)
+        iffpts = .false.
+        call gtpp_gs_setup(igs_z,nelx*nely,1   ,nelz,3) ! z-avg
+
+        call rzero(ravg,size(ravg))
+        dragx_avg = 0
+        atime     = 0
+        timel     = time
+        ntdump    = int(time/tstatfreq)
+
+c     get objects surface area     
+        nn = nx1*nz1
+        do iobj = 1,nobj
+           a_tmp(iobj)= 0.0
+           do imem = 1, nmember(iobj)
+              ieg   = object(iobj,imem,1)
+              ifc   = object(iobj,imem,2)
+              if (gllnid(ieg).eq.nid) then ! this processor has a contribution
+                 iel = gllel(ieg)
+                 a_tmp(iobj)=a_tmp(iobj)+vlsum(area(1,1,ifc,iel),nn)
+              endif
+           enddo
+        enddo
+        call gop(a_tmp, wa, '+  ', maxobj)
+        A_w = 0.0
+        do iobj = 1,nobj
+           A_w = A_w + a_tmp(iobj)
+        enddo
+
+        icalld = 1
+      endif
+
+      dtime = time - timel
+      atime = atime + dtime
+
+      ! averaging over time
+      if (atime.ne.0. .and. dtime.ne.0.) then
+        beta      = dtime / atime
+        alpha     = 1. - beta
+
+        ifverbose = .false.
+        call avg1(ravg(1,1),vx   ,alpha,beta,n,'uavg',ifverbose)
+        call avg2(ravg(1,2),vx   ,alpha,beta,n,'urms',ifverbose)
+        call avg2(ravg(1,3),vy   ,alpha,beta,n,'vrms',ifverbose)
+        call avg2(ravg(1,4),vz   ,alpha,beta,n,'wrms',ifverbose)
+        call avg3(ravg(1,5),vx,vy,alpha,beta,n,'uvmm',ifverbose)
+
+        call torque_calc(1.0,x0,.false.,.false.) ! compute wall shear
+        dragx_avg = alpha*dragx_avg + beta*dragx(0) ! drag from all objects
+      endif
+
+      timel = time
+
+      ! write statistics to file
+      if(istep.gt.0 .and. time.gt.(ntdump+1)*tstatfreq) then
+         ! averaging over statistical homogeneous directions (z)
+         do i = 1,nstat
+            call planar_avg(stat(1,i),ravg(1,i),igs_z)
+         enddo
+
+         ! extract data along wall normal direction (1D profile)
+         call interp_nfld(stat_y,stat,nstat,xint,yint,zint,nint,
+     $                    iwk,rwk,intp_nmax,iffpts,intp_h)
+
+         ntdump = ntdump + 1
+         if (nid.ne.0) goto 998 
+
+         rho    = param(1)
+         dnu    = param(2)
+         tw     = dragx_avg / A_w
+         u_tau  = sqrt(tw / rho)
+         Re_tau = u_tau / dnu
+
+         write(6,*) 'Dumping statistics ...', Re_tau
+ 
+         open(unit=56,file='vel_fluc_prof.dat')
+         write(56,'(A,1pe14.7)') '#time = ', time
+         write(56,'(A)') 
+     $    '#  y    y+    Umean uu    vv    ww    uv    '
+
+         do i = 1,nint
+            yy = yint(i)
+            write(56,3) 
+     &           yy,
+     &           yy*Re_tau,
+     &           stat_y(0*nint+i)/u_tau,
+     &           (stat_y(1*nint+i)-(stat_y(0*nint+i))**2)/u_tau**2,
+     &           stat_y(2*nint+i)/u_tau**2,
+     &           stat_y(3*nint+i)/u_tau**2,
+     &           stat_y(4*nint+i)/u_tau**2
+
+  3         format(1p15e17.9)
+         enddo
+         close(56)
+
+ 998  endif      
+      
+      return
+      end
+
