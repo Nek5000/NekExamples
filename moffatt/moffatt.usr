@@ -209,7 +209,7 @@ c
      $       rwk(nmax,ldim+1),
      $       fpts(ldim*nmax),
      $       pts(ldim*nmax)
-      common /iwk_intp/ 
+      common /iwk_intp/ ih_intp,
      $       iwk(nmax,3)
 
 
@@ -234,16 +234,16 @@ c
       if (icalld.eq.0) then		! interpolation setup
         icalld = 1
         tolin  = 1.e-8
-        call intp_setup(tolin)
+        call interp_setup(ih_intp,tolin,0,nelt)
       endif
 
       ! pack working array
       call opcopy(fwrk(1,1),fwrk(1,2),fwrk(1,ldim),vx,vy,vz)
 
       ! interpolate
-      call intp_do(fpts,fwrk,ndim,
+      call interp_nfld(fpts,fwrk,ndim,
      $             pts(1),pts(1+n),pts(2*n+1),n,
-     $             iwk,rwk,nmax,.true.)
+     $             iwk,rwk,nmax,.true.,ih_intp)
 
       do i=1,n
          uvw(1,i) = fpts(i)

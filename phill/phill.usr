@@ -1,0 +1,560 @@
+C-----------------------------------------------------------------------
+c
+c     user subroutines required by nek5000
+c
+c-----------------------------------------------------------------------
+      subroutine uservp (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'          ! UDIFF, UTRANS
+
+      UDIFF =0.
+      UTRANS=0.
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'          ! FF[XYZ]
+
+      FFX = 0.0
+      FFY = 0.0
+      FFZ = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq  (ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'          ! QVOL
+
+      QVOL   = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk
+      implicit none
+      include 'SIZE'
+      include 'INPUT'
+      include 'TSTEP'
+      include 'SOLN'
+
+c     Point for torque calculation
+      real x0(3)
+      data x0 /3*0.0/    
+      
+      integer bIDs(1), iobj_wall(2)
+      common /local_obj/ iobj_wall
+
+      if (istep.eq.0) then
+         bIDs(1) = 1
+         call create_obj(iobj_wall(1),bIDs,1)
+         bIDs(1) = 2
+         call create_obj(iobj_wall(2),bIDs,1)
+      endif    
+      
+      call torque_calc(1.,x0,.true.,.false.)
+
+      if(ifoutfld) then
+        ifto = .true.
+        call lambda2(t)
+      endif
+      
+      call statistics
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc (ix,iy,iz,iside,ieg)
+      implicit none
+      include 'SIZE'
+      include 'NEKUSE'          ! UX, UY, UZ, TEMP, X, Y, PA
+      integer ix,iy,iz,iside,ieg      
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+      implicit none
+      include 'SIZE'
+      include 'NEKUSE'          ! UX, UY, UZ, TEMP, X, Y, Z
+      integer ix,iy,iz,ieg
+
+      real amp, ran
+      
+      amp = 0.2
+
+      ran = 3.e4*(ieg+X*sin(Y)+Z*cos(Y))
+     $     + 4.7e2*ix*iy*iz - 1.5e3*ix*iy + .5e5*ix
+      ran = 6.e3*sin(ran)
+      ran = 3.e3*sin(ran)
+      ran = cos(ran)
+      ux = 1. + ran*amp
+      
+      ran = (2+ran)*1.e4*(ieg+Y*sin(Z)+X*cos(Z))
+     $     + 1.5e3*ix*iy*iz - 2.5e3*ix*iy + 8.9e4*ix
+      ran = 2.e3*sin(ran)
+      ran = 7.e3*sin(ran)
+      ran = cos(ran)
+      uy = ran*amp
+      
+      ran = (4+ran)*5.1e4*(ieg+Z*sin(X)+Y*cos(X))
+     $     + 4.6e3*ix*iy*iz - 2.9e4*ix*iy + 3.7e3*ix
+      ran = 9.e3*sin(ran)
+      ran = 4.e3*sin(ran)
+      ran = cos(ran)
+      uz = ran*amp
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      implicit none
+      include 'SIZE'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      implicit none
+      include 'SIZE'
+      include 'SOLN'            ! vx,vy,vz,pr,t
+      include 'GEOM'            ! boundaryID
+      include 'INPUT'           ! cbc
+      
+      integer iel
+c     mesh stretching
+      real Betax, Betay
+c     Hill parameters
+      real Lx, Ly, Lz, W, H
+      common /hill_param/ Lx, Ly, Lz, W, H, Betax, Betay
+      
+      Betax = 2.0
+      Betay = 2.4
+      Lx = 9.
+      Ly = 3.035
+      Lz = 4.5
+      W  = 1.929
+      H = 1.
+
+c               Lx      
+c      <----------------->
+c      ___________________ 
+c                           ^
+c                           |
+c                           |
+c      _                 _  | Ly
+c   ^   \               /   |
+c H |    \             /    |
+c   v     \___________/     v
+c      <-->
+c       W
+      
+c     Transform box mesh to periodic hill (only for the conforming mesh!!)
+      call box2phill
+
+c      call gen_re2(0)
+
+c     mark faces for object definition
+      do iel=1,nelt
+         if (cbc(1,iel,1) .eq. 'W  ') then  ! bottom wall
+            boundaryID(1,iel) = 1
+         else if (cbc(3,iel,1) .eq. 'W  ') then ! top wall
+            boundaryID(3,iel) = 2
+         endif 
+      enddo
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+      implicit none
+      include 'SIZE'
+      include 'INPUT'           ! param, if3d
+      include 'MASS'            ! volvm1      
+      
+c     Local variables
+      real Ubulk
+      
+      real Betax,Betay
+c     Hill parameters
+      real Lx, Ly, Lz, W, H
+      common /hill_param/ Lx, Ly, Lz, W, H, Betax, Betay
+
+c     apply mass flux to drive the flow such that
+c     - Ubulk = velocity averaged over the whole domain
+c     - Ubar_inlet = velocity averaged over the inlet plane = 1.
+      if (if3d) then
+         Ubulk = (Lx*(Ly-H)*Lz)/volvm1
+      else
+         Ubulk = (Lx*(Ly-H))/volvm1
+      endif
+
+      if (nid.eq.0) write(6,*) 'U_bulk = ', Ubulk, ' Ubar_inlet = 1'
+      
+      param(54) = -1            ! x-direction
+      param(55) = Ubulk         ! Ubulk      
+      
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine box2phill
+      implicit none
+      include 'SIZE'
+      include 'GEOM'            ! {x,y,z}m1
+      include 'INPUT'           ! param
+      include 'SOLN'
+
+      integer i, ntot
+      real Betax, Betay
+      real Lx, Ly, Lz, Wh, H    ! x dimension, y dimension, hill half width, hill height
+      common /hill_param/ Lx, Ly, Lz, Wh, H, Betax ,Betay
+      real shift, amp
+      real xscale, yscale, zscale, yh, xx, yy, zz
+      real hill_step,hill_height,xfac,glmax,glmin
+      real xmin, xmax, ymin, ymax, zmin, zmax
+      save xmin, xmax, ymin, ymax, zmin, zmax
+      logical ifminmax
+      save ifminmax
+      data ifminmax /.false./
+      
+      ntot = nx1*ny1*nz1*nelt
+
+      if (.not.ifminmax) then
+         ifminmax = .true.
+         xmin = glmin(xm1,ntot)
+         xmax = glmax(xm1,ntot)
+         ymin = glmin(ym1,ntot)
+         ymax = glmax(ym1,ntot)
+         if (if3d) then
+            zmin = glmin(zm1,ntot)
+            zmax = glmax(zm1,ntot)
+         endif
+      endif
+      
+C     decrease resolution in the high velocity regions (increase CFL)
+      do i=1,ntot
+         xm1(i,1,1,1) = 0.5*(sinh(Betax*(xm1(i,1,1,1)-0.5))/
+     $    sinh(Betax*0.5) + 1.0)
+      enddo
+
+c     increase resolution near the wall
+      do i=1,ntot
+         ym1(i,1,1,1) = 0.5*(tanh(Betay*(2*ym1(i,1,1,1)-1.0))/
+     $    tanh(Betay) + 1.0)
+      enddo
+      
+c     rescale rectangular domain [0,Lx]x[0,Ly]x[0,Lz]
+      xscale = Lx/(xmax-xmin)
+      yscale = Ly/(ymax-ymin)
+      do i=1,ntot
+         xx = xm1(i,1,1,1)
+         yy = ym1(i,1,1,1)
+         xm1(i,1,1,1) = (xx - xmin) * xscale
+         ym1(i,1,1,1) = (yy - ymin) * yscale
+      enddo
+      if (if3d) then
+         zscale = Lz/(zmax-zmin)
+         do i=1,ntot
+            zz = zm1(i,1,1,1)
+            zm1(i,1,1,1) = (zz - zmin) * zscale
+         enddo
+      endif
+
+c     Shift points in x
+      amp = 0.25
+      do i=1,ntot
+         xx = xm1(i,1,1,1)
+         yy = ym1(i,1,1,1)
+         xm1(i,1,1,1) = xx + amp*shift(xx,yy,Lx,Ly,Wh)
+      enddo
+      
+c     Add hill
+      do i=1,ntot
+         xx = xm1(i,1,1,1)
+         yy = ym1(i,1,1,1)
+         yh = hill_height(xx,Lx,Wh,H)
+         yscale = 1-yh/Ly
+         ym1(i,1,1,1) = yh + yy * yscale
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+C     Step function for the hill
+C
+C          x=0
+C           | 
+C      _____|  
+C   ^       \
+C   |        \     x->
+C h |         \
+C   v          \_____
+C           <-->
+C            w     
+      function hill_step(x,w,h)
+      implicit none
+
+      real x,xs,w,h
+      real y,hill_step
+
+      xs = x/w
+
+      if (xs.le.0) then
+         y = h
+      elseif (xs.gt.0.and.xs.le.9./54.) then
+         y = h*min(1.,1.+7.05575248e-1*xs**2-1.1947737203e1*xs**3)
+      elseif (xs.gt.9./54.and.xs.le.14./54.) then
+         y = h*(0.895484248+1.881283544*xs-10.582126017*xs**2
+     $        +10.627665327*xs**3)
+      elseif (xs.gt.14./54.and.xs.le.20./54.) then
+         y = h*(0.92128609+1.582719366*xs-9.430521329*xs**2
+     $        +9.147030728*xs**3)
+      elseif (xs.gt.20./54..and.xs.le.30./54.) then
+         y = h*(1.445155365-2.660621763*xs+2.026499719*xs**2
+     $        -1.164288215*xs**3)
+      elseif (xs.gt.30./54..and.xs.le.40./54.) then
+         y = h*(0.640164762+1.6863274926*xs-5.798008941*xs**2
+     $        +3.530416981*xs**3)
+      elseif (xs.gt.40./54..and.xs.le.1.) then
+         y = h*(2.013932568-3.877432121*xs+1.713066537*xs**2
+     $        +0.150433015*xs**3)
+      else
+         y = 0.
+      endif
+
+      hill_step = y
+      
+      return
+      end
+c----------------------------------------------------------------------- 
+      function hill_height(x,Lx,w,H)
+      implicit none
+      real hill_height,hill_step,x,Lx,w,h
+      real xx
+
+      if (x.lt.0) then
+         xx = Lx + mod(x, Lx)
+      elseif (x.gt.Lx) then
+         xx = mod(x, Lx)
+      else
+         xx = x
+      endif
+
+      hill_height = hill_step(xx,w,h) + hill_step(Lx-xx,w,h)
+      
+      return
+      end          
+c-----------------------------------------------------------------------      
+      function shift(x,y,Lx,Ly,W)
+      implicit none
+      real x,y,Lx,Ly,W
+      real xfac,yfac,shift
+
+      yfac = (1-y/Ly)**3
+
+      if (x.le.W/2) then
+         xfac = -2./W * x
+      elseif (x.gt.W/2.and.x.le.Lx-W/2) then
+         xfac = 2./(Lx-W) * x -1-W/(Lx-W)
+      elseif (x.gt.Lx-W/2) then
+         xfac = -2./W * x + 2*Lx/W
+      endif
+
+      shift = xfac*yfac
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine statistics
+
+c
+c     What follows computes some statistics ...
+c
+      include 'SIZE'
+      include 'TOTAL'
+
+c     parameters for line definition
+      integer intp_nmax, nelx, nely, nelz
+      parameter (intp_nmax=200, nelx=22, nely=16, nelz=19)
+      real xcint, zcint, ylen, betam
+      parameter (xcint=4.0, zcint=2.25, ylen=3.035, betam=2.4)
+
+c     statistics start time and output frequency
+      real tstatstar, tstatfreq
+
+c     object definition
+      real a_tmp(maxobj), wa(maxobj), A_w
+      save A_w
+
+      real x0(3)
+      data x0 /0.0, 0.0, 0.0/ 
+      save x0
+
+      integer icalld
+      save    icalld
+      data    icalld /0/
+
+      real atime,timel
+      save atime,timel
+
+      integer ntdump
+      save    ntdump
+      
+      real    rwk(intp_nmax,ldim+1) ! r, s, t, dist2
+      integer iwk(intp_nmax,3)      ! code, proc, el 
+      save    rwk, iwk
+
+      integer nint, intp_h
+      save    nint, intp_h
+
+      logical iffpts
+      save iffpts
+
+      real xint(intp_nmax),yint(intp_nmax),zint(intp_nmax)
+      save xint, yint, zint
+      save igs_z
+
+      parameter(nstat=5)
+      real ravg(lx1*ly1*lz1*lelt,nstat)
+      real stat(lx1*ly1*lz1*lelt,nstat)
+      real stat_y(intp_nmax*nstat)
+      save ravg, stat, stat_y
+
+      save dragx_avg
+
+      logical ifverbose
+      common /gaaa/    wo1(lx1,ly1,lz1,lelv)
+     &              ,  wo2(lx1,ly1,lz1,lelv)
+     &              ,  wo3(lx1,ly1,lz1,lelv)
+
+      real tmn, tmx
+
+      integer bIDs(1)
+      save iobj_wall
+
+      tstatstar = uparam(1)
+      tstatfreq = uparam(2)
+      
+      if (time.lt.tstatstar) return
+
+      n     = nx1*ny1*nz1*nelv
+
+      if(icalld.eq.0) then
+        if(nid.eq.0) write(6,*) 'Start collecting statistics ...'
+
+        call interp_setup(intp_h,0.0,0,nelv)
+        nint = 0
+        if (nid.eq.0) then
+          nint = intp_nmax
+          call cfill(xint,xcint,size(xint))
+          do i = 1,intp_nmax 
+             yi = (i-1.)/(intp_nmax-1)
+             yint(i) = ylen*0.5*(tanh(betam*(2*yi-1.0))/
+     $                 tanh(betam)+1.0)
+          enddo
+          call cfill(zint,zcint,size(zint))
+        endif
+        iffpts = .true. ! dummy call to find points
+        call interp_nfld(stat_y,ravg,1,xint,yint,zint,nint,
+     $                   iwk,rwk,intp_nmax,iffpts,intp_h)
+        iffpts = .false.
+        call gtpp_gs_setup(igs_z,nelx*nely,1   ,nelz,3) ! z-avg
+
+        call rzero(ravg,size(ravg))
+        dragx_avg = 0
+        atime     = 0
+        timel     = time
+        ntdump    = int(time/tstatfreq)
+
+c     get objects surface area     
+        nn = nx1*nz1
+        do iobj = 1,nobj
+           a_tmp(iobj)= 0.0
+           do imem = 1, nmember(iobj)
+              ieg   = object(iobj,imem,1)
+              ifc   = object(iobj,imem,2)
+              if (gllnid(ieg).eq.nid) then ! this processor has a contribution
+                 iel = gllel(ieg)
+                 a_tmp(iobj)=a_tmp(iobj)+vlsum(area(1,1,ifc,iel),nn)
+              endif
+           enddo
+        enddo
+        call gop(a_tmp, wa, '+  ', maxobj)
+        A_w = 0.0
+        do iobj = 1,nobj
+           A_w = A_w + a_tmp(iobj)
+        enddo
+
+        icalld = 1
+      endif
+
+      dtime = time - timel
+      atime = atime + dtime
+
+      ! averaging over time
+      if (atime.ne.0. .and. dtime.ne.0.) then
+        beta      = dtime / atime
+        alpha     = 1. - beta
+
+        ifverbose = .false.
+        call avg1(ravg(1,1),vx   ,alpha,beta,n,'uavg',ifverbose)
+        call avg2(ravg(1,2),vx   ,alpha,beta,n,'urms',ifverbose)
+        call avg2(ravg(1,3),vy   ,alpha,beta,n,'vrms',ifverbose)
+        call avg2(ravg(1,4),vz   ,alpha,beta,n,'wrms',ifverbose)
+        call avg3(ravg(1,5),vx,vy,alpha,beta,n,'uvmm',ifverbose)
+
+        call torque_calc(1.0,x0,.false.,.false.) ! compute wall shear
+        dragx_avg = alpha*dragx_avg + beta*dragx(0) ! drag from all objects
+      endif
+
+      timel = time
+
+      ! write statistics to file
+      if(istep.gt.0 .and. time.gt.(ntdump+1)*tstatfreq) then
+         ! averaging over statistical homogeneous directions (z)
+         do i = 1,nstat
+            call planar_avg(stat(1,i),ravg(1,i),igs_z)
+         enddo
+
+         ! extract data along wall normal direction (1D profile)
+         call interp_nfld(stat_y,stat,nstat,xint,yint,zint,nint,
+     $                    iwk,rwk,intp_nmax,iffpts,intp_h)
+
+         ntdump = ntdump + 1
+         if (nid.ne.0) goto 998 
+
+         rho    = param(1)
+         dnu    = param(2)
+         tw     = dragx_avg / A_w
+         u_tau  = sqrt(tw / rho)
+         Re_tau = u_tau / dnu
+
+         write(6,*) 'Dumping statistics ...', Re_tau
+ 
+         open(unit=56,file='vel_fluc_prof.dat')
+         write(56,'(A,1pe14.7)') '#time = ', time
+         write(56,'(A)') 
+     $    '#  y    y+    Umean uu    vv    ww    uv    '
+
+         do i = 1,nint
+            yy = yint(i)
+            write(56,3) 
+     &           yy,
+     &           yy*Re_tau,
+     &           stat_y(0*nint+i)/u_tau,
+     &           (stat_y(1*nint+i)-(stat_y(0*nint+i))**2)/u_tau**2,
+     &           stat_y(2*nint+i)/u_tau**2,
+     &           stat_y(3*nint+i)/u_tau**2,
+     &           stat_y(4*nint+i)/u_tau**2
+
+  3         format(1p15e17.9)
+         enddo
+         close(56)
+
+ 998  endif      
+      
+      return
+      end
+

@@ -63,8 +63,14 @@ c-----------------------------------------------------------------------
       real x0(3)
       save x0
       data x0 /3*0/
+      
+      integer bIDs(1), iobj_wall(1)
 
-      if (istep.eq.0) call set_obj  ! define objects for surface integrals
+c     define objects for surface integrals
+      if (istep.eq.0) then
+         bIDs(1) = 1
+         call create_obj(iobj_wall(1),bIDs,1)
+      endif 
 
       call estimate_strouhal
 
@@ -116,6 +122,16 @@ c-----------------------------------------------------------------------
 
 c     param(66) = 4.   ! These give the std nek binary i/o and are 
 c     param(67) = 4.   ! good default values
+
+c     mark faces for object definition
+      nface = 2*ndim
+      do iel=1,nelt
+         do iface = 1, nface
+            if (cbc(iface,iel,1) .eq. 'W  ') then
+               boundaryID(iface,iel) = 1
+            endif
+         enddo 
+      enddo
 
       return
       end
@@ -175,53 +191,6 @@ c-----------------------------------------------------------------------
       if (nid.eq.0.and.st.gt.0) write(6,1) istep,time,st,ux,uy
     1 format(i5,1p4e12.4,' Strouhal')
 
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine set_obj  ! define objects for surface integrals
-c
-      include 'SIZE'
-      include 'TOTAL'
-
-      integer e,f,eg
-
-      nobj = 1
-      iobj = 0
-      do ii=nhis+1,nhis+nobj
-         iobj = iobj+1
-         hcode(10,ii) = 'I'
-         hcode( 1,ii) = 'F'
-         hcode( 2,ii) = 'F'
-         hcode( 3,ii) = 'F'
-         lochis(1,ii) = iobj
-      enddo
-      nhis = nhis + nobj
-
-      if (maxobj.lt.nobj) call exitti('increase maxobj in SIZE$',nobj)
-
-      nxyz  = nx1*ny1*nz1
-      nface = 2*ndim
-
-      do e=1,nelv
-      do f=1,nface
-         if (cbc(f,e,1).eq.'W  ') then
-            iobj  = 1
-            if (iobj.gt.0) then
-               nmember(iobj) = nmember(iobj) + 1
-               mem = nmember(iobj)
-               eg  = lglel(e)
-               object(iobj,mem,1) = eg
-               object(iobj,mem,2) = f
-c              write(6,1) iobj,mem,f,eg,e,nid,' OBJ'
-c   1          format(6i9,a4)
-
-            endif
-         endif
-      enddo
-      enddo
-
-c     write(6,*) 'number',(nmember(k),k=1,4)
-c
       return
       end
 c-----------------------------------------------------------------------

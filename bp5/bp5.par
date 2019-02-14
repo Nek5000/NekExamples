@@ -1,0 +1,18 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+polynomialOrder = 7
+PnPnFormulation = yes
+minNumProcesses = 32
+
+numSteps = 0
+dealiasing = no
+timestepper = bdf1
+
+userParam01 = -1e-8 # tolerance (use negative value for fixed iter)
+userParam02 = 500   # max iterations
+userParam03 = 100   # number of repetitions
+
+[VELOCITY]
+viscosity = 1

@@ -6,6 +6,7 @@ userparam01 = 1
 
 dt = -1.0e-02
 timestepper = bdf2
+variableDt = no
 writecontrol = timeStep #runTime
 writeinterval = 90000
 dealiasing = yes

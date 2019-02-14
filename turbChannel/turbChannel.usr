@@ -147,7 +147,7 @@ c
         if(nid.eq.0) write(6,*) 'Start collecting statistics ...'
 
         nxm = 1 ! mesh is linear
-        call interp_setup(0,nxm,intp_h)
+        call interp_setup(intp_h,0.0,nxm,nelt)
         nint = 0
         if (nid.eq.0) then
           nint = INTP_NMAX
@@ -364,7 +364,7 @@ c-----------------------------------------------------------------------
 
       do iel=1,nelt
       do ifc=1,2*ndim
-         if (cbc(ifc,iel,1) .eq. 'W  ') boundaryIDList(ifc,iel) = 1 
+         if (cbc(ifc,iel,1) .eq. 'W  ') boundaryID(ifc,iel) = 1 
          cbc(ifc,iel,2) = cbc(ifc,iel,1) 
          if (cbc(ifc,iel,1) .eq. 'W  ') cbc(ifc,iel,2) = 't  '
       enddo

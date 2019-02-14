@@ -512,7 +512,7 @@ c-----------------------------------------------------------------------
           if(idpss(i).eq.0) call get_limits(t(1,1,1,1,i),thmin(i) !Helmholtz solver
      &          ,thmax(i),thave(i),dth(i),tlag(1,1,1,1,1,i),rmsth(i),nt)
           if(idpss(i).eq.1) call get_limits_nodt(t(1,1,1,1,i) !CVODE solver
-     &                                   ,thmin(i),thmax(i),thave(i),nt)
+     &                      ,thmin(i),thmax(i),thave(i))
         enddo
       endif
 
@@ -535,8 +535,6 @@ c-----------------------------------------------------------------------
         endif
         write(*,*)
       endif
-
-      call copy(prlagl,pr,n2)
 
  254  format(a15,5a13)
  255  format(a15,5es13.4)
