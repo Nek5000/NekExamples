@@ -213,3 +213,7 @@ Some examples provide additional pdf files for a more complete description.
   * __Test name__ : bp5
   * __Purpose__ : Ceed benchmark solving a standard Poisson equation 
   * __Features__ :
+* `e3q`
+  * __Test name__ : e3q
+  * __Purpose__ : Eddy 3D test problem for code valiation
+  * __Features__ :
