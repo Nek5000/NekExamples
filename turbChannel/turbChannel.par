@@ -2,6 +2,10 @@
 # nek parameter file
 #
 [GENERAL] 
+polynomialOrder = 7
+PnPnFormulation = yes
+minNumProcesses = 4
+
 #startFrom = restart.fld time=0 
 stopAt = endTime
 endTime = 400
