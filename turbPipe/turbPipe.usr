@@ -179,6 +179,8 @@ c-----------------------------------------------------------------------
       enddo
       enddo
 
+      if (ifneknek) call neknek_setup 
+
       return
       end
 c-----------------------------------------------------------------------
@@ -190,8 +192,6 @@ c-----------------------------------------------------------------------
       param(54) = -3  ! use >0 for const flowrate or <0 bulk vel
                       ! flow direction is given by (1=x, 2=y, 3=z)
       param(55) = 1.0 ! flowrate/bulk-velocity
-
-      if (ifneknek) call neknek_setup 
 
       return
       end
