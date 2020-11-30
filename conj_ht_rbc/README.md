@@ -147,7 +147,7 @@ Now, the user needs to run `reatore2` and `genmap` tools in order to produce `ch
 
   
 <p align="center">
-  <img width="460" height="400" src="image/mesh.png">
+  <img width="520" height="400" src="image/mesh.png">
 </p>
 
 ### 1.2 Case set-up .usr
@@ -389,7 +389,7 @@ visnek cht2d
 In the viewing window, one can visualize the temperature-field as depicted in this figure
 
 <p align="center">
-  <img width="460" height="400" src="image/cht_rbc.png">
+  <img width="560" height="400" src="image/cht_rbc.png">
 </p>
 
   Steady-State flow field visualized in `Visit/Paraview`. Vectors represent velocity. Colors represent velocity magnitude.  
