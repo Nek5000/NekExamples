@@ -398,4 +398,6 @@ In the viewing window, one can visualize the temperature-field as depicted in th
   Steady-State flow field visualized in `Visit/Paraview`. Vectors represent velocity. Colors represent velocity magnitude.  
 
 
+**Refrence** 
 
+- [Turbulent convection for different thermal boundary conditions at the plates](https://github.com/Foroozani/MyLecturesNote/blob/main/refrences/turbulent_convection_for_different_thermal_boundary_conditions_at_the_plates.pdf "Turbulent convection for different thermal boundary conditions at the plates") 
