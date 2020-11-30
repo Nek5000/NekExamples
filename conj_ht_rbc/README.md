@@ -144,9 +144,11 @@ Then, we can run the `pretex` tool to merge fluid subdomain with the solid resul
 
 Now, the user needs to run `reatore2` and `genmap` tools in order to produce `cht2d.re2` and `cht2d.ma2` binary files respectively.
 
-![](image/mesh.png)
-  
 
+  
+<p align="center">
+  <img width="460" height="400" src="image/mesh.png">
+</p>
 
 ### 1.2 Case set-up .usr
 
@@ -386,7 +388,9 @@ visnek cht2d
 
 In the viewing window, one can visualize the temperature-field as depicted in this figure
 
-![](image/cht_rbc.png)
+<p align="center">
+  <img width="460" height="400" src="image/cht_rbc.png">
+</p>
 
   Steady-State flow field visualized in `Visit/Paraview`. Vectors represent velocity. Colors represent velocity magnitude.  
 
