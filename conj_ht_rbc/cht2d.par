@@ -1,0 +1,50 @@
+#--------------------
+# nek parameter file
+#--------------------
+
+[GENERAL]
+# 
+#----------------------------------------
+#     Job 0
+#----------------------------------------
+numSteps          = 800001
+stopAt            = numSteps
+dt                = 5e-02
+variableDT        = yes
+targetCFL         = 0.5
+writeInterval     = 1000 
+writeControl      = timeStep
+timeStepper       = bdf2
+
+#-----------------------------------------
+[PROBLEMTYPE]
+equation = incompNS
+variableProperties = yes
+
+#------------------------------------------
+[PRESSURE]
+residualTol = 1e-04
+residualProj = no
+#preconditioner = semg_amg
+
+#------------------------------------------
+[VELOCITY]
+residualTol = 1e-06
+density = 1.0
+#
+# Ra=1e7, Pr=0.7, viscosity=sqrt(Pr/Ra)
+#
+viscosity = 3.162278E-04	
+
+#------------------------------------------
+[TEMPERATURE] # temperature with Hmholtz 
+#
+ conjugateHeatTransfer = yes 
+#
+rhoCp = 1.0
+#
+# conductivity=1/sqrt(RaPr)
+# 
+conductivity = 3.162278E-04
+residualTol = 1e-06
+
