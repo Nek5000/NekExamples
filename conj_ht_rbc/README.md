@@ -10,8 +10,8 @@ Users always bear in mind, when you set up a test case in `Nek5000` you must edi
 
 ```bash
 cd $HOME/Nek5000/run 
-mkdir conj_ht
-cd conj_ht
+mkdir conj_ht_rbc
+cd conj_ht_rbc
 ```
 then copy the templates to your case directory. This tutorial requires the `ray0.rea` file from the Rayleigh-Bernard example found in [Nek5000/examples/rayleigh](https://github.com/Nek5000/NekExamples/tree/master/rayleigh).
 
@@ -155,7 +155,7 @@ The [User Routines File (.usr)](http://nek5000.github.io/NekDoc/problem_setup/ca
 
 To get started we copy the template to our case directory and then we modify its subroutines accordingly.
 ```bash 
-cp $HOME/Nek5000/examples/conj_ht/conj_ht.usr cht2d.usr 
+cp $HOME/Nek5000/examples/conj_ht_rbc/conj_ht.usr cht2d.usr 
 ```
 :warning: Note: in  the [uservp](http://nek5000.github.io/NekDoc/problem_setup/case_files.html#case-files-uservp) subroutine, users should specifiy different variable properties for fluid and solid subdomain. For exapmle, thermal diffusivity ratios of Copper and liquid metal alloy GaInSn (Pr = 0.033) is 10 and thermal diffusivity ratios of Copper and air (Pr = 0.7) is 5.2 , [read more here](https://github.com/Foroozani/MyLecturesNote/blob/main/refrences/turbulent_convection_for_different_thermal_boundary_conditions_at_the_plates.pdf "Turbulent convection for different thermal boundary conditions at the plates"). 
 
