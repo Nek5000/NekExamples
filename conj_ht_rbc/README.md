@@ -208,7 +208,7 @@ In this study, the volumetric heat source is set to be zero *qvol=0* in *t mesh*
       return
       end
 ```
-In this example, *Ra = 1E7* and *Pr = 0.033*. In order to have averege temperature at ![equation](https://latex.codecogs.com/gif.latex?%5Cdpi%7B100%7D%20%5Csmall%20%5Ctextlangle%20T%28z%3D0%29%20%5Ctextrangle%20%5Capprox%201%2C%20%5Ctextlangle%20T%28z%3D1%29%20%5Ctextrangle%20%5Capprox%200), one can impose temperature increment of *deltaT = 2.5* (can be set in `USERDEF.f`) at the bottom plate ![](https://latex.codecogs.com/gif.latex?%5Csmall%20%5Cdelta%20T%20%3D%202.5). Therefore temperature equation across the whole domain is `T(y) = -4.303*y + 2.651`.
+In this example, *Ra = 1E7* and *Pr = 0.033*. In order to have averege temperature at ![equation](https://latex.codecogs.com/gif.latex?%5Csmall%20%5Ctextlangle%20T%28y%3D0%29%20%5Ctextrangle%20%5Capprox%201%2C%20%5Ctextlangle%20T%28y%3D1%29%20%5Ctextrangle%20%5Capprox%200), one can impose temperature increment of *deltaT = 2.5* (can be set in `USERDEF.f`) at the bottom plate ![](https://latex.codecogs.com/gif.latex?%5Csmall%20%5Cdelta%20T%20%3D%202.5). Therefore temperature equation across the whole domain is `T(y) = -4.303*y + 2.651`.
 
 :warning: The temperature drop across both solid plates varies with *Pr* and *Ra* and is adjusted at the boundaries. Therfeore `T(y)` equation should be set carefully as shown in the figure [Refrence](https://github.com/Foroozani/MyLecturesNote/blob/main/refrences/turbulent_convection_for_different_thermal_boundary_conditions_at_the_plates.pdf "Turbulent convection for different thermal boundary conditions at the plates").  
 
