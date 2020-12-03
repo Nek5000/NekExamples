@@ -34,6 +34,11 @@ Some examples provide additional pdf files for a more complete description.
   * __Purpose__ : 2D Poiseiulle flow moving between two heated finite thickness
   * __Features__ :
     	* Temperature solve with frozen velocity
+ * `conj_ht_rbc`
+  * __Test name__ :  cht2d
+  * __Purpose__ :  2D thermal convection between two solid finite thickness
+  * __Features__ :
+    	* Non-dimensional governing equations are valid when temperature drop across both solid plates is 1.     
 * `eddy_neknek`
   * __Test name__ : Eddy_Neknek
   * __Purpose__ : Eddy solutions in doubly-periodic domain domains
