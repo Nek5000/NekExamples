@@ -213,7 +213,7 @@ In this example, *Ra = 1E7* and *Pr = 0.033*. In order to have averege temperatu
 :warning: The temperature drop across both solid plates varies with *Pr* and *Ra* and is adjusted at the boundaries. Therfeore `T(y)` equation should be set carefully as shown in the figure [Refrence](https://github.com/Foroozani/MyLecturesNote/blob/main/refrences/turbulent_convection_for_different_thermal_boundary_conditions_at_the_plates.pdf "Turbulent convection for different thermal boundary conditions at the plates").  
 
 <p align="center">
-  <img width="460" height="400" src="image/deltaT.png">
+  <img width="460" height="400" src="image/deltaT2.png">
 </p>
 
 
