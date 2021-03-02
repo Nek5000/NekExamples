@@ -1,0 +1,23 @@
+#
+# nek parameter file
+#
+[GENERAL] 
+stopAt = endTime
+endTime = 1.0
+dt = 1e-04
+timeStepper = bdf2
+
+writeControl = runTime
+writeInterval = 0
+
+[PROBLEMTYPE]
+equation = incompNS
+
+[PRESSURE]
+residualTol = 1e-08
+residualProj = yes
+
+[VELOCITY]
+residualTol = 1e-12
+density = 1
+viscosity = 0.005
