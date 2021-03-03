@@ -1,3 +1,3 @@
 # RANS modle for 2D chnnel flow
 
-This example demonstrates use of kOmg turbulence model.
+This example demonstrates the use of the standar k-tau turbulence model.
