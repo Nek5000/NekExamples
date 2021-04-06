@@ -215,7 +215,7 @@ C     do this BEFORE calling rans_init
 
 c     do iel=1,nelv
 c     do ifc=1,2*ndim
-c       id_face = bc(5,ifc,iel,1)
+c       id_face = boundaryID(ifc,iel)
 c       if (id_face.eq.1) then        ! dirichlet (inlet)  BCs
 c          cbc(ifc,iel,1) = 'v  '
 c          cbc(ifc,iel,2) = 't  '
