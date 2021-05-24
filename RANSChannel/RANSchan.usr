@@ -27,7 +27,7 @@ c-----------------------------------------------------------------------
 
       e = gllel(eg)
 
-      Pr_t=rans_turbPrandtl
+      Pr_t=rans_turbPrandtl()
       mu_t=rans_mut(ix,iy,iz,e)
 
       if(ifield.eq.1) then
