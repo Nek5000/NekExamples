@@ -14,10 +14,10 @@
 #=======================================================================
 #
 Box
--3  -8                                nelx,nely,nelz for Box
+-3  -10                                nelx,nely,nelz for Box
 0 1.0 1.0                             x0,x1,gain
-0.0 1.0 0.55
+0.0 1.0 0.57
 P  ,P  ,SYM,W  
-P  ,P  ,SYM,I  
-P  ,P  ,SYM,t  
-P  ,P  ,SYM,t  
+P  ,P  ,I  ,f  
+P  ,P  ,I  ,t  
+P  ,P  ,I  ,t  

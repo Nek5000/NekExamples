@@ -1,5 +1,4 @@
 #include "experimental/rans_komg.f"
-
 c-----------------------------------------------------------------------
 c  nek5000 user-file template
 c
@@ -23,23 +22,27 @@ c-----------------------------------------------------------------------
       include 'NEKUSE'
 
       integer ix,iy,iz,e,eg
-      real rans_komg_mut,rans_komg_mutsk,rans_komg_mutso
+      real rans_mut,rans_mutsk,rans_mutso,rans_turbPrandtl
       real mu_t,Pr_t
 
       e = gllel(eg)
 
-      Pr_t=0.91
-      mu_t=rans_komg_mut(ix,iy,iz,e)
+      Pr_t=rans_turbPrandtl()
+      mu_t=rans_mut(ix,iy,iz,e)
 
-      utrans = cpfld(ifield,2)
       if(ifield.eq.1) then
+        t(ix,iy,iz,e,4)=mu_t/cpfld(ifield,1) !store eddy viscosity for post processing
         udiff = cpfld(ifield,1)+mu_t
+        utrans = cpfld(ifield,2)
       elseif(ifield.eq.2) then
         udiff = cpfld(ifield,1)+mu_t*cpfld(ifield,2)/(Pr_t*cpfld(1,2))
-      elseif(ifield.eq.3) then
-        udiff = cpfld(ifield,1)+rans_komg_mutsk(ix,iy,iz,e)
-      elseif(ifield.eq.4) then
-        udiff = cpfld(ifield,1)+rans_komg_mutso(ix,iy,iz,e)
+        utrans = cpfld(ifield,2)
+      elseif(ifield.eq.3) then !use rho and mu from field 1
+        udiff = cpfld(1,1)+rans_mutsk(ix,iy,iz,e)
+        utrans = cpfld(1,2)
+      elseif(ifield.eq.4) then !use rho and mu from field 1
+        udiff = cpfld(1,1)+rans_mutso(ix,iy,iz,e)
+        utrans = cpfld(1,2)
       endif
 
       return
@@ -72,14 +75,17 @@ c-----------------------------------------------------------------------
       include 'NEKUSE'
 
       integer ix,iy,iz,e,eg
-      real rans_komg_kSrc,rans_komg_omgSrc
+      real rans_kSrc,rans_omgSrc
+      real rans_kDiag,rans_omgDiag
 
       e = gllel(eg)
 
       if(ifield.eq.3) then
-        qvol = rans_komg_kSrc(ix,iy,iz,e)
+        qvol = rans_kSrc(ix,iy,iz,e)
+        avol = rans_kDiag(ix,iy,iz,e)
       elseif(ifield.eq.4) then
-        qvol = rans_komg_omgSrc(ix,iy,iz,e)
+        qvol = rans_omgSrc(ix,iy,iz,e)
+        avol = rans_omgDiag(ix,iy,iz,e)
       else
         qvol = 0.0
       endif
@@ -112,30 +118,17 @@ c-----------------------------------------------------------------------
       include 'TOTAL'
       include 'NEKUSE'
 
-      real wd
-      common /walldist/ wd(lx1,ly1,lz1,lelv)
-
       integer ix,iy,iz,e,eg
-      real darcy,utau,sigm,kmax,omax,yplus,fact,Re
 
       e = gllel(eg)
 
-      Re    = 1.0/param(2)
-      darcy = 0.316/(Re**0.25)
-      utau  = sqrt(darcy/8.0)
-      sigm  = 0.6
-      kmax  = 4.5*utau*utau
-      omax  = 0.5*utau*utau*Re
-      yplus = max(wd(ix,iy,iz,e)*utau*Re,1.0e-3)
-
-      ux   = 3.0/2.0*(1.0-y*y)
+      ux   = 1.0
       uy   = 0.0
       uz   = 0.0
       temp = 0.0
 
-      fact = exp(-(log10(yplus)-1.0)**2/(2.0*sigm**2))
-      if(ifield.eq.3) temp = kmax*fact
-      if(ifield.eq.4) temp = omax*fact
+      if(ifield.eq.3) temp = 0.01
+      if(ifield.eq.4) temp = 0.2
 
       return
       end
@@ -145,22 +138,19 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      real wd
-      common /walldist/ wd(lx1,ly1,lz1,lelv)
-
-      real ypmin,ypmax,ypave,utmin,utmax,utave
-
-      if (mod(istep,10).eq.0) then
-        call print_limits !monitor the solution
-        call y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
-        if(nio.eq.0) then
-          write(6,256)'y_p+',ypmin,ypmax,ypave
-          write(6,256)'u_tau',utmin,utmax,utave
-          write(6,*)
-        endif
+      real xmax,xmin,ymax,ymin,zmax,zmin
+      real ptA(3),ptB(3)
+      
+      if(istep.eq.nsteps) then
+        call domain_size(xmin,xmax,ymin,ymax,zmin,zmax)
+        ptA(1) = 0.5*(xmin+xmax)
+        ptA(2) = ymax
+        ptA(3) = 0.5*(zmin+zmax)
+        ptB(1) = ptA(1)
+        ptB(2) = ymin
+        ptB(3) = ptA(3)
+        call RANSplot(ptA,ptB,1001)
       endif
-
- 256  format(a15,3es13.4)
 
       return
       end
@@ -181,6 +171,9 @@ C     enforce constant average velocity
       param(54) = -1
       param(55) = 1.0
 
+c     suppress runtime statistics
+      param(120) = nsteps
+
       return
       end
 c-----------------------------------------------------------------------
@@ -192,12 +185,18 @@ c-----------------------------------------------------------------------
       real wd
       common /walldist/ wd(lx1,ly1,lz1,lelv)
 
-      integer i,n
+      integer n,iel,ifc,id_face
       real xmin,xmax,ymin,ymax,scaley,scalex
       real glmin,glmax
 
+      integer ifld_k,ifld_t,m_id,w_id
+      real coeffs(30) !array for passing custom coeffs to RANS model
+      logical ifcoeffs !flag to use custom or default coeffs
+
       n=nx1*ny1*nz1*nelv
 
+
+C     rescale the domain BEFORE calling rans_init
       xmin=glmin(xm1,n)
       xmax=glmax(xm1,n)
       ymin=glmin(ym1,n)
@@ -209,9 +208,48 @@ c-----------------------------------------------------------------------
       call cmult(xm1,scalex,n)
       call cmult(ym1,scaley,n)
 
-c     calculate wall distance for regularized k-omega
-      call rone(wd,n)
-      call sub2(wd,ym1,n)
+
+C     set BCs for velocity and temperature for 3rd party mesh
+C     tke and omega/tau are handled by rans_init
+C     do this BEFORE calling rans_init
+
+c     do iel=1,nelv
+c     do ifc=1,2*ndim
+c       id_face = boundaryID(ifc,iel)
+c       if (id_face.eq.1) then        ! dirichlet (inlet)  BCs
+c          cbc(ifc,iel,1) = 'v  '
+c          cbc(ifc,iel,2) = 't  '
+c       elseif (id_face.eq.2) then    ! Wall / heat flux BCs
+c          cbc(ifc,iel,1) = 'W  '
+c          cbc(ifc,iel,2) = 'f  '
+c       elseif (id_face.eq.3) then    ! Outlet BCs
+c          cbc(ifc,iel,1) = 'O  '
+c          cbc(ifc,iel,2) = 'I  '
+c       endif
+c     enddo
+c     enddo
+
+
+C     Setup RANS model, this MUST be done in usrdat2
+
+      ifld_k = 3         !field number for tke, t(1,1,1,1,ifld_k-1)
+      ifld_t = 4         !field number for omega/tau, t(1,1,1,1,ifld_t-1)
+      ifcoeffs = .false. !set to true to pass custom coefficients
+
+C     Available models:
+c     m_id = 0 !regularized standard k-omega
+c     m_id = 1 !regularized low-Re k-omega
+c     m_id = 2 !regularized standard k-omega SST
+c     m_id = 3 !non-regularized standard k-omega (NOT SUPPORTED)
+      m_id = 4 !standard k-tau
+c     m_id = 5 !low-Re k-tau
+
+C     Wall distance function:
+c     w_id = 0 ! user specified
+c     w_id = 1 ! cheap_dist (path to wall, may work better for periodic boundaries)
+      w_id = 2 ! distf (coordinate difference, provides smoother function)
+
+      call rans_init(ifld_k,ifld_t,ifcoeffs,coeffs,w_id,wd,m_id)
 
       return
       end
@@ -221,321 +259,157 @@ c-----------------------------------------------------------------------
       include 'SIZE'
       include 'TOTAL'
 
-      real wd
-      common /walldist/ wd(lx1,ly1,lz1,lelv)
-
-      integer ifld_k,ifld_omg,m_id,w_id
-      real coeffs(21) !array for passing your own coeffs
-      logical ifcoeffs
-      
-      ifld_k = 3 !address of tke equation in t array
-      ifld_omg = 4 !address of omega equation in t array
-      ifcoeffs=.false. !set to true to pass your own coeffs
-
-C     Supported models:
-c     m_id = 0 !regularized high-Re k-omega (no wall functions)
-      m_id = 1 !regularized low-Re k-omega
-c     m_id = 2 !regularized high-Re k-omega SST (no wall functions)
-c     m_id = 3 !regularized low-Re k-omega SST
-
-C     Wall distance function:
-      w_id = 0 ! user specified
-c     w_id = 1 ! cheap_dist (path to wall, may work better for periodic boundaries)
-c     w_id = 2 ! distf (coordinate difference, provides smoother function)
-
-      call rans_komg_init(ifld_k,ifld_omg,ifcoeffs,coeffs,w_id,wd,m_id)
-
       return
       end
 C-----------------------------------------------------------------------
-      subroutine get_limits(phi,phimin,phimax,phiave,dphi,phip,rmsphi,n)
+      subroutine RANSplot(pt1,pt2,lpts)
       implicit none
       include 'SIZE'
       include 'TOTAL'
 
-      integer i,n,ntot,iglsum
-      real phi(1),phip(1),phimin,phimax,phiave,dphi,rmsphi
-      real glmin,glmax,glsc2,glsum
+      real pt1(ldim),pt2(ldim)
+      integer npts,lpts,iplot
 
-      ntot=iglsum(n,1)
+      character*32 fname
+      character*14 afmt
+      character*10 rfmt
+      integer intp_h,i,j,nt,nfld
+      save intp_h
+      logical ifset,ifdo
+      real dx,pts(lhis,ldim)
+      real fwrk(lx1*ly1*lz1*lelt,ldim+1+ldimt)
+      real fpts(lhis*(ldim+1+ldimt))
+      real uout(lhis),vout(lhis),wout(lhis)
+      real prout(lhis),tout(lhis,ldimt)
+      character*4 outname(ldim+1+ldimt)
 
-      rmsphi=0.0
-      dphi=0.0
-      if(istep.ge.1) then
-        do i=1,n
-          dphi=max(dphi,abs(phip(i)-phi(i)))
-          rmsphi=rmsphi+(phip(i)-phi(i))**2
-        enddo
-        rmsphi=glsum(rmsphi,1)
-        rmsphi=sqrt(rmsphi/DBLE(ntot))/dt
-      endif
-      dphi=glmax(dphi,1)
-      dphi=dphi/dt
+      real rwrk(lhis,ldim+1)
+      integer iwrk(lhis,3)
+      save rwrk,iwrk
 
-      phimin=glmin(phi,n)
-      phimax=glmax(phi,n)
-      phiave=glsc2(phi,bm1,n)/volvm1
+      save ifdo,ifset
+      data ifdo /.true./
+      data ifset /.true./
 
-      return
-      end
-C-----------------------------------------------------------------------
-      subroutine get_limits_nodt(phi,phimin,phimax,phiave)
-      implicit none
-      include 'SIZE'
-      include 'TOTAL'
+      save iplot
+      data iplot /1/
 
-      integer n
-      real phi(1),phimin,phimax,phiave
-      real glmin,glmax,glsc2
+      if(.not.ifdo) return
 
-      n=nx1*ny1*nz1*nelv
+      nt=lx1*ly1*lz1*nelt
 
-      phimin=glmin(phi,n)
-      phimax=glmax(phi,n)
-      phiave=glsc2(phi,bm1,n)/volvm1
-
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine y_p_limits(wd,ypmin,ypmax,ypave,utmin,utmax,utave)
-      implicit none
-      include 'SIZE'
-      include 'TOTAL'
-
-C     calculate min, max, and average y_p+ and u_tau values
-
-      integer e,i,i0,i1,j,j0,j1,k,k0,k1,iw,jw,kw,i2,j2
-      integer ipt,wpt,estrd,isd,jsd
-      real msk(lx1,ly1,lz1,lelv)
-      real gradu(lx1*ly1*lz1,3,3),wd(1)
-      real tau(3),norm(3),vsca,tauw,utau,rho,mu
-      real ypmin,ypmax,yp,ypave,vol,utmin,utmax,utave
-      real glmin,glmax,glsum
-      logical ifgrad, ifdid
-
-      data ifdid /.false./
-      save ifdid, msk
-
-      ypmin=1.0d30
-      ypmax=-1.0d30
-      ypave=0.0
-      utmin=1.0d30
-      utmax=-1.0d30
-      utave=0.0
-      vol=0.0
-
-C     first build the mask
-      if(.not.ifdid)then
-        ifdid=.true.
-        call rone(msk,nx1*ny1*nz1*nelv)
-        do e=1,nelv
-          do isd=1,2*ndim
-            if(cbc(isd,e,1).eq.'W  ') then
-              call backpts(i0,i1,j0,j1,k0,k1,isd)
-              do k=k0,k1
-              do j=j0,j1
-              do i=i0,i1
-                msk(i,j,k,e)=0.0
-              enddo
-              enddo
-              enddo
-            endif
-          enddo
-          do isd=1,2*ndim
-            if(cbc(isd,e,1).eq.'W  ') then
-              call facind(i0,i1,j0,j1,k0,k1,lx1,ly1,lz1,isd)
-              do k=k0,k1
-              do j=j0,j1
-              do i=i0,i1
-                msk(i,j,k,e)=1.0
-              enddo
-              enddo
-              enddo
-            endif
-          enddo
-        enddo
-        call dssum(msk,nx1,ny1,nz1) !for elements with edges but not faces along a wall
+      npts=max(lpts,2)
+      if(npts.gt.lhis) then
+        if(nio.eq.0) write(*,*)
+     &       "Error, recompile with lhis in SIZE >= ",npts
+        ifdo=.false.
+        return
       endif
 
-      do e=1,nelv
-        ifgrad=.true.
-        do isd=1,2*ndim
-          if(cbc(isd,e,1).eq.'W  ')then
-            estrd=(e-1)*nx1*ny1*nz1
-            if(ifgrad)then
-              call gradm11(gradu(1,1,1),gradu(1,1,2),gradu(1,1,3),vx,e)
-              call gradm11(gradu(1,2,1),gradu(1,2,2),gradu(1,2,3),vy,e)
-              if(if3d)
-     &         call gradm11(gradu(1,3,1),gradu(1,3,2),gradu(1,3,3),vz,e)
-              ifgrad=.false.
-            endif
-            call backpts(i0,i1,j0,j1,k0,k1,isd)
-            do k=k0,k1
-            do j=j0,j1
-            do i=i0,i1
-              if(msk(i,j,k,e).lt.0.5) then
-                iw=i
-                jw=j
-                kw=k
-                if    (isd.eq.1) then
-                  jw=1
-                elseif(isd.eq.2) then
-                  iw=nx1
-                elseif(isd.eq.3) then
-                  jw=ny1
-                elseif(isd.eq.4) then
-                  iw=1
-                elseif(isd.eq.5) then
-                  kw=1
-                else
-                  kw=nx1
-                endif
-                call getSnormal(norm,iw,jw,kw,isd,e)
-                ipt=i +(j -1)*nx1+(k -1)*nx1*ny1
-                wpt=iw+(jw-1)*nx1+(kw-1)*nx1*ny1
-
-                mu=vdiff(iw,jw,kw,e,1)
-                rho=vtrans(iw,jw,kw,e,1)
-
-                do i2=1,ldim
-                tau(i2)=0.0
-                  do j2=1,ldim
-                    tau(i2)=tau(i2)+
-     &                   mu*(gradu(wpt,i2,j2)+gradu(wpt,j2,i2))*norm(j2)
-                  enddo
-                enddo
-
-                vsca=0.0
-                do i2=1,ldim
-                  vsca=vsca+tau(i2)*norm(i2)
-                enddo
-
-                tauw=0.0
-                do i2=1,ldim
-                  tauw=tauw+(tau(i2)-vsca*norm(i2))**2
-                enddo
-                tauw=sqrt(tauw)
-                utau=sqrt(tauw/rho)
-                yp=wd(ipt+estrd)*utau*rho/mu
-                ypmin=min(ypmin,yp)
-                ypmax=max(ypmax,yp)
-                ypave=ypave+yp*bm1(i,j,k,e)
-                utmin=min(utau,utmin)
-                utmax=max(utau,utmax)
-                utave=utave+utau*bm1(i,j,k,e)
-                vol=vol+bm1(i,j,k,e)
-              endif
-            enddo
-            enddo
-            enddo
-          endif
+      call rzero(pts,npts*ndim)
+      do j=1,ndim
+        pts(1,j)=pt1(j)
+        dx=(pt2(j)-pt1(j))/(real(npts-1))
+        do i=2,npts
+          pts(i,j)=pts(i-1,j)+dx
         enddo
       enddo
 
-      ypmin=glmin(ypmin,1)
-      ypmax=glmax(ypmax,1)
-      ypave=glsum(ypave,1)
-      utmin=glmin(utmin,1)
-      utmax=glmax(utmax,1)
-      utave=glsum(utave,1)
-      vol=glsum(vol,1)
-      ypave=ypave/vol
-      utave=utave/vol
-
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine backpts(i0,i1,j0,j1,k0,k1,isd)
-      implicit none
-      include 'SIZE'
-
-      integer i0,i1,j0,j1,k0,k1,isd
-
-      i0=1
-      j0=1
-      k0=1
-      i1=nx1
-      j1=ny1
-      k1=nz1
-      if(isd.eq.1) then
-        j0=2
-        j1=2
-      elseif(isd.eq.2) then
-        i0=nx1-1
-        i1=nx1-1
-      elseif(isd.eq.3) then
-        j0=ny1-1
-        j1=ny1-1
-      elseif(isd.eq.4) then
-        i0=2
-        i1=2
-      elseif(isd.eq.5) then
-        k0=2
-        k1=2
-      elseif(isd.eq.6) then
-        k0=nz1-1
-        k1=nz1-1
+      if(ifset)then
+        ifset=.false.
+        call interp_setup(intp_h,0.0,0,nelt)
       endif
 
-      return
-      end
-c-----------------------------------------------------------------------
-      subroutine print_limits
-      implicit none
-      include 'SIZE'
-      include 'TOTAL'
-
-      real vol,glsum,glmin,glmax,glsc2
-      real tmp(lx1*ly1*lz1*lelv)
-      integer i,n1,n2,nt
-
-      real uxmin,uxmax,uxave,uymin,uymax,uyave,uzmin,uzmax,uzave
-      real prmin,prmax,prave
-      real thmin(ldimt),thmax(ldimt),thave(ldimt)
-      real rmsux,rmsuy,rmsuz,rmspr,rmsth(ldimt)
-      real dux,duy,duz,dpr,dth(ldimt)
-      character*15 tname
-
-      n1=nx1*ny1*nz1*nelv
-      n2=nx2*ny2*nz2*nelv
-      nt=nx1*ny1*nz1*nelt
-
-      call get_limits(vx,uxmin,uxmax,uxave,dux,vxlag,rmsux,n1)
-      call get_limits(vy,uymin,uymax,uyave,duy,vylag,rmsuy,n1)
-      if(if3d) call get_limits(vz,uzmin,uzmax,uzave,duz,vzlag,rmsuz,n1)
-      call get_limits(pr,prmin,prmax,prave,dpr,prlag,rmspr,n2)
-      if(ifheat)then
-        do i=1,npscal+1
-          if(idpss(i).eq.0) call get_limits(t(1,1,1,1,i),thmin(i) !Helmholtz solver
-     &          ,thmax(i),thave(i),dth(i),tlag(1,1,1,1,1,i),rmsth(i),nt)
-          if(idpss(i).eq.1) call get_limits_nodt(t(1,1,1,1,i) !CVODE solver
-     &                      ,thmin(i),thmax(i),thave(i))
+      nfld=0
+      if(ifvo) then
+        write(outname(1),'(a4)')"VELX"
+        write(outname(2),'(a4)')"VELY"
+        call copy(fwrk(1,1),vx,nt)
+        call copy(fwrk(1,2),vy,nt)
+        nfld=2
+      endif
+      if(if3d.and.ifvo)then
+        nfld=nfld+1
+        write(outname(nfld),'(a4)')"VELZ"
+        call copy(fwrk(1,nfld),vz,nt)
+      endif
+      if(ifpo) then
+        nfld=nfld+1
+        write(outname(nfld),'(a4)')"PRES"
+        call copy(fwrk(1,nfld),pr,nt)
+      endif
+      if(ifheat) then
+        if(ifto) then
+          nfld=nfld+1
+          write(outname(nfld),'(a4)')"TEMP"
+          call copy(fwrk(1,nfld),t,nt)
+        endif
+        do i=1,ldimt-1
+          if(ifpsco(i)) then
+            nfld=nfld+1
+            write(outname(nfld),'(a2,i2)')"PS",i
+            call copy(fwrk(1,nfld),t(1,1,1,1,i+1),nt)
+          endif
         enddo
       endif
 
-      if(nio.eq.0) then
-        write(*,*)
-        write(*,254) 'limits','min','max','ave','max d/dt','rms d/dt'
-        write(*,255) 'u velocity',uxmin,uxmax,uxave,dux,rmsux
-        write(*,255) 'v velocity',uymin,uymax,uyave,duy,rmsuy
-        if(if3d) write(*,255) 'w velocity',uzmin,uzmax,uzave,duz,rmsuz
-        write(*,255) 'pressure',prmin,prmax,prave,dpr,rmspr
-        if(ifheat) then
-          do i=1,npscal+1
-            if(i.eq.1) write(tname,'(a15)') "temperature"
-            if(i.gt.1) write(tname,'(a14,i1)') "PS ",i-1
-            if(idpss(i).eq.0)write(*,255)
-     &               tname,thmin(i),thmax(i),thave(i),dth(i),rmsth(i)
-            if(idpss(i).eq.1)write(*,256)
-     &               tname,thmin(i),thmax(i),thave(i),'--','--'
+      if(nfld.gt.0) then
+        call blank(fname,32)
+        if(iplot.lt.10) then
+          write(fname,'(a,i1,a)') "plot",iplot,".dat"
+        elseif(iplot.lt.100) then
+          write(fname,'(a,i2,a)') "plot",iplot,".dat"
+        else
+          write(fname,'(a,i3,a)') "plot",iplot,".dat"
+        endif
+
+        if(nio.eq.0) then
+          write(*,*)'   Writing line plot data to file ',fname
+          if(if3d)then
+            write(*,'(7x,3es15.6)')pt1(1),pt1(2),pt1(3)
+            write(*,'(7x,3es15.6)')pt2(1),pt2(2),pt2(3)
+          else
+            write(*,'(7x,2es15.6)')pt1(1),pt1(2)
+            write(*,'(7x,2es15.6)')pt2(1),pt2(2)
+          endif
+          write(*,*)
+        endif
+
+        call interp_nfld(fpts,fwrk,nfld,pts(1,1),pts(1,2),pts(1,3),npts
+     &                                    ,iwrk,rwrk,lhis,.true.,intp_h)
+
+        call blank(afmt,14)
+        call blank(rfmt,10)
+        if(if3d) then
+          write(afmt,'(a1,i2,a11)')"(",nfld+3,"a16,es16.8)"
+          write(rfmt,'(a1,i2,a7)')"(",nfld+3,"es16.8)"
+        else
+          write(afmt,'(a1,i2,a11)')"(",nfld+2,"a16,es16.8)"
+          write(rfmt,'(a1,i2,a7)')"(",nfld+2,"es16.8)"
+        endif
+
+        if(nio.eq.0) then
+          open(unit=10,file=fname,status='unknown',form='formatted')
+          if(if3d) then
+            write(10,afmt)"X","Y","Z",(outname(i),i=1,nfld),time
+          else
+            write(10,afmt)"X","Y",(outname(i),i=1,nfld),time
+          endif
+          do i=1,npts
+            if(if3d) then
+              write(10,rfmt)pts(i,1),pts(i,2),pts(i,3)
+     &                               ,(fpts(i+j),j=0,(npts*nfld-1),npts)
+            else
+              write(10,rfmt)pts(i,1),pts(i,2)
+     &                               ,(fpts(i+j),j=0,(npts*nfld-1),npts)
+            endif
           enddo
         endif
-        write(*,*)
-      endif
 
- 254  format(a15,5a13)
- 255  format(a15,5es13.4)
- 256  format(a15,3es13.4,2a13)
+        close(10)
+
+        iplot=iplot+1
+      endif
 
       return
       end
