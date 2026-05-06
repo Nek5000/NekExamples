@@ -119,7 +119,7 @@ c-----------------------------------------------------------------------
          call create_obj(iobj_wall,bIDs,1)
          nm = iglsum(nmember(iobj_wall),1)
          if(nid.eq.0) write(6,*) 'obj_wall nmem:', nm 
-         call prepost(.true.,'  ')
+         call prepost(.true.,'   ')
       endif
 
       ubar = glsc2(vx,bm1,n)/volvm1
